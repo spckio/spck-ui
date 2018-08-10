@@ -4,7 +4,6 @@
   "homepage": "https://github.com/spckio/spck-ui",
   "main": [
     "./dist/spck-ui.css",
-    "./dist/spck-ui-icons.css",
     "./dist/spck-ui.js"
   ],
   "dependencies": {
