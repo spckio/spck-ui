@@ -1,0 +1,310 @@
+// Name:            Tab
+// Description:     Component to create a tabbed navigation
+//
+// Component:       `uk-tab`
+//
+// Modifiers:       `uk-tab-bottom`
+//                  `uk-tab-left`
+//                  `uk-tab-right`
+//
+// States:          `uk-active`
+//                  `uk-disabled`
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@tab-margin-horizontal:                  20px;
+@tab-margin-bottom:                      0px;
+
+@tab-item-height:                        42px;
+@tab-item-padding-horizontal:            @global-margin;
+@tab-item-padding-vertical:              0;
+@tab-item-color:                         #8391a5;
+@tab-item-hover-color:                   #1f2d3d;
+@tab-item-hover-dark-color:              #ddd;
+@tab-item-hover-text-decoration:         none;
+@tab-item-active-color:                  #20a0ff;
+@tab-item-active-dark-color:             #ffd04b;
+@tab-item-disabled-color:                #8391a5;
+
+@tab-border-width:                       1px;
+@tab-border:                             @global-border;
+
+@tab-item-border-width:                  3px;
+
+@tab-item-active-border:                 @tab-item-active-color;
+@tab-item-active-dark-border:            @tab-item-active-dark-color;
+
+/* ========================================================================
+   Component: Tab
+ ========================================================================== */
+
+/*
+ * 1. Allow items to wrap into the next line
+ * 2. Gutter
+ * 3. Reset lists
+ */
+
+.uk-tab {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    /* 1 */
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    /* 2 */
+    margin-left: -@tab-margin-horizontal;
+    margin-bottom: @tab-margin-bottom;
+    /* 3 */
+    padding: 0;
+    list-style: none;
+    .hook-tab;
+}
+
+/*
+ * 1. Space is allocated solely based on content dimensions: 0 0 auto
+ * 2. Gutter
+ * 3. Create position context for dropdowns
+ */
+
+.uk-tab > * {
+    /* 1 */
+    -ms-flex: none;
+    -webkit-flex: none;
+    flex: none;
+    /* 2 */
+    padding-left: @tab-margin-horizontal;
+    /* 3 */
+    position: relative;
+}
+
+
+/* Items
+ ========================================================================== */
+
+/*
+ * Items must target `a` elements to exclude other elements (e.g. dropdowns)
+ * 1. Center text if a width is set
+ * 2. Style
+ */
+
+.uk-tab > * > a {
+    display: block;
+    box-sizing: border-box;
+    /* 1 */
+    text-align: center;
+    /* 2 */
+    padding: @tab-item-padding-vertical @tab-item-padding-horizontal;
+    color: @tab-item-color;
+    .hook-tab-item;
+}
+
+/* Hover + Focus */
+.uk-tab > * > a:hover,
+.uk-tab > * > a:focus {
+    color: @tab-item-hover-color;
+    text-decoration: @tab-item-hover-text-decoration;
+    .hook-tab-item-hover;
+}
+
+/* Active */
+.uk-tab > .uk-active > a {
+    color: @tab-item-active-color;
+    .hook-tab-item-active;
+}
+
+/* Disabled */
+.uk-tab > .uk-disabled > a {
+    color: @tab-item-disabled-color;
+    .hook-tab-item-disabled;
+}
+
+
+/* Position modifier
+ ========================================================================== */
+
+/*
+ * Bottom
+ */
+
+.uk-tab-bottom {
+    .hook-tab-bottom;
+}
+
+.uk-tab-bottom > * > a {
+    .hook-tab-bottom-item;
+}
+
+/*
+ * Left + Right
+ * 1. Reset Gutter
+ */
+
+.uk-tab-left,
+.uk-tab-right {
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    /* 1 */
+    margin-left: 0;
+}
+
+/* 1 */
+.uk-tab-left > *,
+.uk-tab-right > * { padding-left: 0; }
+
+.uk-tab-left {
+    .hook-tab-left;
+}
+
+.uk-tab-right {
+    .hook-tab-right;
+}
+
+.uk-tab-left > * > a {
+    text-align: right;
+    .hook-tab-left-item;
+}
+
+.uk-tab-right > * > a {
+    text-align: left;
+    .hook-tab-right-item;
+}
+
+
+// Hooks
+// ========================================================================
+
+.hook-tab-misc;
+
+.hook-tab() {}
+.hook-tab-item() {
+    height: @tab-item-height;
+    line-height: @tab-item-height;
+}
+.hook-tab-item-hover() {
+    .dark & {
+        color: @tab-item-hover-dark-color;
+    }
+}
+.hook-tab-item-active() {
+    .dark & {
+        color: @tab-item-active-dark-color;
+    }
+}
+.hook-tab-item-disabled() {}
+.hook-tab-bottom() {}
+.hook-tab-bottom-item() {}
+.hook-tab-left() {}
+.hook-tab-left-item() {}
+.hook-tab-right() {}
+.hook-tab-right-item() {}
+.hook-tab-misc() {}
+
+// Component
+// ========================================================================
+
+.hook-tab() {
+
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: @tab-margin-horizontal;
+        right: 0;
+        border-bottom: @tab-border-width solid @tab-border;
+    }
+
+}
+
+
+// Items
+// ========================================================================
+
+.hook-tab-item() {
+    border-bottom: @tab-item-border-width solid transparent;
+    -webkit-transition: color 0.1s ease-in-out;
+    transition: color 0.1s ease-in-out;
+}
+
+.hook-tab-item-hover() {}
+
+.hook-tab-item-active() {
+    border-color: @tab-item-active-border;
+    .dark & {
+        border-color: @tab-item-active-dark-border;
+    }
+}
+
+.hook-tab-item-disabled() {}
+
+
+// Position modifiers
+// ========================================================================
+
+.hook-tab-bottom() {
+
+    &::before {
+        top: 0;
+        bottom: auto;
+    }
+
+}
+
+.hook-tab-bottom-item() {
+    border-top: @tab-item-border-width solid transparent;
+    border-bottom: none;
+}
+
+.hook-tab-left() {
+
+    &::before {
+        top: 0;
+        bottom: 0;
+        left: auto;
+        right: 0;
+        border-left: @tab-border-width solid @tab-border;
+        border-bottom: none;
+    }
+
+}
+
+.hook-tab-left-item() {
+    border-right: @tab-item-border-width solid transparent;
+    border-bottom: none;
+    box-sizing: border-box;
+}
+
+.hook-tab-right() {
+
+    &::before {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: auto;
+        border-left: @tab-border-width solid @tab-border;
+        border-bottom: none;
+    }
+
+}
+
+.hook-tab-right-item() {
+    border-left: @tab-item-border-width solid transparent;
+    border-bottom: none;
+}
+
+
+// Miscellaneous
+// ========================================================================
+
+.hook-tab-misc() {
+
+    .uk-tab .uk-dropdown { margin-left: (@tab-margin-horizontal + @tab-item-padding-horizontal) }
+
+}

@@ -1,0 +1,97 @@
+// Name:            Badge
+// Description:     Defines styles for badges
+//
+// Component:       `uk-badge`
+//
+// Modifiers:       `uk-badge-notification`
+//                  `uk-badge-success`
+//                  `uk-badge-danger`
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@badge-padding-horizontal:                      @global-margin-small;
+@badge-font-size:                               10px;
+@badge-line-height:                             @global-line-height;
+@badge-color:                                   @global-primary-background;
+
+@badge-success-color:                           @global-success-background;
+@badge-warning-color:                           @global-warning-background;
+@badge-danger-color:                            @global-danger-background;
+
+
+/* ========================================================================
+   Component: Badge
+ ========================================================================== */
+
+.uk-badge {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0 @badge-padding-horizontal;
+    font-size: @badge-font-size;
+    line-height: @badge-line-height;
+    color: @badge-color;
+    background: fade(@badge-color, 10%);
+    border: 1px solid fade(@badge-color, 20%);
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    .hook-badge;
+}
+
+
+/* Modifier: `uk-badge-notification`;
+ ========================================================================== */
+
+.uk-badge-notification {
+    border-radius: 500px;
+}
+
+
+/* Color modifier
+ ========================================================================== */
+
+/*
+ * Modifier: `uk-badge-success`
+ */
+
+.uk-badge-success {
+    color: @badge-success-color;
+    background-color: fade(@badge-success-color, 10%);
+    border: 1px solid fade(@badge-success-color, 10%);
+    .hook-badge-success;
+}
+
+/*
+ * Modifier: `uk-badge-warning`
+ */
+
+.uk-badge-warning {
+    color: @badge-warning-color;
+    background-color: fade(@badge-warning-color, 10%);
+    border: 1px solid fade(@badge-warning-color, 10%);
+    .hook-badge-warning;
+}
+
+/*
+ * Modifier: `uk-badge-danger`
+ */
+
+.uk-badge-danger {
+    color: @badge-danger-color;
+    background-color: fade(@badge-danger-color, 10%);
+    border: 1px solid fade(@badge-danger-color, 10%);
+    .hook-badge-danger;
+}
+
+
+// Hooks
+// ======================================================================== dd
+
+.hook-badge() {}
+.hook-badge-success() {}
+.hook-badge-warning() {}
+.hook-badge-danger() {}

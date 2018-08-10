@@ -1,0 +1,28 @@
+{
+  "name": "spck-ui",
+  "version": "0.1.0",
+  "homepage": "https://github.com/spckio/spck-ui",
+  "main": [
+    "./dist/spck-ui.css",
+    "./dist/spck-ui-icons.css",
+    "./dist/spck-ui.js"
+  ],
+  "dependencies": {
+    "uikit": "uikit/uikit#^2.27.x"
+  },
+  "ignore": [
+    ".idea",
+    "node_modules",
+    "bower_components",
+    "coverage",
+    "docs",
+    "fonts",
+    "less",
+    "gulpfile.js",
+    "karma.conf.js",
+    "package.json",
+    "*.spec.js",
+    ".gitignore",
+    ".travis.yml"
+  ]
+}

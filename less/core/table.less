@@ -1,0 +1,177 @@
+// Name:            Table
+// Description:     Defines styles for tables
+//
+// Component:       `uk-table`
+//
+// Modifiers:       `uk-table-middle`
+//                  `uk-table-striped`
+//                  `uk-table-condensed`
+//                  `uk-table-hover`
+//
+// States:          `uk-active`
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@table-margin-vertical:                         @global-margin;
+@table-gutter:                                  20px;
+@table-padding-vertical:                        @global-margin-small;
+@table-padding-horizontal:                      @global-margin-small;
+
+@table-heading-color:                           @global-color;
+@table-heading-font-size:                       12px;
+@table-heading-font-weight:                     normal;
+
+@table-caption-color:                           @global-color;
+@table-caption-font-size:                       12px;
+
+@table-striped-background:                      @global-default-active-background;
+
+@table-condensed-padding-vertical:              @global-margin-mini;
+@table-condensed-padding-horizontal:            @global-margin-small;
+
+@table-hover-background:                        #ecf5ff;
+
+@table-active-background:                       @table-hover-background;
+
+@table-border:                                  @global-border;
+
+/* ========================================================================
+   Component: Table
+ ========================================================================== */
+
+/*
+ * 1. Remove most spacing between table cells.
+ * 2. Block element behavior
+ * 3. Style
+ */
+
+.uk-table {
+    /* 1 */
+    border-collapse: collapse;
+    border-spacing: 0;
+    /* 2 */
+    width: 100%;
+    /* 3 */
+    margin-bottom: @table-margin-vertical;
+}
+
+/*
+ * Add margin if adjacent element
+ */
+
+* + .uk-table { margin-top: @table-margin-vertical; }
+
+.uk-table th,
+.uk-table td {
+    padding: @table-padding-vertical @table-padding-horizontal ;
+    border-bottom: 1px solid @table-border;
+    .hook-table;
+}
+
+/*
+ * Header
+ */
+
+.uk-table th {
+    font-size: @table-heading-font-size;
+    font-weight: @table-heading-font-weight;
+    color: @table-heading-color;
+    text-transform: uppercase;
+    .hook-table-th;
+}
+
+/*
+ * Set alignment
+ */
+
+.uk-table th { text-align: left; }
+.uk-table td { vertical-align: middle; }
+
+.uk-table thead th { vertical-align: bottom; }
+
+.uk-table {
+    tr td:first-child, thead th:first-child {
+        padding-left: @table-gutter;
+    }
+
+    tr td:last-child, thead th:last-child {
+        padding-right: @table-gutter;
+    }
+}
+
+/*
+ * Caption and footer
+ */
+
+.uk-table caption,
+.uk-table tfoot {
+    font-size: @table-caption-font-size;
+    font-style: italic;
+}
+
+.uk-table caption {
+    text-align: left;
+    color: @table-caption-color;
+}
+
+/*
+ * Active State
+ */
+
+.uk-table tbody tr.uk-active {
+    background: @table-active-background;
+    .hook-table-active;
+}
+
+
+/* Sub-modifier: `uk-table-middle`
+ ========================================================================== */
+
+.uk-table-middle,
+.uk-table-middle td { vertical-align: middle !important; }
+
+
+/* Modifier: `uk-table-striped`
+ ========================================================================== */
+
+.uk-table-striped tbody tr:nth-of-type(odd) {
+    background: @table-striped-background;
+    .hook-table-striped;
+}
+
+
+/* Modifier: `uk-table-condensed`
+ ========================================================================== */
+
+.uk-table-condensed td {
+    padding: @table-condensed-padding-vertical @table-condensed-padding-horizontal;
+    .hook-table-condensed;
+}
+
+
+/* Modifier: `uk-table-hover`
+ ========================================================================== */
+
+.uk-table-hover tbody tr {
+    transition: background-color .25s ease;
+}
+
+.uk-table-hover tbody tr:hover {
+    background: @table-hover-background;
+    .hook-table-hover;
+}
+
+
+// Hooks
+// ========================================================================
+
+.hook-table-th() {}
+.hook-table() {}
+.hook-table-active() {}
+.hook-table-striped() {}
+.hook-table-condensed() {}
+.hook-table-hover() {}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spck UI</title>
+  <script src="./jquery.min.js"></script>
+  <script src="./spck-ui.js"></script>
+  <script src="./spck-ui.meta.js"></script>
+  <link rel="stylesheet" href="./spck-ui.css">
+  <link rel="stylesheet" href="./spck-ui-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/9.10.0/styles/default.min.css">
+  <style>
+    .hljs {
+      background: inherit;
+    }
+  </style>
+</head>
+<body class="uk-hidden">
+<div class="uk-flex-column uk-flex">
+  <div id="navbar" class="uk-flex-item-none"></div>
+  <div class="uk-container uk-container-center">
+    <div class="uk-flex">
+        <div id="sidebar" class="uk-flex uk-flex-item-none uk-hidden-small"></div>
+        <div id="offcanvas" class="uk-offcanvas uk-visible-small"></div>
+        <div id="main" class="uk-flex-item-1">
+        <div id="gettingStarted" class="uk-width-1-1" style="line-height:32px">
+            <h2>Getting Started</h2>
+            <hr>
+            <p>
+            <b>Spck UI</b> is a lightweight, declarative UI components library for creating <b>SPAs</b>
+            (Single Page Applications).
+            </p>
+            
+            <p>
+            <b>Spck UI</b> takes the simple approach that can be summarized in the following points:
+            <ul>
+                <li>Each UI element is declared by a plain <b>JS</b> object</li>
+                <li>Listener callbacks are handled through normal JavaScript functions</li>
+                <li>Component access is handled using an unique id for each UI component and a global accessor function <code>$$('id')</code></li>
+            </ul>
+            This is not an innovative framework, nor does it try to be. If you're after something more progressive,
+            try something like <b>Vue</b> or <b>React</b>. Rather, <b>Spck UI</b> tries an arguably simpler and more
+            straight-forward that's been around for quite some time.
+            </p>
+
+            <h3 class="uk-margin-large-top">Installation & Setup</h3>
+            <hr>
+
+            <p><b>Spck UI</b> can be installed using <b>bower</b>:</p>
+            <p><code>bower install spck-ui</code></p>
+
+            <p>To add styling, add this tag to your <b>HTML</b> file:</p>
+            <pre><code class="html">&lt;link rel="stylesheet" href="spck-ui.css"&gt;</code></pre>
+
+            <p>To use include the icon files, also add:</p>
+            <pre><code class="html">&lt;link rel="stylesheet" href="spck-ui-icon.css"&gt;</code></pre>
+
+            <p>Add the following script files:</p>
+            <pre><code class="html">&lt;script src="jquery.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="spck-ui.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+
+            <h3 class="uk-margin-large-top">Example Usage</h3>
+            <hr>
+            <pre><code class="js">var modal = UI.new({
+  "view": "modal",
+  "header": {
+    "view": "label",
+    "htmlTag": "H3",  // Optional, default is "SPAN"
+    "label": "Spck UI is exquisite!"
+  },
+  "body": {
+    "view": "label",
+    "label": "Hello..."
+  },
+  "footer": {
+    "flexAlign": "right",
+    "cells": [
+      {
+        "view": "button",
+        "label": "No way!",
+        "margin": "right"
+      },
+      {
+        "view": "button",
+        "type": "primary",
+        "label": "Yup."
+      }
+    ]
+  }
+}, document.body);
+
+// Opens the modal
+modal.open();
+</code></pre>
+
+        <h3 class="uk-margin-large-top">Extensible</h3>
+        <hr>
+        <p>Brand new component templates can also be defined using JavaScript objects. This enables
+          the ability to define new components such as switchers, drawers, chips, etc.</p>
+
+        <p>To understand how to create your own custom components,
+            let's take a look at an example from the code below:</p>
+
+        <pre><code>UI.def({
+  __name__: "toggle",
+  $setters: extend(
+    classSetters({
+      color: prefixClassOptions({
+        "success": "",
+        "danger": "",
+        "warning": "",
+        "": ""
+      }, 'uk-toggle-', true)
+    }),
+    {
+      checked: function (value) {
+        this.getFormControl().checked = value;
+      }
+    }
+  ),
+  $defaults: {
+    htmlTag: "LABEL",
+    tagClass: "uk-toggle",
+    type: 'checkbox'
+  },
+  template: '&lt;input&gt;&lt;div class="uk-toggle-slider"&gt;&lt;/div&gt;',
+  getFormControl: function () {
+    /**
+     * Get the HTML input element.
+     * @returns {Element}
+     */
+    return this.el.firstChild;
+  },
+  reset: function () {
+    /**
+     * Reset the toggle.
+     */
+    this.getFormControl().checked = false;
+  },
+  getValue: function () {
+    /**
+     * Get the value of the toggle.
+     * @returns {boolean}
+     */
+    return this.getFormControl().checked;
+  },
+  setValue: function (value) {
+    /**
+     * Set the value of the toggle.
+     * @param value
+     */
+    this.getFormControl().checked = value;
+  }
+}, UI.ChangeEvent, UI.FormControl, UI.definitions.element);</code></pre>
+
+        <h3 class="uk-margin-large-top">Inheritance</h3>
+        <hr>
+        <p>Notice that you can chain previously defined components or Mixins at the end of the definition object:
+          <code>UI.def(config, ext1, ext2, ...)</code>, thus providing the ability to extend library components.
+        </p>
+        
+        <p class="uk-card uk-card-box uk-card-box-primary" style="padding: 16px 64px 16px 24px">
+            <span class="uk-card-badge uk-badge unselectable">Note</span>
+            When overriding properties, the left-most object has the highest priority. In other words,
+            each object will have its properties overridden by anything <b>left</b> of it.
+        </p>
+
+        <h3 class="uk-margin-large-top">Testing</h3>
+        <hr>
+        <p>Writing UI as ordinary JavaScript components actually makes things very testable. <b>Spck UI</b> uses its own
+          event-dispatching system and you can simulate button clicks, change events, or even custom events!</p>
+
+        <p>Below is an example of a <b>Jasmine</b> test case:</p>
+        <pre>
+<code>it("someToggle dispatch onChange event", function () {
+  spyOn(self, "someAction");
+  $$("someToggle").setData([
+    {label: "someLabel1", value: 1},
+    {label: "someLabel2", value: 2}
+  ]);
+  $$("someToggle").setValue(1);
+  $$("someToggle").dispatch("onChange", []);
+  expect(self.someAction).toHaveBeenCalledWith(1);
+  $$("someToggle").setValue(2);
+  $$("someToggle").dispatch("onChange", []);
+  // And so on...
+});</code></pre>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="uk-text-center uk-block-secondary uk-text-muted" style="margin-top:48px; padding:64px">
+  <p>Spck UI is licensed under the MIT license. This website is licensed under CC Commons Attribution 4.0.</p>
+  <p>Copyright 2018 Zeb Zhao. All rights reserved.</p>
+</footer>
+
+<script src="index.js"></script>
+<script src="https://cdn.jsdelivr.net/highlight.js/9.10.0/highlight.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+// Name:            Button
+// Description:     Defines styles for buttons
+//
+// Component:       `uk-button`
+//
+// Sub-objects:     `uk-button-group`
+//                  `uk-button-dropdown`
+//
+// Modifiers:       `uk-button-primary`
+//                  `uk-button-success`
+//                  `uk-button-danger`
+//                  `uk-button-text`
+//                  `uk-button-mini`
+//                  `uk-button-small`
+//                  `uk-button-large`
+//
+// States:          `uk-active`
+//
+// Markup:
+//
+// <!-- uk-button-group -->
+// <div class="uk-button-group">
+//     <button class="uk-button"></button>
+//     <button class="uk-button"></button>
+// </div>
+//
+// <!-- uk-button-dropdown -->
+// <div class="uk-button-dropdown" data-uk-dropdown>
+//     <button class="uk-button"></button>
+//     <div class="uk-dropdown uk-dropdown-small">
+//         <ul class="uk-nav uk-nav-dropdown">
+//             <li><a href=""></a></li>
+//         </ul>
+//     </div>
+// </div>
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@button-height:                                 @global-height;
+@button-mini-height:                            @global-height-mini;
+@button-small-height:                           @global-height-small;
+@button-large-height:                           @global-height-large;
+
+@button-line-height:                            @global-height - 2;
+@button-mini-line-height:                       @global-height-mini - 2;
+@button-small-line-height:                      @global-height-small - 2;
+@button-large-line-height:                      @global-height-large - 2;
+
+@button-font-size:                              @global-font-size;
+@button-mini-font-size:                         round((@global-font-size * 0.78)); // 11px / 12px
+@button-small-font-size:                        round((@global-font-size * 0.85)); // 12px / 14px
+@button-large-font-size:                        round((@global-font-size * 1.14)); // 16px / 18px
+
+@button-padding-horizontal:                     16px;
+@button-mini-padding-horizontal:                4px;
+@button-small-padding-horizontal:               8px;
+@button-large-padding-horizontal:               32px;
+
+@button-background:                             @global-default-background;
+@button-color:                                  @global-color;
+@button-border-radius:                          @global-border-radius;
+@button-hover-background:                       @global-default-hover-background;
+@button-hover-color:                            @global-color;
+@button-active-background:                      @global-default-active-background;
+@button-active-color:                           @global-color;
+
+@button-primary-background:                     @global-primary-background;
+@button-primary-color:                          @global-contrast-color;
+@button-primary-hover-background:               lighten(@global-primary-background, 3%);
+@button-primary-hover-color:                    @global-contrast-color;
+@button-primary-active-background:              darken(@global-primary-background, 3%);
+@button-primary-active-color:                   @global-contrast-color;
+
+@button-success-background:                     @global-success-background;
+@button-success-color:                          @global-contrast-color;
+@button-success-hover-background:               lighten(@global-success-background, 3%);
+@button-success-hover-color:                    @global-contrast-color;
+@button-success-active-background:              darken(@global-success-background, 3%);
+@button-success-active-color:                   @global-contrast-color;
+
+@button-danger-background:                      @global-danger-background;
+@button-danger-color:                           @global-contrast-color;
+@button-danger-hover-background:                lighten(@global-danger-background, 3%);
+@button-danger-hover-color:                     @global-contrast-color;
+@button-danger-active-background:               darken(@global-danger-background, 3%);
+@button-danger-active-color:                    @global-contrast-color;
+
+@button-disabled-background:                    @global-muted-color;
+@button-disabled-color:                         lighten(@global-color, 10%);
+
+@button-link-color:                             @global-primary-background;
+@button-link-hover-text-decoration:             none;
+@button-link-disabled-color:                    lighten(@global-color, 10%);
+
+@button-border:                                 @global-border;
+@button-hover-border:                           @global-primary-background;
+@button-text-shadow:                            @global-text-shadow;
+@button-contrast-text-shadow:                   @global-contrast-text-shadow;
+@button-contrast-border:                        transparent;
+@button-contrast-hover-border:                  transparent;
+
+@button-group-border:                           transparent;
+
+/* ========================================================================
+   Component: Button
+ ========================================================================== */
+
+/*
+ * Removes inner padding and border in Firefox 4+.
+ */
+
+.uk-button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/*
+ * 1. Correct inability to style clickable `input` types in iOS.
+ * 2. Remove margins in Chrome, Safari and Opera.
+ * 3. Remove borders for `button`.
+ * 4. Address `overflow` set to `hidden` in IE 8/9/10/11.
+ * 5. Correct `font` properties and `color` not being inherited for `button`.
+ * 6. Address inconsistent `text-transform` inheritance which is only inherit in Firefox and IE
+ * 7. Style
+ * 8. `line-height` is used to create a height
+ * 9. `min-height` is necessary for `input` elements in Firefox and Opera because `line-height` is not working.
+ * 10. Reset button group whitespace hack
+ * 11. Required for `a`.
+ */
+
+.uk-button {
+    /* 1 */
+    -webkit-appearance: none;
+    /* 2 */
+    margin: 0;
+    /* 3 */
+    border: none;
+    /* 4 */
+    overflow: visible;
+    /* 5 */
+    font: inherit;
+    color: @button-color;
+    /* 6 */
+    text-transform: none;
+    /* 7 */
+    display: inline-block;
+    box-sizing: border-box;
+    border-radius: @button-border-radius;
+    padding: 0 @button-padding-horizontal;
+    background: @button-background;
+    vertical-align: middle;
+    /* 8 */
+    line-height: @button-line-height;
+    /* 9 */
+    min-height: @button-height;
+    /* 10 */
+    font-size: @button-font-size;
+    /* 11 */
+    text-decoration: none;
+    text-align: center;
+    .hook-button;
+}
+
+.uk-button:not(:disabled) { cursor: pointer; }
+
+/*
+ * Hover
+ * 1. Apply hover style also to focus state
+ * 2. Remove default focus style
+ * 3. Required for `a` elements
+ */
+
+@media (min-width: @breakpoint-small) {
+    .uk-button:hover,
+    .uk-button:focus { // 1
+        background-color: @button-hover-background;
+        color: @button-hover-color;
+        /* 2 */
+        outline: none;
+        /* 3 */
+        text-decoration: none;
+        .hook-button-hover;
+    }
+}
+
+/* Active */
+.uk-button:active,
+.uk-button.uk-active {
+    background-color: @button-active-background;
+    color: @button-active-color;
+    .hook-button-active;
+}
+
+
+/* Color modifiers
+ ========================================================================== */
+
+/*
+ * Modifier: `uk-button-primary`
+ */
+
+.uk-button-primary {
+    background-color: @button-primary-background;
+    color: @button-primary-color;
+    .hook-button-primary;
+}
+
+/* Hover */
+@media (min-width: @breakpoint-small) {
+    .uk-button-primary:hover,
+    .uk-button-primary:focus {
+        background-color: @button-primary-hover-background;
+        color: @button-primary-hover-color;
+        .hook-button-primary-hover;
+    }
+}
+
+/* Active */
+.uk-button-primary:active,
+.uk-button-primary.uk-active {
+    background-color: @button-primary-active-background;
+    color: @button-primary-active-color;
+    .hook-button-primary-active;
+}
+
+/*
+ * Modifier: `uk-button-success`
+ */
+
+.uk-button-success {
+    background-color: @button-success-background;
+    color: @button-success-color;
+    .hook-button-success;
+}
+
+/* Hover */
+@media (min-width: @breakpoint-small) {
+    .uk-button-success:hover,
+    .uk-button-success:focus {
+        background-color: @button-success-hover-background;
+        color: @button-success-hover-color;
+        .hook-button-success-hover;
+    }
+}
+
+/* Active */
+.uk-button-success:active,
+.uk-button-success.uk-active {
+    background-color: @button-success-active-background;
+    color: @button-success-active-color;
+    .hook-button-success-active;
+}
+
+/*
+ * Modifier: `uk-button-danger`
+ */
+
+.uk-button-danger {
+    background-color: @button-danger-background;
+    color: @button-danger-color;
+    .hook-button-danger;
+}
+
+/* Hover */
+@media (min-width: @breakpoint-small) {
+    .uk-button-danger:hover,
+    .uk-button-danger:focus {
+        background-color: @button-danger-hover-background;
+        color: @button-danger-hover-color;
+        .hook-button-danger-hover;
+    }
+}
+
+/* Active */
+.uk-button-danger:active,
+.uk-button-danger.uk-active {
+    background-color: @button-danger-active-background;
+    color: @button-danger-active-color;
+    .hook-button-danger-active;
+}
+
+
+/* Disabled state
+ * Overrides also the color modifiers
+ ========================================================================== */
+
+/* Equal for all button types */
+.uk-button:disabled {
+    background-color: @button-disabled-background;
+    color: @button-disabled-color;
+    .hook-button-disable;
+}
+
+
+/* Modifier: `uk-button-link`
+ ========================================================================== */
+
+ /* Reset */
+.uk-button-link,
+.uk-button-link:hover,
+.uk-button-link:focus,
+.uk-button-link:active,
+.uk-button-link.uk-active,
+.uk-button-link:disabled {
+    border-color: transparent;
+    background: none;
+    .hook-button-link;
+}
+
+/* Color */
+.uk-button-link { color: @button-link-color; }
+.uk-button-link.uk-button-primary { color: @button-primary-background; }
+.uk-button-link.uk-button-success { color: @button-success-background; }
+.uk-button-link.uk-button-danger { color: @button-danger-background; }
+.uk-button-link.uk-button-primary:hover { color: lighten(@button-primary-background, 5%); }
+.uk-button-link.uk-button-success:hover { color: lighten(@button-success-background, 5%); }
+.uk-button-link.uk-button-danger:hover { color: lighten(@button-danger-background, 5%); }
+
+.uk-button-link:hover,
+.uk-button-link:focus,
+.uk-button-link:active,
+.uk-button-link.uk-active {
+    text-decoration: @button-link-hover-text-decoration;
+}
+
+.uk-button-link:disabled { color: @button-link-disabled-color; }
+
+/* Size modifiers
+ ========================================================================== */
+
+.uk-button-mini {
+    min-height: @button-mini-height;
+    padding: 0 @button-mini-padding-horizontal;
+    line-height: @button-mini-line-height;
+    font-size: @button-mini-font-size;
+}
+
+.uk-button-small {
+    min-height: @button-small-height;
+    padding: 0 @button-small-padding-horizontal;
+    line-height: @button-small-line-height;
+    font-size: @button-small-font-size;
+}
+
+.uk-button-large {
+    min-height: @button-large-height;
+    padding: 0 @button-large-padding-horizontal;
+    line-height: @button-large-line-height;
+    font-size: @button-large-font-size;
+    .hook-button-large;
+}
+
+
+/* Sub-object `uk-button-group`
+ ========================================================================== */
+
+/*
+ * 1. Behave like buttons
+ * 2. Create position context for dropdowns
+ * 3. Remove whitespace between child elements when using `inline-block`
+ * 4. Prevent buttons from wrapping
+ * 5. Remove whitespace between child elements when using `inline-block`
+ */
+
+.uk-button-group {
+    /* 1 */
+    display: inline-block;
+    vertical-align: middle;
+    /* 2 */
+    position: relative;
+    /* 3 */
+    font-size: 0.001px;
+    /* 4 */
+    white-space: nowrap;
+}
+
+.uk-button-group > * { display: inline-block; }
+
+/* 5 */
+.uk-button-group .uk-button { vertical-align: top; }
+
+
+/* Sub-object: `uk-button-dropdown`
+ ========================================================================== */
+
+/*
+ * 1. Behave like buttons
+ * 2. Create position context for dropdowns
+ */
+
+.uk-button-dropdown {
+    /* 1 */
+    display: inline-block;
+    vertical-align: middle;
+    /* 2 */
+    position: relative;
+}
+
+
+// Hooks
+// ========================================================================
+
+.hook-button() {
+    border: 1px solid @button-border;
+    transition: 0.1s;
+}
+.hook-button-hover() {
+    border-color: @button-hover-border;
+    color: @button-hover-border;
+}
+.hook-button-active() {}
+.hook-button-primary() {
+    border-color: @button-contrast-border;
+}
+.hook-button-primary-hover() {
+    border-color: @button-contrast-hover-border;
+}
+.hook-button-primary-active() {}
+.hook-button-success() {
+    border-color: @button-contrast-border;
+}
+.hook-button-success-hover() {
+    border-color: @button-contrast-hover-border;
+}
+.hook-button-success-active() {}
+.hook-button-danger() {
+    border-color: @button-contrast-border;
+}
+.hook-button-danger-hover() {
+    border-color: @button-contrast-hover-border;
+}
+.hook-button-danger-active() {}
+.hook-button-disable() {}
+.hook-button-link() {}
+.hook-button-large() {}

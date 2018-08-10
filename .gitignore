@@ -1,0 +1,13 @@
+.idea
+.vscode
+
+node_modules
+bower_components
+coverage
+
+.~
+*~
+*.sh
+
+.DS_Store
+package-lock.json

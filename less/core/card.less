@@ -1,0 +1,274 @@
+// Name:            Panel
+// Description:     Defines styles for reusable content areas
+//
+// Component:       `uk-card`
+//
+// Sub-objects:     `uk-card-title`
+//                  `uk-card-badge`
+//                  `uk-card-teaser`
+//                  `uk-card-body`
+//
+// Modifiers:       `uk-card-box`
+//                  `uk-card-box-primary`
+//                  `uk-card-header`
+//                  `uk-card-space`
+//                  `uk-card-divider`
+//
+// Uses:            Nav: `uk-nav-side`
+//
+// Used by:         Dropdown
+//                  Off-canvas
+//                  Grid
+//
+// Markup:
+//
+// <!-- uk-card -->
+// <div class="uk-card">
+//     <div class="uk-card-badge uk-badge"></div>
+//     <h3 class="uk-card-title"></h3>
+//     <p></p>
+// </div>
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@card-title-margin-bottom:                     @global-margin;
+@card-title-min-height:                        36px;
+@card-title-text-transform:                    none;
+
+@card-teaser-margin-bottom:                    @card-title-margin-bottom;
+
+@card-box-padding:                             @global-margin-large;
+@card-box-background:                          @global-background;
+@card-box-color:                               @global-color;
+@card-box-hover-color:                         @card-box-color;
+@card-box-title-color:                         @global-color;
+@card-box-badge-top:                           @global-margin;
+@card-box-badge-right:                         @card-box-badge-top;
+@card-box-header-margin:                       round(-@card-box-padding / 2);
+@card-box-teaser-margin:                       -@card-box-padding;
+@card-box-border:                              @global-border;
+@card-box-border-radius:                       @global-border-radius;
+@card-box-border-width:                        1px;
+@card-box-color:                               @global-color;
+
+@card-box-primary-background:                  fade(@global-primary-background, 10%);
+@card-box-primary-border:                      #50bfff;
+@card-box-primary-color:                       @global-color;
+@card-box-primary-hover-color:                 @card-box-primary-color;
+@card-box-primary-title-color:                 @card-box-primary-color;
+
+@card-header-title-padding:                    @global-margin;
+@card-header-title-border:                     @global-border;
+@card-header-title-border-width:               1px;
+@card-header-title-color:                      @global-color;
+
+@card-space-padding:                           30px;
+
+@card-divider-gutter:                          25px;
+@card-divider-gutter-large:                    35px;
+@card-divider-border:                          @global-border;
+@card-divider-border-width:                    1px;
+
+@card-body-padding:                            @global-margin-small;
+@card-box-shadow:                              0 0 8px 0 rgba(0,0,0,.04),
+                                                0 2px 4px 0 rgba(0,0,0,.02);
+
+
+/* ========================================================================
+   Component: Panel
+ ========================================================================== */
+
+/*
+ * 1. Needed for `a` elements
+ * 2. Create position context for badges
+ */
+
+.uk-card {
+    /* 1 */
+    display: block;
+    /* 2 */
+    position: relative;
+}
+
+/*
+ * Allow panels to be anchors
+ */
+
+.uk-card,
+.uk-card:hover { text-decoration: none; }
+
+/*
+ * Micro clearfix to make panels more robust
+ */
+
+.uk-card:before,
+.uk-card:after {
+    content: "";
+    display: table;
+}
+
+.uk-card:after { clear: both; }
+
+/*
+ * Remove margin from the last-child if not `uk-widget-title`
+ */
+
+.uk-card > :not(.uk-card-title):last-child { margin-bottom: 0; }
+
+
+/* Sub-object: `uk-card-title`
+ ========================================================================== */
+
+.uk-card-title {
+    margin-top: 0;
+    min-height: @card-title-min-height;
+    margin-bottom: @card-title-margin-bottom;
+    text-transform: @card-title-text-transform;
+    border-bottom: solid 1px;
+    border-color: inherit;
+    .hook-card-title;
+}
+
+
+/* Sub-object: `uk-card-badge`
+ ========================================================================== */
+
+.uk-card-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    .hook-card-badge;
+}
+
+/* Sub-object: `uk-card-teaser`
+ ========================================================================== */
+
+.uk-card-teaser { margin-bottom: @card-teaser-margin-bottom; }
+
+
+/* Sub-object: `uk-card-body`
+ ========================================================================== */
+
+.uk-card-body { padding: @card-body-padding; }
+
+
+/* Modifier: `uk-card-box`
+ ========================================================================== */
+
+.uk-card-box {
+    padding: @card-box-padding;
+    background: @card-box-background;
+    color: @card-box-color;
+    border: @card-header-title-border-width solid @card-header-title-border;
+    border-radius: @card-box-border-radius;
+    .hook-card-box;
+}
+
+.uk-card-box:hover {
+    color: @card-box-hover-color;
+    box-shadow: @card-box-shadow;
+    .hook-card-box-hover;
+}
+
+.uk-card-box .uk-card-title { color: @card-box-title-color; }
+
+.uk-card-box .uk-card-badge {
+    top: @card-box-badge-top;
+    right: @card-box-badge-right;
+}
+
+.uk-card-box > .uk-card-teaser:first-child {
+    margin-top: @card-box-teaser-margin;
+}
+
+.uk-card-box > .uk-card-teaser {
+    margin-left: @card-box-teaser-margin;
+    margin-right: @card-box-teaser-margin;
+}
+
+/*
+ * Sub-modifier: `uk-card-box-primary`
+ */
+
+.uk-card-box-primary {
+    background-color: @card-box-primary-background;
+    border-left: 5px solid @card-box-primary-border;
+    color: @card-box-primary-color;
+    .hook-card-box-primary;
+}
+
+.uk-card-box-primary:hover {
+    color: @card-box-primary-hover-color;
+    .hook-card-box-primary-hover;
+}
+
+.uk-card-box-primary .uk-card-title { color: @card-box-primary-title-color; }
+
+
+/* Modifier: `uk-card-header`
+ ========================================================================== */
+
+.uk-card-box .uk-card-header {
+    margin-top: @card-box-header-margin;
+}
+
+.uk-card-header .uk-card-title {
+    padding-bottom: @card-header-title-padding;
+    border-bottom: @card-header-title-border-width solid @card-header-title-border;
+    color: @card-header-title-color;
+    .hook-card-header;
+}
+
+
+/* Modifier: `uk-card-space`
+ ========================================================================== */
+
+.uk-card-space { padding: @card-space-padding; }
+
+.uk-card-space .uk-card-badge {
+    top: @card-space-padding;
+    right: @card-space-padding;
+}
+
+
+/* Modifier: `uk-card-divider`
+ ========================================================================== */
+
+.uk-card + .uk-card-divider { margin-top: (@card-divider-gutter * 2) !important; }
+
+.uk-card + .uk-card-divider:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -(@card-divider-gutter);
+    left: 0;
+    right: 0;
+    border-top: @card-divider-border-width solid @card-divider-border;
+}
+
+/* Large screen and bigger */
+@media (min-width: @breakpoint-xlarge) {
+
+    .uk-card + .uk-card-divider { margin-top: (@card-divider-gutter-large * 2) !important; }
+    .uk-card + .uk-card-divider:before { top: -(@card-divider-gutter-large); }
+
+}
+
+
+// Hooks
+// ========================================================================
+
+.hook-card-title() {}
+.hook-card-badge() {}
+.hook-card-box() {
+    transition: 0.3s;
+}
+.hook-card-box-hover() {}
+.hook-card-box-primary() {}
+.hook-card-box-primary-hover() {}
+.hook-card-header() {}

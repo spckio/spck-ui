@@ -1,0 +1,144 @@
+// Name:            Icon
+// Description:     Defines styles for icons
+//
+// Adapted from http://fortawesome.github.com/Font-Awesome (Version 4.2.0)
+//
+// Component:       `uk-icon-*`
+//
+// Sub-objects:     `uk-icon-hover`
+//                  `uk-icon-button`
+//
+// Modifiers:       `uk-icon-small`
+//                  `uk-icon-medium`
+//                  `uk-icon-large`
+//                  `uk-icon-justify`
+//                  `uk-icon-spin`
+//
+// Uses:            Animation
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@icon-small-font-size:                          16px;
+@icon-medium-font-size:                         20px;
+@icon-large-font-size:                          24px;
+
+@icon-hover-color:                              lighten(@global-color, 10%);
+@icon-hover-hover-color:                        lighten(@global-color, 10%);
+
+@icon-button-width:                             40px;
+@icon-button-height:                            @icon-button-width;
+@icon-button-background:                        transparent;
+@icon-button-font-size:                         12px;
+@icon-button-color:                             lighten(@global-color, 10%);
+
+@icon-button-hover-background:                  transparent;
+@icon-button-hover-color:                       lighten(@global-color, 10%);
+
+@icon-button-active-background:                 transparent;
+@icon-button-active-color:                      lighten(@global-color, 10%);
+
+
+/* ========================================================================
+   Component: Icon
+ ========================================================================== */
+
+/* 6 */
+[class*='uk-icon-'],
+[class*='uk-icon-']:hover,
+[class*='uk-icon-']:focus {
+    text-decoration: none;
+}
+
+[class*='uk-icon-']:before {
+    position: relative;
+}
+
+/* Size modifiers
+ ========================================================================== */
+
+.uk-icon-small {
+    font-size: @icon-small-font-size;
+}
+
+.uk-icon-medium {
+    font-size: @icon-medium-font-size;
+}
+
+.uk-icon-large {
+    font-size: @icon-large-font-size;
+}
+
+
+/* Modifier: `uk-icon-justify`
+ ========================================================================== */
+
+.uk-icon-justify {
+    width: 1em;
+    text-align: center;
+}
+
+
+/* Modifier: `uk-icon-spin`
+ ========================================================================== */
+
+.uk-icon-spin {
+    display: inline-block;
+    -webkit-animation: uk-rotate 2s infinite linear;
+    animation: uk-rotate 2s infinite linear;
+}
+
+
+/* Modifier: `uk-icon-hover`
+ ========================================================================== */
+
+.uk-icon-hover {
+    color: @icon-hover-color;
+}
+
+/*
+ * Hover
+ */
+
+.uk-icon-hover:hover {
+    color: @icon-hover-hover-color;
+}
+
+
+/* Modifier: `uk-icon-button`
+ ========================================================================== */
+
+.uk-icon-button {
+    box-sizing: border-box;
+    display: inline-block;
+    width: @icon-button-width;
+    height: @icon-button-height;
+    background: @icon-button-background;
+    line-height: @icon-button-height;
+    color: @icon-button-color;
+    font-size: @icon-button-font-size;
+    text-align: center;
+}
+
+/*
+ * Hover
+ * 1. Apply hover style also to focus state
+ * 2. Remove default focus style
+ */
+
+.uk-icon-button:hover,
+.uk-icon-button:focus { // 1
+    background-color: @icon-button-hover-background;
+    color: @icon-button-hover-color;
+    /* 2 */
+    outline: none;
+}
+
+/* Active */
+.uk-icon-button:active {
+    background-color: @icon-button-active-background;
+    color: @icon-button-active-color;
+}
