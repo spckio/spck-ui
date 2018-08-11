@@ -306,7 +306,8 @@ var Model = {
         header: {
           view: 'label',
           htmlTag: 'h5',
-          label: 'Stale coffee is exquisite!'
+          padding: true,
+          label: 'Coffee is exquisite!'
         },
         body: {
           view: 'label',
@@ -314,6 +315,7 @@ var Model = {
         },
         footer: {
           flexAlign: 'right',
+          padding: 'x y-sm',
           cells: [
             {view: 'button', label: 'No way!', margin: 'right'},
             {view: 'button', type: 'primary', label: 'Yup.'}
@@ -480,6 +482,7 @@ UI.new({
       {
         view: 'list',
         listStyle: 'navbar',
+        flexSize: 'none',
         data: [
           {
             view: 'icon',
@@ -498,9 +501,17 @@ UI.new({
           {
             view: 'image',
             src: 'logo.svg',
-            screen: 'except-small',
-            width: 160,
-            height: 64
+            screen: 'except-small',            
+            width: 160
+          },
+          {
+            view: 'image',
+            src: 'logo.svg',
+            screen: 'small',            
+            width: 120,
+            style: {
+              height: '64px'
+            }
           }
         ]
       },
@@ -514,8 +525,15 @@ UI.new({
           marginLeft: 'auto'
         },
         data: [
-          {view: 'link', label: 'Github', href: 'https://github.com/spckio/spck-ui'},
-          {view: 'link', label: 'Issues', href: 'https://github.com/spckio/spck-ui/issues'},
+          {
+            view: 'link', label: 'Github',
+            href: 'https://github.com/spckio/spck-ui'
+          },
+          {
+            view: 'link', label: 'Issues',
+            href: 'https://github.com/spckio/spck-ui/issues',
+            screen: 'except-small'            
+          },
           {
             view: 'select',
             data: [

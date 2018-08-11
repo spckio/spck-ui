@@ -23,6 +23,7 @@
     "karma.conf.js",
     "package.json",
     "*.spec.js",
+    ".editorconfig",
     ".gitignore",
     ".travis.yml"
   ]

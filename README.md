@@ -30,6 +30,8 @@ To use include the icon files, also add:
 <link rel="stylesheet" href="spck-ui-icons.css">
 ```
 
+*Credit for the icons goes to the UIkit 3 library.*
+
 Add the following script files:
 
 ```html
