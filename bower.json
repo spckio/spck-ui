@@ -17,6 +17,8 @@
     "docs",
     "fonts",
     "less",
+    "src",
+    "Gruntfile.js",
     "gulpfile.js",
     "karma.conf.js",
     "package.json",
