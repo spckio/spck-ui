@@ -39,7 +39,7 @@
 @modal-background:                              rgba(0,0,0,.1);
 
 @modal-dialog-margin-vertical:                  50px;
-@modal-dialog-padding:                          @global-margin;
+@modal-dialog-padding:                          @global-padding;
 @modal-dialog-width:                            450px;
 @modal-dialog-background:                       #fff;
 @modal-dialog-dark-background:                  #2b3946;
@@ -142,6 +142,11 @@
     -webkit-transition: opacity 0.3s linear, -webkit-transform 0.3s ease-out;
     transition: opacity 0.3s linear, transform 0.3s ease-out;
     .hook-modal-dialog;
+}
+
+.uk-modal-dialog-scroll {
+    height: inherit; /* Hack to fix known vh vw issues in Safari */
+    max-height: ~"calc(100vh - 96px)";
 }
 
 @media (min-width: @breakpoint-mini-max) {

@@ -64,8 +64,7 @@
       keyboard: {$$type: 'boolean'},
       minScrollHeight: {$$type: 'number'},
       closeModals: {$$type: 'boolean'},
-      center: {$$type: 'boolean'},
-      dialogClass: {options: ['', 'uk-modal-dialog-blank', 'uk-modal-dialog-full']}
+      center: {$$type: 'boolean'}
     };
   }($definitions.modal.prototype.$setters));
 

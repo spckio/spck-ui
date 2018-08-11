@@ -5499,10 +5499,20 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       truncate: "",
       "": ""
     }, 'uk-text-', true),
-    padding: {
+    padding: prefixClassOptions({
       "": "",
-      none: "uk-padding-remove"
-    },
+      none: "remove",
+      x: "x",
+      y: "y",
+      "x-sm": "small-x",
+      "y-sm": "small-y",
+      "x-lg": "large-x",
+      "y-lg": "large-y",
+      small: "small",
+      medium: "uk-padding",
+      true: "uk-padding",
+      large: "large",
+    }, 'uk-padding-', false, ["true", "medium"]),
     flexSize: prefixClassOptions({
       "": "",
       none: "none",
@@ -6734,6 +6744,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           lightbox: "",
           large: "",
           blank: "",
+          scroll: "",
           full: "",
           "": ""
         }, 'uk-modal-dialog-', true)
@@ -8247,13 +8258,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       var $listeners = self.$itemListeners[item.id] = self.$itemListeners[item.id] || [];
 
-      if (on.onItemClick) {
-        listenerId = addListener(el, "click", function (e) {
-          if (!exports.$dragged) self.dispatch("onItemClick", [item, el, e]);
-        });
-        $listeners.push(listenerId);
-        self.$listeners.push(listenerId);
-      }
+      // Some components may depend on this firing, so always register it
+      listenerId = addListener(el, "click", function (e) {
+        if (!exports.$dragged) self.dispatch("onItemClick", [item, el, e]);
+      });
+      $listeners.push(listenerId);
+      self.$listeners.push(listenerId);
 
       if (on.onItemContext) {
         listenerId = addListener(el, "contextmenu", function (e) {
