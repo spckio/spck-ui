@@ -100,6 +100,24 @@ var Model = {
           },
           {
             view: 'button',
+            label: 'Muted',
+            color: 'muted',
+            margin: 'x'
+          },
+          {
+            view: 'button',
+            label: 'Success',
+            color: 'success',
+            margin: 'x'
+          },
+          {
+            view: 'button',
+            label: 'Muted Link',
+            link: true,
+            color: 'muted'
+          },
+          {
+            view: 'button',
             size: 'large',
             label: 'Large Link',
             link: true,
@@ -110,10 +128,10 @@ var Model = {
     },
     card: function () {
       return {
-        layout: 'column',
+        flexLayout: 'column',
         cells: [
           {
-            spacing: 'between',
+            flexSpace: 'between',
             margin: 'bottom-lg',
             cells: [
               {
@@ -132,7 +150,7 @@ var Model = {
             ]
           },
           {
-            layout: 'column',
+            flexLayout: 'column',
             card: true,
             cells: [
               {
@@ -228,9 +246,7 @@ var Model = {
     },
     icon: function () {
       return {
-        spacing: 'between',
-
-
+        flexSpace: 'between',
         cells: [
           'cog', 'bolt', 'heart', 'instagram', 'reply', 'close', 'cloud-upload', 'cloud-download',
           'more', 'more-vertical', 'plus', 'minus', 'image'
@@ -251,7 +267,7 @@ var Model = {
     },
     input: function () {
       return {
-        layout: 'column',
+        flexLayout: 'column',
         cells: [
           {
             view: 'input',
@@ -325,7 +341,7 @@ var Model = {
     },
     progress: function () {
       return {
-        layout: 'column',
+        flexLayout: 'column',
         cells: [
           {
             view: 'progress',
@@ -589,7 +605,7 @@ UI.new(
 
 UI.new({
   id: 'mainView',
-  layout: 'column',
+  flexLayout: 'column',
   hidden: true,
   cells: [
     {
@@ -602,7 +618,7 @@ UI.new({
       id: 'exampleView',
       card: true,
       flexSize: 'none',
-      layout: 'column',
+      flexLayout: 'column',
       cells: [
         {
           batch: 'tab',
@@ -682,7 +698,7 @@ UI.new({
     {
       id: 'apiView',
       flexSize: 'none',
-      layout: 'column',
+      flexLayout: 'column',
       margin: 'y-lg',
       card: true,
       cells: [
@@ -715,7 +731,7 @@ UI.new({
         },
         {
           batch: 'props',
-          layout: 'column',
+          flexLayout: 'column',
           card: 'body',
           cells: [
             {
@@ -763,7 +779,7 @@ UI.new({
                           .map(function (option) {
                             return {
                               view: 'link',
-                              label: option,
+                              label: option || '&nbsp;',
                               value: option
                             }
                           })

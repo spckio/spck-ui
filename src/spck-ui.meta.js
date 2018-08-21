@@ -2,15 +2,15 @@
   var $definitions = exports.definitions;
 
   (function ($setters) {
-    $setters.order.$$desc = 'Flex order of the component';
     $setters.screen.$$desc = 'Determines which screen size to show the component on';
     $setters.margin.$$desc = 'Add margins to the component';
     $setters.position.$$desc = 'Determines the CSS <code>position</code>';
     $setters.hidden.$$desc = 'Show or hide the component';
     $setters.animation.$$desc = 'Animation classes to use for the component';
-    $setters.layout.$$desc = 'Sets the flex layout';
     $setters.selectable.$$desc = 'Changes text to unselectable';
     $setters.flex.$$desc = 'Changes component to use flex layout';
+    $setters.flexOrder.$$desc = 'Flex order of the component';
+    $setters.flexLayout.$$desc = 'Sets the flex layout';
     $setters.device.$$desc = 'Show the component on touch or no-touch devices only';
   }(exports.CommonCSS.$setters));
 

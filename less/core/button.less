@@ -62,32 +62,27 @@
 
 @button-background:                             @global-default-background;
 @button-color:                                  @global-color;
-@button-border-radius:                          @global-border-radius;
+@button-border-radius:                          2px;
 @button-hover-background:                       @global-default-hover-background;
 @button-hover-color:                            @global-color;
 @button-active-background:                      @global-default-active-background;
 @button-active-color:                           @global-color;
 
+@button-muted-background:                       @global-muted-background;
+@button-muted-hover-background:                 lighten(@global-muted-background, 3%);
+@button-muted-active-background:                darken(@global-muted-background, 3%);
+
 @button-primary-background:                     @global-primary-background;
-@button-primary-color:                          @global-contrast-color;
 @button-primary-hover-background:               lighten(@global-primary-background, 3%);
-@button-primary-hover-color:                    @global-contrast-color;
 @button-primary-active-background:              darken(@global-primary-background, 3%);
-@button-primary-active-color:                   @global-contrast-color;
 
 @button-success-background:                     @global-success-background;
-@button-success-color:                          @global-contrast-color;
 @button-success-hover-background:               lighten(@global-success-background, 3%);
-@button-success-hover-color:                    @global-contrast-color;
 @button-success-active-background:              darken(@global-success-background, 3%);
-@button-success-active-color:                   @global-contrast-color;
 
 @button-danger-background:                      @global-danger-background;
-@button-danger-color:                           @global-contrast-color;
 @button-danger-hover-background:                lighten(@global-danger-background, 3%);
-@button-danger-hover-color:                     @global-contrast-color;
 @button-danger-active-background:               darken(@global-danger-background, 3%);
-@button-danger-active-color:                    @global-contrast-color;
 
 @button-disabled-background:                    @global-muted-color;
 @button-disabled-color:                         lighten(@global-color, 10%);
@@ -100,10 +95,9 @@
 @button-hover-border:                           @global-primary-background;
 @button-text-shadow:                            @global-text-shadow;
 @button-contrast-text-shadow:                   @global-contrast-text-shadow;
+@button-contrast-text-color:                    @global-contrast-color;
 @button-contrast-border:                        transparent;
 @button-contrast-hover-border:                  transparent;
-
-@button-group-border:                           transparent;
 
 /* ========================================================================
    Component: Button
@@ -200,13 +194,41 @@
  ========================================================================== */
 
 /*
+ * Modifier: `uk-button-muted`
+ */
+
+.uk-button-muted {
+    background-color: @button-muted-background;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-border;
+}
+
+/* Hover */
+@media (min-width: @breakpoint-small) {
+    .uk-button-muted:hover,
+    .uk-button-muted:focus {
+        background-color: @button-muted-hover-background;
+        color: @button-contrast-text-color;
+        border-color: @button-contrast-hover-border;
+    }
+}
+
+/* Active */
+.uk-button-muted:active,
+.uk-button-muted.uk-active {
+    background-color: @button-muted-active-background;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-hover-border;
+}
+
+/*
  * Modifier: `uk-button-primary`
  */
 
 .uk-button-primary {
     background-color: @button-primary-background;
-    color: @button-primary-color;
-    .hook-button-primary;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-hover-border;
 }
 
 /* Hover */
@@ -214,8 +236,8 @@
     .uk-button-primary:hover,
     .uk-button-primary:focus {
         background-color: @button-primary-hover-background;
-        color: @button-primary-hover-color;
-        .hook-button-primary-hover;
+        color: @button-contrast-text-color;
+        border-color: @button-contrast-hover-border;
     }
 }
 
@@ -223,8 +245,8 @@
 .uk-button-primary:active,
 .uk-button-primary.uk-active {
     background-color: @button-primary-active-background;
-    color: @button-primary-active-color;
-    .hook-button-primary-active;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-hover-border;
 }
 
 /*
@@ -233,8 +255,8 @@
 
 .uk-button-success {
     background-color: @button-success-background;
-    color: @button-success-color;
-    .hook-button-success;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-hover-border;
 }
 
 /* Hover */
@@ -242,8 +264,8 @@
     .uk-button-success:hover,
     .uk-button-success:focus {
         background-color: @button-success-hover-background;
-        color: @button-success-hover-color;
-        .hook-button-success-hover;
+        color: @button-contrast-text-color;
+        border-color: @button-contrast-hover-border;
     }
 }
 
@@ -251,8 +273,8 @@
 .uk-button-success:active,
 .uk-button-success.uk-active {
     background-color: @button-success-active-background;
-    color: @button-success-active-color;
-    .hook-button-success-active;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-hover-border;
 }
 
 /*
@@ -261,8 +283,8 @@
 
 .uk-button-danger {
     background-color: @button-danger-background;
-    color: @button-danger-color;
-    .hook-button-danger;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-hover-border;
 }
 
 /* Hover */
@@ -270,8 +292,8 @@
     .uk-button-danger:hover,
     .uk-button-danger:focus {
         background-color: @button-danger-hover-background;
-        color: @button-danger-hover-color;
-        .hook-button-danger-hover;
+        color: @button-contrast-text-color;
+        border-color: @button-contrast-hover-border;
     }
 }
 
@@ -279,8 +301,8 @@
 .uk-button-danger:active,
 .uk-button-danger.uk-active {
     background-color: @button-danger-active-background;
-    color: @button-danger-active-color;
-    .hook-button-danger-active;
+    color: @button-contrast-text-color;
+    border-color: @button-contrast-hover-border;
 }
 
 
@@ -313,12 +335,13 @@
 
 /* Color */
 .uk-button-link { color: @button-link-color; }
-.uk-button-link.uk-button-primary { color: @button-primary-background; }
-.uk-button-link.uk-button-success { color: @button-success-background; }
-.uk-button-link.uk-button-danger { color: @button-danger-background; }
-.uk-button-link.uk-button-primary:hover { color: lighten(@button-primary-background, 5%); }
-.uk-button-link.uk-button-success:hover { color: lighten(@button-success-background, 5%); }
-.uk-button-link.uk-button-danger:hover { color: lighten(@button-danger-background, 5%); }
+.uk-button-link.uk-button-muted { color: @button-muted-background !important; }
+.uk-button-link.uk-button-primary { color: @button-primary-background !important; }
+.uk-button-link.uk-button-success { color: @button-success-background !important; }
+.uk-button-link.uk-button-danger { color: @button-danger-background !important; }
+.uk-button-link.uk-button-primary:hover { color: lighten(@button-primary-background, 5%) !important; }
+.uk-button-link.uk-button-success:hover { color: lighten(@button-success-background, 5%) !important; }
+.uk-button-link.uk-button-danger:hover { color: lighten(@button-danger-background, 5%) !important; }
 
 .uk-button-link:hover,
 .uk-button-link:focus,
@@ -413,27 +436,6 @@
     color: @button-hover-border;
 }
 .hook-button-active() {}
-.hook-button-primary() {
-    border-color: @button-contrast-border;
-}
-.hook-button-primary-hover() {
-    border-color: @button-contrast-hover-border;
-}
-.hook-button-primary-active() {}
-.hook-button-success() {
-    border-color: @button-contrast-border;
-}
-.hook-button-success-hover() {
-    border-color: @button-contrast-hover-border;
-}
-.hook-button-success-active() {}
-.hook-button-danger() {
-    border-color: @button-contrast-border;
-}
-.hook-button-danger-hover() {
-    border-color: @button-contrast-hover-border;
-}
-.hook-button-danger-active() {}
 .hook-button-disable() {}
 .hook-button-link() {}
 .hook-button-large() {}

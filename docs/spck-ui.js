@@ -5469,30 +5469,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       true: "",
       false: "unselectable"
     },
-    layout: prefixClassOptions({
-      "": "",
-      column: "",
-      row: "",
-      "row-reverse": "",
-      "column-reverse": ""
-    }, 'uk-flex-', true),
-    spacing: prefixClassOptions({
-      between: "",
-      around: ""
-    }, 'uk-flex-space-', true),
-    order: prefixClassOptions({
-      first: "",
-      last: "",
-      "first-small": "",
-      "last-small": "",
-      "first-medium": "",
-      "last-medium": "",
-      "first-large": "",
-      "last-large": "",
-      "first-xlarge": "",
-      "last-xlarge": "",
-      "": ""
-    }, 'uk-flex-order-', true),
     wrap: prefixClassOptions({
       break: "",
       nowrap: "",
@@ -5527,6 +5503,41 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       bottom: "",
       "": ""
     }, 'uk-flex-', true),
+    flexLayout: prefixClassOptions({
+      "": "",
+      column: "",
+      row: "",
+      "row-reverse": "",
+      "column-reverse": ""
+    }, 'uk-flex-', true),
+    flexSpace: prefixClassOptions({
+      between: "",
+      around: ""
+    }, 'uk-flex-space-', true),
+    flexWrap: prefixClassOptions({
+      top: "",
+      middle: "",
+      bottom: "",
+      reverse: "",
+      "space-between": "",
+      "space-around": "",
+      wrap: "uk-flex-wrap",
+      nowrap: "uk-flex-nowrap",
+      "": ""
+    }, 'uk-flex-wrap-', true, ["nowrap", "wrap"]),
+    flexOrder: prefixClassOptions({
+      first: "",
+      last: "",
+      "first-small": "",
+      "last-small": "",
+      "first-medium": "",
+      "last-medium": "",
+      "first-large": "",
+      "last-large": "",
+      "first-xlarge": "",
+      "last-xlarge": "",
+      "": ""
+    }, 'uk-flex-order-', true),
     card: prefixClassOptions({
       true: ["uk-card", "uk-card-box"],
       primary: ["uk-card", "uk-card-box", "uk-card-box-primary"],
@@ -6375,7 +6386,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.flexgrid = def({
     __name__: "flexgrid",
     $defaults: {
-      layout: "row",
+      flexLayout: "row",
       flex: true,
       flexSize: "flex",
       singleView: false
@@ -6719,7 +6730,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       center: true,
       flex: false,
       flexSize: "",
-      layout: "",
+      flexLayout: "",
       dialogClass: "",
       headerClass: "",
       footerClass: ""
@@ -6856,6 +6867,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         primary: "",
         success: "",
         danger: "",
+        muted: "",
         "": ""
       }, 'uk-button-', true),
       size: prefixClassOptions({
