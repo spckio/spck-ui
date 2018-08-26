@@ -7,7 +7,7 @@ Spck UI is purely the **View** part of **MVC**, and works using vanilla JavaScri
 
 Spck UI takes the approach of using simple JavaScript objects instead of HTML as it is more flexible, integrates better with code and eliminates the need of using JSX or other templating markup.
 
-Spck UI is against redefining the way JavaScript interacts with the template by using additional transpilers or compilers. This all aims for the simplification of debugging, testing, and deploying.
+Spck UI is based on the existing popular [UIkit](https://github.com/uikit/uikit) library for many UI components as well as CSS styling. Although the code can be modified to support other similar libraries.
 
 To simplify the learning curve, Spck UI tries to resemble traditional HTML tags and CSS as much as possible, while also using modern things like `flexbox` to simplify layouts.
 
