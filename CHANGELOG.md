@@ -1,3 +1,7 @@
+Version 0.2.1
+-----------
+- CSS clean up and tweaks
+
 Version 0.2.0
 -----------
 - **Breaking**: Renamed property `spacing` to `flexSpacing`

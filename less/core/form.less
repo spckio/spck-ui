@@ -49,7 +49,8 @@
 @form-border:                                   @global-border;
 @form-dark-border:                              @global-dark-border;
 @form-border-width:                             1px;
-@form-color:                                    @global-color;
+@form-color:                                    darken(@global-color, 15%);
+@form-dark-color:                               lighten(@global-dark-color, 15%);
 @form-border-radius:                            0;
 
 @form-focus-color:                              @global-color;
@@ -117,7 +118,7 @@
  *    `input[type="color"]` in Firefox
  * 2. Address margins set differently in Firefox/IE and Chrome/Safari/Opera.
  * 3. Remove `border-radius` in iOS.
- * 4. Correct `font` properties and `color` not being inherited.
+ * 4. Correct `font` properties not being inherited.
  */
 
 .uk-form input,
@@ -131,7 +132,6 @@
     border-radius: @form-border-radius;
     /* 4 */
     font: inherit;
-    color: inherit;
 }
 
 /*
@@ -302,10 +302,14 @@
     /* 4 */
     border-width: 0;
     border-bottom: @form-border-width solid @form-border;
-    color: @form-color;
     -webkit-transition: all linear 0.2s;
     transition: all linear 0.2s;
     .hook-form;
+
+    color: @form-color;
+    .dark & {
+        color: @form-dark-color;
+    }
 
     // Focus state
     &:focus {
@@ -568,7 +572,6 @@ select.uk-form-width-mini { width: (@form-mini-width + 25px); }
 
     /* Better vertical alignment if controls are checkboxes and radio buttons with text */
     .uk-form-horizontal .uk-form-controls-text { padding-top: @form-horizontal-controls-text-padding-top; }
-
 
 }
 
