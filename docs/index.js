@@ -112,15 +112,16 @@ var Model = {
           },
           {
             view: 'button',
-            label: 'Muted Link',
-            link: true,
-            color: 'muted'
+            label: 'Muted Button',
+            link: false,
+            color: 'muted',
+            margin: 'x'
           },
           {
             view: 'button',
             size: 'large',
-            label: 'Large Link',
-            link: true,
+            label: 'Large Button',
+            link: false,
             color: 'danger'
           }
         ]

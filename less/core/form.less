@@ -53,8 +53,6 @@
 @form-dark-color:                               lighten(@global-dark-color, 15%);
 @form-border-radius:                            0;
 
-@form-focus-color:                              @global-color;
-
 @form-disabled-border:                          @global-border;
 @form-disabled-background:                      @global-muted-color;
 @form-disabled-color:                           darken(@global-border, 15%);
@@ -314,7 +312,6 @@
     // Focus state
     &:focus {
         outline: 0;
-        color: @form-focus-color;
         .hook-form-focus;
     }
 

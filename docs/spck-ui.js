@@ -6852,15 +6852,17 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.button = def({
     __name__: "button",
     $defaults: {
-      label: "",
       htmlTag: "BUTTON",
-      tagClass: "uk-button",
+      label: "",
+      tagClass: "",
       iconClass: "",
-      selectable: false
+      selectable: false,
+      link: true
     },
     $setters: classSetters({
       link: prefixClassOptions({
         true: "uk-button-link",
+        false: "uk-button",
         "": ""
       }),
       color: prefixClassOptions({
@@ -6950,8 +6952,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.label = def({
     __name__: "label",
     $defaults: {
-      label: "",
       htmlTag: "SPAN",
+      label: "",
       selectable: false
     },
     $setters: classSetters({
@@ -8663,9 +8665,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.select = def({
     __name__: "select",
     $defaults: {
-      tagClass: "",
       htmlTag: "SELECT",
       itemTag: "OPTION",
+      tagClass: "",
       flex: false,
       flexSize: "",
       listStyle: ""
