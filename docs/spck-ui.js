@@ -6840,11 +6840,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        */
       var self = this;
       var config = self.config;
+      var modal = UIkit.modal('#' + config.id);
+
       self.dispatch("onClose", [config, self.el, args]);
-      UIkit.modal('#' + config.id).one('hide.uk.modal', function() {
+      modal.one('hide.uk.modal', function() {
         self.dispatch("onClosed", [config, self.el, args]);
       });
-      UIkit.modal('#' + config.id).hide();
+      
+      if (modal.isActive()) {
+        modal.hide();
+      }
     }
   }, $definitions.flexgrid);
 
