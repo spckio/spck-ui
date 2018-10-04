@@ -331,8 +331,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function template(templateObject, config, thisArg, parentNode) {
+    var returnFlag = false;
+
     if (isFunction(templateObject)) {
       templateObject = templateObject.call(thisArg, config);
+      returnFlag = true;
+    }
+    else if (isNumber(templateObject)) {
+      templateObject = templateObject.toString();
     }
     
     if (isString(templateObject)) {
@@ -353,7 +359,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       });
     }
     else {
-      fail('Unrecognized template!', config);
+      fail(returnFlag ?
+        'Unrecognized return value from template' :
+        'Unrecognized template!', {
+          template: templateObject,
+          config: config
+        });
     }
   }
 
@@ -2189,6 +2200,28 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, $definitions.element, exports.ClickEvents);
 
 
+  UI.def({
+    __name__: "icon-link",
+    $defaults: {
+      tagClass: "uk-icon-link",
+      icon: ""
+    },
+    template: function (config) {
+      var iconTemplate = "<i class='uk-icon-{{icon}}'></i>";
+      var labelTemplate = "<span>{{label}}</span>";
+      return config.rightSideIcon ? labelTemplate + iconTemplate : iconTemplate + labelTemplate;
+    },
+    setLabel: function (label) {
+      /**
+       * Sets the label (HTML accepted) of the link component.
+       * @param value
+       */
+      this.config.label = label;
+      this.render();
+    }
+  }, $definitions.link);
+
+
   $definitions.progress = def({
     __name__: "progress",
     $defaults: {
@@ -2361,6 +2394,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "input",
     $defaults: {
       htmlTag: "INPUT",
+      tagClass: "uk-input",
       inputWidth: "medium"
     },
     $setters: extend(
@@ -2428,6 +2462,34 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self.getFormControl().value = value;
     }
   }, exports.InputControl, exports.ChangeEvent, exports.FormControl, $definitions.element);
+
+
+  UI.def({
+    __name__: "input-field",
+    $defaults: {
+      formDangerClass: "uk-form-danger",
+      helpDangerClass: "uk-text-danger",
+      margin: "top"
+    },
+    __after__: function () {
+      this.getFormControl().setAttribute('spellcheck', 'false');
+    },
+    focus: function () {
+      this.getFormControl().focus();
+    },
+    raiseConcern: function (error) {
+      var $this = this;
+      if (error) {
+        $this.set("help", error);
+        $this.setFormClass("danger");
+      }
+      else {
+        $this.set("help", "");
+        $this.setFormClass("");
+      }
+      $this.invalid = !!error;
+    }
+  }, $definitions.input);
 
 
   $definitions.autocomplete = def({
@@ -2502,6 +2564,119 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return this.el.lastChild;
     }
   }, $definitions.input);
+
+
+  UI.def({
+    __name__: "drawer",
+    $defaults: {
+      tagClass: "uk-offcanvas",
+      $blockDrawerPan: false,
+      $closeInProgress: false,
+    },
+
+    __after__: function () {
+      var $this = this;
+
+      var swipeGesture = $this.swipeGestureRecognizer = new DrawerSwipeGestureRecognizer(
+        $this.isFlipped() ? DrawerSwipeGestureDirection.LEFT_TO_RIGHT : DrawerSwipeGestureDirection.RIGHT_TO_LEFT,
+        $this.element);
+
+      swipeGesture.getWidth = function () {
+        return $this.content().width();
+      };
+
+      swipeGesture.onPan = function () {
+        return !$this.$blockDrawerPan && modules.scroller.scrollState != 'scroll';
+      };
+
+      swipeGesture.onPanStart = function (e) {
+        var firstTouch = e.touches[0];
+        return this.beganPan || (firstTouch && document.elementFromPoint(firstTouch.clientX, firstTouch.clientY) != $this.element);
+      };
+
+      swipeGesture.applyChanges = function (percent) {
+        var contentElement = $this.element.firstChild;
+        if (contentElement) {
+          var elementStyle = $this.element.style;
+          var contentElementStyle = contentElement.style;
+          var transform = "translateX(" + percent + "%)";
+          var transition = "none";
+          var bgTransition = "background-color 100ms linear";
+          var backface = "hidden";
+          var bgColor = "rgba(0,0,0," + 0.42*(1-Math.abs(percent)/100) + ')';
+          contentElementStyle.webkitTransform = transform;
+          contentElementStyle.transform = transform;
+          contentElementStyle.webkitTransition = transition;
+          contentElementStyle.transition = transition;
+          contentElementStyle.backfaceVisibility = backface;
+          elementStyle.backgroundColor = bgColor;
+          elementStyle.webkitTransition = bgTransition;
+          elementStyle.transition = bgTransition;
+          elementStyle.backfaceVisibility = backface;
+        }
+      };
+
+      swipeGesture.onCompleteSwipe = function () {
+        $this.finalize();
+      };
+
+      $($this.element)
+        .on("click", function (e) {
+          if (e.target == e.delegateTarget) {
+            $this.close();
+          }
+        });
+    },
+
+    finalize: function () {
+      $('body').removeClass('uk-offcanvas-page');
+      UI.removeClass(this.element, 'uk-active');
+      this.content().removeClass('uk-offcanvas-bar-show');
+    },
+
+    showDrawer: function() {
+      var $this = this;
+      if (!$this.isVisible()) {
+        var body = $("body");
+
+        $($this.element)
+          .addClass("uk-active");
+
+        body.addClass("uk-offcanvas-page");
+        body.width();  // .width() - force redraw to apply css
+        $this.content().addClass("uk-offcanvas-bar-show");
+        return true;
+      }
+      return false;
+    },
+
+    open: function () {
+      var $this = this;
+      if ($this.showDrawer()) {
+        $this.swipeGestureRecognizer.animate(null, true, true);
+      }
+    },
+
+    close: function () {
+      if (this.swipeGestureRecognizer) {
+        this.swipeGestureRecognizer.animate();
+      } else {
+        this.finalize();
+      }
+    },
+
+    content: function () {
+      return $(this.element).find(".uk-offcanvas-bar");
+    },
+
+    isVisible: function () {
+      return $(this.element).is(":visible");
+    },
+
+    isFlipped: function () {
+      return this.content().hasClass("uk-offcanvas-bar-flip");
+    }
+  }, $definitions.element);
 
 
   $definitions.dropdown = def({
@@ -3413,7 +3588,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       self.dispatch("onItemClosed", [item]);
     },
     itemClass: function (item) {
-      var cls = UI.definitions.stack.prototype.itemClass.call(this, item);
+      var cls = $definitions.stack.prototype.itemClass.call(this, item);
       if (item.$header) cls += " uk-nav-header";
       if (item.$divider) cls += " uk-nav-divider";
       return cls;
@@ -3857,7 +4032,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
 
   UI.def({
-    __name__: self.__name__,
+    __name__: 'resizer',
     $defaults: {
       tagClass: 'uk-resizer',
       device: 'notouch',
@@ -3911,7 +4086,129 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         }
       });
     }
-  }, UI.definitions.element);
+  }, $definitions.element);
+
+
+  UI.def({
+    __name__: 'spacer',
+    __init__: function (config) {
+      var self = this;
+      self.element = self.el = UI.createElement("DIV");
+      self.config = config;
+      UI.addClass(self.el, config.css);
+      UI.extend(self.el.style, {width: config.width || "auto", minHeight: config.height || "auto"});
+    }
+  });
+
+
+  UI.def({
+    __name__: 'scroller',
+    $defaults: {
+      tagClass: 'uk-scroller-container uk-flex',
+      scrollDirection: 'y'
+    },
+    __init__: function (config) {
+      var $this = this;
+      var el = $this.el;
+      var scrollDirection = $this.scrollDirection = config.scrollDirection;
+      $this.bar = UI.createElement('DIV');
+      $this.wrapper = UI.createElement('DIV');
+      
+      UI.addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
+      UI.addClass($this.wrapper, 'uk-scroller-wrapper');
+
+      el.appendChild($this.wrapper);
+      el.appendChild($this.bar);
+
+      $this.$content = UI.new({
+        css: ["uk-scroller-content", scrollDirection],
+        cells: config.cells,
+        flexLayout: scrollDirection == 'y' ? 'column' : 'row'
+      }, $this.wrapper);
+      $this.content = $this.$content.el;
+
+      window.addEventListener('resize', $this.moveBar.bind($this));
+      $this.content.addEventListener('scroll', function (e) {
+        if (self.scrollState == 'start') self.scrollState = 'scroll';
+        $this.moveBar();
+        $this.dispatch("onScroll", [config, $this.content, e]);
+      });
+      $this.content.addEventListener('mouseenter', $this.moveBar.bind($this));
+    },
+
+    __after__: function () {
+      this.initScrollbar(this.bar, this);
+      this.moveBar();
+    },
+
+    initScrollbar: function (el, context) {
+      var lastPageY, lastPageX;
+  
+      el.addEventListener('mousedown', function(e) {
+        lastPageY = e.pageY;
+        lastPageX = e.pageX;
+        UI.addClass(el, 'uk-scroller-grabbed');
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stop);
+        return false;
+      });
+  
+      function drag(e) {
+        var delta = context.scrollDirection == 'y' ? e.pageY - lastPageY : e.pageX - lastPageX;
+        lastPageY = e.pageY;
+        lastPageX = e.pageX;
+  
+        raf(function() {
+          if (context.scrollDirection == 'y') {
+            context.content.scrollTop += delta / context.scrollRatio;
+          }
+          else if ((context.scrollDirection == 'x')) {
+            context.content.scrollLeft += delta / context.scrollRatio;
+          }
+        });
+      }
+
+      function stop() {
+        UI.removeClass(el, 'uk-scroller-grabbed');
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stop);
+      }
+    },
+  
+    moveBar: function(e) {
+      var $this = this;
+      var totalHeight = $this.content.scrollHeight || 1,
+          ownHeight = $this.content.clientHeight || 1,
+          totalWidth = $this.content.scrollWidth || 1,
+          ownWidth = $this.content.clientWidth || 1;
+      var isRtl = $this.direction === 'rtl';
+
+      $this.scrollRatio = $this.scrollDirection == 'y' ? ownHeight / totalHeight : ownWidth / totalWidth;
+  
+      raf(function() {
+        // Hide scrollbar if no scrolling is possible
+        if($this.scrollRatio >= 1) {
+          UI.addClass($this.bar, 'uk-hidden');
+        } else {
+          UI.removeClass($this.bar, 'uk-hidden');
+
+          if ($this.scrollDirection == 'y') {
+            $this.bar.style.cssText = 'height:' + Math.max($this.scrollRatio * 100, 10) + '%; top:' +
+              ($this.content.scrollTop / totalHeight ) * 100 + '%;' +
+              (isRtl ? '' : 'right:0px;');
+          }
+          else if ($this.scrollDirection == 'x') {
+            $this.bar.style.cssText = 'width:' + Math.max($this.scrollRatio * 100, 10) + '%; left:' +
+              ($this.content.scrollLeft / totalWidth ) * 100 + '%;';
+          }
+        }
+      });
+    },
+
+    showBatch: function (batch) {
+      this.$content.showBatch(batch);
+    }
+  }, $definitions.element);
 
 
   $definitions.select = def({

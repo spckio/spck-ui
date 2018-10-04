@@ -70,20 +70,14 @@
 /* Sub-object `uk-offcanvas-page`
  ========================================================================== */
 
-/*
- * Prepares the whole HTML page to slide-out
- * 1. Fix the main page and disallow scrolling
- * 2. Side-out transition
- */
-
 .uk-offcanvas-page {
     /* 1 */
-    position: fixed;
+    position: static;
     /* 2 */
-    -webkit-transition: margin-left 0.3s ease-in-out;
-    transition: margin-left 0.3s ease-in-out;
+    -webkit-transition: none;
+    transition: none;
 }
-
+  
 
 /* Sub-object `uk-offcanvas-bar`
  ========================================================================== */
@@ -124,6 +118,19 @@
 .uk-offcanvas.uk-active .uk-offcanvas-bar.uk-offcanvas-bar-show {
     -webkit-transform: translateX(0%);
     transform: translateX(0%);
+}
+
+.uk-notouch {
+    .uk-offcanvas-large.uk-offcanvas, .uk-offcanvas-large .uk-offcanvas-bar {
+        display: block;
+        height: 100%;
+        position: static;
+
+        -webkit-transform: translateX(0%) !important;
+        transform: translateX(0%) !important;
+
+        box-shadow: none;
+    }
 }
 
 /* Modifier `uk-offcanvas-bar-flip`

@@ -130,6 +130,21 @@
     border-radius: @form-border-radius;
     /* 4 */
     font: inherit;
+
+    background: none;
+    border: none;
+    outline: none;
+    font: inherit;
+  
+    border-bottom: solid 1px @border-color;
+    box-sizing: border-box;
+    padding: @p6 @p8 0;
+    min-height: 40px;
+  
+    .dark & {
+      color: @dark-color;
+      border-bottom: solid 1px #696c77;
+    }
 }
 
 /*
