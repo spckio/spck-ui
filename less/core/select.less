@@ -1,0 +1,31 @@
+
+
+.uk-select {
+  box-sizing: border-box;
+  margin: 0;
+  border-radius: 0;
+  font: inherit;
+  vertical-align: middle;
+
+  background: none;
+  border: none;
+  outline: none;
+
+  /*
+   * Address inconsistent `text-transform` inheritance which is only inherit in Firefox
+   * Address inconsistent styling between firefox and chrome
+   */
+  text-transform: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.uk-select:not([multiple]):not([size]) {
+  background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon.svg") no-repeat 100% 50%;
+  padding-right: 24px;
+
+  .dark & {
+      background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon-dark.svg") no-repeat 100% 50%;
+  }
+}

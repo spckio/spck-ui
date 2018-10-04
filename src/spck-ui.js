@@ -2200,7 +2200,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, $definitions.element, exports.ClickEvents);
 
 
-  UI.def({
+  $definitions.iconLink = def({
     __name__: "icon-link",
     $defaults: {
       tagClass: "uk-icon-link",
@@ -2464,7 +2464,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, exports.InputControl, exports.ChangeEvent, exports.FormControl, $definitions.element);
 
 
-  UI.def({
+  $definitions.inputField = def({
     __name__: "input-field",
     $defaults: {
       formDangerClass: "uk-form-danger",
@@ -2566,7 +2566,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, $definitions.input);
 
 
-  UI.def({
+  $definitions.drawer = def({
     __name__: "drawer",
     $defaults: {
       tagClass: "uk-offcanvas",
@@ -4031,7 +4031,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, $definitions.list);
 
 
-  UI.def({
+  $definitions.resizer = def({
     __name__: 'resizer',
     $defaults: {
       tagClass: 'uk-resizer',
@@ -4089,7 +4089,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, $definitions.element);
 
 
-  UI.def({
+  $definitions.spacer = def({
     __name__: 'spacer',
     __init__: function (config) {
       var self = this;
@@ -4101,7 +4101,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   });
 
 
-  UI.def({
+  $definitions.scroller = def({
     __name__: 'scroller',
     $defaults: {
       tagClass: 'uk-scroller-container uk-flex',
@@ -4215,8 +4215,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "select",
     $defaults: {
       htmlTag: "SELECT",
-      itemTag: "OPTION",
-      tagClass: "",
+      tagClass: "uk-select",
       flex: false,
       flexSize: "",
       listStyle: ""
@@ -4244,7 +4243,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return this.setActive('value', value);
     },
     template: function (item) {
+      if (item.view) {
+        if (item.view == 'optgroup') {
+          return UI.new(item);
+        } else {
+          // Error
+          throw new Error('Invalid view: ' + item.view + ' for "select" child view.' + 
+            'Only "optgroup" is accepted.');
+        }
+      }
       return item.label;
+    },
+    itemTagString: function (item) {
+      return item.view == 'optgroup' ? "OPTGROUP" : "OPTION";
     },
     itemElement: function (item) {
       var attributes = {value: item.value, class: this.itemClass(item)};
@@ -4252,6 +4263,27 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return createElement(this.itemTagString(), attributes);
     }
   }, exports.ChangeEvent, exports.FormControl, $definitions.list);
+
+
+  $definitions.optgroup = def({
+    __name__: "optgroup",
+    $defaults: {
+      htmlTag: "OPTGROUP",
+      itemTag: "OPTION",
+      tagClass: "",
+      flex: false,
+      flexSize: "",
+      listStyle: ""
+    },
+    template: function (item) {
+      return item.label;
+    },
+    itemElement: function (item) {
+      var attributes = {value: item.value, class: this.itemClass(item)};
+      if (item.selected) attributes.selected = item.selected;
+      return createElement(this.itemTagString(), attributes);
+    }
+  }, $definitions.list);
 
 
   $definitions.form = def({

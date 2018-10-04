@@ -9,7 +9,6 @@
 //                  `uk-form-label`
 //                  `uk-form-controls`
 //                  `uk-form-controls-condensed`
-//                  `uk-form-icon`
 //
 // Modifiers:       `uk-form-stacked`
 //                  `uk-form-horizontal`
@@ -45,20 +44,7 @@
 
 
 @form-height:                                   @global-height;
-@form-padding:                                  0 @global-margin-small;
-@form-border:                                   @global-border;
-@form-dark-border:                              @global-dark-border;
-@form-border-width:                             1px;
-@form-color:                                    darken(@global-color, 15%);
-@form-dark-color:                               lighten(@global-dark-color, 15%);
-@form-border-radius:                            0;
-
-@form-disabled-border:                          @global-border;
-@form-disabled-background:                      @global-muted-color;
-@form-disabled-color:                           darken(@global-border, 15%);
-
 @form-placeholder-color:                        lighten(@global-color, 10%);
-
 @form-gutter:                                   20px;
 
 @form-legend-border:                            @global-border;
@@ -66,12 +52,10 @@
 @form-legend-font-size:                         round((@global-font-size * 1.28)); // 18px / 20px
 @form-legend-line-height:                       round((@form-legend-font-size * 1.68)); // 30px / 34px
 
-@form-small-height:                             @global-height-small;
-@form-large-height:                             @global-height-large;
-@form-small-padding:                            0 @global-margin-small;
-@form-large-padding:                            8px 6px;
 @form-small-font-size:                          round((@global-font-size * 0.85)); // 12px / 14px
 @form-large-font-size:                          round((@global-font-size * 1.14)); // 16px / 18px
+
+@form-disabled-color:                           @global-muted-color;
 
 @form-danger-border:                            @button-danger-background;
 @form-danger-color:                             @button-danger-background;
@@ -100,73 +84,9 @@
 @form-horizontal-label-margin-top:              @global-margin-mini;
 @form-horizontal-controls-text-padding-top:     @global-margin-small;
 
-@form-icon-font-size:                           @global-font-size;
-@form-icon-width:                               30px;
-@form-icon-color:                               @form-placeholder-color;
-
 /* ========================================================================
    Component: Form
  ========================================================================== */
-
-/*
- * 1. Define consistent box sizing.
- *    Default is `content-box` with following exceptions set to `border-box`
- *    `button`, `select`, `input[type="checkbox"]` and `input[type="radio"]`
- *    `input[type="search"]` in Chrome, Safari and Opera
- *    `input[type="color"]` in Firefox
- * 2. Address margins set differently in Firefox/IE and Chrome/Safari/Opera.
- * 3. Remove `border-radius` in iOS.
- * 4. Correct `font` properties not being inherited.
- */
-
-.uk-form input,
-.uk-form select,
-.uk-form textarea {
-    /* 1 */
-    box-sizing: border-box;
-    /* 2 */
-    margin: 0;
-    /* 3 */
-    border-radius: @form-border-radius;
-    /* 4 */
-    font: inherit;
-
-    background: none;
-    border: none;
-    outline: none;
-    font: inherit;
-  
-    border-bottom: solid 1px @border-color;
-    box-sizing: border-box;
-    padding: @p6 @p8 0;
-    min-height: 40px;
-  
-    .dark & {
-      color: @dark-color;
-      border-bottom: solid 1px #696c77;
-    }
-}
-
-/*
- * Address inconsistent `text-transform` inheritance which is only inherit in Firefox
- * Address inconsistent styling between firefox and chrome
- */
-
-.uk-form select {
-    text-transform: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.uk-form select:not([multiple]):not([size]) {
-    background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon.svg") no-repeat 100% 50%;
-    padding-right: 20px;
-
-    .dark & {
-        background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon-dark.svg") no-repeat 100% 50%;
-    }
-}
 
 /*
  * 1. Correct `font` properties not being inherited.
@@ -182,60 +102,6 @@
 }
 
 /*
- * Removes inner padding and border in Firefox 4+.
- */
-
-.uk-form input::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-}
-
-/*
- * Removes excess padding in IE 8/9/10.
- */
-
-.uk-form input[type="checkbox"],
-.uk-form input[type="radio"] { padding: 0; }
-
-/*
- * Improves consistency of cursor style for clickable elements
- */
-
-.uk-form input[type="checkbox"]:not(:disabled),
-.uk-form input[type="radio"]:not(:disabled) { cursor: pointer; }
-
-/*
- * Remove default style in iOS.
- */
-
-.uk-form textarea,
-.uk-form input:not([type]),
-.uk-form input[type="text"],
-.uk-form input[type="password"],
-.uk-form input[type="email"],
-.uk-form input[type="url"],
-.uk-form input[type="search"],
-.uk-form input[type="tel"],
-.uk-form input[type="number"],
-.uk-form input[type="datetime"] { -webkit-appearance: none; }
-
-/*
- * Remove inner padding and search cancel button in Chrome, Safari and Opera on OS X.
- */
-
-.uk-form input[type="search"]::-webkit-search-cancel-button,
-.uk-form input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
-
-/*
- * Fix the cursor style for Chrome's increment/decrement buttons. For certain
- * `font-size` values of the `input`, it causes the cursor style of the
- * decrement button to change from `default` to `text`.
- */
-
-.uk-form input[type="number"]::-webkit-inner-spin-button,
-.uk-form input[type="number"]::-webkit-outer-spin-button { height: auto; }
-
-/*
  * Define consistent border, margin, and padding.
  */
 
@@ -245,17 +111,9 @@
     padding: 0;
 }
 
-/*
- * 1. Remove default vertical scrollbar in IE 8/9/10/11.
- * 2. Improve readability and alignment in all browsers.
- */
 
-.uk-form textarea {
-    /* 1 */
-    overflow: auto;
-    /* 2 */
-    vertical-align: top;
-}
+/* Style
+ ========================================================================== */
 
 /*
  * Removes placeholder transparency in Firefox.
@@ -263,81 +121,11 @@
 
 .uk-form ::-moz-placeholder { opacity: 1; }
 
-/*
+ /*
  * Removes `box-shadow` for invalid controls in Firefox.
  */
 
 .uk-form :invalid { box-shadow: none; }
-
-/*
- * Vertical alignment
- */
-
-.uk-form input:not([type="radio"]):not([type="checkbox"]),
-.uk-form select { vertical-align: middle; }
-
-
-/* Style
- ========================================================================== */
-
-/*
- * Controls
- * Except for `range`, `radio`, `checkbox`, `file`, `submit`, `reset`, `button` and `image`
- * 1. Must be `height` because `min-height` is not working in OSX
- * 2. Responsiveness: Sets a maximum width relative to the parent to scale on narrower viewports
- * 3. Vertical `padding` needed for `select` elements in Firefox
- * 4. Style
- */
-
-.uk-form select,
-.uk-form textarea,
-.uk-form input:not([type]),
-.uk-form input[type="text"],
-.uk-form input[type="password"],
-.uk-form input[type="datetime"],
-.uk-form input[type="datetime-local"],
-.uk-form input[type="date"],
-.uk-form input[type="month"],
-.uk-form input[type="time"],
-.uk-form input[type="week"],
-.uk-form input[type="number"],
-.uk-form input[type="email"],
-.uk-form input[type="url"],
-.uk-form input[type="search"],
-.uk-form input[type="tel"],
-.uk-form input[type="color"] {
-    /* 1 */
-    height: @form-height;
-    /* 2 */
-    max-width: 100%;
-    /* 3 */
-    padding: @form-padding;
-    /* 4 */
-    border-width: 0;
-    border-bottom: @form-border-width solid @form-border;
-    -webkit-transition: all linear 0.2s;
-    transition: all linear 0.2s;
-    .hook-form;
-
-    color: @form-color;
-    .dark & {
-        color: @form-dark-color;
-    }
-
-    // Focus state
-    &:focus {
-        outline: 0;
-        .hook-form-focus;
-    }
-
-    // Disabled state
-    &:disabled {
-        border-color: @form-disabled-border;
-        background-color: @form-disabled-background;
-        color: @form-disabled-color;
-        .hook-form-disabled;
-    }
-}
 
 /*
  * Placeholder
@@ -396,16 +184,12 @@ select.uk-form-small,
 textarea.uk-form-small,
 input[type].uk-form-small,
 input:not([type]).uk-form-small {
-    height: @form-small-height;
-    padding: @form-small-padding;
     font-size: @form-small-font-size;
 }
 
 select.uk-form-large,
 textarea.uk-form-large,
 input.uk-form-large  {
-    height: @form-large-height;
-    padding: @form-large-padding;
     font-size: @form-large-font-size;
 }
 
@@ -614,62 +398,9 @@ select.uk-form-width-mini { width: (@form-mini-width + 25px); }
 }
 
 
-/* Sub-object: `uk-form-icon`
- ========================================================================== */
-
-/*
- * 1. Container width fits its content
- * 2. Create position context
- * 3. Prevent `inline-block` consequences
- */
-
-.uk-form-icon {
-    /* 1 */
-    display: inline-block;
-    /* 2 */
-    position: relative;
-    /* 3 */
-    max-width: 100%;
-}
-
-/*
- * 1. Make form element clickable through icon
- */
-
-.uk-form-icon > [class*='uk-icon-'] {
-    position: absolute;
-    top: 50%;
-    width: @form-icon-width;
-    margin-top: round(@form-icon-font-size / -2);
-    font-size: @form-icon-font-size;
-    color: @form-icon-color;
-    text-align: center;
-    /* 1 */
-    pointer-events: none;
-}
-
-.uk-form-icon:not(.uk-form-icon-flip) > input { padding-left: @form-icon-width !important; }
-
-/*
- * Sub-modifier: `uk-form-icon-flip`
- */
-
-.uk-form-icon-flip > [class*='uk-icon-'] { right: 0; }
-.uk-form-icon-flip > input { padding-right: @form-icon-width !important; }
-
-
 // Hooks
 // ========================================================================
 
-.hook-form-misc;
-
-.hook-form() {
-    .dark & {
-        border-color: @form-dark-border;
-    }
-}
-.hook-form-focus() {}
-.hook-form-disabled() {}
 .hook-form-legend() {}
 .hook-form-danger() {}
 .hook-form-success() {}
@@ -677,4 +408,3 @@ select.uk-form-width-mini { width: (@form-mini-width + 25px); }
 .hook-form-blank-focus() {}
 .hook-form-stacked-label() {}
 .hook-form-horizontal-label() {}
-.hook-form-misc() {}

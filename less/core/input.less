@@ -1,0 +1,89 @@
+// Variables
+// ========================================================================
+
+@input-color:                                    @global-color;
+@input-dark-color:                               @global-dark-color;
+@input-border:                                   @global-border;
+@input-dark-border:                              @global-dark-border;
+@input-padding:                                  6px 8px;
+
+@input-disabled-border:                          @global-border;
+@input-disabled-color:                           darken(@global-border, 15%);
+
+/* ========================================================================
+   Component: Input
+ ========================================================================== */
+
+.uk-input {
+  color: @input-color;
+  border: 0;
+  border-bottom: solid 1px @input-border;
+  box-sizing: border-box;
+  padding: @input-padding;
+
+  // Remove `border-radius` in iOS.
+  border-radius: 0;
+
+  /*
+   * Remove default style in iOS.
+   */
+   -webkit-appearance: none;
+  
+  .dark & {
+    color: @input-dark-color;
+    border-bottom: solid 1px @input-dark-border;
+  }
+
+  // Disabled state
+  &:disabled {
+    border-color: @input-disabled-border;
+    color: @input-disabled-color;
+  }
+}
+
+
+/*
+ * Removes inner padding and border in Firefox 4+.
+ */
+
+.uk-input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/*
+* Removes excess padding in IE 8/9/10.
+*/
+
+.uk-input[type="checkbox"],
+.uk-input[type="radio"] { padding: 0; }
+
+/*
+* Improves consistency of cursor style for clickable elements
+*/
+
+.uk-input[type="checkbox"]:not(:disabled),
+.uk-input[type="radio"]:not(:disabled) { cursor: pointer; }
+
+
+/*
+* Remove inner padding and search cancel button in Chrome, Safari and Opera on OS X.
+*/
+
+.uk-input[type="search"]::-webkit-search-cancel-button,
+.uk-input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
+
+/*
+* Fix the cursor style for Chrome's increment/decrement buttons. For certain
+* `font-size` values of the `input`, it causes the cursor style of the
+* decrement button to change from `default` to `text`.
+*/
+
+.uk-input[type="number"]::-webkit-inner-spin-button,
+.uk-input[type="number"]::-webkit-outer-spin-button { height: auto; }
+
+/*
+ * Vertical alignment
+ */
+
+.uk-input:not([type="radio"]):not([type="checkbox"]) { vertical-align: middle; }
