@@ -1,0 +1,53 @@
+// Variables
+// ========================================================================
+
+
+@resizer-background-color:                     @global-border;
+@resizer-dark-background-color:                     @global-dark-border;
+
+
+/* ========================================================================
+   Component: Pagination
+ ========================================================================== */
+
+
+.uk-resizer {
+  background: @resizer-background-color;
+
+  .dark & {
+    background-color: @resizer-dark-background-color;
+  }
+
+  &.x {
+    min-width: 3px;
+    width: 3px; // For IE, Edge
+    cursor: ew-resize;
+
+    .uk-resizer-drag-handle {
+      width: 3px;
+      height: 100%;
+    }
+  }
+
+  &.y {
+    min-height: 3px;
+    height: 3px; // For IE, Edge
+    cursor: ns-resize;
+
+    .uk-resizer-drag-handle {
+      height: 3px;
+      width: 100%;
+    }
+  }
+}
+
+.uk-resizer-drag-handle {
+  z-index: 1002;
+  background: @resizer-background-color;
+  opacity: 0.65;
+  position: absolute;
+
+  .dark & {
+    background-color: @resizer-dark-background-color;
+  }
+}

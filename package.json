@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "description": "Declarative UI library.",
   "main": "./dist/spck-ui.js",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "grunt": "^1.0.2",
     "grunt-webfont": "^1.6.0",

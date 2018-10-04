@@ -1924,17 +1924,17 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     __init__: function (config) {
       var self = this;
-      self.header = self._header = createElement("DIV", {class: "uk-modal-header"});
-      self.footer = self._footer = createElement("DIV", {class: "uk-modal-footer"});
-      self.body = self._body = createElement("DIV", {class: "uk-modal-dialog"});
+      self.header = createElement("DIV", {class: "uk-modal-header"});
+      self.footer = createElement("DIV", {class: "uk-modal-footer"});
+      self.body = createElement("DIV", {class: "uk-modal-dialog"});
 
-      if (config.headerClass) addClass(self._header, config.headerClass);
-      if (config.dialogClass) addClass(self._body, config.dialogClass);
-      if (config.footerClass) addClass(self._footer, config.footerClass);
+      if (config.headerClass) addClass(self.header, config.headerClass);
+      if (config.dialogClass) addClass(self.body, config.dialogClass);
+      if (config.footerClass) addClass(self.footer, config.footerClass);
 
-      self.el.appendChild(self._body);
-      if (config.header) self._body.appendChild(self._header);
-      if (config.footer) self._body.appendChild(self._footer);
+      self.el.appendChild(self.body);
+      if (config.header) self.body.appendChild(self.header);
+      if (config.footer) self.body.appendChild(self.footer);
     },
     $setters: extend(
       classSetters({
@@ -1946,56 +1946,58 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           full: "",
           "": ""
         }, 'uk-modal-dialog-', true)
-      }, "_body"),
+      }, "body"),
       {
         bodyWidth: function (value) {
           value = isNumber(value) ? value + "px" : value;
-          this._body.style.width = value;
+          this.body.style.width = value;
         },
         bodyHeight: function (value) {
           value = isNumber(value) ? value + "px" : value;
-          this._body.style.height = value;
+          this.body.style.height = value;
         },
         closeButton: function (value) {
           if (value) {
             var self = this;
-            self._close = createElement("A",
+            var close = self.close = createElement("A",
               {class: "uk-modal-close uk-close"});
-            if (self._body.firstChild) {
-              self._body.insertBefore(self._close, self._body.firstChild);
+            var body = self.body;
+
+            if (body.firstChild) {
+              body.insertBefore(close, body.firstChild);
             }
             else {
-              self._body.appendChild(self._close);
+              body.appendChild(close);
             }
           }
         },
         body: function (value) {
           var self = this;
           self.bodyContent = exports.new(value, function (el) {
-            if (self._footer.parentNode) {
-              self._body.insertBefore(el, self._footer);
+            if (self.footer.parentNode) {
+              self.body.insertBefore(el, self.footer);
             } else {
-              self._body.appendChild(el);
+              self.body.appendChild(el);
             }
           });
           self.$components.push(self.bodyContent);
         },
         header: function (value) {
           var self = this;
-          self.headerContent = exports.new(value, self._header);
+          self.headerContent = exports.new(value, self.header);
           self.$components.push(self.headerContent);
         },
         footer: function (value) {
           var self = this;
-          self.footerContent = exports.new(value, self._footer);
+          self.footerContent = exports.new(value, self.footer);
           self.$components.push(self.footerContent);
         },
         caption: function (value) {
           var self = this;
-          if (!self._caption)
-            self._caption = createElement("DIV", {class: "uk-modal-caption"});
-          self._caption.innerHTML = value;
-          self._body.appendChild(self._caption);
+          if (!self.caption)
+            self.caption = createElement("DIV", {class: "uk-modal-caption"});
+          self.caption.innerHTML = value;
+          self.body.appendChild(self.caption);
         }
       }
     ),
@@ -3765,16 +3767,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     __init__: function () {
       var self = this;
-      self.header = self._header = createElement("THEAD");
-      self.footer = self._footer = createElement("TFOOT");
-      self.body = self._body = createElement("TBODY");
+      self.header = createElement("THEAD");
+      self.footer = createElement("TFOOT");
+      self.body = createElement("TBODY");
 
       // Make Chrome wrapping behavior same as firefox
-      self._body.style.wordBreak = "break-word";
+      self.body.style.wordBreak = "break-word";
 
-      self.el.appendChild(self._header);
-      self.el.appendChild(self._footer);
-      self.el.appendChild(self._body);
+      self.el.appendChild(self.header);
+      self.el.appendChild(self.footer);
+      self.el.appendChild(self.body);
     },
     $setters: extend(classSetters({
         tableStyle: prefixClassOptions({
@@ -3813,7 +3815,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
                 : "<th>" + column.header + "</th>";
             });
 
-            self._header.innerHTML = "<tr>" + headersHTML + "</tr>";
+            self.header.innerHTML = "<tr>" + headersHTML + "</tr>";
           }
         },
         footer: function (value) {
@@ -3825,14 +3827,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
               column.footer = value.footer;
             }
             var footers = pluck(self.config.columns, "footer");
-            self._footer.innerHTML = "<tr><td>" + footers.join("</td><td>") + "</td></tr>";
+            self.footer.innerHTML = "<tr><td>" + footers.join("</td><td>") + "</td></tr>";
           }
         },
         caption: function (value) {
           var self = this;
-          self._caption = createElement("CAPTION");
-          self._caption.innerHTML = value;
-          self.el.appendChild(self._caption);
+          self.caption = createElement("CAPTION");
+          self.caption.innerHTML = value;
+          self.el.appendChild(self.caption);
         }
       }
     ),
@@ -3849,9 +3851,67 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       });
     },
     containerElement: function () {
-      return this._body;
+      return this.body;
     }
   }, $definitions.list);
+
+
+  UI.def({
+    __name__: self.__name__,
+    $defaults: {
+      tagClass: 'uk-resizer',
+      device: 'notouch',
+      minValue: 0,
+      maxValue: Number.MAX_VALUE
+    },
+    $setters: classSetters({
+      direction: {
+        x: "x",
+        y: "y"
+      }
+    }),
+    __after__: function (config) {
+      var $this = this;
+      var dragHandle = UI.createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
+      $this.dragHandle = dragHandle;
+      $this.el.appendChild(dragHandle);
+
+      UI.addListener($this.el, 'mousedown', function (e) {
+        if (!$this.dragging) {
+          UI.preventEvent(e);
+          dragHandle.style = 'left:' + e.clientX + 'px';
+          UI.removeClass(dragHandle, 'uk-hidden');
+          $this.dragging = true;
+        }
+      });
+
+      UI.addListener(document.body, 'mousemove', function (e) {
+        if ($this.dragging) {
+          var clientX = e.clientX;
+          var maxValue = config.maxValue;
+          var minValue = config.minValue;
+          if (clientX < minValue) clientX = minValue;
+          else if (clientX > maxValue) clientX = maxValue;
+          dragHandle.style = 'left:' + clientX + 'px';
+        }
+      });
+
+      UI.addListener(document.body, 'mouseup', function (e) {
+        if ($this.dragging) {
+          var clientX = e.clientX;
+          var maxValue = config.maxValue;
+          var minValue = config.minValue;
+
+          if (clientX < minValue) clientX = minValue;
+          else if (clientX > maxValue) clientX = maxValue;
+
+          UI.addClass(dragHandle, 'uk-hidden');
+          $this.dragging = false;
+          $this.dispatch("onHandleResized", [clientX, $this.el, e]);
+        }
+      });
+    }
+  }, UI.definitions.element);
 
 
   $definitions.select = def({
