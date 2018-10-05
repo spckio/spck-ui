@@ -43,28 +43,19 @@
 
 @card-box-padding:                             @global-margin-large;
 @card-box-background:                          @global-background;
-@card-box-color:                               @global-color;
-@card-box-hover-color:                         @card-box-color;
-@card-box-title-color:                         @global-color;
+@card-box-dark-background:                     #2f3c46;
 @card-box-badge-top:                           @global-margin;
 @card-box-badge-right:                         @card-box-badge-top;
 @card-box-header-margin:                       round(-@card-box-padding / 2);
 @card-box-teaser-margin:                       -@card-box-padding;
 @card-box-border:                              @global-border;
+@card-box-dark-border:                         @global-dark-border;
 @card-box-border-radius:                       @global-border-radius;
-@card-box-border-width:                        1px;
-@card-box-color:                               @global-color;
 
 @card-box-primary-background:                  fade(@global-primary-background, 10%);
 @card-box-primary-border:                      #50bfff;
-@card-box-primary-color:                       @global-color;
-@card-box-primary-hover-color:                 @card-box-primary-color;
-@card-box-primary-title-color:                 @card-box-primary-color;
 
 @card-header-title-padding:                    @global-margin;
-@card-header-title-border:                     @global-border;
-@card-header-title-border-width:               1px;
-@card-header-title-color:                      @global-color;
 
 @card-space-padding:                           30px;
 
@@ -163,19 +154,20 @@
 .uk-card-box {
     padding: @card-box-padding;
     background: @card-box-background;
-    color: @card-box-color;
-    border: @card-header-title-border-width solid @card-header-title-border;
+    border: 1px solid @card-box-border;
     border-radius: @card-box-border-radius;
+
+    .dark & {
+        background-color: @card-box-dark-background;
+        border-color: @card-box-dark-border;
+    }
+
     .hook-card-box;
 }
 
 .uk-card-box:hover {
-    color: @card-box-hover-color;
     box-shadow: @card-box-shadow;
-    .hook-card-box-hover;
 }
-
-.uk-card-box .uk-card-title { color: @card-box-title-color; }
 
 .uk-card-box .uk-card-badge {
     top: @card-box-badge-top;
@@ -198,16 +190,8 @@
 .uk-card-box-primary {
     background-color: @card-box-primary-background;
     border-left: 5px solid @card-box-primary-border;
-    color: @card-box-primary-color;
     .hook-card-box-primary;
 }
-
-.uk-card-box-primary:hover {
-    color: @card-box-primary-hover-color;
-    .hook-card-box-primary-hover;
-}
-
-.uk-card-box-primary .uk-card-title { color: @card-box-primary-title-color; }
 
 
 /* Modifier: `uk-card-header`
@@ -219,8 +203,7 @@
 
 .uk-card-header .uk-card-title {
     padding-bottom: @card-header-title-padding;
-    border-bottom: @card-header-title-border-width solid @card-header-title-border;
-    color: @card-header-title-color;
+    border-bottom: 1px solid @card-box-border;
     .hook-card-header;
 }
 
@@ -268,7 +251,5 @@
 .hook-card-box() {
     transition: 0.3s;
 }
-.hook-card-box-hover() {}
 .hook-card-box-primary() {}
-.hook-card-box-primary-hover() {}
 .hook-card-header() {}

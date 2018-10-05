@@ -1361,16 +1361,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
 
-  exports.CommonCSS = {
-    __name__: "CommonCSS",
+  exports.CommonStyles = {
+    __name__: "CommonStyles",
     __check__: function (bases) {
-      assertBasesCheck('CommonCSS', 'CommonCSS', bases);
-      assertBasesCheck('PropertySetter', 'CommonCSS', bases);
+      assertBasesCheck('CommonStyles', 'CommonStyles', bases);
+      assertBasesCheck('PropertySetter', 'CommonStyles', bases);
     },
     $setters: classSetters(exports.classOptions)
   };
 
-  assignClassToMethods(exports.CommonCSS.$setters, exports.CommonCSS.__name__);
+  assignClassToMethods(exports.CommonStyles.$setters, exports.CommonStyles.__name__);
 
 
   exports.CommonEvents = {
@@ -1418,7 +1418,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         else
           this.enable();
       },
-      css: function (value) {
+      cls: function (value) {
         addClass(this.el, classString(value));
       },
       sticky: function (value) {
@@ -1578,7 +1578,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         return item[key] === value;
       })[0];
     }
-  }, exports.Dispatcher, exports.Responder, exports.CommonEvents, exports.CommonCSS, exports.PropertySetter);
+  }, exports.Dispatcher, exports.Responder, exports.CommonEvents, exports.CommonStyles, exports.PropertySetter);
 
   
   $definitions.flexgrid = def({
@@ -2494,7 +2494,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   $definitions.autocomplete = def({
     __name__: "autocomplete",
-    template: '<input style="width:100%">',
+    template: '<input class="uk-input" style="width:100%">',
     $defaults: {
       htmlTag: "DIV",
       tagClass: "uk-autocomplete",
@@ -2574,11 +2574,49 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       $closeInProgress: false,
     },
 
+    $setters: {
+      edge: function (value) {
+        if (value) {
+          var $this = this;
+          var direction = $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL;
+          // Tricky: Go in opposite direction of drawer
+          var swiper = new DrawerSwipe(direction, document.body);
+          $this.openSwipe = swiper;
+    
+          swiper.getWidth = function () {
+            return $this.content().width();
+          };
+    
+          swiper.onPanStart = function (e) {
+            var firstTouch = e.touches[0];
+            var lastTouch = this.lastTouch;
+            return this.beganPan || (firstTouch && firstTouch.clientX <= 36) || (lastTouch && lastTouch.clientX <= 36);
+          };
+    
+          swiper.applyChanges = function (percent) {
+            if (this.beganPan) {
+              $this.showDrawer();
+              var percent = $this.closeSwipe.percent = -100 + percent;
+              $this.closeSwipe.applyChanges(percent);
+            }
+          };
+    
+          swiper.onCompleteSwipe = function () {
+            $this.closeSwipe.reset();
+          };
+    
+          swiper.onIncompleteSwipe = function () {
+            $this.close();
+          };
+        }
+      }
+    },
+
     __after__: function () {
       var $this = this;
 
-      var swipeGesture = $this.swipeGestureRecognizer = new DrawerSwipeGestureRecognizer(
-        $this.isFlipped() ? DrawerSwipeGestureDirection.LEFT_TO_RIGHT : DrawerSwipeGestureDirection.RIGHT_TO_LEFT,
+      var swipeGesture = $this.closeSwipe = new DrawerSwipe(
+        $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL,
         $this.element);
 
       swipeGesture.getWidth = function () {
@@ -2653,13 +2691,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     open: function () {
       var $this = this;
       if ($this.showDrawer()) {
-        $this.swipeGestureRecognizer.animate(null, true, true);
+        $this.closeSwipe.animate(null, true, true);
       }
     },
 
     close: function () {
-      if (this.swipeGestureRecognizer) {
-        this.swipeGestureRecognizer.animate();
+      if (this.closeSwipe) {
+        this.closeSwipe.animate();
       } else {
         this.finalize();
       }
@@ -2687,7 +2725,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       padding: "none",
       justify: false,
       dropdownDelay: 0,
-      dropdownCSS: "uk-dropdown-close",
+      dropdownClass: "uk-dropdown-close",
       dropdownAnimation: "uk-animation-scale-up-y uk-animation-top-center",
       dropdownRect: null,
       blank: false
@@ -2722,7 +2760,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     dropdownClass: function () {
       var config = getConfig(this);
-      var result = config.dropdownCSS;
+      var result = config.dropdownClass;
       result += config.blank ? " uk-dropdown-blank" : " uk-dropdown";
       result += config.scrollable ? " uk-dropdown-scrollable" : "";
       result += " " + config.dropdownAnimation;
@@ -3154,7 +3192,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     itemClass: function (item) {
       var itemClass = classString(getConfig(this).itemTagClass);
       itemClass += item.$selected ? ' ' + ACTIVE_CLASS : '';
-      itemClass += ' ' + classString(item.$css);
+      itemClass += ' ' + classString(item.$cls);
       return itemClass;
     },
     itemTagString: function () {
@@ -4016,7 +4054,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     template: function (item) {
       var self = this;
       return self.config.columns.map(function (column) {
-        var td = createElement("TD", {class: column.$css ? classString(column.$css) : ""});
+        var td = createElement("TD", {class: column.$cls ? classString(column.$cls) : ""});
 
         if (column.align)
           td.style.textAlign = column.align;
@@ -4095,7 +4133,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       self.element = self.el = UI.createElement("DIV");
       self.config = config;
-      UI.addClass(self.el, config.css);
+      UI.addClass(self.el, config.cls);
       UI.extend(self.el.style, {width: config.width || "auto", minHeight: config.height || "auto"});
     }
   });
@@ -4121,7 +4159,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       el.appendChild($this.bar);
 
       $this.$content = UI.new({
-        css: ["uk-scroller-content", scrollDirection],
+        cls: ["uk-scroller-content", scrollDirection],
         cells: config.cells,
         flexLayout: scrollDirection == 'y' ? 'column' : 'row'
       }, $this.wrapper);
@@ -4248,7 +4286,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           return UI.new(item);
         } else {
           // Error
-          throw new Error('Invalid view: ' + item.view + ' for "select" child view.' + 
+          fail('Invalid view: ' + item.view + ' for "select" child view.' + 
             'Only "optgroup" is accepted.');
         }
       }
@@ -4260,7 +4298,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     itemElement: function (item) {
       var attributes = {value: item.value, class: this.itemClass(item)};
       if (item.selected) attributes.selected = item.selected;
-      return createElement(this.itemTagString(), attributes);
+      return createElement(this.itemTagString(item), attributes);
     }
   }, exports.ChangeEvent, exports.FormControl, $definitions.list);
 

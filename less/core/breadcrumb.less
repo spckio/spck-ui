@@ -26,8 +26,10 @@
 @breadcrumb-divider-margin:                     8px;
 @breadcrumb-disabled-color:                     #999;
 
-@breadcrumb-color:                              #606266;
-@breadcrumb-divider-color:                      #c0c4cc;
+@breadcrumb-color:                              @global-color;
+@breadcrumb-dark-color:                         @global-dark-color;
+@breadcrumb-divider-color:                      darken(@global-border, 15%);
+@breadcrumb-divider-dark-color:                 lighten(@global-dark-border, 12%);
 
 /* ========================================================================
    Component: Breadcrumb
@@ -67,13 +69,21 @@
 .uk-breadcrumb > li > a {
     transition: color .2s cubic-bezier(.645,.045,.355,1);
     color: @breadcrumb-color;
+
+    .dark & {
+        color: @breadcrumb-dark-color;
+    }
 }
 
 .uk-breadcrumb > li:nth-child(n+2):before {
     content: @breadcrumb-divider;
     display: inline-block;
     margin: 0 @breadcrumb-divider-margin;
-    .hook-breadcrumb-divider;
+    color: @breadcrumb-divider-color;
+
+    .dark & {
+        color: @breadcrumb-divider-dark-color;
+    }
 }
 
 /*
@@ -86,10 +96,4 @@
 // Hooks
 // ========================================================================
 
-.hook-breadcrumb-misc;
-
 .hook-breadcrumb() {}
-.hook-breadcrumb-divider() {
-    color: @breadcrumb-divider-color;
-}
-.hook-breadcrumb-misc() {}

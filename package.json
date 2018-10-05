@@ -1,7 +1,7 @@
 {
   "name": "spck-ui",
-  "version": "0.2.1",
-  "description": "Declarative UI library.",
+  "version": "0.3.0",
+  "description": "Declarative enterprise UI components library.",
   "main": "./dist/spck-ui.js",
   "private": false,
   "devDependencies": {

@@ -7,7 +7,8 @@
     "./dist/spck-ui.js"
   ],
   "dependencies": {
-    "uikit": "uikit/uikit#^2.27.x"
+    "uikit": "uikit/uikit#^2.27.x",
+    "drawer-swipe": "^0.1.0"
   },
   "ignore": [
     ".idea",

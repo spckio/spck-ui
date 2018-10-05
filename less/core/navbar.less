@@ -36,7 +36,10 @@
 // Variables
 // ========================================================================
 
+@navbar-z-index:                                @global-z-index;
+
 @navbar-background:                             @global-background;
+@navbar-dark-background:                        #2f3c46;
 @navbar-color:                                  @global-color;
 @navbar-link-color:                             @global-link-color;
 @navbar-link-hover-color:                       @global-link-hover-color;
@@ -72,7 +75,11 @@
 .uk-navbar {
     background: @navbar-background;
     color: @navbar-color;
-    .hook-navbar;
+    z-index: @navbar-z-index;
+    
+    .dark & {
+        background-color: @navbar-dark-background;
+    }
 }
 
 /*
@@ -307,9 +314,6 @@
 // Hooks
 // ========================================================================
 
-.hook-navbar() {
-    z-index: 1;
-}
 .hook-navbar-nav() {}
 .hook-navbar-nav-hover() {}
 .hook-navbar-nav-onclick() {}

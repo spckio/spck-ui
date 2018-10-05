@@ -6,6 +6,7 @@ var cleanCSS = require('gulp-clean-css');
 var DEST = './dist';
 var DOCS = './docs'
 var FILES = [
+  './bower_components/drawer-swipe/dist/drawer-swipe.js',
   './bower_components/uikit/js/uikit.js',
   './bower_components/uikit/js/components/autocomplete.js',
   './bower_components/uikit/js/components/notify.js',

@@ -30,8 +30,8 @@
 @tab-item-active-dark-color:             #ffd04b;
 @tab-item-disabled-color:                #8391a5;
 
-@tab-border-width:                       1px;
 @tab-border:                             @global-border;
+@tab-dark-border:                        @global-dark-border;
 
 @tab-item-border-width:                  3px;
 
@@ -218,7 +218,11 @@
         bottom: 0;
         left: @tab-margin-horizontal;
         right: 0;
-        border-bottom: @tab-border-width solid @tab-border;
+        border-bottom: 1px solid @tab-border;
+
+        .dark & {
+            border-color: @tab-dark-border;
+        }
     }
 
 }
@@ -269,8 +273,12 @@
         bottom: 0;
         left: auto;
         right: 0;
-        border-left: @tab-border-width solid @tab-border;
+        border-left: 1px solid @tab-border;
         border-bottom: none;
+
+        .dark & {
+            border-color: @tab-dark-border;
+        }
     }
 
 }
@@ -288,8 +296,12 @@
         bottom: 0;
         left: 0;
         right: auto;
-        border-left: @tab-border-width solid @tab-border;
+        border-left: 1px solid @tab-border;
         border-bottom: none;
+
+        .dark & {
+            border-color: @tab-dark-border;
+        }
     }
 
 }

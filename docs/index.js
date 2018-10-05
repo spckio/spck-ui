@@ -487,10 +487,10 @@ function handleHashChange() {
 
 UI.new({
   id: "navBar",
-  css: ['uk-navbar'],
+  cls: ['uk-navbar'],
   margin: 'bottom',
   template: {
-    css: ['uk-container', 'uk-container-center'],
+    cls: ['uk-container', 'uk-container-center'],
     style: {
       paddingTop: '12px',
       paddingBottom: '12px'
@@ -505,7 +505,7 @@ UI.new({
             view: 'icon',
             icon: 'uk-icon-menu',
             iconStyle: 'large',
-            css: 'uk-text-muted', screen: 'small',
+            cls: 'uk-text-muted', screen: 'small',
             style: {
               paddingLeft: '0'
             },
@@ -535,13 +535,31 @@ UI.new({
       {
         view: 'list',
         listStyle: 'navbar',
-        css: 'uk-form',
+        cls: 'uk-form',
         flex: true,
         flexAlign: 'middle',
         style: {
           marginLeft: 'auto'
         },
         data: [
+          {
+            view: 'select',
+            data: [
+              {value: 'light', label: 'Light'},
+              {value: 'dark', label: 'Dark'}
+            ],
+            on: {
+              onChange: function () {
+                switch (this.getValue()) {
+                  case 'dark':
+                    UI.addClass(document.documentElement, 'dark');
+                    break;
+                  default:
+                    UI.removeClass(document.documentElement, 'dark');
+                }
+              }
+            }
+          },
           {
             view: 'link', label: 'Github',
             href: 'https://github.com/spckio/spck-ui'
@@ -574,13 +592,20 @@ function sidebarTemplate(id) {
       marginRight: '64px'
     },
     data: [
-      {view: 'link', css: 'uk-active-line', label: 'Getting Started', $selected: true},
+      {$header: true, label: 'Introduction'},
+      {
+        view: 'link',
+        cls: 'uk-active-line',
+        label: 'Getting Started',
+        $selected: true,
+        margin: 'left'
+      },
       {$divider: true},
       {$header: true, label: 'Components'}
     ].concat(Object.keys(Model.components).sort().map(function (n) {
       return {
         view: 'link',
-        css: 'uk-active-line',
+        cls: 'uk-active-line',
         label: UI.capitalize(n),
         margin: 'left',
         value: n
@@ -599,7 +624,7 @@ function sidebarTemplate(id) {
 UI.new(sidebarTemplate('sideBar'), document.getElementById('sidebar'));
 UI.new(
   UI.extend(sidebarTemplate('sideBarOffcanvas'),
-    {css: 'uk-offcanvas-bar', style: {paddingTop: '32px'}}
+    {cls: 'uk-offcanvas-bar', style: {paddingTop: '32px'}}
   ),
   document.getElementById('offcanvas')
 );
@@ -768,7 +793,7 @@ UI.new({
                   template: function (item) {
                     return item.options ? {
                       view: 'button',
-                      css: 'uk-text-nowrap',
+                      cls: 'uk-text-nowrap',
                       label: 'Show',
                       size: 'small',
                       dropdownOptions: {

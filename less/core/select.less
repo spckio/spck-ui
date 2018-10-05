@@ -1,4 +1,12 @@
+// Variables
+// ========================================================================
 
+@select-color:                                    @global-color;
+@select-dark-color:                               @global-dark-color;
+
+/* ========================================================================
+   Component: Select
+ ========================================================================== */
 
 .uk-select {
   box-sizing: border-box;
@@ -10,6 +18,12 @@
   background: none;
   border: none;
   outline: none;
+
+  color: @select-color;
+
+  .dark & {
+    color: @select-dark-color;
+  }
 
   /*
    * Address inconsistent `text-transform` inheritance which is only inherit in Firefox
