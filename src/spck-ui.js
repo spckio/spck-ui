@@ -131,10 +131,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }
   }
 
-  function assertPropertyValidator(value, name, validator) {
+  function functionName(fun) {
+    var ret = fun.toString();
+    ret = ret.substr('function '.length);
+    ret = ret.substr(0, ret.indexOf('('));
+    return ret;
+  }
+
+  function assertPropertyValidator(value, name, validator, resolveMessage) {
     assert(validator(value),
-      name + ' failed ' + validator.toString() +
-      ' validator, got ' + value + ' instead');
+      name + ' failed "' + functionName(validator) +
+      '" validator, got ' + value + ' instead.' +
+      (resolveMessage ? '\n' + resolveMessage : ''));
   }
 
   function assertBasesCheck(baseName, defName, bases, isLast) {
@@ -756,6 +764,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       success: ["badge", "badge-success"],
       warning: ["badge", "badge-warning"],
       danger: ["badge", "badge-danger"],
+      primary: ["badge", "badge-primary"],
       "": ""
     }, 'uk-', true),
     display: prefixClassOptions({
@@ -791,11 +800,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "z-index": "",
       "": ""
     }, 'uk-position-', true),
-    responsive: prefixClassOptions({
-      "width": "",
-      "height": "",
-      "": ""
-    }, 'uk-responsive-', true),
     fill: prefixClassOptions({
       height: "height-1-1",
       width: "width-100",
@@ -1345,7 +1349,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         for (var v, i = 0; i < values.length; i++) {
           v = values[i];
 
-          assertPropertyValidator(options[v], 'value ' + v + ' for property ' + property, isDefined);
+          assertPropertyValidator(options[v],
+            'value "' + v + '" for property "' + property + '"', isDefined,
+            'Value must be one of "' + Object.keys(options).join('", "') + '"'
+          );
 
           var classes = options[v];
 
@@ -1836,7 +1843,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     setFormClass: function (value) {
       /**
        * Set the display class for the form control.
-       * @param value One of ['success', 'danger']
+       * @param value One of <code>success</code>, <code>danger</code>
        */
       var formControl = this.getFormControl();
       var helpControl = this.help;
@@ -2528,7 +2535,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var autocomplete = self._autocomplete = UIkit.autocomplete(self.el,
           {source: bind(value, self), minLength: self.config.minLength});
         self.el.style.wordBreak = "break-word";
-        autocomplete.dropdown.attr("style", "width:100%");
         autocomplete.dropdown.addClass('uk-dropdown-small');
         autocomplete.on("selectitem.uk.autocomplete", function (e, obj) {
           self.dispatch("onChange", [obj.value]);

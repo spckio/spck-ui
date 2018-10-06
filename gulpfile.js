@@ -13,7 +13,7 @@ var FILES = [
   './bower_components/uikit/js/components/sticky.js',
   './src/spck-ui.js'];
 
-gulp.task('build', function () {
+gulp.task('build', ['build-meta'], function () {
   return gulp.src(FILES)
     .pipe(concat('spck-ui.js'))
     .pipe(gulp.dest(DEST))
@@ -25,7 +25,7 @@ gulp.task('build-meta', function () {
     .pipe(gulp.dest(DEST));
 });
 
-gulp.task('build-docs', function () {
+gulp.task('build-docs', ['build'], function () {
   return gulp.src(['./dist/spck-ui.meta.js', './dist/spck-ui-icons.css'], {base: './dist'})
     .pipe(gulp.dest(DOCS));
 });

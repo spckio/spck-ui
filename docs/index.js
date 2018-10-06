@@ -7,10 +7,14 @@ window.onhashchange = handleHashChange;
 
 
 document.body.onscroll = function () {
+  var navElem = $$('navBar').el;
   if (document.documentElement.scrollTop > 5) {
-    UI.addClass($$('navBar').el, 'uk-box-shadow');
+    UI.addClass(navElem, 'uk-box-shadow');
+    UI.addClass(navElem, 'x-active');
   } else {
-    UI.removeClass($$('navBar').el, 'uk-box-shadow');
+    UI.removeClass(navElem, 'uk-box-shadow');
+    UI.removeClass(navElem, 'x-active');
+
   }
 };
 
@@ -60,15 +64,33 @@ var Model = {
   components: {
     autocomplete: function () {
       return {
-        view: 'autocomplete',
-        placeholder: 'Type something...',
-        sources: [
-          {value: 'Curl'},
-          {value: 'Look'},
-          {value: 'Age'},
-          {value: 'Walk'},
-          {value: 'Elope'},
-          {value: 'Dig'}
+        flexLayout: "column",
+        cells: [
+          {
+            view: "label",
+            label: "Basic Autocomplete",
+            htmlTag: "H6",
+            margin: "bottom"
+          },
+          {
+            view: 'autocomplete',
+            placeholder: 'Type something...',
+            sources: [
+              {value: 'Hard work pays off in the future. Laziness pays off now.'},
+              {value: 'A dog is a dog unless he is facing you. Then he is Mr. Dog.'},
+              {value: 'Experience is something you get just after you need it.'},
+              {value: "If it weren't for the last minute, nothing would get done."},
+              {value: 'Be nice to other people; they outnumber you 5.5 billion to one.'},
+              {value: 'Anything free is worth the price.'},
+              {value: 'A sine curve goes off to infinity, or at least to the end of the blackboard.'}
+            ]
+          },
+          {
+            view: "label",
+            badge: "primary",
+            label: 'Type "free" or "nice" for example.',
+            margin: "top right"
+          }
         ]
       }
     },
@@ -475,7 +497,6 @@ function handleHashChange() {
     $$('componentView').parseConfig(config, view);
     $$('mainTitle').setValue(UI.capitalize(value));
     $$('sideBar').setActiveLabel(UI.capitalize(value));
-    $$('sideBarOffcanvas').setActiveLabel(UI.capitalize(value));
     $$('mainView').show();
     highlightBlocks();
   }
@@ -487,14 +508,9 @@ function handleHashChange() {
 
 UI.new({
   id: "navBar",
-  cls: ['uk-navbar'],
-  margin: 'bottom',
+  cls: 'uk-navbar',
   template: {
-    cls: ['uk-container', 'uk-container-center'],
-    style: {
-      paddingTop: '12px',
-      paddingBottom: '12px'
-    },
+    padding: 'x',
     cells: [
       {
         view: 'list',
@@ -502,32 +518,13 @@ UI.new({
         flexSize: 'none',
         data: [
           {
-            view: 'icon',
-            icon: 'uk-icon-menu',
-            iconStyle: 'large',
-            cls: 'uk-text-muted', screen: 'small',
-            style: {
-              paddingLeft: '0'
-            },
+            view: 'image',
+            src: 'logo.svg',
+            width: 145,
             on: {
               onClick: function () {
-                UIkit.offcanvas.show('#offcanvas', {mode: 'slide'});
+                console.log('cools')
               }
-            }
-          },
-          {
-            view: 'image',
-            src: 'logo.svg',
-            screen: 'except-small',            
-            width: 160
-          },
-          {
-            view: 'image',
-            src: 'logo.svg',
-            screen: 'small',            
-            width: 120,
-            style: {
-              height: '64px'
             }
           }
         ]
@@ -543,7 +540,16 @@ UI.new({
         },
         data: [
           {
+            view: 'link-icon',
+            screen: 'except-small',
+            label: 'Github',
+            icon: 'github',
+            href: 'https://github.com/spckio/spck-ui',
+            margin: 'right-lg'
+          },
+          {
             view: 'select',
+            margin: 'right',
             data: [
               {value: 'light', label: 'Light'},
               {value: 'dark', label: 'Dark'}
@@ -561,15 +567,6 @@ UI.new({
             }
           },
           {
-            view: 'link', label: 'Github',
-            href: 'https://github.com/spckio/spck-ui'
-          },
-          {
-            view: 'link', label: 'Issues',
-            href: 'https://github.com/spckio/spck-ui/issues',
-            screen: 'except-small'            
-          },
-          {
             view: 'select',
             data: [
               {value: UI.VERSION, label: UI.VERSION}
@@ -581,53 +578,74 @@ UI.new({
   }
 }, document.getElementById('navbar'));
 
-
-function sidebarTemplate(id) {
-  return {
-    id: id,
-    view: 'list',
-    listStyle: 'side',
-    style: {
-      minWidth: '192px',
-      marginRight: '64px'
-    },
-    data: [
-      {$header: true, label: 'Introduction'},
+UI.new({
+  view: "drawer",
+  touchOnly: true,
+  edge: true,
+  template: {
+    view: 'scroller',
+    cells: [
       {
-        view: 'link',
-        cls: 'uk-active-line',
-        label: 'Getting Started',
-        $selected: true,
-        margin: 'left'
-      },
-      {$divider: true},
-      {$header: true, label: 'Components'}
-    ].concat(Object.keys(Model.components).sort().map(function (n) {
-      return {
-        view: 'link',
-        cls: 'uk-active-line',
-        label: UI.capitalize(n),
-        margin: 'left',
-        value: n
+        id: 'sideBar',
+        view: 'list',
+        listStyle: 'side',
+        style: {
+          minWidth: '200px',
+        },
+        data: [
+          {
+            view: 'spacer',
+            height: 16
+          },
+          {
+            $header: true, label: 'Getting Started'
+          },
+          {
+            view: 'link',
+            cls: 'uk-active-line',
+            label: 'Introduction',
+            $selected: true,
+            margin: 'left'
+          },
+          {
+            view: 'link',
+            cls: 'uk-active-line',
+            label: 'Installation',
+            margin: 'left'
+          },
+          {
+            view: 'link',
+            cls: 'uk-active-line',
+            label: 'CDN Links',
+            margin: 'left'
+          },
+          {$divider: true},
+          {$header: true, label: 'Components'}
+        ].concat(Object.keys(Model.components).sort().map(function (n) {
+          return {
+            view: 'link',
+            cls: 'uk-active-line',
+            label: UI.capitalize(n),
+            margin: 'left',
+            value: n
+          }
+        })).concat([
+          {
+            view: 'spacer',
+            height: 64
+          }
+        ]),
+        on: {
+          onItemClick: function (item) {
+            var value = item.value;
+            this.setActiveLabel(item.label);
+            location.hash = value || "";
+          }
+        }
       }
-    })),
-    on: {
-      onItemClick: function (item) {
-        var value = item.value;
-        this.setActiveLabel(item.label);
-        location.hash = value || "";
-      }
-    }
-  };
-}
-
-UI.new(sidebarTemplate('sideBar'), document.getElementById('sidebar'));
-UI.new(
-  UI.extend(sidebarTemplate('sideBarOffcanvas'),
-    {cls: 'uk-offcanvas-bar', style: {paddingTop: '32px'}}
-  ),
-  document.getElementById('offcanvas')
-);
+    ]
+  }
+}, document.getElementById('sidebar'));
 
 UI.new({
   id: 'mainView',
@@ -637,7 +655,7 @@ UI.new({
     {
       id: 'mainTitle',
       view: 'label',
-      htmlTag: 'h2',
+      htmlTag: 'h1',
       margin: 'bottom-lg'
     },
     {
@@ -708,7 +726,15 @@ UI.new({
               }
             }
 
-            this.config.code = JSON.stringify(objectModel, null, "  ")
+            this.config.code = JSON.stringify(objectModel,
+              function(name, value) {
+                if (typeof value == 'function') {
+                  return value.toString();
+                }
+                else {
+                  return value;
+                }
+              }, "  ")
               .replace(/&/g, '&amp;')
               .replace(/"/g, '&quot;')
               .replace(/</g, '&lt;')
@@ -794,7 +820,7 @@ UI.new({
                     return item.options ? {
                       view: 'button',
                       cls: 'uk-text-nowrap',
-                      label: 'Show',
+                      label: 'Options',
                       size: 'small',
                       dropdownOptions: {
                         marginY: Object.keys(item.options).length > 12 ? -300 : 8
@@ -912,10 +938,10 @@ UI.new({
                       '</dl>',
                       '<dl class="uk-description-list-horizontal">',
                       (method.params && method.params.length ?
-                        '<dt>Parameters</dt><dd>&nbsp;</dd>{{parameters}}' : ''),
-                      (method.dispatch ? '<dt>Dispatch</dt><dd><code>{{dispatch}}</code></dd>' : ''),
-                      (method.returns ? '<dt>Returns</dt><dd>{{returns}}</dd>' : ''),
-                      (method.example ? '<dt>Example</dt><dd><code>{{example}}</code></dd>' : ''),
+                        '<dt class="uk-margin-small-left">Parameters</dt><dd>&nbsp;</dd>{{parameters}}' : ''),
+                      (method.dispatch ? '<dt class="uk-margin-small-left">Dispatch</dt><dd><code>{{dispatch}}</code></dd>' : ''),
+                      (method.returns ? '<dt class="uk-margin-small-left">Returns</dt><dd>{{returns}}</dd>' : ''),
+                      (method.example ? '<dt class="uk-margin-small-left">Example</dt><dd><code>{{example}}</code></dd>' : ''),
                       '</dl>'
                     ].join(''),
                     name: method.name,
@@ -925,7 +951,7 @@ UI.new({
                     example: method.example,
                     parameters: method.params.map(function (n) {
                       return UI.interpolate(
-                        '<dt class="uk-text-muted" style="margin-left: 8px">{{name}}</dt><dd>{{description}}</dd>', n);
+                        '<dt class="uk-text-muted uk-margin-left">{{name}}</dt><dd>{{description}}</dd>', n);
                     }).join('')
                   }
                 }
