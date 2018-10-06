@@ -11,9 +11,9 @@
 // Variables
 // ========================================================================
 
-@base-body-background:                          #fff;
-@base-body-dark-background:                     #232c35;
-@base-body-font-family:                         Ubuntu,-apple-system,BlinkMacSystemFont,Lato,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+@base-body-background:                          @global-background;
+@base-body-dark-background:                     @global-dark-background;
+@base-body-font-family:                         -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
 @base-body-font-weight:                         normal;
 @base-body-font-size:                           @global-font-size;
 @base-body-line-height:                         @global-line-height;
@@ -42,6 +42,7 @@
 @base-margin-vertical:                          @global-margin;
 
 @base-heading-text-transform:                   none;
+@base-heading-font-weight:                      500;
 @base-heading-color:                            #474747;
 @base-heading-dark-color:                       #ebebeb;
 @base-heading-margin-top:                       0;
@@ -337,6 +338,7 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
     text-transform: @base-heading-text-transform;
     color: @base-heading-color;
+    font-weight: @base-heading-font-weight;
 
     .dark & {
         color: @base-heading-dark-color;
@@ -352,7 +354,7 @@ h1, h2, h3, h4, h5, h6 {
 * + h3,
 * + h4,
 * + h5,
-* + h6 { margin-top: @base-heading-margin-top; }
+* + h6 {margin-top: @base-heading-margin-top; }
 
 /*
  * Sizes

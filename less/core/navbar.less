@@ -36,34 +36,29 @@
 // Variables
 // ========================================================================
 
-@navbar-z-index:                                @global-z-index;
+@navbar-z-index:                                @global-z-index + 2;
 
 @navbar-background:                             @global-background;
-@navbar-dark-background:                        #2f3c46;
+@navbar-dark-background:                        #222;
 @navbar-color:                                  @global-color;
 @navbar-link-color:                             @global-link-color;
-@navbar-link-hover-color:                       @global-link-hover-color;
 
 @navbar-nav-height:                             64px;
 @navbar-nav-line-height:                        @navbar-nav-height;
 @navbar-nav-padding-horizontal:                 @global-margin;
 @navbar-nav-color:                              #8391a5;
 @navbar-nav-hover-background:                   transparent;
-@navbar-nav-hover-color:                        #1f2d3d;
 @navbar-nav-onclick-background:                 @navbar-nav-hover-background;
-@navbar-nav-onclick-color:                      @navbar-nav-hover-color;
 @navbar-nav-active-background:                  @navbar-nav-onclick-background;
-@navbar-nav-active-color:                       @navbar-nav-onclick-color;
+@navbar-nav-active-color:                       @navbar-nav-color;
 @navbar-nav-subtitle-font-size:                 10px;
 @navbar-nav-subtitle-offset:                    2px;
 
 @navbar-brand-font-size:                        18px;
 @navbar-brand-color:                            @global-color;
-@navbar-brand-hover-color:                      @global-color;
 
 @navbar-toggle-font-size:                       18px;
 @navbar-toggle-color:                           @global-color;
-@navbar-toggle-hover-color:                     @global-color;
 @navbar-toggle-icon:                            "\f0c9";
 @navbar-toggle-icon-alt:                        "\f002";
 
@@ -147,7 +142,6 @@
 .uk-navbar-nav > li > a:focus, // 1
 .uk-navbar-nav > li.uk-open > a { // 2
     background-color: @navbar-nav-hover-background;
-    color: @navbar-nav-hover-color;
     /* 3 */
     outline: none;
     .hook-navbar-nav-hover;
@@ -156,7 +150,6 @@
 /* OnClick */
 .uk-navbar-nav > li > a:active {
     background-color: @navbar-nav-onclick-background;
-    color: @navbar-nav-onclick-color;
     .hook-navbar-nav-onclick;
 }
 
@@ -225,7 +218,6 @@
  */
 
 .uk-navbar-content > a:not([class]) { color: @navbar-link-color; }
-.uk-navbar-content > a:not([class]):hover { color: @navbar-link-hover-color; }
 
 
 /* Sub-objects: `uk-navbar-brand`
@@ -244,7 +236,6 @@
 
 .uk-navbar-brand:hover,
 .uk-navbar-brand:focus { // 1
-    color: @navbar-brand-hover-color;
     text-decoration: none;
     /* 2 */
     outline: none;
@@ -267,7 +258,6 @@
 
 .uk-navbar-toggle:hover,
 .uk-navbar-toggle:focus { // 1
-    color: @navbar-toggle-hover-color;
     text-decoration: none;
     /* 2 */
     outline: none;

@@ -12,7 +12,7 @@
     $setters.flexOrder.$$desc = 'Flex order of the component';
     $setters.flexLayout.$$desc = 'Sets the flex layout';
     $setters.device.$$desc = 'Show the component on touch or no-touch devices only';
-  }(exports.CommonCSS.$setters));
+  }(exports.CommonStyles.$setters));
 
 
   (function ($setters) {
@@ -20,8 +20,8 @@
     $setters.disabled.$$type = 'boolean';
     $setters.tooltip.$$desc = 'Add a tooltip to the component';
     $setters.tooltip.$$type = 'string';
-    $setters.css.$$desc = 'Custom CSS classes for the component';
-    $setters.css.$$type = 'string | string[]';
+    $setters.cls.$$desc = 'Custom CSS classes for the component';
+    $setters.cls.$$type = 'string | string[]';
     $setters.dropdown.$$desc = 'Configuration object to show in a context menu';
     $setters.uploader.$$type = 'boolean';
 

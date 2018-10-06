@@ -24,6 +24,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $globalListenerIds: $globalListenerIds,
     $windowListeners: $windowListeners,
     $counters: $counters,
+    $scrollState: null,
 
     listeners: $listeners,
     definitions: $definitions,
@@ -2201,9 +2202,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
 
   $definitions.iconLink = def({
-    __name__: "icon-link",
+    __name__: "link-icon",
     $defaults: {
-      tagClass: "uk-icon-link",
+      tagClass: "uk-link-icon",
       icon: ""
     },
     template: function (config) {
@@ -2574,46 +2575,57 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       $closeInProgress: false,
     },
 
-    $setters: {
-      edge: function (value) {
-        if (value) {
-          var $this = this;
-          var direction = $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL;
-          // Tricky: Go in opposite direction of drawer
-          var swiper = new DrawerSwipe(direction, document.body);
-          $this.openSwipe = swiper;
-    
-          swiper.getWidth = function () {
-            return $this.content().width();
-          };
-    
-          swiper.onPanStart = function (e) {
-            var firstTouch = e.touches[0];
-            var lastTouch = this.lastTouch;
-            return this.beganPan || (firstTouch && firstTouch.clientX <= 36) || (lastTouch && lastTouch.clientX <= 36);
-          };
-    
-          swiper.applyChanges = function (percent) {
-            if (this.beganPan) {
-              $this.showDrawer();
-              var percent = $this.closeSwipe.percent = -100 + percent;
-              $this.closeSwipe.applyChanges(percent);
-            }
-          };
-    
-          swiper.onCompleteSwipe = function () {
-            $this.closeSwipe.reset();
-          };
-    
-          swiper.onIncompleteSwipe = function () {
-            $this.close();
-          };
+    $setters: extend(
+      classSetters({
+        touchOnly: {
+          "": "",
+          "false": "",
+          "true": 'uk-offcanvas-touch'
+        }
+      }),
+      {
+        edge: function (value) {
+          if (value) {
+            var $this = this;
+            var direction = $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL;
+            // Tricky: Go in opposite direction of drawer
+            var swiper = new DrawerSwipe(direction, document.body);
+            $this.openSwipe = swiper;
+      
+            swiper.getWidth = function () {
+              return $this.content().width();
+            };
+      
+            swiper.onPanStart = function (e) {
+              var firstTouch = e.touches[0];
+              var lastTouch = this.lastTouch;
+              return this.beganPan || (firstTouch && firstTouch.clientX <= 36) || (lastTouch && lastTouch.clientX <= 36);
+            };
+      
+            swiper.applyChanges = function (percent) {
+              if (this.beganPan) {
+                $this.showDrawer();
+                var percent = $this.closeSwipe.percent = -100 + percent;
+                $this.closeSwipe.applyChanges(percent);
+              }
+            };
+      
+            swiper.onCompleteSwipe = function () {
+              $this.closeSwipe.reset();
+            };
+      
+            swiper.onIncompleteSwipe = function () {
+              $this.close();
+            };
+          }
         }
       }
-    },
+    ),
 
     __after__: function () {
       var $this = this;
+      var content = $this.el.firstChild;
+      if (content) UI.addClass(content, 'uk-offcanvas-bar');
 
       var swipeGesture = $this.closeSwipe = new DrawerSwipe(
         $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL,
@@ -2624,7 +2636,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.onPan = function () {
-        return !$this.$blockDrawerPan && modules.scroller.scrollState != 'scroll';
+        return !$this.$blockDrawerPan && exports.$scrollState != 'scroll';
       };
 
       swipeGesture.onPanStart = function (e) {
@@ -3352,7 +3364,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       /**
        * Get the 'batch' value that was passed to `setBatch`.
        */
-      return this.$batch;
+    return this.$batch;
     },
     showBatch: function (name) {
       /**
@@ -4133,8 +4145,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       self.element = self.el = UI.createElement("DIV");
       self.config = config;
+      var width = (isNumber(config.width) ? config.width + 'px' : config.width) || 'auto';
+      var height = (isNumber(config.height) ? config.height + 'px' : config.height) || 'auto';
       UI.addClass(self.el, config.cls);
-      UI.extend(self.el.style, {width: config.width || "auto", minHeight: config.height || "auto"});
+      UI.extend(self.el.style, {minWidth: width, minHeight: height});
     }
   });
 
@@ -4142,7 +4156,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.scroller = def({
     __name__: 'scroller',
     $defaults: {
-      tagClass: 'uk-scroller-container uk-flex',
+      tagClass: 'uk-scroller-container',
       scrollDirection: 'y'
     },
     __init__: function (config) {
@@ -4167,7 +4181,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       window.addEventListener('resize', $this.moveBar.bind($this));
       $this.content.addEventListener('scroll', function (e) {
-        if (self.scrollState == 'start') self.scrollState = 'scroll';
+        if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
         $this.moveBar();
         $this.dispatch("onScroll", [config, $this.content, e]);
       });
@@ -4214,6 +4228,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
   
     moveBar: function(e) {
+      var raf = window.requestAnimationFrame || window.setImmediate || function(c) { return setTimeout(c, 0); };
       var $this = this;
       var totalHeight = $this.content.scrollHeight || 1,
           ownHeight = $this.content.clientHeight || 1,
@@ -4544,4 +4559,4 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   return exports;
 })({}, window, window.UIkit);
 
-window.UI.VERSION = '0.1.0';
+window.UI.VERSION = '0.3.0';

@@ -3,6 +3,7 @@
 
 @select-color:                                    @global-color;
 @select-dark-color:                               @global-dark-color;
+@select-dark-background:                          @global-dark-background;
 
 /* ========================================================================
    Component: Select
@@ -23,6 +24,10 @@
 
   .dark & {
     color: @select-dark-color;
+
+    > option {
+      background-color: @select-dark-background;
+    }
   }
 
   /*
