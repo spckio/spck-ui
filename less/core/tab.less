@@ -57,11 +57,16 @@
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
     /* 2 */
+    margin: 0;
     margin-left: -@tab-margin-horizontal;
     margin-bottom: @tab-margin-bottom;
     /* 3 */
     padding: 0;
     list-style: none;
+
+    &:before {
+        content: none;
+    }
     .hook-tab;
 }
 

@@ -2,8 +2,9 @@ Version 0.3.0
 -----------
 - **Breaking**: Renamed property `css` to `cls`
 - **Breaking**: Renamed property `dropdownCSS` to `dropdownClass`
+- **Breaking**: Renamed property `link` to `buttonStyle`
 - **Breaking**: Refactor `uk-form` to `uk-input`, `uk-select`, `uk-textarea`
-- Added `scroller`, `drawer`, `resizer`, `optgroup`, `link-icon`, `spacer`, `input-field` components
+- Added `scroller`, `drawer`, `resizer`, `optgroup`, `spacer` components
 - Various CSS tweaks
 
 Version 0.2.1

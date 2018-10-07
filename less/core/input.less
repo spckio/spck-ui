@@ -16,8 +16,6 @@
 
 .uk-input {
   color: @input-color;
-  border: 0;
-  border-bottom: solid 1px @input-border;
   background: none;
   box-sizing: border-box;
   padding: @input-padding;
@@ -32,9 +30,12 @@
   
   outline: none;
   
+  border: 0;
+  border-bottom: solid 1px @input-border;
+  
   .dark & {
     color: @input-dark-color;
-    border-bottom: solid 1px @input-dark-border;
+    border-color: @input-dark-border;
   }
 
   // Disabled state

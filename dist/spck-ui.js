@@ -1,3 +1,203 @@
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.DrawerSwipe = factory();
+  }
+}(this, function() {
+var DrawerSwipe = function (direction, element) {
+  var $this = this;
+  $this.percent = 0;
+  $this.lastTouch = null;
+  $this._buffer = [];
+  $this._bufferLength = 5;
+  $this._distanceX = 0;
+  $this.closeInProgress = false;
+  $this.positionThreshold = 60;
+  $this.speedThreshold = 30;
+  $this.minimumSpeed = 20;
+  $this.minimumPercentageThreshold = 5;
+  $this.direction = direction;
+  $this.beganPan = false;
+  $this.getWidth = function () { return 0 };
+  $this.onPanStart = function () { return true };
+  $this.onPan = function () { return true };
+  $this.onCompleteSwipe = function () {};
+  $this.onIncompleteSwipe = function () {};
+  $this.applyChanges = function () {};
+
+  element.addEventListener("touchmove", function (e) {
+    var firstTouch = e.touches[0];
+    if ($this.onPanStart(e)) {
+      if ($this.lastTouch) {
+        var deltaX = firstTouch.screenX - $this.lastTouch.screenX;
+        $this._distanceX += deltaX;
+        $this.addBuffer(deltaX);
+        $this.pan($this._distanceX);
+        $this.beganPan = true;
+      }
+      $this.lastTouch = firstTouch;
+    }
+  });
+
+  element.addEventListener("touchend", function (e) {
+    $this.lastTouch = null;
+    $this._distanceX = 0;
+
+    var maxValue = Math.max.apply(null, $this._buffer);
+    var minValue = Math.min.apply(null, $this._buffer);
+    $this._buffer.length = 0;
+
+    var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
+    var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
+    var closeToRight = leftToRight && maxValue >= $this.speedThreshold;
+    var closeToLeft = rightToLeft && minValue <= -$this.speedThreshold;
+
+    if (Math.abs($this.percent) >= $this.positionThreshold || closeToRight || closeToLeft) {
+      $this.animate({
+        maxValue: closeToRight && maxValue,
+        minValue: closeToLeft && minValue
+      });
+    }
+    else if ($this.beganPan) {
+      $this.animate(null, true);
+    }
+  });
+};
+
+!(function () {
+  var raf = window.requestAnimationFrame || window.setImmediate || function(c) { return setTimeout(c, 0); };
+
+  DrawerSwipe.prototype = {
+    addBuffer: function (value) {
+      var buffer = this._buffer;
+      var bufferLength = this._bufferLength;
+      if (buffer.unshift(value) > bufferLength) buffer.length = bufferLength;
+    },
+
+    pan: function (distanceX) {
+      var $this = this;
+
+      if ($this.closeInProgress) {
+        return;
+      }
+      else if (!$this.onPan(distanceX)) {
+        $this.reset();
+        return;
+      }
+
+      var width = $this.getWidth();
+      var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
+      var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
+      var percent = Math.round(distanceX / width * 100);
+
+      if (!(leftToRight && percent > 0 || rightToLeft && percent < 0)) {
+        percent = 0;
+      }
+
+      if (percent != $this.percent && Math.abs(percent) >= $this.minimumPercentageThreshold) {
+        if (Math.abs(percent) >= 100) {
+          $this.animate();
+        }
+        else {
+          $this.applyChanges(percent);
+          $this.percent = percent;
+        }
+      }
+    },
+
+    animate: function (speed, reverse, restart) {
+      var $this = this;
+      var width = $this.getWidth();
+
+      if (restart) {
+        $this.closeInProgress = false;
+        $this.percent = $this.direction == DrawerSwipe.Direction.LTR ? 100 : -100;
+      }
+
+      if (!$this.closeInProgress) {
+        if (raf) {
+          $this.closeInProgress = true;
+          raf(update);
+        }
+        else {
+          $this.onCompleteSwipe();
+          $this.reset();
+        }
+      }
+
+      function update() {
+        var deltaPercent = 0;
+        var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
+        var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
+
+        if (speed && speed.maxValue) {
+          deltaPercent = Math.max(speed.maxValue/3, $this.minimumSpeed)/width * 100;
+        }
+        else if (speed && speed.minValue) {
+          deltaPercent = Math.min(speed.minValue/3, -$this.minimumSpeed)/width * 100;
+        }
+        else if (leftToRight) {
+          deltaPercent = $this.minimumSpeed/width * (reverse ? -100 : 100);
+        }
+        else if (rightToLeft) {
+          deltaPercent = -$this.minimumSpeed/width * (reverse ? -100 : 100);
+        }
+        $this.percent += deltaPercent;
+        var percent = $this.percent;
+
+        if (leftToRight && percent >= 100) {
+          percent = 100;
+        }
+        else if (rightToLeft && percent <= -100) {
+          percent = -100;
+        }
+        else if (reverse) {
+          if (leftToRight && percent <= 0) {
+            percent = 0;
+          }
+          else if (rightToLeft && percent >= 0) {
+            percent = 0;
+          }
+        }
+
+        $this.percent = percent;
+        $this.applyChanges(percent);
+
+        if (Math.abs(percent) == 100) {
+          $this.reset();
+          $this.onCompleteSwipe();
+        }
+        else if (percent == 0) {
+          $this.reset();
+          $this.onIncompleteSwipe();
+        }
+        else {
+          raf(update);
+        }
+      }
+    },
+
+    reset: function () {
+      this.beganPan = false;
+      this.closeInProgress = false;
+    }
+  }
+
+  DrawerSwipe.Direction = {
+    LEFT_TO_RIGHT: 1,
+    LTR: 1,
+    RIGHT_TO_LEFT: 2,
+    RTL: 2,
+    BOTH: 3
+  };  
+}());
+
+return DrawerSwipe;
+}));
+
 /*! UIkit 2.27.4 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(core) {
 
@@ -4837,6 +5037,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $globalListenerIds: $globalListenerIds,
     $windowListeners: $windowListeners,
     $counters: $counters,
+    $scrollState: null,
 
     listeners: $listeners,
     definitions: $definitions,
@@ -4943,10 +5144,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }
   }
 
-  function assertPropertyValidator(value, name, validator) {
+  function functionName(fun) {
+    var ret = fun.toString();
+    ret = ret.substr('function '.length);
+    ret = ret.substr(0, ret.indexOf('('));
+    return ret;
+  }
+
+  function assertPropertyValidator(value, name, validator, resolveMessage) {
     assert(validator(value),
-      name + ' failed ' + validator.toString() +
-      ' validator, got ' + value + ' instead');
+      name + ' failed "' + functionName(validator) +
+      '" validator, got ' + value + ' instead.' +
+      (resolveMessage ? '\n' + resolveMessage : ''));
   }
 
   function assertBasesCheck(baseName, defName, bases, isLast) {
@@ -5144,8 +5353,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function template(templateObject, config, thisArg, parentNode) {
+    var returnFlag = false;
+
     if (isFunction(templateObject)) {
       templateObject = templateObject.call(thisArg, config);
+      returnFlag = true;
+    }
+    else if (isNumber(templateObject)) {
+      templateObject = templateObject.toString();
     }
     
     if (isString(templateObject)) {
@@ -5166,7 +5381,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       });
     }
     else {
-      fail('Unrecognized template!', config);
+      fail(returnFlag ?
+        'Unrecognized return value from template' :
+        'Unrecognized template!', {
+          template: templateObject,
+          config: config
+        });
     }
   }
 
@@ -5557,6 +5777,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       success: ["badge", "badge-success"],
       warning: ["badge", "badge-warning"],
       danger: ["badge", "badge-danger"],
+      primary: ["badge", "badge-primary"],
       "": ""
     }, 'uk-', true),
     display: prefixClassOptions({
@@ -5592,11 +5813,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "z-index": "",
       "": ""
     }, 'uk-position-', true),
-    responsive: prefixClassOptions({
-      "width": "",
-      "height": "",
-      "": ""
-    }, 'uk-responsive-', true),
     fill: prefixClassOptions({
       height: "height-1-1",
       width: "width-100",
@@ -6146,7 +6362,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         for (var v, i = 0; i < values.length; i++) {
           v = values[i];
 
-          assertPropertyValidator(options[v], 'value ' + v + ' for property ' + property, isDefined);
+          assertPropertyValidator(options[v],
+            'value "' + v + '" for property "' + property + '"', isDefined,
+            'Value must be one of "' + Object.keys(options).join('", "') + '"'
+          );
 
           var classes = options[v];
 
@@ -6163,16 +6382,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
 
-  exports.CommonCSS = {
-    __name__: "CommonCSS",
+  exports.CommonStyles = {
+    __name__: "CommonStyles",
     __check__: function (bases) {
-      assertBasesCheck('CommonCSS', 'CommonCSS', bases);
-      assertBasesCheck('PropertySetter', 'CommonCSS', bases);
+      assertBasesCheck('CommonStyles', 'CommonStyles', bases);
+      assertBasesCheck('PropertySetter', 'CommonStyles', bases);
     },
     $setters: classSetters(exports.classOptions)
   };
 
-  assignClassToMethods(exports.CommonCSS.$setters, exports.CommonCSS.__name__);
+  assignClassToMethods(exports.CommonStyles.$setters, exports.CommonStyles.__name__);
 
 
   exports.CommonEvents = {
@@ -6220,7 +6439,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         else
           this.enable();
       },
-      css: function (value) {
+      cls: function (value) {
         addClass(this.el, classString(value));
       },
       sticky: function (value) {
@@ -6380,7 +6599,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         return item[key] === value;
       })[0];
     }
-  }, exports.Dispatcher, exports.Responder, exports.CommonEvents, exports.CommonCSS, exports.PropertySetter);
+  }, exports.Dispatcher, exports.Responder, exports.CommonEvents, exports.CommonStyles, exports.PropertySetter);
 
   
   $definitions.flexgrid = def({
@@ -6594,9 +6813,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
             self.getFormControl().parentNode.appendChild(self.help);
           }
         },
-        multiple: function (value) {
-          setAttributes(this.getFormControl(), isString(value) ? {multiple: value} : {});
-        },
         type: function (value) {
           setAttributes(this.getFormControl(), {type: value});
         },
@@ -6637,7 +6853,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     setFormClass: function (value) {
       /**
        * Set the display class for the form control.
-       * @param value One of ['success', 'danger']
+       * @param value One of <code>success</code>, <code>danger</code>
        */
       var formControl = this.getFormControl();
       var helpControl = this.help;
@@ -6653,11 +6869,30 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         if (helpControl) addClass(helpControl, this.helpDangerClass);
       }
     },
+    raiseConcern: function (error) {
+      /**
+       * Set an error message to be displayed for the FormControl.
+       * @param error Error string or null, null will clear the error.
+       */
+      var $this = this;
+      if (error) {
+        $this.set("help", error);
+        $this.setFormClass("danger");
+      }
+      else {
+        $this.set("help", "");
+        $this.setFormClass("");
+      }
+      $this.invalid = !!error;
+    },
     reset: function () {
       /**
        * Clear the form control.
        */
       this.getFormControl().value = "";
+    },
+    focus: function () {
+      this.getFormControl().focus();
     },
     enable: function () {
       /**
@@ -6737,17 +6972,17 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     __init__: function (config) {
       var self = this;
-      self.header = self._header = createElement("DIV", {class: "uk-modal-header"});
-      self.footer = self._footer = createElement("DIV", {class: "uk-modal-footer"});
-      self.body = self._body = createElement("DIV", {class: "uk-modal-dialog"});
+      self.header = createElement("DIV", {class: "uk-modal-header"});
+      self.footer = createElement("DIV", {class: "uk-modal-footer"});
+      self.body = createElement("DIV", {class: "uk-modal-dialog"});
 
-      if (config.headerClass) addClass(self._header, config.headerClass);
-      if (config.dialogClass) addClass(self._body, config.dialogClass);
-      if (config.footerClass) addClass(self._footer, config.footerClass);
+      if (config.headerClass) addClass(self.header, config.headerClass);
+      if (config.dialogClass) addClass(self.body, config.dialogClass);
+      if (config.footerClass) addClass(self.footer, config.footerClass);
 
-      self.el.appendChild(self._body);
-      if (config.header) self._body.appendChild(self._header);
-      if (config.footer) self._body.appendChild(self._footer);
+      self.el.appendChild(self.body);
+      if (config.header) self.body.appendChild(self.header);
+      if (config.footer) self.body.appendChild(self.footer);
     },
     $setters: extend(
       classSetters({
@@ -6759,56 +6994,58 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           full: "",
           "": ""
         }, 'uk-modal-dialog-', true)
-      }, "_body"),
+      }, "body"),
       {
         bodyWidth: function (value) {
           value = isNumber(value) ? value + "px" : value;
-          this._body.style.width = value;
+          this.body.style.width = value;
         },
         bodyHeight: function (value) {
           value = isNumber(value) ? value + "px" : value;
-          this._body.style.height = value;
+          this.body.style.height = value;
         },
         closeButton: function (value) {
           if (value) {
             var self = this;
-            self._close = createElement("A",
+            var close = self.close = createElement("A",
               {class: "uk-modal-close uk-close"});
-            if (self._body.firstChild) {
-              self._body.insertBefore(self._close, self._body.firstChild);
+            var body = self.body;
+
+            if (body.firstChild) {
+              body.insertBefore(close, body.firstChild);
             }
             else {
-              self._body.appendChild(self._close);
+              body.appendChild(close);
             }
           }
         },
         body: function (value) {
           var self = this;
           self.bodyContent = exports.new(value, function (el) {
-            if (self._footer.parentNode) {
-              self._body.insertBefore(el, self._footer);
+            if (self.footer.parentNode) {
+              self.body.insertBefore(el, self.footer);
             } else {
-              self._body.appendChild(el);
+              self.body.appendChild(el);
             }
           });
           self.$components.push(self.bodyContent);
         },
         header: function (value) {
           var self = this;
-          self.headerContent = exports.new(value, self._header);
+          self.headerContent = exports.new(value, self.header);
           self.$components.push(self.headerContent);
         },
         footer: function (value) {
           var self = this;
-          self.footerContent = exports.new(value, self._footer);
+          self.footerContent = exports.new(value, self.footer);
           self.$components.push(self.footerContent);
         },
         caption: function (value) {
           var self = this;
-          if (!self._caption)
-            self._caption = createElement("DIV", {class: "uk-modal-caption"});
-          self._caption.innerHTML = value;
-          self._body.appendChild(self._caption);
+          if (!self.caption)
+            self.caption = createElement("DIV", {class: "uk-modal-caption"});
+          self.caption.innerHTML = value;
+          self.body.appendChild(self.caption);
         }
       }
     ),
@@ -6862,14 +7099,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       tagClass: "",
       iconClass: "",
       selectable: false,
-      link: true
+      buttonStyle: "link"
     },
     $setters: classSetters({
-      link: prefixClassOptions({
-        true: "uk-button-link",
-        false: "uk-button",
+      buttonStyle: prefixClassOptions({
+        link: "button-link",
+        button: "button",
         "": ""
-      }),
+      }, 'uk-'),
       color: prefixClassOptions({
         primary: "",
         success: "",
@@ -6945,6 +7182,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         small: "",
         medium: "",
         large: "",
+        xlarge: "",
         button: "",
         justify: "",
         "": ""
@@ -6994,8 +7232,20 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       label: "",
       htmlTag: "A"
     },
+    $setters: classSetters({
+      linkStyle: {
+        '': '',
+        'line': 'uk-active-line'
+      }
+    }),
     template: function (config) {
-      return config.label;
+      if (config.icon) {
+        var iconTemplate = "<i class='uk-link-icon uk-icon-{{icon}}'></i>";
+        var labelTemplate = "<span>{{label}}</span>";
+        return config.alignIconRight ? labelTemplate + iconTemplate : iconTemplate + labelTemplate;  
+      } else {
+        return config.label;
+      }
     }
   }, $definitions.element, exports.ClickEvents);
 
@@ -7106,6 +7356,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       autocorrect: function (value) {
         setAttributes(this.getFormControl(), {autocorrect: value});
       },
+      spellcheck: function (value) {
+        setAttributes(this.getFormControl(), {spellcheck: value});
+      },
       placeholder: function (value) {
         setAttributes(this.getFormControl(), {placeholder: value});
       }
@@ -7172,6 +7425,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "input",
     $defaults: {
       htmlTag: "INPUT",
+      tagClass: "uk-input",
       inputWidth: "medium"
     },
     $setters: extend(
@@ -7190,10 +7444,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           large: ""
         }, 'uk-form-', true)
       }),
-      {
-      checked: function (value) {
-        this.getFormControl().checked = value;
-      },
+    {
       readonly: function (value) {
         setAttributes(this.getFormControl(), {readonly: value});
       }
@@ -7243,7 +7494,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   $definitions.autocomplete = def({
     __name__: "autocomplete",
-    template: '<input style="width:100%">',
+    template: '<input class="uk-input" style="width:100%">',
     $defaults: {
       htmlTag: "DIV",
       tagClass: "uk-autocomplete",
@@ -7276,7 +7527,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var autocomplete = self._autocomplete = UIkit.autocomplete(self.el,
           {source: bind(value, self), minLength: self.config.minLength});
         self.el.style.wordBreak = "break-word";
-        autocomplete.dropdown.attr("style", "width:100%");
         autocomplete.dropdown.addClass('uk-dropdown-small');
         autocomplete.on("selectitem.uk.autocomplete", function (e, obj) {
           self.dispatch("onChange", [obj.value]);
@@ -7315,6 +7565,168 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, $definitions.input);
 
 
+  $definitions.drawer = def({
+    __name__: "drawer",
+    $defaults: {
+      tagClass: "uk-offcanvas",
+      $blockDrawerPan: false,
+      $closeInProgress: false,
+    },
+
+    $setters: extend(
+      classSetters({
+        touchOnly: {
+          "": "",
+          "false": "",
+          "true": 'uk-offcanvas-touch'
+        }
+      }),
+      {
+        edge: function (value) {
+          if (value) {
+            var $this = this;
+            var direction = $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL;
+            // Tricky: Go in opposite direction of drawer
+            var swiper = new DrawerSwipe(direction, document.body);
+            $this.openSwipe = swiper;
+      
+            swiper.getWidth = function () {
+              return $this.content().width();
+            };
+      
+            swiper.onPanStart = function (e) {
+              var firstTouch = e.touches[0];
+              var lastTouch = this.lastTouch;
+              return this.beganPan || (firstTouch && firstTouch.clientX <= 36) || (lastTouch && lastTouch.clientX <= 36);
+            };
+      
+            swiper.applyChanges = function (percent) {
+              if (this.beganPan) {
+                $this.showDrawer();
+                var percent = $this.closeSwipe.percent = -100 + percent;
+                $this.closeSwipe.applyChanges(percent);
+              }
+            };
+      
+            swiper.onCompleteSwipe = function () {
+              $this.closeSwipe.reset();
+            };
+      
+            swiper.onIncompleteSwipe = function () {
+              $this.close();
+            };
+          }
+        }
+      }
+    ),
+
+    __after__: function () {
+      var $this = this;
+      var content = $this.el.firstChild;
+      if (content) UI.addClass(content, 'uk-offcanvas-bar');
+
+      var swipeGesture = $this.closeSwipe = new DrawerSwipe(
+        $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL,
+        $this.element);
+
+      swipeGesture.getWidth = function () {
+        return $this.content().width();
+      };
+
+      swipeGesture.onPan = function () {
+        return !$this.$blockDrawerPan && exports.$scrollState != 'scroll';
+      };
+
+      swipeGesture.onPanStart = function (e) {
+        var firstTouch = e.touches[0];
+        return this.beganPan || (firstTouch && document.elementFromPoint(firstTouch.clientX, firstTouch.clientY) != $this.element);
+      };
+
+      swipeGesture.applyChanges = function (percent) {
+        var contentElement = $this.element.firstChild;
+        if (contentElement) {
+          var elementStyle = $this.element.style;
+          var contentElementStyle = contentElement.style;
+          var transform = "translateX(" + percent + "%)";
+          var transition = "none";
+          var bgTransition = "background-color 100ms linear";
+          var backface = "hidden";
+          var bgColor = "rgba(0,0,0," + 0.42*(1-Math.abs(percent)/100) + ')';
+          contentElementStyle.webkitTransform = transform;
+          contentElementStyle.transform = transform;
+          contentElementStyle.webkitTransition = transition;
+          contentElementStyle.transition = transition;
+          contentElementStyle.backfaceVisibility = backface;
+          elementStyle.backgroundColor = bgColor;
+          elementStyle.webkitTransition = bgTransition;
+          elementStyle.transition = bgTransition;
+          elementStyle.backfaceVisibility = backface;
+        }
+      };
+
+      swipeGesture.onCompleteSwipe = function () {
+        $this.finalize();
+      };
+
+      $($this.element)
+        .on("click", function (e) {
+          if (e.target == e.delegateTarget) {
+            $this.close();
+          }
+        });
+    },
+
+    finalize: function () {
+      $('body').removeClass('uk-offcanvas-page');
+      UI.removeClass(this.element, 'uk-active');
+      this.content().removeClass('uk-offcanvas-bar-show');
+    },
+
+    showDrawer: function() {
+      var $this = this;
+      if (!$this.isVisible()) {
+        var body = $("body");
+
+        $($this.element)
+          .addClass("uk-active");
+
+        body.addClass("uk-offcanvas-page");
+        body.width();  // .width() - force redraw to apply css
+        $this.content().addClass("uk-offcanvas-bar-show");
+        return true;
+      }
+      return false;
+    },
+
+    open: function () {
+      var $this = this;
+      if ($this.showDrawer()) {
+        $this.closeSwipe.animate(null, true, true);
+      }
+    },
+
+    close: function () {
+      if (this.closeSwipe) {
+        this.closeSwipe.animate();
+      } else {
+        this.finalize();
+      }
+    },
+
+    content: function () {
+      return $(this.element).find(".uk-offcanvas-bar");
+    },
+
+    isVisible: function () {
+      return $(this.element).is(":visible");
+    },
+
+    isFlipped: function () {
+      return this.content().hasClass("uk-offcanvas-bar-flip");
+    }
+  }, $definitions.element);
+
+
   $definitions.dropdown = def({
     __name__: "dropdown",
     $defaults: {
@@ -7323,7 +7735,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       padding: "none",
       justify: false,
       dropdownDelay: 0,
-      dropdownCSS: "uk-dropdown-close",
+      dropdownClass: "uk-dropdown-close",
       dropdownAnimation: "uk-animation-scale-up-y uk-animation-top-center",
       dropdownRect: null,
       blank: false
@@ -7358,7 +7770,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     dropdownClass: function () {
       var config = getConfig(this);
-      var result = config.dropdownCSS;
+      var result = config.dropdownClass;
       result += config.blank ? " uk-dropdown-blank" : " uk-dropdown";
       result += config.scrollable ? " uk-dropdown-scrollable" : "";
       result += " " + config.dropdownAnimation;
@@ -7790,7 +8202,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     itemClass: function (item) {
       var itemClass = classString(getConfig(this).itemTagClass);
       itemClass += item.$selected ? ' ' + ACTIVE_CLASS : '';
-      itemClass += ' ' + classString(item.$css);
+      itemClass += ' ' + classString(item.$cls);
       return itemClass;
     },
     itemTagString: function () {
@@ -7950,7 +8362,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       /**
        * Get the 'batch' value that was passed to `setBatch`.
        */
-      return this.$batch;
+    return this.$batch;
     },
     showBatch: function (name) {
       /**
@@ -7994,10 +8406,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           "list": "list",
           "tab": "tab",
           "tab-flip": "tab-flip",
-          "tab-bottom": "tab-bottom",
           "tab-center": "tab-center",
-          "tab-left": "tab-left",
-          "tab-right": "tab-right",
+          "tab-bottom": ["tab", "tab-bottom"],
+          "tab-left": ["tab", "tab-left"],
+          "tab-right": ["tab", "tab-right"],
           "breadcrumb": "breadcrumb",
           "": ""
         }, 'uk-')
@@ -8224,7 +8636,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       self.dispatch("onItemClosed", [item]);
     },
     itemClass: function (item) {
-      var cls = UI.definitions.stack.prototype.itemClass.call(this, item);
+      var cls = $definitions.stack.prototype.itemClass.call(this, item);
       if (item.$header) cls += " uk-nav-header";
       if (item.$divider) cls += " uk-nav-divider";
       return cls;
@@ -8578,16 +8990,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     __init__: function () {
       var self = this;
-      self.header = self._header = createElement("THEAD");
-      self.footer = self._footer = createElement("TFOOT");
-      self.body = self._body = createElement("TBODY");
+      self.header = createElement("THEAD");
+      self.footer = createElement("TFOOT");
+      self.body = createElement("TBODY");
 
       // Make Chrome wrapping behavior same as firefox
-      self._body.style.wordBreak = "break-word";
+      self.body.style.wordBreak = "break-word";
 
-      self.el.appendChild(self._header);
-      self.el.appendChild(self._footer);
-      self.el.appendChild(self._body);
+      self.el.appendChild(self.header);
+      self.el.appendChild(self.footer);
+      self.el.appendChild(self.body);
     },
     $setters: extend(classSetters({
         tableStyle: prefixClassOptions({
@@ -8626,7 +9038,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
                 : "<th>" + column.header + "</th>";
             });
 
-            self._header.innerHTML = "<tr>" + headersHTML + "</tr>";
+            self.header.innerHTML = "<tr>" + headersHTML + "</tr>";
           }
         },
         footer: function (value) {
@@ -8638,21 +9050,21 @@ window.UI = window.ui = (function (exports, window, UIkit) {
               column.footer = value.footer;
             }
             var footers = pluck(self.config.columns, "footer");
-            self._footer.innerHTML = "<tr><td>" + footers.join("</td><td>") + "</td></tr>";
+            self.footer.innerHTML = "<tr><td>" + footers.join("</td><td>") + "</td></tr>";
           }
         },
         caption: function (value) {
           var self = this;
-          self._caption = createElement("CAPTION");
-          self._caption.innerHTML = value;
-          self.el.appendChild(self._caption);
+          self.caption = createElement("CAPTION");
+          self.caption.innerHTML = value;
+          self.el.appendChild(self.caption);
         }
       }
     ),
     template: function (item) {
       var self = this;
       return self.config.columns.map(function (column) {
-        var td = createElement("TD", {class: column.$css ? classString(column.$css) : ""});
+        var td = createElement("TD", {class: column.$cls ? classString(column.$cls) : ""});
 
         if (column.align)
           td.style.textAlign = column.align;
@@ -8662,20 +9074,207 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       });
     },
     containerElement: function () {
-      return this._body;
+      return this.body;
     }
   }, $definitions.list);
+
+
+  $definitions.resizer = def({
+    __name__: 'resizer',
+    $defaults: {
+      tagClass: 'uk-resizer',
+      device: 'notouch',
+      minValue: 0,
+      maxValue: Number.MAX_VALUE
+    },
+    $setters: classSetters({
+      direction: {
+        x: "x",
+        y: "y"
+      }
+    }),
+    __after__: function (config) {
+      var $this = this;
+      var dragHandle = UI.createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
+      $this.dragHandle = dragHandle;
+      $this.el.appendChild(dragHandle);
+
+      UI.addListener($this.el, 'mousedown', function (e) {
+        if (!$this.dragging) {
+          UI.preventEvent(e);
+          dragHandle.style = 'left:' + e.clientX + 'px';
+          UI.removeClass(dragHandle, 'uk-hidden');
+          $this.dragging = true;
+        }
+      });
+
+      UI.addListener(document.body, 'mousemove', function (e) {
+        if ($this.dragging) {
+          var clientPos = e.clientX;
+          var maxValue = config.maxValue;
+          var minValue = config.minValue;
+          if (clientPos < minValue) clientPos = minValue;
+          else if (clientPos > maxValue) clientPos = maxValue;
+          dragHandle.style = 'left:' + clientPos + 'px';
+        }
+      });
+
+      UI.addListener(document.body, 'mouseup', function (e) {
+        if ($this.dragging) {
+          var clientX = e.clientX;
+          var maxValue = config.maxValue;
+          var minValue = config.minValue;
+
+          if (clientX < minValue) clientX = minValue;
+          else if (clientX > maxValue) clientX = maxValue;
+
+          UI.addClass(dragHandle, 'uk-hidden');
+          $this.dragging = false;
+          $this.dispatch("onHandleResized", [clientX, $this.el, e]);
+        }
+      });
+    }
+  }, $definitions.element);
+
+
+  $definitions.spacer = def({
+    __name__: 'spacer',
+    __init__: function (config) {
+      var self = this;
+      self.element = self.el = UI.createElement("DIV");
+      self.config = config;
+      var width = (isNumber(config.width) ? config.width + 'px' : config.width) || 'auto';
+      var height = (isNumber(config.height) ? config.height + 'px' : config.height) || 'auto';
+      UI.addClass(self.el, config.cls);
+      UI.extend(self.el.style, {minWidth: width, minHeight: height});
+    }
+  });
+
+
+  $definitions.scroller = def({
+    __name__: 'scroller',
+    $defaults: {
+      tagClass: 'uk-scroller-container',
+      scrollDirection: 'y'
+    },
+    __init__: function (config) {
+      var $this = this;
+      var el = $this.el;
+      var scrollDirection = $this.scrollDirection = config.scrollDirection;
+      $this.bar = UI.createElement('DIV');
+      $this.wrapper = UI.createElement('DIV');
+      
+      UI.addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
+      UI.addClass($this.wrapper, 'uk-scroller-wrapper');
+
+      el.appendChild($this.wrapper);
+      el.appendChild($this.bar);
+
+      $this.$content = UI.new({
+        cls: ["uk-scroller-content", scrollDirection],
+        cells: config.cells,
+        flexLayout: scrollDirection == 'y' ? 'column' : 'row'
+      }, $this.wrapper);
+      $this.content = $this.$content.el;
+
+      window.addEventListener('resize', $this.moveBar.bind($this));
+      $this.content.addEventListener('scroll', function (e) {
+        if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
+        $this.moveBar();
+        $this.dispatch("onScroll", [config, $this.content, e]);
+      });
+      $this.content.addEventListener('mouseenter', $this.moveBar.bind($this));
+    },
+
+    __after__: function () {
+      this.initScrollbar(this.bar, this);
+      this.moveBar();
+    },
+
+    initScrollbar: function (el, context) {
+      var lastPageY, lastPageX;
+  
+      el.addEventListener('mousedown', function(e) {
+        lastPageY = e.pageY;
+        lastPageX = e.pageX;
+        UI.addClass(el, 'uk-scroller-grabbed');
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stop);
+        return false;
+      });
+  
+      function drag(e) {
+        var delta = context.scrollDirection == 'y' ? e.pageY - lastPageY : e.pageX - lastPageX;
+        lastPageY = e.pageY;
+        lastPageX = e.pageX;
+  
+        raf(function() {
+          if (context.scrollDirection == 'y') {
+            context.content.scrollTop += delta / context.scrollRatio;
+          }
+          else if ((context.scrollDirection == 'x')) {
+            context.content.scrollLeft += delta / context.scrollRatio;
+          }
+        });
+      }
+
+      function stop() {
+        UI.removeClass(el, 'uk-scroller-grabbed');
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stop);
+      }
+    },
+  
+    moveBar: function(e) {
+      var raf = window.requestAnimationFrame || window.setImmediate || function(c) { return setTimeout(c, 0); };
+      var $this = this;
+      var totalHeight = $this.content.scrollHeight || 1,
+          ownHeight = $this.content.clientHeight || 1,
+          totalWidth = $this.content.scrollWidth || 1,
+          ownWidth = $this.content.clientWidth || 1;
+      var isRtl = $this.direction === 'rtl';
+
+      $this.scrollRatio = $this.scrollDirection == 'y' ? ownHeight / totalHeight : ownWidth / totalWidth;
+  
+      raf(function() {
+        // Hide scrollbar if no scrolling is possible
+        if($this.scrollRatio >= 1) {
+          UI.addClass($this.bar, 'uk-hidden');
+        } else {
+          UI.removeClass($this.bar, 'uk-hidden');
+
+          if ($this.scrollDirection == 'y') {
+            $this.bar.style.cssText = 'height:' + Math.max($this.scrollRatio * 100, 10) + '%; top:' +
+              ($this.content.scrollTop / totalHeight ) * 100 + '%;' +
+              (isRtl ? '' : 'right:0px;');
+          }
+          else if ($this.scrollDirection == 'x') {
+            $this.bar.style.cssText = 'width:' + Math.max($this.scrollRatio * 100, 10) + '%; left:' +
+              ($this.content.scrollLeft / totalWidth ) * 100 + '%;';
+          }
+        }
+      });
+    },
+
+    showBatch: function (batch) {
+      this.$content.showBatch(batch);
+    }
+  }, $definitions.element);
 
 
   $definitions.select = def({
     __name__: "select",
     $defaults: {
       htmlTag: "SELECT",
-      itemTag: "OPTION",
-      tagClass: "",
+      tagClass: "uk-select",
       flex: false,
       flexSize: "",
       listStyle: ""
+    },
+    $setters: {
+      multiple: function (value) {
+        setAttributes(this.getFormControl(), value ? {multiple: value} : {});
+      }
     },
     select: function (item) {
       /**
@@ -8700,6 +9299,39 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return this.setActive('value', value);
     },
     template: function (item) {
+      if (item.view) {
+        if (item.view == 'optgroup') {
+          return UI.new(item);
+        } else {
+          // Error
+          fail('Invalid view: ' + item.view + ' for "select" child view.' + 
+            'Only "optgroup" is accepted.');
+        }
+      }
+      return item.label;
+    },
+    itemTagString: function (item) {
+      return item.view == 'optgroup' ? "OPTGROUP" : "OPTION";
+    },
+    itemElement: function (item) {
+      var attributes = {value: item.value, class: this.itemClass(item)};
+      if (item.selected) attributes.selected = item.selected;
+      return createElement(this.itemTagString(item), attributes);
+    }
+  }, exports.ChangeEvent, exports.FormControl, $definitions.list);
+
+
+  $definitions.optgroup = def({
+    __name__: "optgroup",
+    $defaults: {
+      htmlTag: "OPTGROUP",
+      itemTag: "OPTION",
+      tagClass: "",
+      flex: false,
+      flexSize: "",
+      listStyle: ""
+    },
+    template: function (item) {
       return item.label;
     },
     itemElement: function (item) {
@@ -8707,7 +9339,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       if (item.selected) attributes.selected = item.selected;
       return createElement(this.itemTagString(), attributes);
     }
-  }, exports.ChangeEvent, exports.FormControl, $definitions.list);
+  }, $definitions.list);
 
 
   $definitions.form = def({
@@ -8930,4 +9562,4 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   return exports;
 })({}, window, window.UIkit);
 
-window.UI.VERSION = '0.1.0';
+window.UI.VERSION = '0.3.0';

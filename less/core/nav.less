@@ -58,7 +58,7 @@
 @nav-side-active-dark-color:                    #fff;
 @nav-side-active-border-color:                  @tab-item-active-color;
 @nav-side-active-dark-border-color:             @tab-item-active-dark-color;
-@nav-side-header-color:                         rgba(123, 126, 133, 0.8);
+@nav-side-header-color:                         fade(#8391a5, 80%);
 @nav-side-divider-border:                       @global-border;
 @nav-side-divider-dark-border:                  @global-dark-border;
 @nav-side-divider-border-width:                 1px;
@@ -70,6 +70,7 @@
 @nav-dropdown-hover-dark-color:                 @nav-side-active-dark-color;
 @nav-dropdown-header-color:                     @nav-side-header-color;
 @nav-dropdown-divider-border:                   @global-border;
+@nav-dropdown-divider-dark-border:              @global-dark-border;
 @nav-dropdown-divider-border-width:             1px;
 
 
@@ -286,6 +287,6 @@
 .hook-nav-dropdown-header() {}
 .hook-nav-dropdown-divider() {
     .dark & {
-        border-color: @nav-side-divider-dark-border
+        border-color: @nav-dropdown-divider-dark-border
     }
 }

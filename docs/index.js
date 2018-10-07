@@ -10,13 +10,54 @@ document.body.onscroll = function () {
   var navElem = $$('navBar').el;
   if (document.documentElement.scrollTop > 5) {
     UI.addClass(navElem, 'uk-box-shadow');
-    UI.addClass(navElem, 'x-active');
   } else {
     UI.removeClass(navElem, 'uk-box-shadow');
-    UI.removeClass(navElem, 'x-active');
-
   }
 };
+
+
+var phrases1 = [
+  "I'm having a party",
+  "Everyone can come",
+  "By the way, you're invited",
+  "You seem pretty fun",
+  "I've got a massive sound system",
+  "Biggest in the world",
+  "DJ spins all the tunes",
+  "That will make you move",
+  "- Kero Kero Bonito"
+];
+
+
+var phrases2 = [
+  'Hard work pays off in the future. Laziness pays off now.',
+  'A dog is a dog unless he is facing you. Then he is Mr. Dog.',
+  'Experience is something you get just after you need it.',
+  "If it weren't for the last minute, nothing would get done.",
+  'Be nice to other people; they outnumber you 5.5 billion to one.',
+  'Anything free is worth the price.',
+  'A sine curve goes off to infinity, or at least to the end of the blackboard.'
+];
+
+
+function mapToProperty(array, property, base) {
+  return array.map(function (elem) {
+    var result = UI.extend({}, base || {});
+    result[property] = elem;
+    return result;
+  });
+}
+
+
+function findKeyWithValue(object, value) {
+  for (var key in object) {
+    if (object.hasOwnProperty(key)) {
+      if (object[key] == value) {
+        return key;
+      }
+    }
+  }
+}
 
 
 var Model = {
@@ -29,31 +70,6 @@ var Model = {
         view: 'form',
         fieldsets: [fieldset]
       }
-    },
-    dropdown: function (dropdown) {
-      return {
-        view: 'button',
-        label: 'Show dropdown',
-        type: 'primary',
-        dropdown: dropdown.dropdown
-      }
-    },
-    modal: function (modal) {
-      return {
-        cells: [
-          {
-            view: 'button',
-            label: 'Show modal',
-            type: 'primary',
-            on: {
-              onClick: function () {
-                $$(modal.id).open();
-              }
-            }
-          },
-          modal
-        ]
-      }
     }
   },
   aliases: {
@@ -63,411 +79,849 @@ var Model = {
   },
   components: {
     autocomplete: function () {
+      var quotes = mapToProperty(phrases2, 'value');
       return {
-        flexLayout: "column",
-        cells: [
-          {
-            view: "label",
-            label: "Basic Autocomplete",
-            htmlTag: "H6",
-            margin: "bottom"
-          },
-          {
-            view: 'autocomplete',
-            placeholder: 'Type something...',
-            sources: [
-              {value: 'Hard work pays off in the future. Laziness pays off now.'},
-              {value: 'A dog is a dog unless he is facing you. Then he is Mr. Dog.'},
-              {value: 'Experience is something you get just after you need it.'},
-              {value: "If it weren't for the last minute, nothing would get done."},
-              {value: 'Be nice to other people; they outnumber you 5.5 billion to one.'},
-              {value: 'Anything free is worth the price.'},
-              {value: 'A sine curve goes off to infinity, or at least to the end of the blackboard.'}
-            ]
-          },
-          {
-            view: "label",
-            badge: "primary",
-            label: 'Type "free" or "nice" for example.',
-            margin: "top right"
-          }
-        ]
-      }
+        locals: {
+          quotes: quotes
+        },
+        component: {
+          cells: [
+            {
+              flexLayout: "column",
+              cells: [
+                {
+                  view: "label",
+                  label: "Basic Autocomplete",
+                  htmlTag: "H6",
+                  margin: "bottom"
+                },
+                {
+                  view: 'autocomplete',
+                  placeholder: 'Type something...',
+                  sources: quotes
+                },
+                {
+                  view: "label",
+                  badge: "primary",
+                  label: 'Type "free" or "nice" for example.',
+                  margin: "top"
+                }
+              ]
+            },
+            {
+              margin: "left-lg",
+              flexLayout: "column",
+              cells: [
+                {
+                  view: "label",
+                  label: "Remote Source",
+                  htmlTag: "H6",
+                  margin: "bottom"
+                },
+                {
+                  view: 'autocomplete',
+                  placeholder: 'Type something else...',
+                  minLength: 3,
+                  autocomplete: function (release) {
+                    var searchValue = this.getValue();
+                    setTimeout(function () {
+                      release(
+                        quotes.filter(function (item) {
+                          return item.value.indexOf(searchValue) != -1;
+                        })
+                      );
+                    }, 250);
+                  }
+                },
+                {
+                  view: "label",
+                  badge: "primary",
+                  label: 'Type at least 3 characters.',
+                  margin: "top"
+                }
+              ]
+            }
+          ]
+        }
+      };
     },
     breadcrumb: function () {
       return {
-        view: 'list',
-        listStyle: 'breadcrumb',
-        data: [
-          {view: 'link', label: 'Root'},
-          {view: 'link', label: 'Parent'},
-          {view: 'link', label: 'Child'}
-        ]
-      }
+        component: {
+          view: 'list',
+          listStyle: 'breadcrumb',
+          data: [
+            { view: 'link', label: 'Root' },
+            { view: 'link', label: 'Parent' },
+            { view: 'link', label: 'Child' }
+          ]
+        }
+      };
     },
     button: function () {
       return {
-        flex: false,
-        cells: [
-          {
-            view: 'button',
-            size: 'small',
-            label: 'Small Primary',
-            color: 'primary'
-          },
-          {
-            view: 'button',
-            label: 'Default',
-            margin: 'x'
-          },
-          {
-            view: 'button',
-            label: 'Muted',
-            color: 'muted',
-            margin: 'x'
-          },
-          {
-            view: 'button',
-            label: 'Success',
-            color: 'success',
-            margin: 'x'
-          },
-          {
-            view: 'button',
-            label: 'Muted Button',
-            link: false,
-            color: 'muted',
-            margin: 'x'
-          },
-          {
-            view: 'button',
-            size: 'large',
-            label: 'Large Button',
-            link: false,
-            color: 'danger'
-          }
-        ]
-      }
+        component: {
+          cells: [
+            {
+              flexLayout: 'column',
+              cells: [
+                {
+                  view: 'button',
+                  size: 'small',
+                  label: 'Small Link',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Default Link',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Muted Link',
+                  color: 'muted',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Success Link',
+                  color: 'success',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Primary Large Link',
+                  color: 'primary',
+                  size: 'large',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Danger Large Link',
+                  size: 'large',
+                  color: 'danger',
+                  margin: 'y'
+                }
+              ]
+            },
+            {
+              flexLayout: 'column',
+              cells: [
+                {
+                  view: 'button',
+                  size: 'small',
+                  label: 'Small Button',
+                  buttonStyle: 'button',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Default Button',
+                  buttonStyle: 'button',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Muted Button',
+                  buttonStyle: 'button',
+                  color: 'muted',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Success Button',
+                  buttonStyle: 'button',
+                  color: 'success',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Primary Large Button',
+                  buttonStyle: 'button',
+                  color: 'primary',
+                  size: 'large',
+                  margin: 'y'
+                },
+                {
+                  view: 'button',
+                  label: 'Danger Large Button',
+                  buttonStyle: 'button',
+                  size: 'large',
+                  color: 'danger',
+                  margin: 'y'
+                }
+              ]
+            }
+          ]
+        }
+      };
     },
     card: function () {
       return {
-        flexLayout: 'column',
-        cells: [
-          {
-            flexSpace: 'between',
-            margin: 'bottom-lg',
-            cells: [
-              {
-                view: 'label',
-                flexSize: 'flex',
-                label: 'Default Card',
-                card: true
-              },
-              {
-                view: 'label',
-                flexSize: 'flex',
-                label: 'Primary Card',
-                card: 'primary',
-                margin: 'left-lg'
+        component: {
+          flexLayout: 'column',
+          cells: [
+            {
+              flexSpace: 'between',
+              margin: 'bottom-lg',
+              cells: [
+                {
+                  view: 'label',
+                  flexSize: 'flex',
+                  label: 'Default Card',
+                  card: true
+                },
+                {
+                  view: 'label',
+                  flexSize: 'flex',
+                  label: 'Primary Card',
+                  card: 'primary',
+                  margin: 'left-lg'
+                }
+              ]
+            },
+            {
+              flexLayout: 'column',
+              card: true,
+              cells: [
+                {
+                  view: 'label',
+                  card: 'badge',
+                  badge: 'danger',
+                  label: 'Awesome'
+                },
+                {
+                  view: 'label',
+                  htmlTag: 'h5',
+                  label: 'Card with Header',
+                  card: 'header title'
+                },
+                {
+                  view: 'label',
+                  label: 'Primary Card',
+                  card: 'body'
+                }
+              ]
+            }
+          ]
+        }
+      };
+    },
+    drawer: function () {
+      return {
+        component: {
+          cells: [
+            {
+              view: 'button',
+              label: 'Show Drawer',
+              buttonStyle: 'button',
+              on: {
+                onClick: function () {
+                  $$('drawer').show();
+                }
               }
-            ]
-          },
-          {
-            flexLayout: 'column',
-            card: true,
-            cells: [
-              {
-                view: 'label',
-                card: 'badge',
-                badge: 'danger',
-                label: 'Awesome'
-              },
-              {
-                view: 'label',
-                htmlTag: 'h5',
-                label: 'Card with Header',
-                card: 'header title'
-              },
-              {
-                view: 'label',
-                label: 'Primary Card',
-                card: 'body'
-              }
-            ]
-          }
-        ]
-      }
+            },
+            {
+              id: 'drawer',
+              view: 'drawer'
+            }
+          ]
+        }
+      };
     },
     dropdown: function () {
       return {
-        dropdown: {
-          view: 'list',
-          data: [
-            {$header: true, label: 'Random'},
-            {view: 'link', label: 'Curl into a furry donut.'},
-            {view: 'link', label: 'Look into a furry donut.'},
-            {view: 'link', label: 'Age into a furry donut.'},
-            {view: 'link', label: 'Walk into a furry donut.'},
-            {view: 'link', label: 'Elope into a furry donut.'},
-            {view: 'link', label: 'Dig into a furry donut.'}
+        component: {
+          cells: [
+            {
+              view: 'button',
+              label: 'Show dropdown',
+              color: 'primary',
+              buttonStyle: 'button',
+              dropdown: {
+                view: 'list',
+                data: [
+                  { $header: true, label: 'Lyrics' }
+                ].concat(mapToProperty(phrases1, 'label', {view: 'link'}))
+              }
+            },
+            {
+              view: 'button',
+              label: "What's in here?",
+              buttonStyle: 'button',
+              margin: 'left',
+              dropdown: {
+                flexLayout: 'column',
+                padding: 'x',
+                cells: [
+                  {
+                    view: 'label',
+                    label: 'An image',
+                    htmlTag: 'H6',
+                    margin: 'top'
+                  },
+                  {
+                    view: 'image',
+                    src: "logo.svg"
+                  }
+                ]
+              }
+            }
           ]
         }
-      }
+      };
     },
     element: function () {
       return {
-        template: '<p>{{action}} into a furry donut.</p>',
-        action: 'Curl'
-      }
+        component: {
+          template: '<h6>Element {{name}}</h6><p>{{name}} can be anything.</p>',
+          name: 'Template'
+        }
+      };
     },
     fieldset: function () {
       return {
-        view: 'fieldset',
-        data: [
-          {formLabel: 'User', view: 'input', value: 'Hello'},
-          {formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password'},
-          {view: 'button', type: 'primary', label: 'Login', inputWidth: 'medium', margin: 'top'}
-        ]
-      }
+        component: {
+          view: 'fieldset',
+          data: [
+            { formLabel: 'User', view: 'input', value: 'Hello' },
+            { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' },
+            { view: 'button', color: 'primary', buttonStyle: 'button', label: 'Login', inputWidth: 'medium', margin: 'top' }
+          ]
+        }
+      };
     },
     form: function () {
       return {
-        view: 'form',
-        fieldset: [
-          {formLabel: 'User', view: 'input', value: 'Hello'},
-          {formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password'},
-          {view: 'button', type: 'primary', label: 'Login', inputWidth: 'medium', margin: 'top'}
-        ]
-      }
+        component: {
+          view: 'form',
+          fieldset: [
+            { formLabel: 'User', view: 'input', value: 'Hello' },
+            { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' },
+            { view: 'button', color: 'primary', buttonStyle: 'button', label: 'Login', inputWidth: 'medium', margin: 'top' }
+          ]
+        }
+      };
     },
     flexgrid: function () {
       return {
-        cells: [
-          {
-            view: 'list',
-            listStyle: 'side',
-            data: [
-              {view: 'link', label: 'Curl into a furry donut.'},
-              {view: 'link', label: 'Look into a furry donut.'},
-              {view: 'link', label: 'Age into a furry donut.'},
-              {view: 'link', label: 'Walk into a furry donut.'},
-              {view: 'link', label: 'Elope into a furry donut.'},
-              {view: 'link', label: 'Dig into a furry donut.'}
-            ]
-          },
-          {
-            view: 'form',
-            margin: 'left-lg',
-            fieldset: [
-              {formLabel: 'User', view: 'input', value: 'Hello'},
-              {formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password'},
-              {view: 'button', type: 'primary', label: 'Login', inputWidth: 'medium', margin: 'top'}
-            ]
-          }
-        ]
-      }
+        component: {
+          cells: [
+            {
+              view: 'list',
+              listStyle: 'side',
+              data: [
+                { view: 'link', label: 'Curl into a furry donut.' },
+                { view: 'link', label: 'Look into a furry donut.' },
+                { view: 'link', label: 'Age into a furry donut.' },
+                { view: 'link', label: 'Walk into a furry donut.' },
+                { view: 'link', label: 'Elope into a furry donut.' },
+                { view: 'link', label: 'Dig into a furry donut.' }
+              ]
+            },
+            {
+              view: 'form',
+              margin: 'left-lg',
+              fieldset: [
+                { formLabel: 'User', view: 'input', value: 'Hello' },
+                { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' },
+                { view: 'button', type: 'primary', label: 'Login', inputWidth: 'medium', margin: 'top' }
+              ]
+            }
+          ]
+        }
+      };
     },
     icon: function () {
       return {
-        flexSpace: 'between',
-        cells: [
-          'cog', 'bolt', 'heart', 'instagram', 'reply', 'close', 'cloud-upload', 'cloud-download',
-          'more', 'more-vertical', 'plus', 'minus', 'image'
-        ].map(function (icon) {
-          return {
-            view: 'icon',
-            icon: 'uk-icon-' + icon,
-            iconStyle: 'medium'
-          }
-        })
-      }
+        component: {
+          flexWrap: 'wrap',
+          cells: [
+            'album', 'arrow-down', 'arrow-left', 'arrow-right', 'arrow-up', 'bold',
+            'bolt', 'bookmark', 'calendar', 'camera', 'cart', 'check',
+            'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up', 'close',
+            'cloud-download', 'cloud-upload', 'code', 'cog', 'comment', 'commenting', 'comments',
+            'copy', 'credit-card', 'desktop', 'download', 'expand', 'file-edit', 'file',
+            'folder', 'forward', 'future', 'git-branch', 'git-fork', 'github-alt', 'github',
+            'gitter', 'google-plus', 'google', 'grid', 'hashtag', 'heart', 'history',
+            'home', 'image', 'instagram', 'italic', 'laptop', 'link', 'list', 'location',
+            'lock', 'mail', 'menu', 'minus', 'more-vertical', 'more', 'move', 'paint-bucket',
+            'penceil', 'phone-landscape', 'phone', 'play', 'plus', 'pull', 'push', 'receiver',
+            'refresh', 'reply', 'rss', 'search', 'server', 'settings', 'shrink', 'sign-in',
+            'sign-out', 'social', 'star', 'strikethrough', 'table', 'tablet-landscape', 'tablet',
+            'tag', 'thumbnails', 'trash', 'triangle-down', 'triangle-left', 'triangle-right',
+            'triangle-up', 'unlock', 'user', 'users', 'video-camera'
+          ].map(function (icon) {
+            return {
+              flexLayout: "column",
+              flexSize: "none",
+              card: true,
+              style: {
+                minWidth: '112px'
+              },
+              cells: [
+                {
+                  view: 'label',
+                  label: icon,
+                  card: 'header',
+                  textAlign: 'center'
+                },
+                {
+                  view: 'icon',
+                  card: 'body',
+                  textAlign: 'center',
+                  icon: 'uk-icon-' + icon,
+                  iconStyle: 'large'
+                }
+              ]
+            };
+          })
+        }
+      };
     },
     image: function () {
       return {
-        view: 'image',
-        src: "logo.svg"
-      }
+        component: {
+          view: 'image',
+          src: "logo.svg"
+        }
+      };
     },
     input: function () {
       return {
-        flexLayout: 'column',
-        cells: [
-          {
-            view: 'input',
-            placeholder: 'Default Size'
-          },
-          {
-            view: 'input',
-            size: 'small',
-            placeholder: 'Small Size',
-            margin: 'y'
-          },
-          {
-            view: 'input',
-            size: 'large',
-            placeholder: 'Large Size'
-          }
-        ]
-      }
+        component: {
+          flexLayout: 'column',
+          cells: [
+            {
+              view: 'input',
+              placeholder: 'Default Size'
+            },
+            {
+              view: 'input',
+              size: 'small',
+              placeholder: 'Small Size',
+              margin: 'y'
+            },
+            {
+              view: 'input',
+              size: 'large',
+              placeholder: 'Large Size',
+            },
+            {
+              view: 'input',
+              readonly: true,
+              placeholder: 'Readonly',
+              margin: 'y'
+            }
+          ]
+        }
+      };
     },
     label: function () {
       return {
-        view: 'label',
-        label: 'Curl into a furry donut.'
-      }
+        component: {
+          view: 'label',
+          label: 'Curl into a furry donut.'
+        }
+      };
     },
     link: function () {
       return {
-        view: 'link',
-        label: 'Curl into a furry donut.'
-      }
+        component: {
+          cells: [
+            {
+              view: 'link',
+              label: 'Default Link'
+            },
+            {
+              view: 'link',
+              icon: 'heart',
+              label: 'Link Icon',
+              margin: 'x-lg'
+            },
+            {
+              view: 'link',
+              icon: 'link',
+              label: 'Right Icon',
+              alignIconRight: true
+            }
+          ]
+        }
+      };
     },
     list: function () {
       return {
-        view: 'list',
-        listStyle: ['side', 'line', 'striped'],
-        style: {
-          minWidth: '50%'
-        },
-        data: [
-          {view: 'link', label: 'Curl into a furry donut.'},
-          {view: 'link', label: 'Look into a furry donut.'},
-          {view: 'link', label: 'Age into a furry donut.'},
-          {view: 'link', label: 'Walk into a furry donut.'},
-          {view: 'link', label: 'Elope into a furry donut.'},
-          {view: 'link', label: 'Dig into a furry donut.'}
-        ]
-      }
+        component: {
+          cells: [
+            listTemplate(['side', 'line'], phrases1),
+            listTemplate(['side', 'line', 'striped'], phrases2)
+          ]
+        }
+      };
     },
     modal: function () {
       return {
-        view: 'modal',
-        header: {
-          view: 'label',
-          htmlTag: 'h5',
-          padding: true,
-          label: 'Coffee is exquisite!'
-        },
-        body: {
-          view: 'label',
-          label: 'Medium brewed, dripper to go filter iced kopi-luwak qui variety cortado acerbic. Plunger pot latte organic sweet single shot robust cappuccino. Plunger pot qui decaffeinated crema, variety cappuccino carajillo shop blue mountain milk. Dark single origin filter, fair trade at grounds aged caffeine froth. In pumpkin spice ristretto single shot chicory mocha kopi-luwak robusta trifecta french press dark.'
-        },
-        footer: {
-          flexAlign: 'right',
-          padding: 'x y-sm',
+        component: {
           cells: [
-            {view: 'button', label: 'No way!', margin: 'right'},
-            {view: 'button', type: 'primary', label: 'Yup.'}
+            {
+              view: 'button',
+              label: 'Show modal',
+              type: 'primary',
+              on: {
+                onClick: function () {
+                  $$('modal').open();
+                }
+              }
+            },
+            {
+              id: "modal",
+              view: 'modal',
+              header: {
+                view: 'label',
+                htmlTag: 'h5',
+                padding: true,
+                label: 'Coffee is exquisite!'
+              },
+              body: {
+                view: 'label',
+                label: 'Medium brewed, dripper to go filter iced kopi-luwak qui variety cortado acerbic. Plunger pot latte organic sweet single shot robust cappuccino. Plunger pot qui decaffeinated crema, variety cappuccino carajillo shop blue mountain milk. Dark single origin filter, fair trade at grounds aged caffeine froth. In pumpkin spice ristretto single shot chicory mocha kopi-luwak robusta trifecta french press dark.'
+              },
+              footer: {
+                flexAlign: 'right',
+                padding: 'x y-sm',
+                cells: [
+                  { view: 'button', label: 'No way!', margin: 'right' },
+                  { view: 'button', type: 'primary', label: 'Yup.' }
+                ]
+              }
+            }
           ]
         }
       }
     },
+    optgroup: function () {
+
+    },
     progress: function () {
       return {
-        flexLayout: 'column',
-        cells: [
-          {
-            view: 'progress',
-            color: 'primary',
-            value: 80
+        component: {
+          flexLayout: 'column',
+          cells: [
+            {
+              view: 'progress',
+              color: 'primary',
+              value: 80
+            },
+            {
+              view: 'progress',
+              color: 'success striped',
+              value: 65,
+              margin: 'y-lg'
+            },
+            {
+              view: 'progress',
+              size: 'small',
+              value: 50,
+              margin: 'bottom-lg'
+            },
+            {
+              view: 'progress',
+              size: 'small',
+              color: ['warning', 'striped'],
+              value: 35,
+              margin: 'bottom-lg'
+            },
+            {
+              view: 'progress',
+              size: 'mini',
+              color: 'danger',
+              value: 20
+            }
+          ]
+        }
+      };
+    },
+    resizer: function () {
+      return;
+    },
+    scroller: function () {
+      return {
+        component: {
+          view: 'scroller',
+          style: {
+            height: '240px'
           },
-          {
-            view: 'progress',
-            color: 'success striped',
-            value: 65,
-            margin: 'y-lg'
-          },
-          {
-            view: 'progress',
-            size: 'small',
-            value: 50,
-            margin: 'bottom-lg'
-          },
-          {
-            view: 'progress',
-            size: 'small',
-            color: ['warning', 'striped'],
-            value: 35,
-            margin: 'bottom-lg'
-          },
-          {
-            view: 'progress',
-            size: 'mini',
-            color: 'danger',
-            value: 20
-          }
-        ]
-        
-      }
+          cells: [
+            {
+              view: "label",
+              label: "Scroll down to see more...",
+              htmlTag: "H6",
+              margin: "bottom-lg"
+            },
+            listTemplate(['side', 'line', 'striped'], phrases1),
+            {
+              view: "label",
+              label: "Quotes",
+              htmlTag: "H6",
+              margin: "y-lg"
+            },
+            listTemplate(['side', 'line', 'striped'], phrases2)
+          ]
+        }
+      };
     },
     search: function () {
       return {
-        view: 'search'
+        component: {
+          view: 'search'
+        }
       }
     },
     select: function () {
       return {
-        view: 'select',
-        data: [
-          {label: 'Curl'},
-          {label: 'Look'},
-          {label: 'Age'},
-          {label: 'Walk'},
-          {label: 'Elope'},
-          {label: 'Dig'}
-        ]
+        component: {
+          cells: [
+            {
+              flexLayout: 'column',
+              margin: 'right',
+              cells: [
+                {
+                  view: "label",
+                  label: "Basic Select",
+                  htmlTag: "H6",
+                  margin: "bottom-lg"
+                },
+                {
+                  view: 'select',
+                  data: mapToProperty(phrases1, 'label')
+                },
+                {
+                  view: "label",
+                  label: "Opt Group",
+                  htmlTag: "H6",
+                  margin: "y-lg"
+                },
+                {
+                  view: 'select',
+                  data: [
+                    {
+                      view: 'optgroup',
+                      data: [
+                        {label: 'Apple'},
+                        {label: 'Banana'},
+                        {label: 'Oranges'}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              flexLayout: 'column',
+              margin: 'right',
+              cells: [
+                {
+                  view: "label",
+                  label: "Multi Select",
+                  htmlTag: "H6",
+                  margin: "bottom-lg"
+                },
+                {
+                  view: 'select',
+                  multiple: true,
+                  data: mapToProperty(phrases1, 'label')
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    spacer: function () {
+      return {
+        component: {
+          view: 'scroller',
+          style: {
+            height: '240px'
+          },
+          cells: [
+            {
+              view: "label",
+              label: "Scroll Down Please",
+              htmlTag: "H6"
+            },
+            {
+              view: "spacer",
+              height: 500
+            },
+            {
+              view: "label",
+              label: "Bottom",
+              htmlTag: "H6"
+            }
+          ]
+        }
       }
     },
     table: function () {
       return {
-        view: 'table',
-        tableStyle: ['hover', 'striped'],
-        header: true,
-        footer: true,
-        columns: [
-          {header: 'Action', name: 'action', footer: '1'},
-          {header: 'Preposition', name: 'preposition', footer: '2'},
-          {header: 'Article', name: 'directObject.article', footer: '3'},
-          {header: 'Object', template: "<code>{{directObject.object}}</code>", footer: 'Y'}
-        ],
-        data: [
-          {action: 'Curl', preposition: 'into', directObject: {article: 'a', object: 'furry donut'}},
-          {action: 'Look', preposition: 'into', directObject: {article: 'a', object: 'furry donut'}},
-          {action: 'Age', preposition: 'into', directObject: {article: 'a', object: 'furry donut'}},
-          {action: 'Walk', preposition: 'into', directObject: {article: 'a', object: 'furry donut'}},
-          {action: 'Elope', preposition: 'into', directObject: {article: 'a', object: 'furry donut'}},
-          {action: 'Dig', preposition: 'into', directObject: {article: 'a', object: 'furry donut'}}
-        ]
+        component: {
+          view: 'table',
+          tableStyle: ['hover', 'striped'],
+          header: true,
+          footer: true,
+          columns: [
+            { header: 'Action', name: 'action', footer: 'F1' },
+            { header: 'Preposition', name: 'preposition', footer: 'F2' },
+            { header: 'Article', name: 'directObject.article', footer: 'F3' },
+            { header: 'Object', template: "<code>{{directObject.object}}</code>", footer: 'F4' }
+          ],
+          data: [
+            { action: 'Curl', preposition: 'into', directObject: { article: 'a', object: 'furry donut' } },
+            { action: 'Look', preposition: 'at', directObject: { article: 'a', object: 'furry donut' } },
+            { action: 'Age', preposition: 'with', directObject: { article: 'a', object: 'furry donut' } },
+            { action: 'Walk', preposition: 'around', directObject: { article: 'a', object: 'furry donut' } },
+            { action: 'Sprinkle', preposition: 'on', directObject: { article: 'a', object: 'furry donut' } }
+          ]
+        }
       }
     },
     tab: function () {
       return {
-        view: 'list',
-        listStyle: 'tab',
-        tab: true,
-        data: [
-          {view: 'link', label: 'A', $selected: true},
-          {view: 'link', label: 'B'},
-          {view: 'link', label: 'C'}
-        ]
+        component: {
+          flexLayout: 'column',
+          cells: [
+            {
+              view: "label",
+              label: "Basic Tab",
+              htmlTag: "H6",
+              margin: "bottom-lg"
+            },
+            {
+              view: 'list',
+              listStyle: 'tab',
+              tab: true,
+              data: [
+                { view: 'link', label: 'Apple', $selected: true },
+                { view: 'link', label: 'Banana' },
+                { view: 'link', label: 'Celery' }
+              ]
+            },
+            {
+              view: "label",
+              label: "Tab-Bottom",
+              htmlTag: "H6",
+              margin: "y-lg"
+            },
+            {
+              view: 'list',
+              listStyle: 'tab-bottom',
+              tab: true,
+              data: [
+                { view: 'link', label: 'Apple' },
+                { view: 'link', label: 'Banana' },
+                { view: 'link', label: 'Celery', $selected: true }
+              ]
+            },
+            {
+              view: "label",
+              label: "Tab-Left & Tab-Right",
+              htmlTag: "H6",
+              margin: "y-lg"
+            },
+            {
+              flexSpace: 'between',
+              cells: [
+                {
+                  view: 'list',
+                  listStyle: 'tab-left',
+                  tab: true,
+                  margin: 'right',
+                  data: [
+                    { view: 'link', label: 'X' },
+                    { view: 'link', label: 'Y', $selected: true },
+                    { view: 'link', label: 'Z' }
+                  ]
+                },
+                {
+                  view: 'list',
+                  listStyle: 'tab-right',
+                  tab: true,
+                  margin: 'left',
+                  data: [
+                    { view: 'link', label: 'X', $selected: true },
+                    { view: 'link', label: 'Y' },
+                    { view: 'link', label: 'Z' }
+                  ]
+                },
+                {
+                  view: 'list',
+                  listStyle: 'tab-left',
+                  tab: true,
+                  margin: 'left',
+                  data: [
+                    { view: 'icon', icon: 'uk-icon-heart', iconStyle: 'large', $selected: true },
+                    { view: 'icon', icon: 'uk-icon-bolt', iconStyle: 'large' },
+                    { view: 'icon', icon: 'uk-icon-paint-bucket', iconStyle: 'large' }
+                  ]
+                },
+                {
+                  view: 'list',
+                  listStyle: 'tab-right',
+                  tab: true,
+                  margin: 'left',
+                  data: [
+                    { view: 'icon', icon: 'uk-icon-heart', iconStyle: 'large' },
+                    { view: 'icon', icon: 'uk-icon-bolt', iconStyle: 'large' },
+                    { view: 'icon', icon: 'uk-icon-paint-bucket', iconStyle: 'large', $selected: true }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     toggle: function () {
       return {
-        view: 'toggle',
-        checked: true
+        component: {
+          flexSpace: 'around',
+          cells: [
+            {
+              view: 'toggle',
+              checked: true
+            },
+            {
+              view: 'toggle',
+              checked: true,
+              color: 'success'
+            },
+            {
+              view: 'toggle',
+              checked: true,
+              color: 'warning'
+            },
+            {
+              view: 'toggle',
+              checked: true,
+              color: 'danger'
+            }
+          ]
+        }
       }
     },
     tree: function () {
       return {
-        view: 'tree',
-        data: [
-          {label: 'Curl', id: 'root'},
-          {label: 'into', id: 'into', $parent: 'root'},
-          {label: 'a', id: 'a', $parent: 'root'},
-          {label: 'furry', id: 'furry', $parent: 'a'},
-          {label: 'donut', id: 'donut', $parent: 'a'}
-        ]
+        component: {
+          view: 'tree',
+          data: [
+            { label: 'Curl', id: 'root' },
+            { label: 'into', id: 'into', $parent: 'root' },
+            { label: 'a', id: 'a', $parent: 'root' },
+            { label: 'furry', id: 'furry', $parent: 'a' },
+            { label: 'donut', id: 'donut', $parent: 'a' }
+          ]
+        }
       }
     }
   },
@@ -481,6 +935,16 @@ function wrapInForm(input) {
   return {
     view: 'form',
     fieldset: [input]
+  }
+}
+
+
+function listTemplate(listStyle, data) {
+  return {
+    view: 'list',
+    listStyle: listStyle,
+    data: mapToProperty(data, 'label', {view: 'label'}),
+    margin: 'right'
   }
 }
 
@@ -523,7 +987,7 @@ UI.new({
             width: 145,
             on: {
               onClick: function () {
-                console.log('cools')
+                $$('sideDrawer').open();
               }
             }
           }
@@ -540,19 +1004,20 @@ UI.new({
         },
         data: [
           {
-            view: 'link-icon',
+            view: 'link',
             screen: 'except-small',
             label: 'Github',
             icon: 'github',
             href: 'https://github.com/spckio/spck-ui',
+            target: '_blank',
             margin: 'right-lg'
           },
           {
             view: 'select',
             margin: 'right',
             data: [
-              {value: 'light', label: 'Light'},
-              {value: 'dark', label: 'Dark'}
+              { value: 'light', label: 'Light' },
+              { value: 'dark', label: 'Dark' }
             ],
             on: {
               onChange: function () {
@@ -569,7 +1034,7 @@ UI.new({
           {
             view: 'select',
             data: [
-              {value: UI.VERSION, label: UI.VERSION}
+              { value: UI.VERSION, label: UI.VERSION }
             ]
           }
         ]
@@ -579,19 +1044,21 @@ UI.new({
 }, document.getElementById('navbar'));
 
 UI.new({
+  id: "sideDrawer",
   view: "drawer",
   touchOnly: true,
   edge: true,
   template: {
     view: 'scroller',
+    style: {
+      minWidth: '200px',
+      width: '200px'
+    },
     cells: [
       {
         id: 'sideBar',
         view: 'list',
         listStyle: 'side',
-        style: {
-          minWidth: '200px',
-        },
         data: [
           {
             view: 'spacer',
@@ -602,29 +1069,35 @@ UI.new({
           },
           {
             view: 'link',
-            cls: 'uk-active-line',
+            linkStyle: 'line',
             label: 'Introduction',
             $selected: true,
             margin: 'left'
           },
           {
             view: 'link',
-            cls: 'uk-active-line',
+            linkStyle: 'line',
             label: 'Installation',
             margin: 'left'
           },
           {
             view: 'link',
-            cls: 'uk-active-line',
+            linkStyle: 'line',
             label: 'CDN Links',
             margin: 'left'
           },
-          {$divider: true},
-          {$header: true, label: 'Components'}
+          {
+            view: 'link',
+            linkStyle: 'line',
+            label: 'Extending',
+            margin: 'left'
+          },
+          { $divider: true },
+          { $header: true, label: 'Components' }
         ].concat(Object.keys(Model.components).sort().map(function (n) {
           return {
             view: 'link',
-            cls: 'uk-active-line',
+            linkStyle: 'line',
             label: UI.capitalize(n),
             margin: 'left',
             value: n
@@ -672,8 +1145,8 @@ UI.new({
           card: 'header',
           margin: 'bottom-lg',
           data: [
-            {view: 'link', label: 'Preview', value: 'component', $selected: true},
-            {view: 'link', label: 'Code', value: 'code'}
+            { view: 'link', label: 'Preview', value: 'component', $selected: true },
+            { view: 'link', label: 'Code', value: 'code' }
           ],
           on: {
             onItemClick: function (item) {
@@ -711,38 +1184,46 @@ UI.new({
         {
           id: 'codeView',
           batch: 'code',
-          template: "<pre><code>UI.new({{code}}, document.body);</code></pre>",
+          template: '<pre><code class="javascript">{{locals}}UI.new({{code}}, document.body);</code></pre>',
           card: 'body',
           code: '',
           parseCode: function (name) {
-            var view = Model.aliases[name] || name;
-            var objectModel = UI.extend(UI.extend({}, Model.properties[name]), Model.components[name]());
-            var defaults = UI.definitions[view].prototype.$defaults;
-            for (var k in objectModel) {
-              if (objectModel.hasOwnProperty(k)) {
-                if (objectModel[k] == defaults[k]) {
-                  delete objectModel[k];
-                }
-              }
-            }
+            var componentData = Model.components[name]();
+            var locals = componentData.locals || {};
 
-            this.config.code = JSON.stringify(objectModel,
-              function(name, value) {
+            var localCode = Object.keys(locals).map(function (key) {
+              return UI.interpolate('var {{variable}} = {{value}};', {
+                variable: key,
+                value: JSON.stringify(locals[key], null, '  ')
+              });
+            }).join('\n').replace(/"([\$\w]+)":/g, '$1:');
+
+            this.config.locals = localCode ? localCode + '\n\n' : '';
+            this.config.code = indent.js(JSON.stringify(componentData.component,
+              function (name, value) {
+                var key = findKeyWithValue(locals, value);
                 if (typeof value == 'function') {
                   return value.toString();
-                }
-                else {
+                } else if (key) {
+                  return '~' + key + '~';
+                } else {
                   return value;
                 }
               }, "  ")
+              .replace(/"function/g, 'function')
+              .replace(/}"/g, '}')
+              .replace(/"([\$\w]+)":/g, '$1:')
+              .replace(/"~/g, '')
+              .replace(/~"/g, '')
+              .replace(/\\n/g, '\n')
               .replace(/&/g, '&amp;')
               .replace(/"/g, '&quot;')
               .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;');
+              .replace(/>/g, '&gt;'), { tabString: "  " });
 
             this.render();
 
-            return objectModel;
+            return componentData.component;
           }
         }
       ]
@@ -761,8 +1242,8 @@ UI.new({
           tab: true,
           card: 'header',
           data: [
-            {view: 'link', label: 'Properties', value: 'properties', $selected: true},
-            {view: 'link', label: 'Methods', value: 'methods'}
+            { view: 'link', label: 'Properties', value: 'properties', $selected: true },
+            { view: 'link', label: 'Methods', value: 'methods' }
           ],
           on: {
             onItemClick: function (item) {
@@ -845,6 +1326,7 @@ UI.new({
                 var meta = UI.extend({}, setters.$$meta);
                 var name = component.prototype.__name__;
                 var bases = {};
+                bases[name] = true;
                 var baseOrder = {};
 
                 component.prototype.__baseNames__.forEach(function (name, i) {
@@ -862,7 +1344,8 @@ UI.new({
                       name: n,
                       sortKey: baseOrder[meta[n].__class__] + '_' + n,
                       type: meta[n].$$type || 'string',
-                      desc: UI.isString(meta[n]) ? meta[n] : meta[n].$$desc || ''
+                      desc: UI.isString(meta[n]) ? meta[n] : meta[n].$$desc || '',
+                      options: meta[n].options
                     }
                   });
 
@@ -922,12 +1405,12 @@ UI.new({
                     htmlTag: method.title ? 'h5' : 'div',
                     label: method.title ? method.header : '<b>' + method.header + '</b>',
                     style: method.title ? {
-                      marginTop:  '40px',
+                      marginTop: '40px',
                       marginBottom: '24px'
                     } : {
-                      marginTop: '24px',
-                      marginBottom: '16px'
-                    }
+                        marginTop: '24px',
+                        marginBottom: '16px'
+                      }
                   }
                 } else {
                   return {
@@ -976,7 +1459,7 @@ function formatReturnsString(str) {
   var type = str.match(regex);
   type = type ? type[0].slice(1, -1) : '';
   return str.replace(regex, UI.interpolate(
-    '<span class="uk-badge uk-badge-notification uk-margin-right">{{type}}</span>', {type: type}))
+    '<span class="uk-badge uk-badge-notification uk-margin-right">{{type}}</span>', { type: type }))
 }
 
 function getComponentMethods(component) {
@@ -1047,7 +1530,7 @@ function extractDocString(name, fn) {
       l = l.split(' ');
       switch (l[0]) {
         case "@param":
-          params.push({name: l[1], description: l.slice(2).join(' ')});
+          params.push({ name: l[1], description: l.slice(2).join(' ') });
           break;
         case "@returns":
           returns = l.slice(1).join(' ');
@@ -1062,7 +1545,7 @@ function extractDocString(name, fn) {
           summary += l.join(' ');
       }
     });
-    return {name: name, summary: summary, dispatch: dispatch, returns: returns, params: params, example: example};
+    return { name: name, summary: summary, dispatch: dispatch, returns: returns, params: params, example: example };
   }
 }
 

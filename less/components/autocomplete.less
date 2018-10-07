@@ -12,10 +12,15 @@
 // ========================================================================
 
 @nav-autocomplete-color:                            @global-color;
+@nav-autocomplete-dark-color:                       @global-dark-color;
 @nav-autocomplete-active-background:                @nav-dropdown-hover-background;
+@nav-autocomplete-active-dark-background:           @nav-dropdown-hover-dark-background;
 @nav-autocomplete-active-color:                     @nav-dropdown-hover-color;
-@nav-autocomplete-header-color:                     @global-muted-color;
+@nav-autocomplete-active-dark-color:                @nav-dropdown-hover-dark-color;
+@nav-autocomplete-header-color:                     @nav-dropdown-header-color;
+
 @nav-autocomplete-divider-border:                   @global-border;
+@nav-autocomplete-divider-dark-border:              @global-dark-border;
 @nav-autocomplete-divider-border-width:             1px;
 
 /* ========================================================================
@@ -50,13 +55,20 @@
 
 .uk-nav-autocomplete > li > a {
     color: @nav-autocomplete-color;
-    .hook-nav-autocomplete;
+    
+    .dark & {
+        color: @nav-autocomplete-dark-color;
+    }
 }
 
 .uk-nav-autocomplete > li.uk-active > a {
     background: @nav-autocomplete-active-background;
     color: @nav-autocomplete-active-color;
-    .hook-nav-autocomplete-active;
+
+    .dark & {
+        background-color: @nav-autocomplete-active-dark-background;
+        color: @nav-autocomplete-active-dark-color;
+    }
 }
 
 /*
@@ -65,7 +77,6 @@
 
 .uk-nav-autocomplete .uk-nav-header {
     color: @nav-autocomplete-header-color;
-    .hook-nav-autocomplete-header;
 }
 
 /*
@@ -74,16 +85,8 @@
 
 .uk-nav-autocomplete .uk-nav-divider {
     border-top: @nav-autocomplete-divider-border-width solid @nav-autocomplete-divider-border;
-    .hook-nav-autocomplete-divider;
+    
+    .dark & {
+        border-color: @nav-autocomplete-divider-dark-border;
+    }
 }
-
-
-// Hooks
-// ========================================================================
-
-.hook-autocomplete-misc() {};
-
-.hook-nav-autocomplete() {}
-.hook-nav-autocomplete-active() {}
-.hook-nav-autocomplete-header() {}
-.hook-nav-autocomplete-divider() {}

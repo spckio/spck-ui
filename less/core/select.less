@@ -4,6 +4,9 @@
 @select-color:                                    @global-color;
 @select-dark-color:                               @global-dark-color;
 @select-dark-background:                          @global-dark-background;
+@select-border:                                   @input-border;
+@select-dark-border:                              fade(@input-dark-border, 80%);
+@select-padding:                                  4px 24px 4px 8px;
 
 /* ========================================================================
    Component: Select
@@ -17,11 +20,11 @@
   vertical-align: middle;
 
   background: none;
-  border: none;
   outline: none;
+  border: 0;
 
   color: @select-color;
-
+  
   .dark & {
     color: @select-dark-color;
 
@@ -40,11 +43,14 @@
   appearance: none;
 }
 
-.uk-select:not([multiple]):not([size]) {
+.uk-select:not([multiple]) {
   background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon.svg") no-repeat 100% 50%;
-  padding-right: 24px;
+  padding: @select-padding;
+
+  border-bottom: solid 1px @select-border;
 
   .dark & {
-      background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon-dark.svg") no-repeat 100% 50%;
+    border-color: @select-dark-border;
+    background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon-dark.svg") no-repeat 100% 50%;
   }
 }

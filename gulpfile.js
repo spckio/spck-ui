@@ -26,7 +26,10 @@ gulp.task('build-meta', function () {
 });
 
 gulp.task('build-docs', ['build'], function () {
-  return gulp.src(['./dist/spck-ui.meta.js', './dist/spck-ui-icons.css'], {base: './dist'})
+  return gulp.src([
+    './dist/spck-ui.meta.js',
+    './dist/spck-ui-icons.css'
+  ], {base: './dist'})
     .pipe(gulp.dest(DOCS));
 });
 

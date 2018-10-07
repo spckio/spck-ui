@@ -50,6 +50,7 @@
 @button-small-line-height:                      @global-height-small - 2;
 @button-large-line-height:                      @global-height-large - 2;
 
+@button-link-font-weight:                       600;
 @button-font-size:                              @global-font-size;
 @button-mini-font-size:                         round((@global-font-size * 0.78)); // 11px / 12px
 @button-small-font-size:                        round((@global-font-size * 0.85)); // 12px / 14px
@@ -58,7 +59,7 @@
 @button-padding-horizontal:                     16px;
 @button-mini-padding-horizontal:                4px;
 @button-small-padding-horizontal:               8px;
-@button-large-padding-horizontal:               32px;
+@button-large-padding-horizontal:               24px;
 
 @button-background:                             @global-default-background;
 @button-color:                                  @global-color;
@@ -333,6 +334,7 @@
     overflow: visible;
     /* 5 */
     font: inherit;
+    font-weight: @button-link-font-weight;
     /* 6 */
     text-transform: none;
     /* 7 */

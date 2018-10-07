@@ -8,8 +8,9 @@
   <title>Spck UI</title>
   <link rel="stylesheet" href="./spck-ui.css">
   <link rel="stylesheet" href="./spck-ui-icons.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/dracula.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.8.0/styles/dracula.css">
   <script src="./jquery.min.js"></script>
+  <script src="./indent.min.js"></script>
   <script src="./spck-ui.js"></script>
   <script src="./spck-ui.meta.js"></script>
   <style>
@@ -28,6 +29,7 @@
     #sidebar {
       position: fixed;
       height: calc(100% - 64px);
+      z-index: 1000;
     }
   </style>
 </head>
@@ -36,9 +38,9 @@
   <div id="navbar" class="uk-flex-item-none dark"></div>
   <div class="uk-flex">
     <div id="sidebar" class="uk-box-shadow"></div>
-    <div style="min-width: 220px" class="uk-hidden-touch">
+    <div style="min-width: 200px" class="uk-hidden-touch">
     </div>
-    <div class="uk-flex uk-flex-column">
+    <div class="uk-flex uk-flex-column uk-flex-item-1">
       <div id="main" class="uk-container uk-container-center uk-margin-large-y">
         <div id="gettingStarted" class="uk-width-1-1 uk-margin-large-x" style="line-height:32px">
             <h1>Getting Started</h1>
@@ -214,7 +216,6 @@ modal.open();
 </div>
 
 <script src="index.js"></script>
-<script src="https://cdn.jsdelivr.net/highlight.js/9.10.0/highlight.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/highlightjs@9.8.0/highlight.pack.min.js"></script>
 </body>
 </html>

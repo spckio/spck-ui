@@ -36,17 +36,12 @@
 @dropdown-z-index:                              @global-z-index + 5;
 @dropdown-width:                                200px;
 @dropdown-background:                           @global-background;
+@dropdown-dark-background:                      #2f3c46;
 @dropdown-color:                                @global-color;
 @dropdown-font-size:                            1rem;
 
 @dropdown-divider-border-width:                 1px;
 @dropdown-divider-border:                       @global-border;
-
-@dropdown-navbar-margin:                        0;
-@dropdown-navbar-background:                    #ecf5ff;
-@dropdown-navbar-dark-background:               #2f3c46;
-@dropdown-navbar-color:                         @global-color;
-@dropdown-navbar-animation:                     uk-slide-top-fixed;
 
 @dropdown-scrollable-height:                    200px;
 @dropdown-box-shadow:                           @global-box-shadow;
@@ -88,7 +83,13 @@
     /* 1 */
     font-size: @dropdown-font-size;
     vertical-align: top;
-    .hook-dropdown;
+
+    box-shadow: @dropdown-box-shadow;
+    border-radius: @global-border-radius;
+
+    .dark & {
+        background: @dropdown-dark-background;
+    }
 }
 
 /*
@@ -112,22 +113,6 @@
     min-width: 150px;
     width: auto;
     white-space: nowrap;
-}
-
-
-/* Modifier: `uk-dropdown-navbar`
- ========================================================================== */
-
-.uk-dropdown-navbar {
-    margin-top: @dropdown-navbar-margin;
-    background: @dropdown-navbar-background;
-    color: @dropdown-navbar-color;
-    .hook-dropdown-navbar;
-}
-
-.uk-open > .uk-dropdown-navbar {
-    -webkit-animation: @dropdown-navbar-animation 0.2s ease-in-out;
-    animation: @dropdown-navbar-animation 0.2s ease-in-out;
 }
 
 
@@ -156,16 +141,5 @@
 // Hooks
 // ========================================================================
 
-.hook-dropdown-misc;
-
-.hook-dropdown() {
-    box-shadow: @dropdown-box-shadow;
-    border-radius: @global-border-radius;
-
-    .dark & {
-        background: @dropdown-navbar-dark-background;
-    }
-}
 .hook-dropdown-navbar() {}
 .hook-dropdown-overlay() {}
-.hook-dropdown-misc() {}

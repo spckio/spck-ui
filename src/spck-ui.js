@@ -1800,9 +1800,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
             self.getFormControl().parentNode.appendChild(self.help);
           }
         },
-        multiple: function (value) {
-          setAttributes(this.getFormControl(), isString(value) ? {multiple: value} : {});
-        },
         type: function (value) {
           setAttributes(this.getFormControl(), {type: value});
         },
@@ -1859,11 +1856,30 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         if (helpControl) addClass(helpControl, this.helpDangerClass);
       }
     },
+    raiseConcern: function (error) {
+      /**
+       * Set an error message to be displayed for the FormControl.
+       * @param error Error string or null, null will clear the error.
+       */
+      var $this = this;
+      if (error) {
+        $this.set("help", error);
+        $this.setFormClass("danger");
+      }
+      else {
+        $this.set("help", "");
+        $this.setFormClass("");
+      }
+      $this.invalid = !!error;
+    },
     reset: function () {
       /**
        * Clear the form control.
        */
       this.getFormControl().value = "";
+    },
+    focus: function () {
+      this.getFormControl().focus();
     },
     enable: function () {
       /**
@@ -2070,14 +2086,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       tagClass: "",
       iconClass: "",
       selectable: false,
-      link: true
+      buttonStyle: "link"
     },
     $setters: classSetters({
-      link: prefixClassOptions({
-        true: "uk-button-link",
-        false: "uk-button",
+      buttonStyle: prefixClassOptions({
+        link: "button-link",
+        button: "button",
         "": ""
-      }),
+      }, 'uk-'),
       color: prefixClassOptions({
         primary: "",
         success: "",
@@ -2153,6 +2169,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         small: "",
         medium: "",
         large: "",
+        xlarge: "",
         button: "",
         justify: "",
         "": ""
@@ -2202,32 +2219,22 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       label: "",
       htmlTag: "A"
     },
+    $setters: classSetters({
+      linkStyle: {
+        '': '',
+        'line': 'uk-active-line'
+      }
+    }),
     template: function (config) {
-      return config.label;
+      if (config.icon) {
+        var iconTemplate = "<i class='uk-link-icon uk-icon-{{icon}}'></i>";
+        var labelTemplate = "<span>{{label}}</span>";
+        return config.alignIconRight ? labelTemplate + iconTemplate : iconTemplate + labelTemplate;  
+      } else {
+        return config.label;
+      }
     }
   }, $definitions.element, exports.ClickEvents);
-
-
-  $definitions.iconLink = def({
-    __name__: "link-icon",
-    $defaults: {
-      tagClass: "uk-link-icon",
-      icon: ""
-    },
-    template: function (config) {
-      var iconTemplate = "<i class='uk-icon-{{icon}}'></i>";
-      var labelTemplate = "<span>{{label}}</span>";
-      return config.rightSideIcon ? labelTemplate + iconTemplate : iconTemplate + labelTemplate;
-    },
-    setLabel: function (label) {
-      /**
-       * Sets the label (HTML accepted) of the link component.
-       * @param value
-       */
-      this.config.label = label;
-      this.render();
-    }
-  }, $definitions.link);
 
 
   $definitions.progress = def({
@@ -2336,6 +2343,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       autocorrect: function (value) {
         setAttributes(this.getFormControl(), {autocorrect: value});
       },
+      spellcheck: function (value) {
+        setAttributes(this.getFormControl(), {spellcheck: value});
+      },
       placeholder: function (value) {
         setAttributes(this.getFormControl(), {placeholder: value});
       }
@@ -2421,10 +2431,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           large: ""
         }, 'uk-form-', true)
       }),
-      {
-      checked: function (value) {
-        this.getFormControl().checked = value;
-      },
+    {
       readonly: function (value) {
         setAttributes(this.getFormControl(), {readonly: value});
       }
@@ -2470,34 +2477,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self.getFormControl().value = value;
     }
   }, exports.InputControl, exports.ChangeEvent, exports.FormControl, $definitions.element);
-
-
-  $definitions.inputField = def({
-    __name__: "input-field",
-    $defaults: {
-      formDangerClass: "uk-form-danger",
-      helpDangerClass: "uk-text-danger",
-      margin: "top"
-    },
-    __after__: function () {
-      this.getFormControl().setAttribute('spellcheck', 'false');
-    },
-    focus: function () {
-      this.getFormControl().focus();
-    },
-    raiseConcern: function (error) {
-      var $this = this;
-      if (error) {
-        $this.set("help", error);
-        $this.setFormClass("danger");
-      }
-      else {
-        $this.set("help", "");
-        $this.setFormClass("");
-      }
-      $this.invalid = !!error;
-    }
-  }, $definitions.input);
 
 
   $definitions.autocomplete = def({
@@ -3414,10 +3393,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           "list": "list",
           "tab": "tab",
           "tab-flip": "tab-flip",
-          "tab-bottom": "tab-bottom",
           "tab-center": "tab-center",
-          "tab-left": "tab-left",
-          "tab-right": "tab-right",
+          "tab-bottom": ["tab", "tab-bottom"],
+          "tab-left": ["tab", "tab-left"],
+          "tab-right": ["tab", "tab-right"],
           "breadcrumb": "breadcrumb",
           "": ""
         }, 'uk-')
@@ -4118,12 +4097,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       UI.addListener(document.body, 'mousemove', function (e) {
         if ($this.dragging) {
-          var clientX = e.clientX;
+          var clientPos = e.clientX;
           var maxValue = config.maxValue;
           var minValue = config.minValue;
-          if (clientX < minValue) clientX = minValue;
-          else if (clientX > maxValue) clientX = maxValue;
-          dragHandle.style = 'left:' + clientX + 'px';
+          if (clientPos < minValue) clientPos = minValue;
+          else if (clientPos > maxValue) clientPos = maxValue;
+          dragHandle.style = 'left:' + clientPos + 'px';
         }
       });
 
@@ -4278,6 +4257,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       flex: false,
       flexSize: "",
       listStyle: ""
+    },
+    $setters: {
+      multiple: function (value) {
+        setAttributes(this.getFormControl(), value ? {multiple: value} : {});
+      }
     },
     select: function (item) {
       /**

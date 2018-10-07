@@ -24,7 +24,10 @@
 
 @icon-small-font-size:                          12px;
 @icon-medium-font-size:                         14px;
-@icon-large-font-size:                          16px;
+@icon-large-font-size:                          18px;
+@icon-xlarge-font-size:                          24px;
+
+@link-icon-padding:                             0 12px;
 
 @icon-hover-color:                              lighten(@global-color, 10%);
 @icon-hover-hover-color:                        lighten(@global-color, 10%);
@@ -58,6 +61,19 @@
     margin-top: -4px;
 }
 
+/* ========================================================================
+   Component: Link-Icon
+ ========================================================================== */
+
+ .uk-link-icon {
+    padding: @link-icon-padding;
+    width: 1em;
+  
+    &::before {
+      margin-top: -1px;
+    }
+}  
+
 /* Size modifiers
  ========================================================================== */
 
@@ -73,6 +89,9 @@
     font-size: @icon-large-font-size;
 }
 
+.uk-icon-xlarge {
+    font-size: @icon-xlarge-font-size;
+}
 
 /* Modifier: `uk-icon-justify`
  ========================================================================== */
