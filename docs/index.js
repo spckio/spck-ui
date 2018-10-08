@@ -1124,6 +1124,44 @@ var Model = {
 };
 
 
+var Examples = [
+  {
+    label: 'Tab Switcher',
+    component: {
+      cells: [
+        {
+          batch: 'tab',
+          view: 'list',
+          listStyle: "tab-left",
+          tab: true,
+          data: [
+            {view: 'icon', icon: 'uk-icon-heart', iconStyle: 'large', $selected: true},
+            {view: 'icon', icon: 'uk-icon-bolt', iconStyle: 'large'},
+            {view: 'icon', icon: 'uk-icon-star', iconStyle: 'large'}
+          ]
+        }
+      ]
+    }
+  },
+  {
+    label: 'Tree Searching',
+    component: {}
+  },
+  {
+    label: 'Customized List',
+    component: {}
+  },
+  {
+    label: 'Dynamic Table',
+    component: {}
+  },
+  {
+    label: 'Image Switcher',
+    component: {}
+  }
+];
+
+
 function wrapInForm(input) {
   return {
     view: 'form',
@@ -1143,25 +1181,82 @@ function listTemplate(listStyle, data) {
 
 
 function handleHashChange() {
-  var value = location.hash.substring(1);
-  if (Model.components[value]) {
-    var view = Model.aliases[value] || value;
-    // If link is empty, assume it points to a component
-    UI.addClass(document.getElementById('gettingStarted'), 'uk-hidden');
+  var hash = location.hash.substring(1);
+  var introViews = UI.pluck($$('introView').cells, 'batch');
+  var landing = document.getElementById('landing');
+
+  if (introViews.indexOf(hash) != -1) {
+    UI.addClass(landing, 'uk-hidden');
+    $$('mainView').hide();
+    $$('introView').showBatch(hash);
+    $$('introView').show();
+    $$('sideBar').setActive('value', hash);
+    highlightBlocks();
+  }
+  else if (Model.components[hash]) {
+    UI.addClass(landing, 'uk-hidden');
+    $$('introView').hide();
+    var view = Model.aliases[hash] || hash;
     $$('methodList').parseMethods(UI.definitions[view]);
     $$('propertiesTable').parseProperties(UI.definitions[view]);
-    var config = $$('codeView').parseCode(value);
+    var config = $$('codeView').parseCode(Model.components[hash]());
     $$('componentView').parseConfig(config, view);
-    $$('mainTitle').setValue(UI.capitalize(value));
-    $$('sideBar').setActiveLabel(UI.capitalize(value));
+    $$('mainTitle').setValue(UI.capitalize(hash));
+    $$('sideBar').setActive('value', hash);
     $$('mainView').show();
     highlightBlocks();
   }
   else {
     $$('mainView').hide();
-    UI.removeClass(document.getElementById('gettingStarted'), 'uk-hidden');
+    $$('introView').hide();
+    UI.removeClass(landing, 'uk-hidden');
   }
 }
+
+UI.def({
+  __name__: 'codeview',
+  $defaults: {
+    code: ''
+  },
+  template: '<pre class="uk-margin-remove"><code class="javascript">{{locals}}UI.new({{code}}, document.body);</code></pre>',
+  parseCode: function (componentData) {
+    var locals = componentData.locals || {};
+
+    var localCode = Object.keys(locals).map(function (key) {
+      return UI.interpolate('var {{variable}} = {{value}};', {
+        variable: key,
+        value: JSON.stringify(locals[key], null, '  ')
+      });
+    }).join('\n').replace(/"([\$\w]+)":/g, '$1:');
+
+    this.config.locals = localCode ? localCode + '\n\n' : '';
+    this.config.code = indent.js(JSON.stringify(componentData.component,
+      function (name, value) {
+        var key = findKeyWithValue(locals, value);
+        if (typeof value == 'function') {
+          return value.toString();
+        } else if (key) {
+          return '~' + key + '~';
+        } else {
+          return value;
+        }
+      }, "  ")
+      .replace(/"function/g, 'function')
+      .replace(/}"/g, '}')
+      .replace(/"([\$\w]+)":/g, '$1:')
+      .replace(/"~/g, '')
+      .replace(/~"/g, '')
+      .replace(/\\n/g, '\n')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;'), { tabString: "  " });
+
+    this.render();
+
+    return componentData.component;
+  }
+}, UI.definitions.element);
 
 UI.new({
   id: "navBar",
@@ -1271,18 +1366,14 @@ UI.new({
             view: 'link',
             linkStyle: 'line',
             label: 'Installation',
+            value: 'installation',
             margin: 'left'
           },
           {
             view: 'link',
             linkStyle: 'line',
-            label: 'CDN Links',
-            margin: 'left'
-          },
-          {
-            view: 'link',
-            linkStyle: 'line',
-            label: 'Extending',
+            label: 'Examples',
+            value: 'examples',
             margin: 'left'
           },
           { $divider: true },
@@ -1314,6 +1405,122 @@ UI.new({
 }, document.getElementById('sidebar'));
 
 UI.new({
+  id: 'introView',
+  text: 'large',
+  cells: [
+    {
+      batch: 'installation',
+      flexLayout: 'column',
+      cells: [
+        {
+          view: 'label',
+          label: 'Installation',
+          htmlTag: 'H1',
+          margin: 'bottom'
+        },
+        {
+          template: "<p>Adding the library to your project is no complicated than adding jQuery or Bootstrap to your project. There aren't any complicated build tools, all that's required is <a href='https://nodejs.org' target='_blank'>Node.js</a> or <a href='https://bower.io' target='_blank'>Bower</a>. Alternatively, you can just directly include the library using the CDN links, if you want to quickly use the library without downloading it.</p>"
+        },
+        {
+          view: 'label',
+          label: 'Getting the Library',
+          htmlTag: 'H2',
+          margin: 'y-lg'
+        },
+        {
+          view: 'label',
+          label: 'The library is available on popular package repositories.'
+        },
+        {
+          template: '<ul><li>To install with bower, run the following command: <code>bower install spck-ui</code></li><li>Likewise, to install with npm, run the following: <code>npm install spck-ui</code></ul>'
+        },
+        {
+          view: 'label',
+          label: 'Adding the HTML Tags',
+          htmlTag: 'H2',
+          margin: 'y-lg'
+        },
+        {
+          template: '<span>To add the default CSS styling, add this tag to your HTML file:</span><pre><code class="html">&lt;!-- Bower installation --&gt;\n&lt;link rel="stylesheet" href="bower_components/spck-ui/dist/spck-ui.css"&gt;\n&lt;!-- Npm installation --&gt;\n&lt;link rel="stylesheet" href="node_modules/spck-ui/dist/spck-ui.css"&gt;</code></pre>'
+        },
+        {
+          template: '<span>To add the <b>optional</b> library icons (from UIkit 3), add this tag to your HTML file:</span><pre><code class="html">&lt;!-- Bower installation --&gt;\n&lt;link rel="stylesheet" href="bower_components/spck-ui/dist/spck-ui-icons.css"&gt;\n&lt;!-- Npm installation --&gt;\n&lt;link rel="stylesheet" href="node_modules/spck-ui/dist/spck-ui-icons.css"&gt;</code></pre>'
+        },
+        {
+          template: '<p>To add the library scripts, add this tag to your HTML file:</p><pre><code class="html">&lt;script src="jquery.js" type="text/javascript"&gt;&lt;/script&gt;\n&lt;!-- Bower installation --&gt;\n&lt;script src="bower_components/spck-ui/dist/spck-ui.js" type="text/javascript"&gt;&lt;/script&gt;\n&lt;!-- Npm installation --&gt;\n&lt;script src="node_modules/spck-ui/dist/spck-ui.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>'
+        },
+        {
+          margin: 'y-lg',
+          card: 'primary',
+          flexLayout: 'column',
+          cells: [
+            {
+              view: 'label',
+              textColor: 'primary',
+              label: 'Tip',
+              text: 'bold',
+              card: 'header'
+            },
+            {
+              template: '<p>You must include a non-slim version of <b>jQuery 2.x or 3.x</b> before including the library. Otherwise, you will get an error when trying to load the library.</p><span>The icon CSS file is completely optional as the icon font file is embedded into the CSS file, so it is quite large. You may want to exclude it if you are not using any of the default icons.</span>'
+            }
+          ]
+        },
+        {
+          view: 'label',
+          label: 'CDN Links',
+          htmlTag: 'H2',
+          margin: 'y-lg'
+        },
+        {
+          template: 'There are CDN links available for the library thanks to the <a href="https://unpkg.com" target="_blanks">unpkg</a> service.<pre><code class="html">&lt;link rel="stylesheet" href="https://unpkg.com/spck-ui@latest/dist/spck-ui.css"&gt;\n&lt;link rel="stylesheet" href="https://unpkg.com/spck-ui@latest/dist/spck-ui-icons.css"&gt;\n&lt;script src="https://unpkg.com/spck-ui@latest/dist/spck-ui.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>'
+        }
+      ]
+    },
+    {
+      batch: 'examples',
+      flexLayout: 'column',
+      cells: [
+        {
+          view: 'label',
+          label: 'Examples',
+          htmlTag: 'H1',
+          margin: 'bottom'
+        },
+        {
+          template: "<p>Learning a library can be difficult. This is why we have provided a list of advanced examples to help. We believe these examples can help teach a few additional ways of using the library that may not be obvious at first.</p>"
+        }
+      ].concat(Examples.map(function (example) {
+        return {
+          margin: 'y-lg',
+          card: true,
+          flexLayout: 'column',
+          flexSize: 'auto',
+          cells: [
+            {
+              view: 'label',
+              label: example.label,
+              htmlTag: 'H4',
+              card: 'header',
+              margin: 'bottom-lg'
+            },
+            {
+              flexSize: 'none',
+              cells: [
+                {
+                  flexSize: 'flex',
+                  cells: [example.component]
+                }
+              ]
+            }
+          ]
+        };
+      }))
+    }
+  ],
+}, document.getElementById('main'));
+
+UI.new({
   id: 'mainView',
   flexLayout: 'column',
   hidden: true,
@@ -1321,7 +1528,7 @@ UI.new({
     {
       id: 'mainTitle',
       view: 'label',
-      htmlTag: 'h1',
+      htmlTag: 'H1',
       margin: 'bottom-lg'
     },
     {
@@ -1377,47 +1584,8 @@ UI.new({
         {
           id: 'codeView',
           batch: 'code',
-          template: '<pre><code class="javascript">{{locals}}UI.new({{code}}, document.body);</code></pre>',
-          card: 'body',
-          code: '',
-          parseCode: function (name) {
-            var componentData = Model.components[name]();
-            var locals = componentData.locals || {};
-
-            var localCode = Object.keys(locals).map(function (key) {
-              return UI.interpolate('var {{variable}} = {{value}};', {
-                variable: key,
-                value: JSON.stringify(locals[key], null, '  ')
-              });
-            }).join('\n').replace(/"([\$\w]+)":/g, '$1:');
-
-            this.config.locals = localCode ? localCode + '\n\n' : '';
-            this.config.code = indent.js(JSON.stringify(componentData.component,
-              function (name, value) {
-                var key = findKeyWithValue(locals, value);
-                if (typeof value == 'function') {
-                  return value.toString();
-                } else if (key) {
-                  return '~' + key + '~';
-                } else {
-                  return value;
-                }
-              }, "  ")
-              .replace(/"function/g, 'function')
-              .replace(/}"/g, '}')
-              .replace(/"([\$\w]+)":/g, '$1:')
-              .replace(/"~/g, '')
-              .replace(/~"/g, '')
-              .replace(/\\n/g, '\n')
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;'), { tabString: "  " });
-
-            this.render();
-
-            return componentData.component;
-          }
+          view: 'codeview',
+          card: 'body'
         }
       ]
     },

@@ -35,6 +35,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     prompt: UIkit.modal.prompt,
     alert: UIkit.modal.alert,
 
+    support: UIkit.support,
+
     $$: $$,
 
     isArray: isArray,
@@ -989,7 +991,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $globalListenerIds.load = addListener(window, "load", buildWindowListener($windowListeners.load));
   }
 
-  if (UIkit.support.touch) {
+  if (exports.support.touch) {
     $globalListenerIds.touchend = addListener(window, "touchend", buildWindowListener($windowListeners.touchend));
     $globalListenerIds.touchmove = addListener(window, "touchmove", buildWindowListener($windowListeners.touchmove));
   }
@@ -3712,7 +3714,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         $listeners.push(listenerId);
         self.$listeners.push(listenerId);
 
-        if (UIkit.support.touch) {
+        if (exports.support.touch) {
           listenerId = addListener(el, "touchstart", onMouseDown, self);
           $listeners.push(listenerId);
           self.$listeners.push(listenerId);

@@ -42,7 +42,7 @@
     </div>
     <div class="uk-flex uk-flex-column uk-flex-item-1">
       <div id="main" class="uk-container uk-margin-large-y">
-        <div id="gettingStarted" class="uk-width-1-1 uk-margin-large-x" style="line-height:32px">
+        <div id="landing" class="uk-width-1-1 uk-margin-large-x" style="line-height:32px">
             <h1>Getting Started</h1>
             <hr>
             <p>
@@ -61,56 +61,6 @@
             try something like <b>Vue</b> or <b>React</b>. Rather, <b>Spck UI</b> tries an arguably simpler and more
             straight-forward that's been around for quite some time.
             </p>
-
-            <h3 class="uk-margin-large-top">Installation & Setup</h3>
-            <hr>
-
-            <p><b>Spck UI</b> can be installed using <b>bower</b>:</p>
-            <p><code>bower install spck-ui</code></p>
-
-            <p>To add styling, add this tag to your <b>HTML</b> file:</p>
-            <pre><code class="html">&lt;link rel="stylesheet" href="spck-ui.css"&gt;</code></pre>
-
-            <p>To use include the icon files, also add:</p>
-            <pre><code class="html">&lt;link rel="stylesheet" href="spck-ui-icon.css"&gt;</code></pre>
-
-            <p>Add the following script files:</p>
-            <pre><code class="html">&lt;script src="jquery.js" type="text/javascript"&gt;&lt;/script&gt;
-&lt;script src="spck-ui.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
-
-            <h3 class="uk-margin-large-top">Example Usage</h3>
-            <hr>
-            <pre><code class="js">var modal = UI.new({
-  "view": "modal",
-  "header": {
-    "view": "label",
-    "htmlTag": "H3",  // Optional, default is "SPAN"
-    "label": "Spck UI is exquisite!"
-  },
-  "body": {
-    "view": "label",
-    "label": "Hello..."
-  },
-  "footer": {
-    "flexAlign": "right",
-    "cells": [
-      {
-        "view": "button",
-        "label": "No way!",
-        "margin": "right"
-      },
-      {
-        "view": "button",
-        "type": "primary",
-        "label": "Yup."
-      }
-    ]
-  }
-}, document.body);
-
-// Opens the modal
-modal.open();
-</code></pre>
 
         <h3 class="uk-margin-large-top">Extensible</h3>
         <hr>
