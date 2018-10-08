@@ -4,6 +4,7 @@ Version 0.3.0
 - **Breaking**: Renamed property `dropdownCSS` to `dropdownClass`
 - **Breaking**: Renamed property `link` to `buttonStyle`
 - **Breaking**: Refactor `uk-form` to `uk-input`, `uk-select`, `uk-textarea`
+- **Breaking**: Removed `singleView` and `defaultView` for `defaultBatch` on `flexgrid`
 - Added `scroller`, `drawer`, `resizer`, `spacer` components
 - Various CSS tweaks
 

@@ -31,14 +31,18 @@
 
 @search-width:                                  100%;
 @search-height:                                 @global-height;
-@search-border:                                 none;
 @search-background:                             none;
 @search-color:                                  @global-color;
+@search-dark-color:                             @global-dark-color;
 @search-placeholder-color:                      lighten(@global-color, 10%);
-@search-text-indent:                            20px;
+@search-text-indent:                            1.5em;
+@search-border:                                 @global-border;
+@search-dark-border:                            @global-dark-border;
+@search-padding:                                6px 8px;
 
 // Search icon
-@search-icon-top:                               5px;
+@search-icon-top:                               0.05em;
+@search-icon-line-height:                       @global-height;
 
 // Dropdown modifier
 @dropdown-search-width:                         300px;
@@ -131,13 +135,20 @@
     /* 6 */
     width: @search-width;
     height: @search-height;
-    border: @search-border;
     background: @search-background;
     -webkit-transition: all linear 0.2s;
     transition: all linear 0.2s;
     vertical-align: middle;
     text-indent: @search-text-indent;
-    .hook-search-field;
+
+    border: 0;
+    border-bottom: solid 1px @search-border;
+    padding: @search-padding;
+  
+    .dark & {
+        color: @search-dark-color;
+        border-color: @search-dark-border;
+    }
 }
 
 /* Placeholder */
@@ -149,13 +160,13 @@
 /* Focus */
 .uk-search-field:focus {
     outline: 0;
-    .hook-search-field-focus;
 }
 
 .uk-search-icon {
     position: absolute;
     pointer-events: none;
     top: @search-icon-top;
+    line-height: @search-icon-line-height;
 }
 
 /* Dropdown modifier: `uk-dropdown-search`
@@ -166,7 +177,6 @@
     margin-top: @dropdown-search-margin-top;
     background: @dropdown-search-background;
     color: @dropdown-search-color;
-    .hook-dropdown-search;
 }
 
 .uk-open > .uk-dropdown-search {
@@ -230,16 +240,8 @@
 // Hooks
 // ========================================================================
 
-.hook-search-misc;
-
 .hook-search() {}
-.hook-search-field() {}
-.hook-search-field-focus() {}
-
-.hook-dropdown-search() {}
 .hook-nav-search() {}
 .hook-nav-search-active() {}
 .hook-nav-search-header() {}
 .hook-nav-search-divider() {}
-
-.hook-search-misc() {}

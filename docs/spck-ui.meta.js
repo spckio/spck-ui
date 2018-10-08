@@ -67,6 +67,12 @@
   (function ($setters) {
     $setters.cells.$$type = 'object[]';
     $setters.cells.$$desc = "An array of Component configuration objects.";
+    $setters.$$meta = {
+      defaultBatch: {
+        $$type: 'string | string[]',
+        $$desc: 'Upon initializing, <code>showBatch</code> will be called with this value.'
+      }
+    };
   }($definitions.flexgrid.prototype.$setters));
 
 
@@ -168,6 +174,7 @@
 
   (function ($setters) {
     $setters.iconStyle.$$desc = 'Predefined icon style classes.';
+    $setters.size.$$desc = 'Size classes for controlling the icon appearance.';
   }($definitions.icon.prototype.$setters));
 
 
@@ -253,6 +260,8 @@
     $setters.edge.$$desc = 'If true, drawer will be openable by swiping the edges of the screen. (Touch devices only)';
     $setters.touchOnly.$$type = 'boolean';
     $setters.touchOnly.$$desc = 'If true, drawer will be always open on no-touch devices.';
+    $setters.flipped.$$type = 'boolean';
+    $setters.flipped.$$desc = 'If true, drawer will show on right-side rather than left.';
   }($definitions.drawer.prototype.$setters));
 
 

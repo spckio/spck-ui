@@ -30,6 +30,7 @@
 @link-icon-padding:                             0 12px;
 
 @icon-hover-color:                              lighten(@global-color, 10%);
+@icon-hover-dark-color:                         darken(@global-dark-color, 10%);
 @icon-hover-hover-color:                        lighten(@global-color, 10%);
 
 @icon-button-width:                             40px;
@@ -117,6 +118,9 @@
 
 .uk-icon-hover {
     color: @icon-hover-color;
+    .dark & {
+        color: @icon-hover-dark-color;
+    }
 }
 
 /*
@@ -127,6 +131,13 @@
     color: @icon-hover-hover-color;
 }
 
+/* Modifier: `uk-icon-blank`
+ ========================================================================== */
+
+.uk-icon-blank:before {
+    content: "";
+    width: 1em;
+}
 
 /* Modifier: `uk-icon-button`
  ========================================================================== */

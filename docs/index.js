@@ -576,7 +576,7 @@ var Model = {
                   card: 'body',
                   textAlign: 'center',
                   icon: 'uk-icon-' + icon,
-                  iconStyle: 'large'
+                  size: 'large'
                 }
               ]
             };
@@ -1053,9 +1053,9 @@ var Model = {
                   tab: true,
                   margin: 'left',
                   data: [
-                    { view: 'icon', icon: 'uk-icon-heart', iconStyle: 'large', $selected: true },
-                    { view: 'icon', icon: 'uk-icon-bolt', iconStyle: 'large' },
-                    { view: 'icon', icon: 'uk-icon-paint-bucket', iconStyle: 'large' }
+                    { view: 'icon', icon: 'uk-icon-heart', size: 'large', $selected: true },
+                    { view: 'icon', icon: 'uk-icon-bolt', size: 'large' },
+                    { view: 'icon', icon: 'uk-icon-paint-bucket', size: 'large' }
                   ]
                 },
                 {
@@ -1064,9 +1064,9 @@ var Model = {
                   tab: true,
                   margin: 'left',
                   data: [
-                    { view: 'icon', icon: 'uk-icon-heart', iconStyle: 'large' },
-                    { view: 'icon', icon: 'uk-icon-bolt', iconStyle: 'large' },
-                    { view: 'icon', icon: 'uk-icon-paint-bucket', iconStyle: 'large', $selected: true }
+                    { view: 'icon', icon: 'uk-icon-heart', size: 'large' },
+                    { view: 'icon', icon: 'uk-icon-bolt', size: 'large' },
+                    { view: 'icon', icon: 'uk-icon-paint-bucket', size: 'large', $selected: true }
                   ]
                 }
               ]
@@ -1125,39 +1125,226 @@ var Model = {
 
 
 var Examples = [
-  {
-    label: 'Tab Switcher',
-    component: {
-      cells: [
-        {
-          batch: 'tab',
-          view: 'list',
-          listStyle: "tab-left",
-          tab: true,
-          data: [
-            {view: 'icon', icon: 'uk-icon-heart', iconStyle: 'large', $selected: true},
-            {view: 'icon', icon: 'uk-icon-bolt', iconStyle: 'large'},
-            {view: 'icon', icon: 'uk-icon-star', iconStyle: 'large'}
-          ]
-        }
-      ]
+  function () {
+    return {
+      label: 'Tab Switcher',
+      component: {
+        cells: [
+          {
+            batch: 'tab',
+            view: 'list',
+            listStyle: "tab-left",
+            tab: true,
+            data: [
+              {
+                view: 'icon',
+                icon: 'uk-icon-heart',
+                size: 'large',
+                value: 'heart',
+                $selected: true
+              },
+              {
+                view: 'icon',
+                icon: 'uk-icon-bolt',
+                value: 'bolt',
+                size: 'large'
+              },
+              {
+                view: 'icon',
+                icon: 'uk-icon-star',
+                value: 'star',
+                size: 'large'
+              },
+              {
+                view: 'icon',
+                icon: 'uk-icon-list',
+                value: ['heart', 'bolt', 'star'],
+                size: 'large'
+              }
+            ],
+            on: {
+              onItemClick: function (item) {
+                $$('tabs').showBatch(item.value);
+              }
+            }
+          },
+          {
+            id: 'tabs',
+            flexSize: 'flex',
+            flexAlign: 'center middle',
+            flexLayout: 'column',
+            defaultBatch: 'heart',
+            card: true,
+            margin: 'x-lg y-lg',
+            cells: [
+              {
+                batch: 'heart',
+                view: 'label',
+                label: '<i class="uk-icon-heart"></i> Heart',
+                htmlTag: 'H2'
+              },
+              {
+                batch: 'bolt',
+                view: 'label',
+                label: '<i class="uk-icon-bolt"></i> Bolt',
+                htmlTag: 'H2'
+              },
+              {
+                batch: 'star',
+                view: 'label',
+                label: '<i class="uk-icon-star"></i> Star',
+                htmlTag: 'H2'
+              }
+            ]
+          }
+        ]
+      }
     }
   },
-  {
-    label: 'Tree Searching',
-    component: {}
+  function () {
+    return {
+      label: 'Tree Searching',
+      component: {
+        flexLayout: 'column',
+        margin: 'right',
+        cells: [
+          {
+            id: 'search',
+            view: 'search',
+            margin: 'bottom',
+            on: {
+              onInput: function () {
+                $$('tree').refresh();
+              }
+            }
+          },
+          {
+            scroll: 'y',
+            style: {
+              maxHeight: '345px',
+              height: '345px'
+            },
+            cells: [
+              inheritanceTree('tree', {
+                filter: function (item) {
+                  var searchPhrase = $$('search').getValue().toLowerCase();
+                  var match = true;
+
+                  if (searchPhrase) {
+                    match = item.id.indexOf(searchPhrase) != -1;
+
+                    if (!match && item.$branch) {
+                      match = item.$children.some(function (child) {
+                        return child.id.indexOf(searchPhrase) != -1;
+                      });
+                    }
+                  }
+
+                  return !item.$parentClosed && match;
+                }
+              })
+            ]
+          }
+        ]
+      }
+    }
   },
-  {
-    label: 'Customized List',
-    component: {}
+  function () {
+    var contacts = [
+      {name: 'Ambrose', phone: 'XXX-222-1234', icon: 'user'},
+      {name: 'Clarine', phone: 'XXX-333-1234', icon: 'users'},
+      {name: 'Mickie', phone: 'XXX-555-1234', icon: 'mail'},
+      {name: 'Sammie', phone: 'XXX-111-1234', icon: 'heart'},
+    ];
+    return {
+      label: 'Contact List',
+      locals: {
+        contacts: contacts
+      },
+      component: {
+        view: 'list',
+        template: function (item) {
+          return {
+            padding: 'small',
+            flexAlign: 'middle',
+            cells: [
+              {
+                view: 'icon',
+                icon: 'uk-icon-' + item.icon,
+                size: 'large',
+                margin: 'right-lg'
+              },
+              {
+                flexLayout: 'column',
+                cells: [
+                  {
+                    view: 'label',
+                    label: item.name
+                  },
+                  {
+                    view: 'label',
+                    label: item.phone
+                  }
+                ]
+              }
+            ]
+          };
+        },
+        data: contacts
+      }
+    }
   },
-  {
-    label: 'Dynamic Table',
-    component: {}
-  },
-  {
-    label: 'Image Switcher',
-    component: {}
+  function () {
+    return {
+      label: 'Image Switcher',
+      component: {
+        flexLayout: 'column',
+        margin: 'right',
+        cells: [
+          {
+            id: 'imageSelect',
+            view: 'select',
+            style: {
+              maxWidth: '360px'
+            },
+            data: [
+              {label: 'Image 1', value: 'image1.jpg', desc: 'Photo by Oleksandr Kurchev on Unsplash'},
+              {label: 'Image 2', value: 'image2.jpg', desc: 'Photo by Yong Chuan on Unsplash'}
+            ],
+            on: {
+              onChange: function () {
+                var item = this.findOne('value', this.getValue());
+                $$('image').setSource(item);
+              }
+            }
+          },
+          {
+            id: 'image',
+            view: 'image',
+            width: '360px',
+            margin: 'y-lg',
+            setSource: function (data) {
+              this.set('src', 'images/' + data.value);
+              $$('imageCaption').setLabel(data.desc);
+            }
+          },
+          {
+            id: 'imageCaption',
+            view: 'label',
+            textAlign: 'center',
+            setLabel: function (label) {
+              this.set('label', label);
+              this.render();
+            }
+          }
+        ],
+        on: {
+          onInitialized: function () {
+            $$('imageSelect').dispatch('onChange');
+          }
+        }
+      }
+    }
   }
 ];
 
@@ -1177,6 +1364,42 @@ function listTemplate(listStyle, data) {
     data: mapToProperty(data, 'label', {view: 'label'}),
     margin: 'right'
   }
+}
+
+
+function inheritanceTree(id, props) {
+  return UI.extend({
+    id: id,
+    view: 'tree',
+    data: [
+      { label: 'Element', id: 'element' },
+      { label: 'Flexgrid', id: 'flexgrid', $parent: 'element' },
+      { label: 'Stack', id: 'stack', $parent: 'element' },
+      { label: 'Input', id: 'input', $parent: 'element' },
+      { label: 'Autocomplete', id: 'autocomplete', $parent: 'input' },
+      { label: 'List', id: 'list', $parent: 'stack' },
+      { label: 'Button', id: 'button', $parent: 'element' },
+      { label: 'Drawer', id: 'drawer', $parent: 'element' },
+      { label: 'Dropdown', id: 'dropdown', $parent: 'flexgrid' },
+      { label: 'Fieldset', id: 'fieldset', $parent: 'stack' },
+      { label: 'Form', id: 'form', $parent: 'element' },
+      { label: 'Icon', id: 'icon', $parent: 'element' },
+      { label: 'Image', id: 'image', $parent: 'element' },
+      { label: 'Label', id: 'label', $parent: 'element' },
+      { label: 'Link', id: 'link', $parent: 'element' },
+      { label: 'Modal', id: 'modal', $parent: 'flexgrid' },
+      { label: 'Progress', id: 'progress', $parent: 'element' },
+      { label: 'Resizer', id: 'resizer', $parent: 'element' },
+      { label: 'Scroller', id: 'scroller', $parent: 'element' },
+      { label: 'Search', id: 'search', $parent: 'input' },
+      { label: 'Select', id: 'select', $parent: 'list' },
+      { label: 'Spacer', id: 'spacer', inherits: '' },
+      { label: 'Tab', id: 'tab', $parent: 'stack' },
+      { label: 'Table', id: 'table', $parent: 'list' },
+      { label: 'Toggle', id: 'toggle', $parent: 'element' },
+      { label: 'Tree', id: 'tree', $parent: 'list' }
+    ]
+  }, props);
 }
 
 
@@ -1432,7 +1655,7 @@ UI.new({
           label: 'The library is available on popular package repositories.'
         },
         {
-          template: '<ul><li>To install with bower, run the following command: <code>bower install spck-ui</code></li><li>Likewise, to install with npm, run the following: <code>npm install spck-ui</code></ul>'
+          template: '<ul><li>To install with bower, run the following command: <code>bower install spck-ui</code></li><li>Likewise, to install with npm, run the following: <code>npm install spck-ui</code></li><li>To install the newest <b class="uk-text-primary">unreleased</b> code, run the following: <code>bower install spck-ui#master</code></li></ul>'
         },
         {
           view: 'label',
@@ -1491,6 +1714,7 @@ UI.new({
           template: "<p>Learning a library can be difficult. This is why we have provided a list of advanced examples to help. We believe these examples can help teach a few additional ways of using the library that may not be obvious at first.</p>"
         }
       ].concat(Examples.map(function (example) {
+        var data = example();
         return {
           margin: 'y-lg',
           card: true,
@@ -1499,17 +1723,44 @@ UI.new({
           cells: [
             {
               view: 'label',
-              label: example.label,
-              htmlTag: 'H4',
+              label: data.label,
+              htmlTag: 'H2',
               card: 'header',
               margin: 'bottom-lg'
             },
             {
-              flexSize: 'none',
+              flexLayout: 'column-small',
               cells: [
                 {
+                  flexSize: 'none',
+                  style: {
+                    minWidth: '360px'
+                  },
+                  cells: [data.component]
+                },
+                {
+                  screen: 'small',
+                  view: 'spacer',
+                  height: 32
+                },
+                {
+                  view: 'scroller',
                   flexSize: 'flex',
-                  cells: [example.component]
+                  style: {
+                    maxHeight: '400px',
+                    height: '400px',
+                    borderRadius: '4px'
+                  },
+                  cells: [
+                    {
+                      view: 'codeview',
+                      on: {
+                        onInitialized: function () {
+                          this.parseCode(example());
+                        }
+                      }
+                    }  
+                  ]
                 }
               ]
             }

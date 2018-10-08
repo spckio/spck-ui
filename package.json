@@ -28,5 +28,8 @@
     "url": "https://github.com/spckio/spck-ui"
   },
   "author": "Zeb Zhao",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "gulp-uglify": "^3.0.1"
+  }
 }

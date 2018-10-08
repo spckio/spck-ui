@@ -5048,6 +5048,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     prompt: UIkit.modal.prompt,
     alert: UIkit.modal.alert,
 
+    support: UIkit.support,
+
     $$: $$,
 
     isArray: isArray,
@@ -5171,8 +5173,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function fail(message, details) {
-    log("error", message);
-    if (details) log("debug: ", details);
+    log("error", message, details);
     if (exports.debug !== false) {
       throw new Error(message);
     }
@@ -5728,7 +5729,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       column: "",
       row: "",
       "row-reverse": "",
-      "column-reverse": ""
+      "column-reverse": "",
+      "column-large": "",
+      "column-small": "",
+      "column-reverse-large": "",
+      "column-reverse-small": "",
+      "row-reverse-large": "",
+      "row-reverse-small": ""
     }, 'uk-flex-', true),
     flexSpace: prefixClassOptions({
       between: "",
@@ -6002,7 +6009,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $globalListenerIds.load = addListener(window, "load", buildWindowListener($windowListeners.load));
   }
 
-  if (UIkit.support.touch) {
+  if (exports.support.touch) {
     $globalListenerIds.touchend = addListener(window, "touchend", buildWindowListener($windowListeners.touchend));
     $globalListenerIds.touchmove = addListener(window, "touchmove", buildWindowListener($windowListeners.touchmove));
   }
@@ -6364,7 +6371,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
           assertPropertyValidator(options[v],
             'value "' + v + '" for property "' + property + '"', isDefined,
-            'Value must be one of "' + Object.keys(options).join('", "') + '"'
+            'Value must be one of "' + Object.keys(options).join('", "') + '".'
           );
 
           var classes = options[v];
@@ -6605,10 +6612,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.flexgrid = def({
     __name__: "flexgrid",
     $defaults: {
-      flexLayout: "row",
       flex: true,
-      flexSize: "flex",
-      singleView: false
+      flexLayout: "row",
+      flexSize: "flex"
     },
     $setters: {
       cells: function (value) {
@@ -6621,8 +6627,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           self.addChild(config);
         }
 
-        if (self.config.singleView && self.config.defaultView)
-          self.setChild(self.config.defaultView);
+        if (self.config.defaultBatch)
+          self.showBatch(self.config.defaultBatch);
       }
     },
     render: function () {
@@ -6659,14 +6665,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return ui;
 
       function appendChild(element) {
-        if (!self.config.singleView) {
-          if (index > 0)
-            self.el.insertAfter(element, self.$components[index - 1].el);
-          else if (index + 1 < self.$components.length)
-            self.el.insertBefore(element, self.$components[index + 1].el);
-          else
-            self.el.appendChild(element)
-        }
+        if (index > 0)
+          self.el.insertAfter(element, self.$components[index - 1].el);
+        else if (index + 1 < self.$components.length)
+          self.el.insertBefore(element, self.$components[index + 1].el);
+        else
+          self.el.appendChild(element)
       }
     },
     addChild: function (config) {
@@ -6677,7 +6681,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        */
       var self = this;
       var component = config.element ? config : exports.new(config, function (el) {
-        if (!self.config.singleView) self.el.appendChild(el);
+        self.el.appendChild(el);
       });
       self.$components.push(component);
       return component;
@@ -6747,7 +6751,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     getBatch: function () {
       /**
-       * Get the 'batch' value that was passed to `setBatch`.
+       * Get the 'batch' value that was passed to `showBatch`.
        */
       return this.$batch;
     },
@@ -7007,7 +7011,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         closeButton: function (value) {
           if (value) {
             var self = this;
-            var close = self.close = createElement("A",
+            var close = self.closeButton = createElement("A",
               {class: "uk-modal-close uk-close"});
             var body = self.body;
 
@@ -7179,12 +7183,15 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $setters: classSetters({
       iconStyle: prefixClassOptions({
         hover: "",
+        button: "",
+        justify: "",
+        "": ""
+      }, 'uk-icon-', true),
+      size: prefixClassOptions({
         small: "",
         medium: "",
         large: "",
         xlarge: "",
-        button: "",
-        justify: "",
         "": ""
       }, 'uk-icon-', true)
     }),
@@ -7426,7 +7433,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       htmlTag: "INPUT",
       tagClass: "uk-input",
-      inputWidth: "medium"
+      width: "medium"
     },
     $setters: extend(
       classSetters({
@@ -7579,6 +7586,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           "": "",
           "false": "",
           "true": 'uk-offcanvas-touch'
+        },
+        flipped: {
+          "": "",
+          "false": "",
+          "true": "uk-offcanvas-flip"
         }
       }),
       {
@@ -7714,15 +7726,15 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     content: function () {
-      return $(this.element).find(".uk-offcanvas-bar");
+      return $(this.el).find(".uk-offcanvas-bar");
     },
 
     isVisible: function () {
-      return $(this.element).is(":visible");
+      return $(this.el).is(":visible");
     },
 
     isFlipped: function () {
-      return this.content().hasClass("uk-offcanvas-bar-flip");
+      return UI.hasClass(this.el, "uk-offcanvas-flip");
     }
   }, $definitions.element);
 
@@ -8228,9 +8240,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         node = self.createItemElement(obj);
       
         if (obj.$tailNode)
-          self.containerElement().insertBefore(node, self._addToDOM(obj.$tailNode));
+          self.containerElement(obj).insertBefore(node, self._addToDOM(obj.$tailNode));
         else
-          self.containerElement().appendChild(node);
+          self.containerElement(obj).appendChild(node);
       }
 
       if (obj.$hidden) addClass(node, HIDDEN_CLASS);
@@ -8244,7 +8256,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     _onDispose: function () {
       var self = this;
       forInLoop(function (key, node) {
-        if (node.parentNode) self.containerElement().removeChild(node);
+        if (node.parentNode) node.parentNode.removeChild(node);
       }, self.$elements);
 
       forInLoop(function (id, listeners) {
@@ -8306,7 +8318,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       var node = self.getItemNode(obj.id);
       if (node) {
-        self.containerElement().removeChild(node);
+        node.parentNode.removeChild(node);
         delete self.$elements[obj.id];
       }
 
@@ -8332,7 +8344,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         item.$hidden = self._checkItemHidden(item);
         self._addToDOM(item);
       });
-
       self.dispatch("onDOMChanged", [null, "refresh"]);
     },
     _onClearAll: function () {
@@ -8341,6 +8352,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     _checkItemHidden: function (item) {
       return !this.filter(item);
+    },
+    beforeSetData: function (data) {
+      return data;
     },
     setData: function (data) {
       /**
@@ -8352,6 +8366,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var $this = this;
       $this.clearAll();
 
+      data = $this.beforeSetData(data);
+
       data.forEach(function (item) {
         $this.add(item);
       });
@@ -8360,7 +8376,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     getBatch: function () {
       /**
-       * Get the 'batch' value that was passed to `setBatch`.
+       * Get the 'batch' value that was passed to `showBatch`.
        */
     return this.$batch;
     },
@@ -8675,6 +8691,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           self.$itemComponents[item.id] = itemTemplate;
           self.$components.push(itemTemplate);
         }
+        else if (isObject(itemTemplate)) {
+          var component = UI.new(itemTemplate, el);
+          self.$itemComponents[itemTemplate.id] = component;
+          self.$components.push(component);
+        }
         else {
           fail('Unrecognized object returned by template function.', itemTemplate);
         }
@@ -8720,7 +8741,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         $listeners.push(listenerId);
         self.$listeners.push(listenerId);
 
-        if (UIkit.support.touch) {
+        if (exports.support.touch) {
           listenerId = addListener(el, "touchstart", onMouseDown, self);
           $listeners.push(listenerId);
           self.$listeners.push(listenerId);
@@ -8840,6 +8861,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
       return closed;
     },
+    beforeSetData: function (data) {
+      var itemCache = {};
+      data.forEach(function (item) {
+        if (item.id) itemCache[item.id] = item;
+      });
+      data.forEach(function (item) {
+        var parentId = item.$parent;
+        if (parentId && itemCache[parentId])
+          itemCache[parentId].$branch = true;
+      });
+      return data;
+    },
     add: function (obj) {
       /**
        * Add a child to the tree.
@@ -8849,11 +8882,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       if (obj.$branch) obj.$children = [];
 
       var self = this;
+      var parent;
       if (!obj.$parent) {
         obj.$depth = 0;
       }
       else {
-        var parent = self.getItem(obj.$parent);
+        parent = self.getItem(obj.$parent);
         obj.$parentClosed = self._checkParentClosed(obj);
         obj.$depth = parent.$depth + 1;
         obj.$hidden = this._checkItemHidden(obj);
@@ -8881,10 +8915,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         '<a><i class="uk-icon-{{icon}}" style="margin-left: {{margin}}px">' +
         '</i><span class="uk-margin-small-left">{{label}}</span></a>',
         {
-          icon: config.$branch ? "folder" : "file",
+          icon: getChevron(config),
           label: config.label,
           margin: config.$depth * this.indentWidth
         });
+
+      function getChevron (item) {
+        if (item.$children && item.$children.length > 0) {
+          return item.$closed ? 'chevron-right' : 'chevron-down';
+        } else {
+          return 'blank';
+        }
+      }
     },
     open: function (item) {
       /**
@@ -9102,7 +9144,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       UI.addListener($this.el, 'mousedown', function (e) {
         if (!$this.dragging) {
           UI.preventEvent(e);
-          dragHandle.style = 'left:' + e.clientX + 'px';
+          updateDragHandlePosition(e);
           UI.removeClass(dragHandle, 'uk-hidden');
           $this.dragging = true;
         }
@@ -9110,29 +9152,42 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       UI.addListener(document.body, 'mousemove', function (e) {
         if ($this.dragging) {
-          var clientPos = e.clientX;
-          var maxValue = config.maxValue;
-          var minValue = config.minValue;
-          if (clientPos < minValue) clientPos = minValue;
-          else if (clientPos > maxValue) clientPos = maxValue;
-          dragHandle.style = 'left:' + clientPos + 'px';
+          updateDragHandlePosition(e);
         }
       });
 
       UI.addListener(document.body, 'mouseup', function (e) {
         if ($this.dragging) {
-          var clientX = e.clientX;
-          var maxValue = config.maxValue;
-          var minValue = config.minValue;
-
-          if (clientX < minValue) clientX = minValue;
-          else if (clientX > maxValue) clientX = maxValue;
-
           UI.addClass(dragHandle, 'uk-hidden');
           $this.dragging = false;
-          $this.dispatch("onHandleResized", [clientX, $this.el, e]);
+          $this.dispatch("onHandleResized", [updateDragHandlePosition(e), $this.el, e]);
         }
       });
+
+      function updateDragHandlePosition (mouseEvent) {
+        var isDirectionEqualX = config.direction == 'x';
+        var el = $this.el;
+
+        var clientRect = el.getBoundingClientRect();
+        var parentRect = el.parentNode.getBoundingClientRect();
+
+        var minValue = config.minValue;
+        var maxValue = Math.min(config.maxValue,
+          (isDirectionEqualX ? parentRect.width : parentRect.height));
+
+        var value = isDirectionEqualX ?
+          mouseEvent.clientX - parentRect.left:
+          mouseEvent.clientY - parentRect.top;
+
+        if (value < minValue) value = minValue;
+        else if (value > maxValue) value = maxValue;
+
+        var relativeValue = value - (isDirectionEqualX ?
+          clientRect.left - parentRect.left : clientRect.top - parentRect.top);
+        dragHandle.style = (isDirectionEqualX ? 'left:' : 'top:') + relativeValue + 'px';
+        
+        return value;
+      }
     }
   }, $definitions.element);
 
@@ -9266,6 +9321,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "select",
     $defaults: {
       htmlTag: "SELECT",
+      itemTag: "OPTION",
+      groupTag: "OPTGROUP",
       tagClass: "uk-select",
       flex: false,
       flexSize: "",
@@ -9275,6 +9332,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       multiple: function (value) {
         setAttributes(this.getFormControl(), value ? {multiple: value} : {});
       }
+    },
+    __init__: function () {
+      this.optgroups = {};
     },
     select: function (item) {
       /**
@@ -9299,47 +9359,29 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return this.setActive('value', value);
     },
     template: function (item) {
-      if (item.view) {
-        if (item.view == 'optgroup') {
-          return UI.new(item);
-        } else {
-          // Error
-          fail('Invalid view: ' + item.view + ' for "select" child view.' + 
-            'Only "optgroup" is accepted.');
-        }
-      }
       return item.label;
-    },
-    itemTagString: function (item) {
-      return item.view == 'optgroup' ? "OPTGROUP" : "OPTION";
     },
     itemElement: function (item) {
       var attributes = {value: item.value, class: this.itemClass(item)};
       if (item.selected) attributes.selected = item.selected;
       return createElement(this.itemTagString(item), attributes);
+    },
+    containerElement: function (item) {
+      var self = this;
+      var optgroup = item.optgroup;
+      if (optgroup) {
+        var optGroupEl = self.optgroups[optgroup];
+        if (!optGroupEl) {
+          optGroupEl = createElement(self.config.groupTag, {label: optgroup});
+          self.optgroups[optgroup] = optGroupEl;
+          self.el.appendChild(optGroupEl);
+        }
+        return optGroupEl;
+      } else {
+        return self.el;
+      }
     }
   }, exports.ChangeEvent, exports.FormControl, $definitions.list);
-
-
-  $definitions.optgroup = def({
-    __name__: "optgroup",
-    $defaults: {
-      htmlTag: "OPTGROUP",
-      itemTag: "OPTION",
-      tagClass: "",
-      flex: false,
-      flexSize: "",
-      listStyle: ""
-    },
-    template: function (item) {
-      return item.label;
-    },
-    itemElement: function (item) {
-      var attributes = {value: item.value, class: this.itemClass(item)};
-      if (item.selected) attributes.selected = item.selected;
-      return createElement(this.itemTagString(), attributes);
-    }
-  }, $definitions.list);
 
 
   $definitions.form = def({

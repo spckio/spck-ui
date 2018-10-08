@@ -160,8 +160,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function fail(message, details) {
-    log("error", message);
-    if (details) log("debug: ", details);
+    log("error", message, details);
     if (exports.debug !== false) {
       throw new Error(message);
     }
@@ -717,7 +716,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       column: "",
       row: "",
       "row-reverse": "",
-      "column-reverse": ""
+      "column-reverse": "",
+      "column-large": "",
+      "column-small": "",
+      "column-reverse-large": "",
+      "column-reverse-small": "",
+      "row-reverse-large": "",
+      "row-reverse-small": ""
     }, 'uk-flex-', true),
     flexSpace: prefixClassOptions({
       between: "",
@@ -1353,7 +1358,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
           assertPropertyValidator(options[v],
             'value "' + v + '" for property "' + property + '"', isDefined,
-            'Value must be one of "' + Object.keys(options).join('", "') + '"'
+            'Value must be one of "' + Object.keys(options).join('", "') + '".'
           );
 
           var classes = options[v];
@@ -1594,10 +1599,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.flexgrid = def({
     __name__: "flexgrid",
     $defaults: {
-      flexLayout: "row",
       flex: true,
-      flexSize: "flex",
-      singleView: false
+      flexLayout: "row",
+      flexSize: "flex"
     },
     $setters: {
       cells: function (value) {
@@ -1610,8 +1614,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           self.addChild(config);
         }
 
-        if (self.config.singleView && self.config.defaultView)
-          self.setChild(self.config.defaultView);
+        if (self.config.defaultBatch)
+          self.showBatch(self.config.defaultBatch);
       }
     },
     render: function () {
@@ -1648,14 +1652,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return ui;
 
       function appendChild(element) {
-        if (!self.config.singleView) {
-          if (index > 0)
-            self.el.insertAfter(element, self.$components[index - 1].el);
-          else if (index + 1 < self.$components.length)
-            self.el.insertBefore(element, self.$components[index + 1].el);
-          else
-            self.el.appendChild(element)
-        }
+        if (index > 0)
+          self.el.insertAfter(element, self.$components[index - 1].el);
+        else if (index + 1 < self.$components.length)
+          self.el.insertBefore(element, self.$components[index + 1].el);
+        else
+          self.el.appendChild(element)
       }
     },
     addChild: function (config) {
@@ -1666,7 +1668,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        */
       var self = this;
       var component = config.element ? config : exports.new(config, function (el) {
-        if (!self.config.singleView) self.el.appendChild(el);
+        self.el.appendChild(el);
       });
       self.$components.push(component);
       return component;
@@ -1736,7 +1738,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     getBatch: function () {
       /**
-       * Get the 'batch' value that was passed to `setBatch`.
+       * Get the 'batch' value that was passed to `showBatch`.
        */
       return this.$batch;
     },
@@ -2168,12 +2170,15 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $setters: classSetters({
       iconStyle: prefixClassOptions({
         hover: "",
+        button: "",
+        justify: "",
+        "": ""
+      }, 'uk-icon-', true),
+      size: prefixClassOptions({
         small: "",
         medium: "",
         large: "",
         xlarge: "",
-        button: "",
-        justify: "",
         "": ""
       }, 'uk-icon-', true)
     }),
@@ -2415,7 +2420,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       htmlTag: "INPUT",
       tagClass: "uk-input",
-      inputWidth: "medium"
+      width: "medium"
     },
     $setters: extend(
       classSetters({
@@ -3326,7 +3331,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         item.$hidden = self._checkItemHidden(item);
         self._addToDOM(item);
       });
-
       self.dispatch("onDOMChanged", [null, "refresh"]);
     },
     _onClearAll: function () {
@@ -3335,6 +3339,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     _checkItemHidden: function (item) {
       return !this.filter(item);
+    },
+    beforeSetData: function (data) {
+      return data;
     },
     setData: function (data) {
       /**
@@ -3346,6 +3353,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var $this = this;
       $this.clearAll();
 
+      data = $this.beforeSetData(data);
+
       data.forEach(function (item) {
         $this.add(item);
       });
@@ -3354,7 +3363,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     getBatch: function () {
       /**
-       * Get the 'batch' value that was passed to `setBatch`.
+       * Get the 'batch' value that was passed to `showBatch`.
        */
     return this.$batch;
     },
@@ -3669,6 +3678,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           self.$itemComponents[item.id] = itemTemplate;
           self.$components.push(itemTemplate);
         }
+        else if (isObject(itemTemplate)) {
+          var component = UI.new(itemTemplate, el);
+          self.$itemComponents[itemTemplate.id] = component;
+          self.$components.push(component);
+        }
         else {
           fail('Unrecognized object returned by template function.', itemTemplate);
         }
@@ -3834,6 +3848,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
       return closed;
     },
+    beforeSetData: function (data) {
+      var itemCache = {};
+      data.forEach(function (item) {
+        if (item.id) itemCache[item.id] = item;
+      });
+      data.forEach(function (item) {
+        var parentId = item.$parent;
+        if (parentId && itemCache[parentId])
+          itemCache[parentId].$branch = true;
+      });
+      return data;
+    },
     add: function (obj) {
       /**
        * Add a child to the tree.
@@ -3843,11 +3869,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       if (obj.$branch) obj.$children = [];
 
       var self = this;
+      var parent;
       if (!obj.$parent) {
         obj.$depth = 0;
       }
       else {
-        var parent = self.getItem(obj.$parent);
+        parent = self.getItem(obj.$parent);
         obj.$parentClosed = self._checkParentClosed(obj);
         obj.$depth = parent.$depth + 1;
         obj.$hidden = this._checkItemHidden(obj);
@@ -3884,7 +3911,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         if (item.$children && item.$children.length > 0) {
           return item.$closed ? 'chevron-right' : 'chevron-down';
         } else {
-          return '';
+          return 'blank';
         }
       }
     },
