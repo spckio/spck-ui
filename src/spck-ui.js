@@ -1994,7 +1994,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         closeButton: function (value) {
           if (value) {
             var self = this;
-            var close = self.close = createElement("A",
+            var close = self.closeButton = createElement("A",
               {class: "uk-modal-close uk-close"});
             var body = self.body;
 
@@ -2566,6 +2566,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           "": "",
           "false": "",
           "true": 'uk-offcanvas-touch'
+        },
+        flipped: {
+          "": "",
+          "false": "",
+          "true": "uk-offcanvas-flip"
         }
       }),
       {
@@ -2701,15 +2706,15 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     content: function () {
-      return $(this.element).find(".uk-offcanvas-bar");
+      return $(this.el).find(".uk-offcanvas-bar");
     },
 
     isVisible: function () {
-      return $(this.element).is(":visible");
+      return $(this.el).is(":visible");
     },
 
     isFlipped: function () {
-      return this.content().hasClass("uk-offcanvas-bar-flip");
+      return UI.hasClass(this.el, "uk-offcanvas-flip");
     }
   }, $definitions.element);
 
@@ -3215,9 +3220,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         node = self.createItemElement(obj);
       
         if (obj.$tailNode)
-          self.containerElement().insertBefore(node, self._addToDOM(obj.$tailNode));
+          self.containerElement(obj).insertBefore(node, self._addToDOM(obj.$tailNode));
         else
-          self.containerElement().appendChild(node);
+          self.containerElement(obj).appendChild(node);
       }
 
       if (obj.$hidden) addClass(node, HIDDEN_CLASS);
@@ -3231,7 +3236,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     _onDispose: function () {
       var self = this;
       forInLoop(function (key, node) {
-        if (node.parentNode) self.containerElement().removeChild(node);
+        if (node.parentNode) node.parentNode.removeChild(node);
       }, self.$elements);
 
       forInLoop(function (id, listeners) {
@@ -3293,7 +3298,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       var node = self.getItemNode(obj.id);
       if (node) {
-        self.containerElement().removeChild(node);
+        node.parentNode.removeChild(node);
         delete self.$elements[obj.id];
       }
 
@@ -3868,10 +3873,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         '<a><i class="uk-icon-{{icon}}" style="margin-left: {{margin}}px">' +
         '</i><span class="uk-margin-small-left">{{label}}</span></a>',
         {
-          icon: config.$branch ? "folder" : "file",
+          icon: getChevron(config),
           label: config.label,
           margin: config.$depth * this.indentWidth
         });
+
+      function getChevron (item) {
+        if (item.$children && item.$children.length > 0) {
+          return item.$closed ? 'chevron-right' : 'chevron-down';
+        } else {
+          return '';
+        }
+      }
     },
     open: function (item) {
       /**
@@ -4089,7 +4102,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       UI.addListener($this.el, 'mousedown', function (e) {
         if (!$this.dragging) {
           UI.preventEvent(e);
-          dragHandle.style = 'left:' + e.clientX + 'px';
+          updateDragHandlePosition(e);
           UI.removeClass(dragHandle, 'uk-hidden');
           $this.dragging = true;
         }
@@ -4097,29 +4110,42 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       UI.addListener(document.body, 'mousemove', function (e) {
         if ($this.dragging) {
-          var clientPos = e.clientX;
-          var maxValue = config.maxValue;
-          var minValue = config.minValue;
-          if (clientPos < minValue) clientPos = minValue;
-          else if (clientPos > maxValue) clientPos = maxValue;
-          dragHandle.style = 'left:' + clientPos + 'px';
+          updateDragHandlePosition(e);
         }
       });
 
       UI.addListener(document.body, 'mouseup', function (e) {
         if ($this.dragging) {
-          var clientX = e.clientX;
-          var maxValue = config.maxValue;
-          var minValue = config.minValue;
-
-          if (clientX < minValue) clientX = minValue;
-          else if (clientX > maxValue) clientX = maxValue;
-
           UI.addClass(dragHandle, 'uk-hidden');
           $this.dragging = false;
-          $this.dispatch("onHandleResized", [clientX, $this.el, e]);
+          $this.dispatch("onHandleResized", [updateDragHandlePosition(e), $this.el, e]);
         }
       });
+
+      function updateDragHandlePosition (mouseEvent) {
+        var isDirectionEqualX = config.direction == 'x';
+        var el = $this.el;
+
+        var clientRect = el.getBoundingClientRect();
+        var parentRect = el.parentNode.getBoundingClientRect();
+
+        var minValue = config.minValue;
+        var maxValue = Math.min(config.maxValue,
+          (isDirectionEqualX ? parentRect.width : parentRect.height));
+
+        var value = isDirectionEqualX ?
+          mouseEvent.clientX - parentRect.left:
+          mouseEvent.clientY - parentRect.top;
+
+        if (value < minValue) value = minValue;
+        else if (value > maxValue) value = maxValue;
+
+        var relativeValue = value - (isDirectionEqualX ?
+          clientRect.left - parentRect.left : clientRect.top - parentRect.top);
+        dragHandle.style = (isDirectionEqualX ? 'left:' : 'top:') + relativeValue + 'px';
+        
+        return value;
+      }
     }
   }, $definitions.element);
 
@@ -4253,6 +4279,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "select",
     $defaults: {
       htmlTag: "SELECT",
+      itemTag: "OPTION",
+      groupTag: "OPTGROUP",
       tagClass: "uk-select",
       flex: false,
       flexSize: "",
@@ -4262,6 +4290,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       multiple: function (value) {
         setAttributes(this.getFormControl(), value ? {multiple: value} : {});
       }
+    },
+    __init__: function () {
+      this.optgroups = {};
     },
     select: function (item) {
       /**
@@ -4286,47 +4317,29 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return this.setActive('value', value);
     },
     template: function (item) {
-      if (item.view) {
-        if (item.view == 'optgroup') {
-          return UI.new(item);
-        } else {
-          // Error
-          fail('Invalid view: ' + item.view + ' for "select" child view.' + 
-            'Only "optgroup" is accepted.');
-        }
-      }
       return item.label;
-    },
-    itemTagString: function (item) {
-      return item.view == 'optgroup' ? "OPTGROUP" : "OPTION";
     },
     itemElement: function (item) {
       var attributes = {value: item.value, class: this.itemClass(item)};
       if (item.selected) attributes.selected = item.selected;
       return createElement(this.itemTagString(item), attributes);
+    },
+    containerElement: function (item) {
+      var self = this;
+      var optgroup = item.optgroup;
+      if (optgroup) {
+        var optGroupEl = self.optgroups[optgroup];
+        if (!optGroupEl) {
+          optGroupEl = createElement(self.config.groupTag, {label: optgroup});
+          self.optgroups[optgroup] = optGroupEl;
+          self.el.appendChild(optGroupEl);
+        }
+        return optGroupEl;
+      } else {
+        return self.el;
+      }
     }
   }, exports.ChangeEvent, exports.FormControl, $definitions.list);
-
-
-  $definitions.optgroup = def({
-    __name__: "optgroup",
-    $defaults: {
-      htmlTag: "OPTGROUP",
-      itemTag: "OPTION",
-      tagClass: "",
-      flex: false,
-      flexSize: "",
-      listStyle: ""
-    },
-    template: function (item) {
-      return item.label;
-    },
-    itemElement: function (item) {
-      var attributes = {value: item.value, class: this.itemClass(item)};
-      if (item.selected) attributes.selected = item.selected;
-      return createElement(this.itemTagString(), attributes);
-    }
-  }, $definitions.list);
 
 
   $definitions.form = def({

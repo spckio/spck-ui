@@ -317,13 +317,51 @@ var Model = {
               buttonStyle: 'button',
               on: {
                 onClick: function () {
-                  $$('drawer').show();
+                  $$('drawerLeft').open();
                 }
               }
             },
             {
-              id: 'drawer',
-              view: 'drawer'
+              view: 'button',
+              label: 'Show Right Drawer',
+              buttonStyle: 'button',
+              margin: 'left',
+              on: {
+                onClick: function () {
+                  $$('drawerRight').open();
+                }
+              }
+            },
+            {
+              id: 'drawerLeft',
+              view: 'drawer',
+              template: {
+                flex: true,
+                flexAlign: 'center middle',
+                cells: [
+                  {
+                    view: 'label',
+                    label: 'Left Drawer',
+                    text: 'bold'
+                  }
+                ]
+              }
+            },
+            {
+              id: 'drawerRight',
+              view: 'drawer',
+              flipped: true,
+              template: {
+                flex: true,
+                flexAlign: 'center middle',
+                cells: [
+                  {
+                    view: 'label',
+                    label: 'Right Drawer',
+                    text: 'bold'
+                  }
+                ]
+              }
             }
           ]
         }
@@ -406,26 +444,87 @@ var Model = {
     flexgrid: function () {
       return {
         component: {
+          flexLayout: 'column',
           cells: [
             {
-              view: 'list',
-              listStyle: 'side',
-              data: [
-                { view: 'link', label: 'Curl into a furry donut.' },
-                { view: 'link', label: 'Look into a furry donut.' },
-                { view: 'link', label: 'Age into a furry donut.' },
-                { view: 'link', label: 'Walk into a furry donut.' },
-                { view: 'link', label: 'Elope into a furry donut.' },
-                { view: 'link', label: 'Dig into a furry donut.' }
+              style: {
+                minHeight: '128px'
+              },
+              margin: 'bottom',
+              cells: [
+                {
+                  flexSize: 'none',
+                  card: true,
+                  template: {
+                    view: 'label',
+                    label: 'None',
+                    text: 'bold'
+                  }
+                },
+                {
+                  flex: true,
+                  flexSize: 'flex',
+                  flexAlign: 'center',
+                  card: true,
+                  margin: 'x',
+                  template: {
+                    view: 'label',
+                    label: 'Flex, Center',
+                    text: 'bold'
+                  }
+                },
+                {
+                  flex: true,
+                  flexSize: 'none',
+                  flexAlign: 'bottom',
+                  card: true,
+                  template: {
+                    view: 'label',
+                    label: 'None, Bottom',
+                    text: 'bold'
+                  }
+                }
               ]
             },
             {
-              view: 'form',
-              margin: 'left-lg',
-              fieldset: [
-                { formLabel: 'User', view: 'input', value: 'Hello' },
-                { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' },
-                { view: 'button', type: 'primary', label: 'Login', inputWidth: 'medium', margin: 'top' }
+              style: {
+                minHeight: '128px'
+              },
+              cells: [
+                {
+                  flex: true,
+                  flexSize: 'flex',
+                  flexAlign: 'right',
+                  card: true,
+                  template: {
+                    view: 'label',
+                    label: 'Flex, Right',
+                    text: 'bold'
+                  }
+                },
+                {
+                  flex: true,
+                  flexSize: 'auto',
+                  flexAlign: 'center middle',
+                  card: true,
+                  margin: 'x',
+                  template: {
+                    view: 'label',
+                    label: 'Auto, Center Middle',
+                    text: 'bold'
+                  }
+                },
+                {
+                  flex: true,
+                  flexSize: 'flex',
+                  flexAlign: ['right', 'middle'],
+                  card: true,
+                  template: {
+                    view: 'label',
+                    label: 'Flex, Right Middle',
+                    text: 'bold'
+                  }
+                }
               ]
             }
           ]
@@ -446,7 +545,7 @@ var Model = {
             'gitter', 'google-plus', 'google', 'grid', 'hashtag', 'heart', 'history',
             'home', 'image', 'instagram', 'italic', 'laptop', 'link', 'list', 'location',
             'lock', 'mail', 'menu', 'minus', 'more-vertical', 'more', 'move', 'paint-bucket',
-            'penceil', 'phone-landscape', 'phone', 'play', 'plus', 'pull', 'push', 'receiver',
+            'pencil', 'phone-landscape', 'phone', 'play', 'plus', 'pull', 'push', 'receiver',
             'refresh', 'reply', 'rss', 'search', 'server', 'settings', 'shrink', 'sign-in',
             'sign-out', 'social', 'star', 'strikethrough', 'table', 'tablet-landscape', 'tablet',
             'tag', 'thumbnails', 'trash', 'triangle-down', 'triangle-left', 'triangle-right',
@@ -457,14 +556,20 @@ var Model = {
               flexSize: "none",
               card: true,
               style: {
-                minWidth: '112px'
+                minWidth: '96px',
+                width: '96px',
               },
+              margin: 'x-sm y-sm',
               cells: [
                 {
                   view: 'label',
                   label: icon,
                   card: 'header',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  selectable: true,
+                  style: {
+                    height: '48px'
+                  }
                 },
                 {
                   view: 'icon',
@@ -560,13 +665,17 @@ var Model = {
       };
     },
     modal: function () {
+      var text = 'Medium brewed, dripper to go filter iced kopi-luwak qui variety cortado acerbic. Plunger pot latte organic sweet single shot robust cappuccino. Plunger pot qui decaffeinated crema, variety cappuccino carajillo shop blue mountain milk. Dark single origin filter, fair trade at grounds aged caffeine froth. In pumpkin spice ristretto single shot chicory mocha kopi-luwak robusta trifecta french press dark.';
       return {
+        locals: {
+          text: text
+        },
         component: {
           cells: [
             {
               view: 'button',
               label: 'Show modal',
-              type: 'primary',
+              buttonStyle: 'button',
               on: {
                 onClick: function () {
                   $$('modal').open();
@@ -584,23 +693,38 @@ var Model = {
               },
               body: {
                 view: 'label',
-                label: 'Medium brewed, dripper to go filter iced kopi-luwak qui variety cortado acerbic. Plunger pot latte organic sweet single shot robust cappuccino. Plunger pot qui decaffeinated crema, variety cappuccino carajillo shop blue mountain milk. Dark single origin filter, fair trade at grounds aged caffeine froth. In pumpkin spice ristretto single shot chicory mocha kopi-luwak robusta trifecta french press dark.'
+                label: text
               },
               footer: {
                 flexAlign: 'right',
-                padding: 'x y-sm',
+                padding: true,
                 cells: [
-                  { view: 'button', label: 'No way!', margin: 'right' },
-                  { view: 'button', type: 'primary', label: 'Yup.' }
+                  {
+                    view: 'button',
+                    label: 'No way!',
+                    margin: 'right',
+                    on: {
+                      onClick: function () {
+                        $$('modal').close();
+                      }
+                    }
+                  },
+                  {
+                    view: 'button',
+                    type: 'primary',
+                    label: 'Yup.',
+                    on: {
+                      onClick: function () {
+                        $$('modal').close();
+                      }
+                    }
+                  }
                 ]
               }
             }
           ]
         }
       }
-    },
-    optgroup: function () {
-
     },
     progress: function () {
       return {
@@ -642,7 +766,78 @@ var Model = {
       };
     },
     resizer: function () {
-      return;
+      return {
+        component: {
+          cells: [
+            {
+              id: 'leftFrame',
+              flex: true,
+              flexAlign: 'center middle',
+              template: {
+                view: 'label',
+                label: 'Left Frame',
+                text: 'bold'
+              },
+              style: {
+                minWidth: '200px',
+                minHeight: '180px'
+              }
+            },
+            {
+              view: 'resizer',
+              direction: 'x',
+              minValue: 100,
+              maxValue: 600,
+              on: {
+                onHandleResized: function (pos) {
+                  $$('leftFrame').element.style.minWidth = pos + 'px';
+                }
+              }
+            },
+            {
+              flexSize: 'flex',
+              flexLayout: 'column',
+              cells: [
+                {
+                  id: 'topFrame',
+                  flex: true,
+                  flexSize: 'none',
+                  flexAlign: 'center middle',
+                  template: {
+                    view: 'label',
+                    label: 'Top Frame',
+                    text: 'bold'
+                  },
+                  style: {
+                    minHeight: '90px'
+                  }
+                },
+                {
+                  view: 'resizer',
+                  direction: 'y',
+                  minValue: 30,
+                  maxValue: 150,
+                  on: {
+                    onHandleResized: function (pos) {
+                      $$('topFrame').element.style.minHeight = pos + 'px';
+                    }
+                  }
+                },
+                {
+                  flex: true,
+                  flexSize: 'flex',
+                  flexAlign: 'center middle',
+                  template: {
+                    view: 'label',
+                    label: 'Bottom Frame',
+                    text: 'bold'
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      };
     },
     scroller: function () {
       return {
@@ -675,7 +870,7 @@ var Model = {
         component: {
           view: 'search'
         }
-      }
+      };
     },
     select: function () {
       return {
@@ -704,14 +899,12 @@ var Model = {
                 {
                   view: 'select',
                   data: [
-                    {
-                      view: 'optgroup',
-                      data: [
-                        {label: 'Apple'},
-                        {label: 'Banana'},
-                        {label: 'Oranges'}
-                      ]
-                    }
+                    {label: 'Apple', optgroup: 'Fruit'},
+                    {label: 'Banana', optgroup: 'Fruit'},
+                    {label: 'Oranges', optgroup: 'Fruit'},
+                    {label: 'Carrot', optgroup: 'Veggies'},
+                    {label: 'Celery', optgroup: 'Veggies'},
+                    {label: 'Sprouts', optgroup: 'Veggies'}
                   ]
                 }
               ]
@@ -735,7 +928,7 @@ var Model = {
             }
           ]
         }
-      }
+      };
     },
     spacer: function () {
       return {
@@ -761,7 +954,7 @@ var Model = {
             }
           ]
         }
-      }
+      };
     },
     table: function () {
       return {
@@ -784,7 +977,7 @@ var Model = {
             { action: 'Sprinkle', preposition: 'on', directObject: { article: 'a', object: 'furry donut' } }
           ]
         }
-      }
+      };
     },
     tab: function () {
       return {
@@ -880,7 +1073,7 @@ var Model = {
             }
           ]
         }
-      }
+      };
     },
     toggle: function () {
       return {
@@ -908,21 +1101,21 @@ var Model = {
             }
           ]
         }
-      }
+      };
     },
     tree: function () {
       return {
         component: {
           view: 'tree',
           data: [
-            { label: 'Curl', id: 'root' },
-            { label: 'into', id: 'into', $parent: 'root' },
-            { label: 'a', id: 'a', $parent: 'root' },
-            { label: 'furry', id: 'furry', $parent: 'a' },
-            { label: 'donut', id: 'donut', $parent: 'a' }
+            { label: 'Chicken', id: '1' },
+            { label: 'Egg 1', id: '1.1', $parent: '1', $closed: true },
+            { label: 'Egg 2', id: '1.2', $parent: '1' },
+            { label: 'Chick 1', id: '1.1.1', $parent: '1.1' },
+            { label: 'Chick 2', id: '1.2.1', $parent: '1.2' }
           ]
         }
-      }
+      };
     }
   },
   properties: UI.forIn(function (name, value) {
@@ -1034,7 +1227,7 @@ UI.new({
           {
             view: 'select',
             data: [
-              { value: UI.VERSION, label: UI.VERSION }
+              { value: UI.VERSION, label: UI.VERSION, optgroup: 'Latest' }
             ]
           }
         ]

@@ -4,7 +4,7 @@ Version 0.3.0
 - **Breaking**: Renamed property `dropdownCSS` to `dropdownClass`
 - **Breaking**: Renamed property `link` to `buttonStyle`
 - **Breaking**: Refactor `uk-form` to `uk-input`, `uk-select`, `uk-textarea`
-- Added `scroller`, `drawer`, `resizer`, `optgroup`, `spacer` components
+- Added `scroller`, `drawer`, `resizer`, `spacer` components
 - Various CSS tweaks
 
 Version 0.2.1

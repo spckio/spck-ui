@@ -61,13 +61,11 @@
 @button-small-padding-horizontal:               8px;
 @button-large-padding-horizontal:               24px;
 
-@button-background:                             @global-default-background;
 @button-color:                                  @global-color;
+@button-dark-color:                             @global-dark-color;
 @button-border-radius:                          2px;
-@button-hover-background:                       @global-default-hover-background;
-@button-hover-color:                            @global-color;
-@button-active-background:                      @global-default-active-background;
-@button-active-color:                           @global-color;
+@button-hover-color:                            @global-primary-background;
+@button-active-color:                           @button-hover-color;
 
 @button-muted-background:                       @global-muted-background;
 @button-muted-hover-background:                 lighten(@global-muted-background, 3%);
@@ -93,6 +91,7 @@
 @button-link-disabled-color:                    lighten(@global-color, 10%);
 
 @button-border:                                 @global-border;
+@button-dark-border:                            @global-dark-border;
 @button-hover-border:                           @global-primary-background;
 @button-text-shadow:                            @global-text-shadow;
 @button-contrast-text-shadow:                   @global-contrast-text-shadow;
@@ -125,6 +124,7 @@
  * 9. `min-height` is necessary for `input` elements in Firefox and Opera because `line-height` is not working.
  * 10. Reset button group whitespace hack
  * 11. Required for `a`.
+ * 12. Remove outline.
  */
 
 .uk-button {
@@ -146,7 +146,7 @@
     box-sizing: border-box;
     border-radius: @button-border-radius;
     padding: 0 @button-padding-horizontal;
-    background: @button-background;
+    background: transparent;
     vertical-align: middle;
     /* 8 */
     line-height: @button-line-height;
@@ -157,6 +157,8 @@
     /* 11 */
     text-decoration: none;
     text-align: center;
+    /* 12 */
+    outline: none;
     .hook-button;
 }
 
@@ -165,18 +167,13 @@
 /*
  * Hover
  * 1. Apply hover style also to focus state
- * 2. Remove default focus style
- * 3. Required for `a` elements
+ * 2. Required for `a` elements
  */
 
 .uk-notouch {
-    .uk-button:hover,
-    .uk-button:focus { // 1
-        background-color: @button-hover-background;
+    .uk-button:hover { // 1
         color: @button-hover-color;
         /* 2 */
-        outline: none;
-        /* 3 */
         text-decoration: none;
         .hook-button-hover;
     }
@@ -184,7 +181,6 @@
     /* Active */
     .uk-button:active,
     .uk-button.uk-active {
-        background-color: @button-active-background;
         color: @button-active-color;
         .hook-button-active;
     }
@@ -205,8 +201,7 @@
 
 .uk-notouch {
     /* Hover */
-    .uk-button.uk-button-muted:hover,
-    .uk-button.uk-button-muted:focus {
+    .uk-button.uk-button-muted:hover {
         background-color: @button-muted-hover-background;
         color: @button-contrast-text-color;
         border-color: @button-contrast-hover-border;
@@ -233,8 +228,7 @@
 
 .uk-notouch {
     /* Hover */
-    .uk-button.uk-button-primary:hover,
-    .uk-button.uk-button-primary:focus {
+    .uk-button.uk-button-primary:hover {
         background-color: @button-primary-hover-background;
         color: @button-contrast-text-color;
         border-color: @button-contrast-hover-border;
@@ -263,8 +257,7 @@
 
 .uk-notouch {
     /* Hover */
-    .uk-button.uk-button-success:hover,
-    .uk-button.uk-button-success:focus {
+    .uk-button.uk-button-success:hover {
         background-color: @button-success-hover-background;
         color: @button-contrast-text-color;
         border-color: @button-contrast-hover-border;
@@ -291,8 +284,7 @@
 
 .uk-notouch {
     /* Hover */
-    .uk-button.uk-button-danger:hover,
-    .uk-button.uk-button-danger:focus {
+    .uk-button.uk-button-danger:hover {
         background-color: @button-danger-hover-background;
         color: @button-contrast-text-color;
         border-color: @button-contrast-hover-border;
@@ -452,10 +444,14 @@
 .hook-button() {
     border: 1px solid @button-border;
     transition: 0.1s;
+
+    .dark & {
+        border-color: @button-dark-border;
+        color: @button-dark-color;
+    }
 }
 .hook-button-hover() {
     border-color: @button-hover-border;
-    color: @button-hover-border;
 }
 .hook-button-active() {}
 .hook-button-disable() {}

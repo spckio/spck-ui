@@ -3,7 +3,7 @@
 
 
 @resizer-background-color:                     @global-border;
-@resizer-dark-background-color:                     @global-dark-border;
+@resizer-dark-background-color:                @global-dark-border;
 
 
 /* ========================================================================
@@ -13,6 +13,7 @@
 
 .uk-resizer {
   background: @resizer-background-color;
+  position: relative;
 
   .dark & {
     background-color: @resizer-dark-background-color;

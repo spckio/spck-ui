@@ -253,6 +253,8 @@
     $setters.edge.$$desc = 'If true, drawer will be openable by swiping the edges of the screen. (Touch devices only)';
     $setters.touchOnly.$$type = 'boolean';
     $setters.touchOnly.$$desc = 'If true, drawer will be always open on no-touch devices.';
+    $setters.flipped.$$type = 'boolean';
+    $setters.flipped.$$desc = 'If true, drawer will show on right-side rather than left.';
   }($definitions.drawer.prototype.$setters));
 
 

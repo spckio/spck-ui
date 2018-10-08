@@ -28,7 +28,7 @@
   .dark & {
     color: @select-dark-color;
 
-    > option {
+    > option, > optgroup {
       background-color: @select-dark-background;
     }
   }
@@ -52,5 +52,11 @@
   .dark & {
     border-color: @select-dark-border;
     background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon-dark.svg") no-repeat 100% 50%;
+  }
+}
+
+.uk-select[multiple] {
+  > option, > optgroup {
+    padding: @select-padding;
   }
 }
