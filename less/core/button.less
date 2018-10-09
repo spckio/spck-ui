@@ -94,10 +94,10 @@
 @button-dark-border:                            @global-dark-border;
 @button-hover-border:                           @global-primary-background;
 @button-text-shadow:                            @global-text-shadow;
-@button-contrast-text-shadow:                   @global-contrast-text-shadow;
 @button-contrast-text-color:                    @global-contrast-color;
 @button-contrast-border:                        transparent;
 @button-contrast-hover-border:                  transparent;
+@button-contrast-text-shadow:                   1px 1px rgba(0,0,0,0.15);
 
 /* ========================================================================
    Component: Button
@@ -196,6 +196,7 @@
  .uk-button.uk-button-muted {
     background-color: @button-muted-background;
     color: @button-contrast-text-color;
+    text-shadow: @button-contrast-text-shadow;
     border-color: @button-contrast-border;
 }
 
@@ -223,6 +224,7 @@
 .uk-button.uk-button-primary {
     background-color: @button-primary-background;
     color: @button-contrast-text-color;
+    text-shadow: @button-contrast-text-shadow;
     border-color: @button-contrast-hover-border;
 }
 
@@ -252,6 +254,7 @@
 .uk-button.uk-button-success {
     background-color: @button-success-background;
     color: @button-contrast-text-color;
+    text-shadow: @button-contrast-text-shadow;
     border-color: @button-contrast-hover-border;
 }
 
@@ -279,6 +282,7 @@
  .uk-button.uk-button-danger {
     background-color: @button-danger-background;
     color: @button-contrast-text-color;
+    text-shadow: @button-contrast-text-shadow;
     border-color: @button-contrast-hover-border;
 }
 

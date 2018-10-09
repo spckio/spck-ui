@@ -1630,6 +1630,7 @@ UI.new({
 UI.new({
   id: 'introView',
   text: 'large',
+  margin: 'y-lg',
   cells: [
     {
       batch: 'installation',
@@ -1771,9 +1772,22 @@ UI.new({
   ],
 }, document.getElementById('main'));
 
+
+UI.new({
+  view: 'scroller',
+  style: {
+    maxHeight: '320px',
+    height: '320px'
+  },
+  cells: [
+    inheritanceTree('inhertanceTree')
+  ]
+}, document.getElementById('inhertiance'));
+
 UI.new({
   id: 'mainView',
   flexLayout: 'column',
+  margin: 'y-lg',
   hidden: true,
   cells: [
     {

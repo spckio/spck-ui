@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,155 +18,161 @@
     body {
       background: #eaedf1;
     }
+
     .hljs {
       background: #282a36;
     }
+
     pre {
       background: #282a36;
     }
+
     #navBar {
       padding: 0;
     }
+
     #sidebar {
       position: fixed;
       height: calc(100% - 64px);
       z-index: 1000;
     }
+
+    #jumbotron {
+      height: 640px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+
+    #landing {
+      background: #111;
+      color: #f1f1f1;
+    }
+
+    #landing .uk-text-attribution {
+      color: #4d308e!important;
+    }
+
+    #landing h3 {
+      color: #f1f1f1;
+      font-weight: 300;
+    }
+
+    #jumbotron h1 {
+      color: white;
+      font-weight: 400;
+    }
+
+    #jumbotron .background {
+      width: 100%;
+      opacity: 0.35;
+      margin-bottom: 60px;
+      position: absolute;
+    }
+
+    #jumbotron .foreground {
+      left: 0;
+      right: 0;
+      text-align: center;
+      margin-top: 56px;
+      z-index: 10;
+      position: absolute;
+    }
   </style>
 </head>
+
 <body class="uk-hidden">
-<div class="uk-flex-column uk-flex">
-  <div id="navbar" class="uk-flex-item-none dark"></div>
-  <div class="uk-flex">
-    <div id="sidebar" class="uk-box-shadow"></div>
-    <div style="min-width: 200px" class="uk-hidden-touch">
-    </div>
-    <div class="uk-flex uk-flex-column uk-flex-item-1">
-      <div id="main" class="uk-container uk-margin-large-y">
-        <div id="landing" class="uk-width-1-1 uk-margin-large-x" style="line-height:32px">
-            <h1>Getting Started</h1>
-            <hr>
-            <p>
-            <b>Spck UI</b> is a lightweight, declarative UI components library for creating <b>SPAs</b>
-            (Single Page Applications).
-            </p>
+  <div class="uk-flex-column uk-flex">
+    <div id="navbar" class="uk-flex-item-none dark"></div>
+    <div class="uk-flex">
+      <div id="sidebar" class="uk-box-shadow"></div>
+      <div style="min-width: 200px" class="uk-hidden-touch"></div>
+      <div class="uk-flex uk-flex-column uk-flex-item-1" style="min-height:100vh">
+        <div id="landing" class="dark uk-text-large uk-flex-item-1">
+          <div id="jumbotron">
+            <img class="background" src="images/image2.jpg">
+            <div class="foreground">
+              <img width="160" src="logo-mark.svg">
+              <div class="uk-container uk-container-center">
+                <h1 class="uk-margin-large-y uk-padding-large-x">
+                  Want to write <span class="uk-text-warning">pure JSON</span> and
+                  finish an app?</h1>
+
+                <h3 class="uk-visible-large uk-padding-large-x">
+                  An UI Component Library Designed for Enterprise.
+                </h3>
+
+                <div style="margin-top:48px">
+                  <a class="uk-button uk-button-primary uk-button-large uk-margin-right" href="#installation">
+                    <b>GET STARTED</b></a>
+                  <a class="uk-button uk-button-success uk-button-large" href="#examples">
+                    <b>SEE EXAMPLES</b></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="uk-container uk-container-center uk-margin-large-top">
+            <div class="uk-flex uk-flex-column-reverse-small">
+              <div class="uk-flex-item-1 uk-flex-column uk-padding">
+                <h3 class="uk-margin-large-y">Build incredibly powerful interfaces.</h3>
+                <p>Create amazing interactive interfaces with a collection of really powerful UI components. Based on <a href="https://getuikit.com" target="_blank">UIkit</a> library, each component can be finely tuned to support multiple devices and screens.</p>
+              </div>
+              <div class="uk-flex-item-1 uk-padding uk-text-right">
+                <img src="images/landing1.svg">
+                <small><a class="uk-text-attribution" href="https://www.freepik.com/free-vector/modern-web-design-concept-with-isometric-view_3086993.htm" target="_blank">Designed by Freepik</a></small>
+              </div>
+            </div>
             
-            <p>
-            <b>Spck UI</b> takes the simple approach that can be summarized in the following points:
-            <ul>
-                <li>Each UI element is declared by a plain <b>JS</b> object</li>
-                <li>Listener callbacks are handled through normal JavaScript functions</li>
-                <li>Component access is handled using an unique id for each UI component and a global accessor function <code>$$('id')</code></li>
-            </ul>
-            This is not an innovative framework, nor does it try to be. If you're after something more progressive,
-            try something like <b>Vue</b> or <b>React</b>. Rather, <b>Spck UI</b> tries an arguably simpler and more
-            straight-forward that's been around for quite some time.
-            </p>
+            <div class="uk-flex uk-flex-row-reverse uk-flex-column-reverse-small">
+              <div class="uk-flex-item-1 uk-flex-column uk-padding">
+                <h3 class="uk-margin-large-y">Build reliable, robust apps.</h3>
+                <p>Create amazing interactive interfaces with a collection of really powerful UI components. Based on <a href="https://getuikit.com" target="_blank">UIkit</a> library, each component can be finely tuned to support multiple devices and screens.</p>
+              </div>
+              <div class="uk-flex-item-1 uk-padding uk-text-center">
+                
+              </div>
+            </div>
 
-        <h3 class="uk-margin-large-top">Extensible</h3>
-        <hr>
-        <p>Brand new component templates can also be defined using JavaScript objects. This enables
-          the ability to define new components such as switchers, drawers, chips, etc.</p>
+            <div class="uk-flex uk-flex-column-reverse-small">
+              <div class="uk-flex-item-1 uk-flex-column uk-padding">
+                <h3 class="uk-margin-large-y">Build flexible, reusable components.</h3>
+                <p>Create amazing interactive interfaces with a collection of really powerful UI components. Based on <a href="https://getuikit.com" target="_blank">UIkit</a> library, each component can be finely tuned to support multiple devices and screens.</p>
+              </div>
+              <div id="inhertiance" class="uk-flex-item-1 uk-padding">
+                <h3 class="uk-margin-large-y">Inheritance Tree</h3>
 
-        <p>To understand how to create your own custom components,
-            let's take a look at an example from the code below:</p>
-
-        <pre><code>UI.def({
-  __name__: "toggle",
-  $setters: extend(
-    classSetters({
-      color: prefixClassOptions({
-        "success": "",
-        "danger": "",
-        "warning": "",
-        "": ""
-      }, 'uk-toggle-', true)
-    }),
-    {
-      checked: function (value) {
-        this.getFormControl().checked = value;
-      }
-    }
-  ),
-  $defaults: {
-    htmlTag: "LABEL",
-    tagClass: "uk-toggle",
-    type: 'checkbox'
-  },
-  template: '&lt;input&gt;&lt;div class="uk-toggle-slider"&gt;&lt;/div&gt;',
-  getFormControl: function () {
-    /**
-     * Get the HTML input element.
-     * @returns {Element}
-     */
-    return this.el.firstChild;
-  },
-  reset: function () {
-    /**
-     * Reset the toggle.
-     */
-    this.getFormControl().checked = false;
-  },
-  getValue: function () {
-    /**
-     * Get the value of the toggle.
-     * @returns {boolean}
-     */
-    return this.getFormControl().checked;
-  },
-  setValue: function (value) {
-    /**
-     * Set the value of the toggle.
-     * @param value
-     */
-    this.getFormControl().checked = value;
-  }
-}, UI.ChangeEvent, UI.FormControl, UI.definitions.element);</code></pre>
-
-        <h3 class="uk-margin-large-top">Inheritance</h3>
-        <hr>
-        <p>Notice that you can chain previously defined components or Mixins at the end of the definition object:
-          <code>UI.def(config, ext1, ext2, ...)</code>, thus providing the ability to extend library components.
-        </p>
-        
-        <p class="uk-card uk-card-box uk-card-box-primary" style="padding: 16px 64px 16px 24px">
-            <span class="uk-card-badge uk-badge unselectable">Note</span>
-            When overriding properties, the left-most object has the highest priority. In other words,
-            each object will have its properties overridden by anything <b>left</b> of it.
-        </p>
-
-        <h3 class="uk-margin-large-top">Testing</h3>
-        <hr>
-        <p>Writing UI as ordinary JavaScript components actually makes things very testable. <b>Spck UI</b> uses its own
-          event-dispatching system and you can simulate button clicks, change events, or even custom events!</p>
-
-        <p>Below is an example of a <b>Jasmine</b> test case:</p>
-        <pre>
-<code>it("someToggle dispatch onChange event", function () {
-  spyOn(self, "someAction");
-  $$("someToggle").setData([
-    {label: "someLabel1", value: 1},
-    {label: "someLabel2", value: 2}
-  ]);
-  $$("someToggle").setValue(1);
-  $$("someToggle").dispatch("onChange", []);
-  expect(self.someAction).toHaveBeenCalledWith(1);
-  $$("someToggle").setValue(2);
-  $$("someToggle").dispatch("onChange", []);
-  // And so on...
-});</code></pre>
-
+              </div>
+            </div>
+          </div>
+    <pre>
+  <code>it("someToggle dispatch onChange event", function () {
+    spyOn(self, "someAction");
+    $$("someToggle").setData([
+      {label: "someLabel1", value: 1},
+      {label: "someLabel2", value: 2}
+    ]);
+    $$("someToggle").setValue(1);
+    $$("someToggle").dispatch("onChange", []);
+    expect(self.someAction).toHaveBeenCalledWith(1);
+    $$("someToggle").setValue(2);
+    $$("someToggle").dispatch("onChange", []);
+    // And so on...
+  });</code></pre>
         </div>
+
+        <div id="main" class="uk-container uk-flex-item-1">
+        </div>
+        <footer class="uk-text-center uk-block-secondary uk-text-muted" style="padding:64px">
+          <p>Spck UI is licensed under the MIT license. This website is licensed under CC Commons Attribution 4.0.</p>
+          <p>Copyright 2018 Zeb Zhao. All rights reserved.</p>
+        </footer>
       </div>
-      <footer class="uk-text-center uk-block-secondary uk-text-muted" style="margin-top:48px; padding:64px">
-        <p>Spck UI is licensed under the MIT license. This website is licensed under CC Commons Attribution 4.0.</p>
-        <p>Copyright 2018 Zeb Zhao. All rights reserved.</p>
-      </footer>
     </div>
   </div>
-</div>
 
-<script src="index.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/highlightjs@9.8.0/highlight.pack.min.js"></script>
+  <script src="index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlightjs@9.8.0/highlight.pack.min.js"></script>
 </body>
+
 </html>

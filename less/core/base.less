@@ -29,7 +29,7 @@
 @base-code-font-size:                           12px;
 @base-code-font-family:                         Menlo,Monaco,Droid Sans Mono,Ubuntu Mono,Consolas,source-code-pro,monospace;
 @base-code-border:                              @global-border;
-@base-code-dark-border:                         @global-dark-border;
+@base-code-dark-border:                         fade(@global-dark-border, 60%);
 @base-code-border-radius:                       @global-border-radius;
 @base-code-padding:                             @global-margin-mini;
 
@@ -78,7 +78,8 @@
 @base-pre-font-size:                            12px;
 @base-pre-line-height:                          18px;
 @base-pre-font-family:                          @base-code-font-family;
-@base-pre-border:                               none;
+@base-pre-border:                               @global-border;
+@base-pre-dark-border:                          @base-code-dark-border;
 @base-pre-border-radius:                        @global-border-radius;
 
 @base-selection-background:                     #39f;
@@ -474,6 +475,10 @@ pre {
     tab-size: 4;
     /* 1 */
     overflow: auto;
+
+    .dark & {
+        border-color: @base-pre-dark-border;
+    }
     .hook-base-pre;
 }
 
