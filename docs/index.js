@@ -1103,6 +1103,20 @@ var Model = {
         }
       };
     },
+    tooltip: function () {
+      return {
+        component: {
+          cells: [
+            {
+              view: 'button',
+              label: 'Show tooltip',
+              buttonStyle: 'button',
+              tooltip: "I'm a tooltip!"
+            }
+          ]
+        }
+      };
+    },
     tree: function () {
       return {
         component: {
@@ -1180,19 +1194,19 @@ var Examples = [
               {
                 batch: 'heart',
                 view: 'label',
-                label: '<i class="uk-icon-heart"></i> Heart',
+                label: "<i class='uk-icon-heart'></i> Heart",
                 htmlTag: 'H2'
               },
               {
                 batch: 'bolt',
                 view: 'label',
-                label: '<i class="uk-icon-bolt"></i> Bolt',
+                label: "<i class='uk-icon-bolt'></i> Bolt",
                 htmlTag: 'H2'
               },
               {
                 batch: 'star',
                 view: 'label',
-                label: '<i class="uk-icon-star"></i> Star',
+                label: "<i class='uk-icon-star'></i> Star",
                 htmlTag: 'H2'
               }
             ]
@@ -1397,6 +1411,7 @@ function inheritanceTree(id, props) {
       { label: 'Tab', id: 'tab', $parent: 'stack' },
       { label: 'Table', id: 'table', $parent: 'list' },
       { label: 'Toggle', id: 'toggle', $parent: 'element' },
+      { label: 'Tooltip', id: 'tooltip', $parent: 'element' },
       { label: 'Tree', id: 'tree', $parent: 'list' }
     ]
   }, props);
@@ -1436,12 +1451,75 @@ function handleHashChange() {
   }
 }
 
+function selectText(node) {
+  if (document.body.createTextRange) {
+      const range = document.body.createTextRange();
+      range.moveToElementText(node);
+      range.select();
+  } else if (window.getSelection) {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      selection.removeAllRanges();
+      selection.addRange(range);
+  } else {
+      console.warn("Could not select text in node: Unsupported browser.");
+  }
+}
+
 UI.def({
   __name__: 'codeview',
   $defaults: {
-    code: ''
+    cls: 'dark',
+    code: '',
+    position: 'relative'
   },
-  template: '<pre class="uk-margin-remove"><code class="javascript">{{locals}}UI.new({{code}}, document.body);</code></pre>',
+  template: function () {
+    var self = this;
+    var wrapper = UI.new({
+      position: 'relative',
+      cells: [
+        {
+          view: 'icon',
+          iconStyle: 'hover',
+          position: 'absolute z-index',
+          icon: 'uk-icon-copy',
+          title: 'Copy',
+          size: 'large',
+          style: {
+            top: '10px',
+            right: '16px'
+          },
+          on: {
+            onClick: function () {
+              selectText(self.el.querySelector('code'));
+              $$('copiedTooltip').open(null, 1500);
+              $$('copiedTooltip').positionNextTo(this.el, 'top-center', 0, 16);
+              document.execCommand('copy');
+            }
+          }
+        }
+      ]
+    });
+
+    var scroller = UI.new({
+      view: 'scroller',
+      flexSize: 'flex',
+      style: {
+        maxHeight: '400px',
+        height: '400px',
+        borderRadius: '4px'
+      },
+      cells: []
+    }, wrapper.el);
+
+    self.inner = UI.new({
+      template: '<pre class="uk-margin-remove">' +
+        '<code class="javascript">{{locals}}UI.new({{code}}, document.body);</code></pre>'
+    }, scroller.content);
+
+    return wrapper.el;
+  },
   parseCode: function (componentData) {
     var locals = componentData.locals || {};
 
@@ -1452,8 +1530,8 @@ UI.def({
       });
     }).join('\n').replace(/"([\$\w]+)":/g, '$1:');
 
-    this.config.locals = localCode ? localCode + '\n\n' : '';
-    this.config.code = indent.js(JSON.stringify(componentData.component,
+    this.inner.config.locals = localCode ? localCode + '\n\n' : '';
+    this.inner.config.code = indent.js(JSON.stringify(componentData.component,
       function (name, value) {
         var key = findKeyWithValue(locals, value);
         if (typeof value == 'function') {
@@ -1475,11 +1553,12 @@ UI.def({
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;'), { tabString: "  " });
 
-    this.render();
+    this.inner.render();
 
     return componentData.component;
   }
 }, UI.definitions.element);
+
 
 UI.new({
   id: "navBar",
@@ -1783,6 +1862,14 @@ UI.new({
     inheritanceTree('inhertanceTree')
   ]
 }, document.getElementById('inhertiance'));
+
+
+UI.new({
+  id: 'copiedTooltip',
+  view: 'tooltip',
+  label: 'Copied!'
+}, document.body);
+
 
 UI.new({
   id: 'mainView',
