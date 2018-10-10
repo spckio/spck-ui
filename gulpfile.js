@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
+var uglify = require('gulp-uglify');
 var cleanCSS = require('gulp-clean-css');
 
 var DEST = './dist';
@@ -18,6 +19,13 @@ gulp.task('build', ['build-meta'], function () {
     .pipe(concat('spck-ui.js'))
     .pipe(gulp.dest(DEST))
     .pipe(gulp.dest(DOCS));
+});
+
+gulp.task('build-min', ['build'], function () {
+  return gulp.src('./dist/spck-ui.js')
+    .pipe(uglify())
+    .pipe(concat('spck-ui.min.js'))
+    .pipe(gulp.dest(DEST));
 });
 
 gulp.task('build-meta', function () {
@@ -43,4 +51,4 @@ gulp.task('build-less', function () {
     .pipe(gulp.dest(DOCS));
 });
 
-gulp.task('default', ['build', 'build-less', 'build-meta', 'build-docs']);
+gulp.task('default', ['build', 'build-min', 'build-less', 'build-meta', 'build-docs']);
