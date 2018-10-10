@@ -38,7 +38,7 @@
     $setters.href.$$desc = 'Set the <code>href</code> attribute.';
     $setters.target.$$type = 'String';
     $setters.target.$$desc = 'Set the <code>target</code> attribute.';
-  }(exports.ClickEvents.$setters));
+  }(exports.MouseEvents.$setters));
 
 
   (function ($setters) {
@@ -50,6 +50,8 @@
     $setters.uploader.$$desc = 'Turns the component into an upload button.';
     $setters.tooltip.$$desc = 'Add a tooltip to the component.';
     $setters.tooltip.$$type = 'string';
+    $setters.title.$$desc = 'Set the <code>title</code> attribute of the element.';
+    $setters.title.$$type = 'string';
     $setters.cls.$$desc = 'Custom CSS classes for the component.';
     $setters.cls.$$type = 'string | string[]';
     $setters.dropdown.$$type = 'object';
@@ -221,6 +223,14 @@
     $setters.size.$$desc = 'Size classes for controlling the input appearance.';
     $setters.width.$$desc = 'Width classes for controlling the input appearance.';
   }($definitions.input.prototype.$setters));
+
+
+  (function ($setters) {
+    $setters.direction.$$desc = 'Set the direction of the tooltip, which affects the arrow direction.';
+    $setters.$$meta = {
+      label: {$$type: 'string', $$desc: 'Displayed label for the tooltip.'}
+    };
+  }($definitions.tooltip.prototype.$setters));
 
 
   (function ($setters) {

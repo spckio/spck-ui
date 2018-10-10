@@ -5031,6 +5031,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $globalListenerIds = {},
     $components = {};
 
+  // Request animation frame fallback
+  var raf = window.requestAnimationFrame || window.setImmediate || function(c) { return setTimeout(c, 0); };
+
   extend(exports, {
     $ready: false,
     $dragThreshold: 10,
@@ -5081,6 +5084,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     pluck: pluck,
     bind: bind,
     echo: echo,
+    noop: noop,
     delay: delay,
     interpolate: interpolate,
     capitalize: capitalize,
@@ -5480,6 +5484,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
     return Component;
   }
+
+  function noop() {}
 
   function echo(input) {
     return function () {
@@ -6431,13 +6437,20 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.element = def({
     __name__: "element",
     $defaults: {
-      tooltipPos: "bottom",
       dropdownEvent: "onClick",
       dropdownOptions: {
         pos: "bottom-center",
         marginX: 0,
         marginY: 8
-      }
+      },
+      tooltipOptions: {
+        pos: "top-center",
+        marginX: 0,
+        marginY: 5,
+        closeDelay: 0
+      },
+      tooltipDismissEvent: 'onMouseLeave',
+      tooltipEvent: 'onMouseEnter'
     },
     $setters: {
       disabled: function (value) {
@@ -6454,28 +6467,48 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           this._sticky = UIkit.sticky(this.el, value);
         }
       },
+      title: function (value) {
+        setAttributes(this.el, {
+          "title": value
+        }); 
+      },
       tooltip: function (value) {
+        if (!value) return;
+        
         var self = this;
+        var config = self.config;
+        var tooltipOptions = config.tooltipOptions;
+        var tooltip = extend({
+          view: "tooltip",
+          label: value
+        }, tooltipOptions);
 
-        if (value)
-          setAttributes(self.el, {
-            "title": value,
-            "data-uk-tooltip": interpolate("{pos: '{{pos}}'}", {pos: self.config.tooltipPos})
-          });
-        else
-          removeClass(self.el, "data-uk-tooltip");
+        var ui = self.tooltipPopup = exports.new(tooltip, document.body);
+
+        config.on = config.on || {};
+        self.addListener(config.tooltipEvent, function (config, node) {
+          var relativeNode = $$(tooltipOptions.relativeTo);
+          relativeNode = relativeNode ? relativeNode.el : node;
+          var bb = {left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight};
+          ui.open(config, tooltipOptions.closeDelay);
+          ui.positionNextTo(relativeNode, tooltipOptions.pos, tooltipOptions.marginX, tooltipOptions.marginY);
+          ui.moveWithinBoundary(bb);
+        });
+
+        self.addListener(config.tooltipDismissEvent, function () {
+          ui.close(config);
+        });
       },
       dropdown: function (value) {
         var self = this;
         var config = self.config;
-
         var dropdownOptions = config.dropdownOptions;
         var dropdown = extend({
           view: "dropdown",
           dropdown: value
         }, dropdownOptions);
 
-        var ui = exports.new(dropdown, document.body);
+        var ui = self.dropdownPopup = exports.new(dropdown, document.body);
 
         config.on = config.on || {};
         self.addListener(config.dropdownEvent, function (config, node) {
@@ -6483,10 +6516,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           relativeNode = relativeNode ? relativeNode.el : node;
           var bb = {left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight};
           ui.open(config);
-          ui.positionNextTo(relativeNode, dropdown.pos, dropdownOptions.marginX, dropdownOptions.marginY);
+          ui.positionNextTo(relativeNode, dropdownOptions.pos, dropdownOptions.marginX, dropdownOptions.marginY);
           ui.moveWithinBoundary(bb);
         });
-        self.dropdownPopup = ui;
       },
       uploader: function (value) {
         if (value) {
@@ -6519,6 +6551,24 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       extend(self.el.style, config.style || {});
 
       self.render();
+
+      var on = config.on = config.on || {};
+      if (config.tooltip) {
+        var tooltipEvent = config.tooltipEvent;
+        var tooltipDismissEvent = config.tooltipDismissEvent;
+        if (tooltipEvent && !on[tooltipEvent]) {
+          on[tooltipEvent] = noop;
+        }
+        if (tooltipDismissEvent && !on[tooltipDismissEvent]) {
+          on[tooltipDismissEvent] = noop;
+        }
+      }
+      if (config.dropdown) {
+        var dropdownEvent = config.dropdownEvent;
+        if (dropdownEvent && !on[dropdownEvent]) {
+          on[dropdownEvent] = noop;
+        }
+      }
     },
     dispose: function () {
       var self = this;
@@ -6930,11 +6980,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   assignClassToMethods(exports.FormControl, exports.FormControl.__name__);
 
 
-  exports.ClickEvents = {
-    __name__: 'ClickEvents',
+  exports.MouseEvents = {
+    __name__: 'MouseEvents',
     $events: {
-      click: {dispatch: "onClick", defaultEvent: true},
+      click: {lazy: true, dispatch: "onClick", defaultEvent: true},
       contextmenu: {lazy: true, dispatch: "onContext"},
+      mouseenter: {lazy: true, dispatch: "onMouseEnter"},
+      mouseleave: {lazy: true, dispatch: "onMouseLeave"},
+      mouseout: {lazy: true, dispatch: "onMouseOut"},
       mousedown: {lazy: true, dispatch: "onMouseDown"},
       mouseup: {lazy: true, dispatch: "onMouseUp", callback: function (config, el, e) {
         windowOnMouseUp(e);
@@ -6949,11 +7002,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
     },
     __check__: function (bases) {
-      assertBasesCheck('Responder', 'ClickEvents', bases);
+      assertBasesCheck('Responder', 'MouseEvents', bases);
     }
   };
 
-  assignClassToMethods(exports.ClickEvents.$setters, exports.ClickEvents.__name__);
+  assignClassToMethods(exports.MouseEvents.$setters, exports.MouseEvents.__name__);
 
 
   $definitions.modal = def({
@@ -7169,7 +7222,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       getConfig(this).label = value;
       this.render();
     }
-  }, $definitions.element, exports.ClickEvents);
+  }, $definitions.element, exports.MouseEvents);
 
 
   $definitions.icon = def({
@@ -7196,7 +7249,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, 'uk-icon-', true)
     }),
     template: "<i class='{{icon}}'>{{content}}</i>"
-  }, $definitions.element, exports.ClickEvents);
+  }, $definitions.element, exports.MouseEvents);
 
 
   $definitions.label = def({
@@ -7254,7 +7307,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         return config.label;
       }
     }
-  }, $definitions.element, exports.ClickEvents);
+  }, $definitions.element, exports.MouseEvents);
 
 
   $definitions.progress = def({
@@ -7330,7 +7383,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         setAttributes(this.el, {height: value});
       }
     }
-  }, $definitions.element, exports.ClickEvents);
+  }, $definitions.element, exports.MouseEvents);
 
 
   exports.ChangeEvent = {
@@ -7737,6 +7790,66 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return UI.hasClass(this.el, "uk-offcanvas-flip");
     }
   }, $definitions.element);
+
+
+  $definitions.tooltip = def({
+    __name__: "tooltip",
+    $defaults: {
+      label: "",
+      tagClass: "uk-tooltip",
+      direction: "top"
+    },
+    $setters: classSetters({
+      direction: prefixClassOptions({
+        top: "",
+        "top-left": "",
+        "top-right": "",
+        bottom: "",
+        "bottom-left": "",
+        "bottom-right": "",
+        left: "",
+        right: ""
+      }, 'uk-tooltip-', true)
+    }),
+    template: '<div class="uk-tooltip-inner">{{label}}</div>',
+    isOpened: function () {
+      /**
+       * Returns if the tooltip is open.
+       * @returns {boolean}
+       */
+      return hasClass(this.el, ACTIVE_CLASS);
+    },
+    open: function (args, timeout) {
+      /**
+       * Open the tooltip.
+       * @param args Parameter to pass into the dispatch handlers. (3rd argument of the callback.)
+       * @param timeout Close the tooltip automatically after this long.
+       */
+      var self = this;
+      args = [self.config, self.el, args];
+      self.dispatch("onOpen", args);
+      self.el.style.display = 'block';
+      UI.addClass(self.el, ACTIVE_CLASS);
+      self.dispatch("onOpened", []);
+      if (timeout) {
+        setTimeout(function () {
+          self.close();
+        }, timeout);
+      }
+    },
+    close: function (args) {
+      /**
+       * Close the tooltip.
+       * @param args Parameter to pass into the dispatch handlers. (3rd argument of the callback.)
+       */
+      var self = this;
+      args = [self.config, self.el, args];
+      self.dispatch("onClose", args);
+      self.el.style.display = null;
+      UI.removeClass(self.el, ACTIVE_CLASS);
+      self.dispatch("onClosed", args);
+    }
+  }, $definitions.element, exports.AbsolutePositionMethods);
 
 
   $definitions.dropdown = def({
@@ -9281,7 +9394,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
   
     moveBar: function(e) {
-      var raf = window.requestAnimationFrame || window.setImmediate || function(c) { return setTimeout(c, 0); };
       var $this = this;
       var totalHeight = $this.content.scrollHeight || 1,
           ownHeight = $this.content.clientHeight || 1,
@@ -9497,7 +9609,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, 'uk-form-', true)
     }),
     itemTagString: function (item) {
-      return item.title ? "LEGEND" : getConfig(this).itemTag;
+      return item.$title ? "LEGEND" : getConfig(this).itemTag;
     },
     buildItemElement: function (el, item) {
       if (item.$title) {
