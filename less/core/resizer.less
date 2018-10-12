@@ -15,6 +15,11 @@
 .uk-resizer {
   background: @resizer-background-color;
   position: relative;
+  opacity: 0.5;
+
+  &:hover, &:focus {
+    opacity: 1;
+  }
 
   .dark & {
     background-color: @resizer-dark-background-color;

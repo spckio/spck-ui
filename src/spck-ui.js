@@ -4325,7 +4325,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           mouseEvent.clientX - parentRect.left:
           mouseEvent.clientY - parentRect.top;
 
-        if (value < minValue) value = minValue;
+        if (minValue >= maxValue) value = 0;
+        else if (value < minValue) value = minValue;
         else if (value > maxValue) value = maxValue;
 
         var relativeValue = value - (isDirectionEqualX ?
