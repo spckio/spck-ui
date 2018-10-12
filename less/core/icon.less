@@ -25,9 +25,9 @@
 @icon-small-font-size:                          12px;
 @icon-medium-font-size:                         14px;
 @icon-large-font-size:                          18px;
-@icon-xlarge-font-size:                          24px;
+@icon-xlarge-font-size:                         20px;
 
-@link-icon-padding:                             0 12px;
+@link-icon-margin:                              12px;
 
 @icon-hover-color:                              lighten(@global-color, 10%);
 @icon-hover-dark-color:                         darken(@global-dark-color, 10%);
@@ -66,14 +66,21 @@
    Component: Link-Icon
  ========================================================================== */
 
- .uk-link-icon {
-    padding: @link-icon-padding;
+.uk-link-icon {
     width: 1em;
   
     &::before {
-      margin-top: -1px;
+      margin-top: -2px;
     }
-}  
+}
+
+.uk-link-icon + span {
+    margin-left: @link-icon-margin;
+}
+
+span + .uk-link-icon {
+    margin-left: @link-icon-margin;
+}
 
 /* Size modifiers
  ========================================================================== */

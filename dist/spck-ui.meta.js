@@ -143,9 +143,35 @@
     $setters.color.$$desc = "Color classes for changing the button appearance.";
 
     $setters.$$meta = {
-      iconClass: {$$type: 'string', $$desc: 'CSS class to apply to the icon. For example: <code>uk-icon-small</code>.'},
-      icon: {$$type: 'string', $$desc: 'CSS class for button icon. This is the full CSS class name, no shorthands. For example: <code>uk-icon-heart</code>.'},
-      label: {$$type: 'string', $$desc: 'Displayed label for the button.'}
+      label: {$$type: 'string', $$desc: 'Displayed label for the component.'},
+      labelClass: {
+        $$type: 'string',
+        $$desc: 'CSS class for the label.'
+      },
+      alignIconRight: {
+        $$type: 'boolean',
+        $$desc: 'Displayed icon on the right side.'
+      },
+      icon: {
+        $$type: 'string',
+        $$desc: 'Shorthand icon class, leave out the uk-icon prefix.'
+      },
+      iconSize: {
+        $$type: 'string',
+        $$desc: 'Predefined icon size classes.'
+      },
+      iconClass: {
+        $$type: 'string',
+        $$desc: 'CSS class for the icon.'
+      },
+      iconContent: {
+        $$type: 'string',
+        $$desc: 'Content within the icon tag.'
+      },
+      iconTemplate: {
+        $$type: 'string | Function',
+        $$desc: 'Function that return the icon HTML.'
+      }
     };
   }($definitions.button.prototype.$setters));
 
@@ -162,26 +188,41 @@
 
   (function ($setters) {
     $setters.linkStyle.$$desc = 'Predefined link style classes.';
-
-    $setters.$$meta = {
-      label: {$$type: 'string', $$desc: 'Displayed label for the link.'},
-      alignIconRight: {$$type: 'boolean', $$desc: 'Displayed icon on the right side.'},
-      icon: {
-        $$type: 'string',
-        $$desc: 'Shorthand icon class, see Icon component for examples.'
-      }
-    }
   }($definitions.link.prototype.$setters));
 
 
   (function ($setters) {
     $setters.iconStyle.$$desc = 'Predefined icon style classes.';
-    $setters.size.$$desc = 'Size classes for controlling the icon appearance.';
+    $setters.$$meta = {
+      icon: {
+        $$type: 'string',
+        $$desc: 'Shorthand icon class, leave out the uk-icon prefix.'
+      },
+      iconSize: {
+        $$type: 'string',
+        $$desc: 'Predefined icon size classes.'
+      },
+      iconClass: {
+        $$type: 'string',
+        $$desc: 'CSS class for the icon.'
+      },
+      iconContent: {
+        $$type: 'string',
+        $$desc: 'Content within the icon tag.'
+      },
+      iconTemplate: {
+        $$type: 'string | Function',
+        $$desc: 'Function that return the icon HTML.'
+      }
+    };
   }($definitions.icon.prototype.$setters));
 
 
   (function ($setters) {
     $setters.labelStyle.$$desc = 'Predefined label style classes.';
+    $setters.$$meta = {
+      label: {$$type: 'string', $$desc: 'Displayed label.'}
+    };
   }($definitions.label.prototype.$setters));
 
 
@@ -243,8 +284,34 @@
 
   (function ($setters) {
     $setters.$$meta = {
-      iconTemplate: {$$type: 'string', $$desc: 'Raw HTML for adding an icon next to the input element.'},
-      inputClass: {$$type: 'string', $$desc: 'CSS class applied to the input element.'}
+      inputClass: {
+        $$type: 'string',
+        $$desc: 'CSS class applied to the input element.'
+      },
+      alignIconRight: {
+        $$type: 'boolean',
+        $$desc: 'Displayed icon on the right side.'
+      },
+      icon: {
+        $$type: 'string',
+        $$desc: 'Shorthand icon class, leave out the uk-icon prefix.'
+      },
+      iconSize: {
+        $$type: 'string',
+        $$desc: 'Predefined icon size classes.'
+      },
+      iconClass: {
+        $$type: 'string',
+        $$desc: 'CSS class for the icon.'
+      },
+      iconContent: {
+        $$type: 'string',
+        $$desc: 'Content within the icon tag.'
+      },
+      iconTemplate: {
+        $$type: 'string | Function',
+        $$desc: 'Function that return the icon HTML.'
+      }
     };
   }($definitions.search.prototype.$setters));
 
@@ -259,8 +326,14 @@
   (function ($setters) {
     $setters.direction.$$desc = 'Change the direction of the resizer.';
     $setters.$$meta = {
-      minValue: {$$type: 'number', $$desc: 'Minimum screen value that resizer cannot go past.'},
-      maxValue: {$$type: 'number', $$desc: 'Maximum screen value that the resizer cannot exceed.'}
+      minValue: {
+        $$type: 'number | Function',
+        $$desc: 'Minimum screen value in pixels, or a function that returns it, that resizer cannot go past.'
+      },
+      maxValue: {
+        $$type: 'number | Function',
+        $$desc: 'Maximum screen value in pixels, or a function that returns it, that the resizer cannot exceed.'
+      }
     }
   }($definitions.resizer.prototype.$setters));
 

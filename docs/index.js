@@ -192,6 +192,7 @@ var Model = {
                   view: 'button',
                   label: 'Primary Large Link',
                   color: 'primary',
+                  icon: 'heart',
                   size: 'large',
                   margin: 'y'
                 },
@@ -238,6 +239,7 @@ var Model = {
                   view: 'button',
                   label: 'Primary Large Button',
                   buttonStyle: 'button',
+                  icon: 'heart',
                   color: 'primary',
                   size: 'large',
                   margin: 'y'
@@ -380,7 +382,7 @@ var Model = {
                 view: 'list',
                 data: [
                   { $header: true, label: 'Lyrics' }
-                ].concat(mapToProperty(phrases1, 'label', {view: 'link'}))
+                ].concat(mapToProperty(phrases1, 'label', { view: 'link' }))
               }
             },
             {
@@ -575,8 +577,8 @@ var Model = {
                   view: 'icon',
                   card: 'body',
                   textAlign: 'center',
-                  icon: 'uk-icon-' + icon,
-                  size: 'large'
+                  icon: icon,
+                  size: 'xlarge'
                 }
               ]
             };
@@ -899,12 +901,12 @@ var Model = {
                 {
                   view: 'select',
                   data: [
-                    {label: 'Apple', optgroup: 'Fruit'},
-                    {label: 'Banana', optgroup: 'Fruit'},
-                    {label: 'Oranges', optgroup: 'Fruit'},
-                    {label: 'Carrot', optgroup: 'Veggies'},
-                    {label: 'Celery', optgroup: 'Veggies'},
-                    {label: 'Sprouts', optgroup: 'Veggies'}
+                    { label: 'Apple', optgroup: 'Fruit' },
+                    { label: 'Banana', optgroup: 'Fruit' },
+                    { label: 'Oranges', optgroup: 'Fruit' },
+                    { label: 'Carrot', optgroup: 'Veggies' },
+                    { label: 'Celery', optgroup: 'Veggies' },
+                    { label: 'Sprouts', optgroup: 'Veggies' }
                   ]
                 }
               ]
@@ -1053,9 +1055,9 @@ var Model = {
                   tab: true,
                   margin: 'left',
                   data: [
-                    { view: 'icon', icon: 'uk-icon-heart', size: 'large', $selected: true },
-                    { view: 'icon', icon: 'uk-icon-bolt', size: 'large' },
-                    { view: 'icon', icon: 'uk-icon-paint-bucket', size: 'large' }
+                    { view: 'icon', icon: 'heart', size: 'large', $selected: true },
+                    { view: 'icon', icon: 'bolt', size: 'large' },
+                    { view: 'icon', icon: 'paint-bucket', size: 'large' }
                   ]
                 },
                 {
@@ -1064,9 +1066,9 @@ var Model = {
                   tab: true,
                   margin: 'left',
                   data: [
-                    { view: 'icon', icon: 'uk-icon-heart', size: 'large' },
-                    { view: 'icon', icon: 'uk-icon-bolt', size: 'large' },
-                    { view: 'icon', icon: 'uk-icon-paint-bucket', size: 'large', $selected: true }
+                    { view: 'icon', icon: 'heart', size: 'large' },
+                    { view: 'icon', icon: 'bolt', size: 'large' },
+                    { view: 'icon', icon: 'paint-bucket', size: 'large', $selected: true }
                   ]
                 }
               ]
@@ -1152,26 +1154,26 @@ var Examples = [
             data: [
               {
                 view: 'icon',
-                icon: 'uk-icon-heart',
+                icon: 'heart',
                 size: 'large',
                 value: 'heart',
                 $selected: true
               },
               {
                 view: 'icon',
-                icon: 'uk-icon-bolt',
+                icon: 'bolt',
                 value: 'bolt',
                 size: 'large'
               },
               {
                 view: 'icon',
-                icon: 'uk-icon-star',
+                icon: 'star',
                 value: 'star',
                 size: 'large'
               },
               {
                 view: 'icon',
-                icon: 'uk-icon-list',
+                icon: 'list',
                 value: ['heart', 'bolt', 'star'],
                 size: 'large'
               }
@@ -1265,10 +1267,10 @@ var Examples = [
   },
   function () {
     var contacts = [
-      {name: 'Ambrose', phone: 'XXX-222-1234', icon: 'user'},
-      {name: 'Clarine', phone: 'XXX-333-1234', icon: 'users'},
-      {name: 'Mickie', phone: 'XXX-555-1234', icon: 'mail'},
-      {name: 'Sammie', phone: 'XXX-111-1234', icon: 'heart'},
+      { name: 'Ambrose', phone: 'XXX-222-1234', icon: 'user' },
+      { name: 'Clarine', phone: 'XXX-333-1234', icon: 'users' },
+      { name: 'Mickie', phone: 'XXX-555-1234', icon: 'mail' },
+      { name: 'Sammie', phone: 'XXX-111-1234', icon: 'heart' },
     ];
     return {
       label: 'Contact List',
@@ -1284,7 +1286,7 @@ var Examples = [
             cells: [
               {
                 view: 'icon',
-                icon: 'uk-icon-' + item.icon,
+                icon: item.icon,
                 size: 'large',
                 margin: 'right-lg'
               },
@@ -1322,8 +1324,8 @@ var Examples = [
               maxWidth: '360px'
             },
             data: [
-              {label: 'Image 1', value: 'image1.jpg', desc: 'Photo by Oleksandr Kurchev on Unsplash'},
-              {label: 'Image 2', value: 'image2.jpg', desc: 'Photo by Yong Chuan on Unsplash'}
+              { label: 'Image 1', value: 'image1.jpg', desc: 'Photo by Oleksandr Kurchev on Unsplash' },
+              { label: 'Image 2', value: 'image2.jpg', desc: 'Photo by Yong Chuan on Unsplash' }
             ],
             on: {
               onChange: function () {
@@ -1375,7 +1377,7 @@ function listTemplate(listStyle, data) {
   return {
     view: 'list',
     listStyle: listStyle,
-    data: mapToProperty(data, 'label', {view: 'label'}),
+    data: mapToProperty(data, 'label', { view: 'label' }),
     margin: 'right'
   }
 }
@@ -1400,7 +1402,7 @@ function inheritanceTree(id, props) {
       { label: 'Icon', id: 'icon', $parent: 'element' },
       { label: 'Image', id: 'image', $parent: 'element' },
       { label: 'Label', id: 'label', $parent: 'element' },
-      { label: 'Link', id: 'link', $parent: 'element' },
+      { label: 'Link', id: 'link', $parent: 'button' },
       { label: 'Modal', id: 'modal', $parent: 'flexgrid' },
       { label: 'Progress', id: 'progress', $parent: 'element' },
       { label: 'Resizer', id: 'resizer', $parent: 'element' },
@@ -1430,6 +1432,7 @@ function handleHashChange() {
     $$('introView').show();
     $$('sideBar').setActive('value', hash);
     highlightBlocks();
+    window.scrollTo(0, 0);
   }
   else if (Model.components[hash]) {
     UI.addClass(landing, 'uk-hidden');
@@ -1443,27 +1446,36 @@ function handleHashChange() {
     $$('sideBar').setActive('value', hash);
     $$('mainView').show();
     highlightBlocks();
+    window.scrollTo(0, 0);
   }
   else {
     $$('mainView').hide();
     $$('introView').hide();
     UI.removeClass(landing, 'uk-hidden');
   }
+
+  gtag('event', 'change_hash', {
+    'event_category': 'page',
+    'event_label': hash
+  });
 }
 
 function selectText(node) {
   if (document.body.createTextRange) {
-      const range = document.body.createTextRange();
-      range.moveToElementText(node);
-      range.select();
+    const range = document.body.createTextRange();
+    range.moveToElementText(node);
+    range.select();
   } else if (window.getSelection) {
-      const selection = window.getSelection();
-      const range = document.createRange();
-      range.selectNodeContents(node);
-      selection.removeAllRanges();
-      selection.addRange(range);
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
   } else {
-      console.warn("Could not select text in node: Unsupported browser.");
+    console.warn("Could not select text in node: Unsupported browser.");
+    gtag('event', 'copy_failed', {
+      'event_category': 'error'
+    });
   }
 }
 
@@ -1483,7 +1495,7 @@ UI.def({
           view: 'icon',
           iconStyle: 'hover',
           position: 'absolute z-index',
-          icon: 'uk-icon-copy',
+          icon: 'copy',
           title: 'Copy',
           size: 'large',
           style: {
@@ -1839,7 +1851,7 @@ UI.new({
                           this.parseCode(example());
                         }
                       }
-                    }  
+                    }
                   ]
                 }
               ]

@@ -32,8 +32,7 @@
 @offcanvas-bar-width:                           270px;
 @offcanvas-bar-shadow:                          0 5px 10px rgba(0,0,0,0.15);
 @offcanvas-bar-background:                      #fff;
-@offcanvas-bar-dark-background:                 fade(#2f3c46, 60%);
-
+@offcanvas-bar-dark-background:                 @global-dark-background;
 
 /* ========================================================================
    Component: Off-canvas
@@ -128,21 +127,12 @@
 
         -webkit-transform: translateX(0%) !important;
         transform: translateX(0%) !important;
-
-        box-shadow: none;
     }
 }
 
-/* Modifier `uk-offcanvas-bar-flip`
- ========================================================================== */
-
-.uk-offcanvas-flip .uk-offcanvas-bar {
-    left: auto;
-    right: 0;
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%);
+.uk-notouch .uk-offcanvas-touch .uk-offcanvas-bar {
+    box-shadow: none;
 }
-
 
 // Hooks
 // ========================================================================

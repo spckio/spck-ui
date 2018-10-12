@@ -8,8 +8,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $definitions = {},
     $listeners = {},
     $windowListeners = {
+      mousedown: [windowOnMouseDown],
       mousemove: [windowOnMouseMove],
       mouseup: [windowOnMouseUp],
+      touchstart: [windowOnMouseDown],
       touchend: [windowOnMouseUp],
       touchmove: [windowOnMouseMove],
       load: [windowOnLoad],
@@ -342,6 +344,25 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       return String(value);
     }
     else return '';
+  }
+
+  function iconTemplate(config) {
+    var classes = classes || '';
+    var iconSize = config.iconSize ? ' uk-icon-{{iconSize}}' : '';
+    var icon = config.icon ? ' uk-icon-{{icon}}' : '';
+    return '<i class="{{iconClass}}' + classes + icon + iconSize + '">{{iconContent}}</i>';
+  }
+
+  function elementIconTemplate(templateString) {
+    return function (config) {
+      if (config.icon) {
+        var iconTemplate = isFunction(config.iconTemplate) ? config.iconTemplate.call(this, config) : (config.iconTemplate || '');
+        return config.alignIconRight ? templateString + iconTemplate : iconTemplate + templateString;
+      }
+      else {
+        return templateString;
+      }
+    };
   }
 
   function template(templateObject, config, thisArg, parentNode) {
@@ -694,10 +715,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       none: "remove",
       x: "x",
       y: "y",
+      "x-mi": "mini-x",
+      "y-mi": "mini-y",
       "x-sm": "small-x",
       "y-sm": "small-y",
       "x-lg": "large-x",
       "y-lg": "large-y",
+      mini: "mini",
       small: "small",
       medium: "uk-padding",
       true: "uk-padding",
@@ -992,6 +1016,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     return executeAllListeners;
   }
 
+  $globalListenerIds.mousedown = addListener(window, "mousedown", buildWindowListener($windowListeners.mousedown));
   $globalListenerIds.mouseup = addListener(window, "mouseup", buildWindowListener($windowListeners.mouseup));
   $globalListenerIds.mousemove = addListener(window, "mousemove", buildWindowListener($windowListeners.mousemove));
   $globalListenerIds.resize = addListener(window, "resize", buildWindowListener($windowListeners.resize));
@@ -1003,6 +1028,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   if (exports.support.touch) {
+    $globalListenerIds.touchstart = addListener(window, "touchstart", buildWindowListener($windowListeners.touchstart));
     $globalListenerIds.touchend = addListener(window, "touchend", buildWindowListener($windowListeners.touchend));
     $globalListenerIds.touchmove = addListener(window, "touchmove", buildWindowListener($windowListeners.touchmove));
   }
@@ -1033,6 +1059,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       exports.$dragged = null;
     }
     exports._selectedForDrag = null;
+    exports.$scrollState = null;
+  }
+
+  function windowOnMouseDown() {
+    exports.$scrollState = 'start';
   }
 
   function windowOnMouseMove(e) {
@@ -1163,6 +1194,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         "right-bottom": pos(origin.height - height, origin.width + marginX),
         "right-center": pos(origin.height / 2 - height / 2, origin.width + marginX)
       };
+
+      assert(!!variants[position], 'position: "' + position + '" not recognized.', this.el);
 
       this.position(
         origin.top - parentPos.top + variants[position].top,
@@ -1499,11 +1532,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
         config.on = config.on || {};
         self.addListener(config.dropdownEvent, function (config, node) {
-          var relativeNode = $$(dropdownOptions.relativeTo);
+          var relativeNode = $$(dropdown.relativeTo);
           relativeNode = relativeNode ? relativeNode.el : node;
           var bb = {left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight};
           ui.open(config);
-          ui.positionNextTo(relativeNode, dropdownOptions.pos, dropdownOptions.marginX, dropdownOptions.marginY);
+          ui.positionNextTo(relativeNode, dropdown.pos, dropdown.marginX, dropdown.marginY);
           ui.moveWithinBoundary(bb);
         });
       },
@@ -1514,7 +1547,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           addClass($this.el, "uk-form-file");
           var uploader = $this._uploader = createElement('INPUT', {type: 'file', multiple: value == 'multiple' ? value : null});
           uploader.onchange = function (e) {
-            $this.dispatch('onFileChange', [$this.config, this, e])
+            $this.dispatch('onFileChange', [getConfig($this), this, e])
           };
           $this.el.appendChild(uploader);
         }
@@ -2141,9 +2174,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       htmlTag: "BUTTON",
       label: "",
       tagClass: "",
-      iconClass: "",
       selectable: false,
-      buttonStyle: "link"
+      buttonStyle: "link",
+      labelClass: "",
+      iconContent: "",
+      iconClass: "uk-link-icon",
+      iconTemplate: iconTemplate
     },
     $setters: classSetters({
       buttonStyle: prefixClassOptions({
@@ -2165,14 +2201,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         "": ""
       }, 'uk-button-', true)
     }),
-    template: function (config) {
-      if (config.type == "icon")
-        return "<i class='{{icon}} {{iconClass}}'></i><span>{{label}}</span>";
-      else if (config.label)
-        return "<span>{{label}}</span>";
-      else
-        return "";
-    },
+    template: elementIconTemplate('<span class="{{labelClass}}">{{label}}</span>'),
     select: function () {
       /**
        * Change the button state to selected.
@@ -2218,7 +2247,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       htmlTag: "A",
       iconStyle: "hover",
       selectable: false,
-      content: ""
+      iconContent: "",
+      iconClass: "",
+      iconTemplate: iconTemplate
     },
     $setters: classSetters({
       iconStyle: prefixClassOptions({
@@ -2235,7 +2266,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         "": ""
       }, 'uk-icon-', true)
     }),
-    template: "<i class='{{icon}}'>{{content}}</i>"
+    template: function (config) {
+      return isFunction(config.iconTemplate) ?
+        config.iconTemplate.call(this, config) : (config.iconTemplate || '');
+    }
   }, $definitions.element, exports.MouseEvents);
 
 
@@ -2277,24 +2311,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "link",
     $defaults: {
       label: "",
-      htmlTag: "A"
+      htmlTag: "A",
+      buttonStyle: ""
     },
     $setters: classSetters({
       linkStyle: {
         '': '',
         'line': 'uk-active-line'
       }
-    }),
-    template: function (config) {
-      if (config.icon) {
-        var iconTemplate = "<i class='uk-link-icon uk-icon-{{icon}}'></i>";
-        var labelTemplate = "<span>{{label}}</span>";
-        return config.alignIconRight ? labelTemplate + iconTemplate : iconTemplate + labelTemplate;  
-      } else {
-        return config.label;
-      }
-    }
-  }, $definitions.element, exports.MouseEvents);
+    })
+  }, $definitions.button, exports.MouseEvents);
 
 
   $definitions.progress = def({
@@ -2473,7 +2499,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       htmlTag: "INPUT",
       tagClass: "uk-input",
-      width: "medium"
+      width: ""
     },
     $setters: extend(
       classSetters({
@@ -2593,15 +2619,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   $definitions.search = def({
     __name__: "search",
-    template: '{{iconTemplate}}<input class="{{inputClass}}">',
     $defaults: {
       htmlTag: "DIV",
       tagClass: "uk-search",
       placeholder: "Search...",
-      iconTemplate: "<i class='uk-icon-search uk-search-icon'></i>",
+      iconClass: "uk-icon-search uk-search-icon",
+      iconContent: "",
+      icon: "search",
+      iconTemplate: iconTemplate,
       inputClass: "uk-search-field",
       type: "search"
     },
+    template: elementIconTemplate('<input class="{{inputClass}}">'),
     getFormControl: function () {
       /**
        * Gets the HTML input element.
@@ -2784,7 +2813,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       label: "",
       tagClass: "uk-tooltip",
-      direction: "top"
+      direction: "top",
+      device: "notouch"
     },
     $setters: classSetters({
       direction: prefixClassOptions({
@@ -2893,7 +2923,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * Gets the bounding rectangle of the element. Needs to be added first since this delegates the call to element.getBoundingClientRect.
        * @returns {any | ClientRect}
        */
-      return this.config.dropdownRect || this.el.firstChild.getBoundingClientRect();
+      return getConfig(this).dropdownRect || this.el.firstChild.getBoundingClientRect();
     },
     isOpened: function () {
       /**
@@ -4226,6 +4256,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       tagClass: 'uk-resizer',
       device: 'notouch',
+      direction: 'x',
       minValue: 0,
       maxValue: Number.MAX_VALUE
     },
@@ -4238,14 +4269,25 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __after__: function (config) {
       var $this = this;
       var dragHandle = UI.createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
+      var dragBackdrop = UI.createElement('div', {class: 'uk-hidden uk-resizer-drag-backdrop'});
       $this.dragHandle = dragHandle;
+      $this.dragBackdrop = dragBackdrop;
       $this.el.appendChild(dragHandle);
+      $this.el.appendChild(dragBackdrop);
 
       UI.addListener($this.el, 'mousedown', function (e) {
         if (!$this.dragging) {
           UI.preventEvent(e);
           updateDragHandlePosition(e);
           UI.removeClass(dragHandle, 'uk-hidden');
+          UI.removeClass(dragBackdrop, 'uk-hidden');
+          var parentRect = $this.el.parentNode.getBoundingClientRect();
+          extend(dragBackdrop.style, {
+            left: parentRect.left + 'px',
+            width: parentRect.width + 'px',
+            height: parentRect.height + 'px',
+            top: parentRect.top + 'px'
+          });
           $this.dragging = true;
         }
       });
@@ -4259,6 +4301,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       UI.addListener(document.body, 'mouseup', function (e) {
         if ($this.dragging) {
           UI.addClass(dragHandle, 'uk-hidden');
+          UI.addClass(dragBackdrop, 'uk-hidden');
           $this.dragging = false;
           $this.dispatch("onHandleResized", [updateDragHandlePosition(e), $this.el, e]);
         }
@@ -4272,8 +4315,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var parentRect = el.parentNode.getBoundingClientRect();
 
         var minValue = config.minValue;
-        var maxValue = Math.min(config.maxValue,
-          (isDirectionEqualX ? parentRect.width : parentRect.height));
+        minValue = isFunction(minValue) ? minValue() : minValue;
+
+        var maxValue = config.maxValue;
+        maxValue = isFunction(maxValue) ? maxValue() : maxValue;
+        maxValue = Math.min(maxValue, (isDirectionEqualX ? parentRect.width : parentRect.height));
 
         var value = isDirectionEqualX ?
           mouseEvent.clientX - parentRect.left:
@@ -4310,7 +4356,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: 'scroller',
     $defaults: {
       tagClass: 'uk-scroller-container',
-      scrollDirection: 'y'
+      scrollDirection: 'y',
+      flex: true
     },
     __init__: function (config) {
       var $this = this;
