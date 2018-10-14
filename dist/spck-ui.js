@@ -7685,7 +7685,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         edge: function (value) {
           if (value) {
             var $this = this;
-            var direction = $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL;
+            var direction = $this.isFlipped() ? DrawerSwipe.Direction.RTL : DrawerSwipe.Direction.LTR;
             // Tricky: Go in opposite direction of drawer
             var swiper = new DrawerSwipe(direction, document.body);
             $this.openSwipe = swiper;
