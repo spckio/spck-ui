@@ -1,4 +1,8 @@
-Version 0.3.0
+Version 0.3.2 (unreleased)
+-----------
+- Add `sortValue` to `tree`
+
+Version 0.3.1
 -----------
 - **Breaking**: Renamed property `css` to `cls`
 - **Breaking**: Renamed property `dropdownCSS` to `dropdownClass`

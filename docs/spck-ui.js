@@ -8931,18 +8931,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       selectable: false,
       indentWidth: 15,
       dataTransfer: 'id',
-      draggable: true,
-      orderAfter: function (other) {
-        var self = this;
-        var isParent = self.$parent == other.id;
-        var isNestedDeeper = self.$depth < other.$depth;
-        var sameParent = self.$parent == other.$parent;
-        return (isParent || isNestedDeeper || (sameParent && (
-        self.label > other.label && self.$branch == other.$branch || self.$branch < other.$branch)));
-      },
-      droppable: function (item) {
-        return item.$branch;
-      }
+      draggable: true
     },
     __after__: function () {
       var self = this;
@@ -9010,6 +8999,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
       return closed;
     },
+    orderAfter: function (self, other) {
+      var isParent = self.$parent == other.id;
+      var isNestedDeeper = self.$depth < other.$depth;
+      var sameParent = self.$parent == other.$parent;
+      return (isParent || isNestedDeeper || (sameParent && (
+        this.sortValue(self) > this.sortValue(other) && self.$branch == other.$branch || self.$branch < other.$branch)));
+    },
+    sortValue: function (item) {
+      return item.label.toLowerCase();
+    },
+    droppable: function (item) {
+      return item.$branch;
+    },
     beforeSetData: function (data) {
       var itemCache = {};
       data.forEach(function (item) {
@@ -9044,7 +9046,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         parent.$children = parent.$children || [];
         parent.$children.push(obj);
       }
-      var refChild = self.findLast(self.config.orderAfter, parent, obj);
+      var refChild = self.findLast(function (other) {
+        return self.orderAfter(obj, other);
+      }, parent);
       self.insertAfter(obj, refChild);
     },
     remove: function (obj) {
@@ -9770,4 +9774,4 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   return exports;
 })({}, window, window.UIkit);
 
-window.UI.VERSION = '0.3.0';
+window.UI.VERSION = '0.3.1';
