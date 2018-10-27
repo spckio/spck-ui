@@ -24,6 +24,7 @@ var DrawerSwipe = function (direction, element) {
   $this.getWidth = function () { return 0 };
   $this.onPanStart = function () { return true };
   $this.onPan = function () { return true };
+  $this.onSwipe = function () { return true };
   $this.onCompleteSwipe = function () {};
   $this.onIncompleteSwipe = function () {};
   $this.applyChanges = function () {};
@@ -55,7 +56,7 @@ var DrawerSwipe = function (direction, element) {
     var closeToRight = leftToRight && maxValue >= $this.speedThreshold;
     var closeToLeft = rightToLeft && minValue <= -$this.speedThreshold;
 
-    if (Math.abs($this.percent) >= $this.positionThreshold || closeToRight || closeToLeft) {
+    if ($this.onSwipe() && (Math.abs($this.percent) >= $this.positionThreshold || closeToRight || closeToLeft)) {
       $this.animate({
         maxValue: closeToRight && maxValue,
         minValue: closeToLeft && minValue
@@ -7734,6 +7735,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.onPan = function () {
+        return !$this.$blockDrawerPan && exports.$scrollState != 'scroll';
+      };
+
+      swipeGesture.onSwipe = function () {
         return !$this.$blockDrawerPan && exports.$scrollState != 'scroll';
       };
 

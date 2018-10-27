@@ -2718,6 +2718,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         return !$this.$blockDrawerPan && exports.$scrollState != 'scroll';
       };
 
+      swipeGesture.onSwipe = function () {
+        return !$this.$blockDrawerPan && exports.$scrollState != 'scroll';
+      };
+
       swipeGesture.onPanStart = function (e) {
         var firstTouch = e.touches[0];
         return this.beganPan || (firstTouch && document.elementFromPoint(firstTouch.clientX, firstTouch.clientY) != $this.element);
