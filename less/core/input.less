@@ -27,6 +27,12 @@
    * Remove default style in iOS.
    */
   -webkit-appearance: none;
+
+  /*
+   * Firefox will implicitly set a min-width on input elements which will overflow flex containers.
+   * Reset min-width to 0 to get consistent behavior across Webkit, FF
+   */
+  min-width: 0;
   
   outline: none;
   
