@@ -81,6 +81,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
     createElement: createElement,
     preventEvent: preventEvent,
+    stopPropagation: stopPropagation,
     setAttributes: setAttributes,
     addClass: addClass,
     removeClass: removeClass,
@@ -981,9 +982,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function preventEvent(e) {
-    if (e && e.preventDefault) e.preventDefault();
+    if (e.preventDefault) e.preventDefault();
     e.defaultPrevented = true;
     e.cancelBubble = true;
+  }
+
+  function stopPropagation(e) {
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
   }
 
   function addClass(node, name) {
@@ -1069,7 +1075,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   function windowOnMouseMove(e) {
     var selectedForDrag = exports._selectedForDrag;
     var src = e.touches ? e.touches[0] : e;
+    var dragged = exports.$dragged;
+
     if (selectedForDrag) {
+      preventEvent(e);
+
       if (Math.abs(src.clientX - selectedForDrag.pos.x) > exports.$dragThreshold ||
         Math.abs(src.clientY - selectedForDrag.pos.y) > exports.$dragThreshold) {
         // Begin drag event
@@ -1082,8 +1092,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           [selectedForDrag.config, selectedForDrag.node, selectedForDrag.event]);
       }
     }
-    else if (exports.$dragged) {
-      var dragged = exports.$dragged;
+    else if (dragged) {
+      preventEvent(e);
+
       dragged.node.style.top = (src.clientY + dragged.mouseOffset.top) + 'px';
       dragged.node.style.left = (src.clientX + dragged.mouseOffset.left) + 'px';
 
@@ -2645,8 +2656,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "drawer",
     $defaults: {
       tagClass: "uk-offcanvas",
+      $blockDrawerOpen: false,
       $blockDrawerPan: false,
       $closeInProgress: false,
+      openable: returnTrue,
+      closable: returnTrue
     },
 
     $setters: extend(
@@ -2676,9 +2690,25 @@ window.UI = window.ui = (function (exports, window, UIkit) {
             };
       
             swiper.onPanStart = function (e) {
-              var firstTouch = e.touches[0];
-              var lastTouch = this.lastTouch;
-              return this.beganPan || (firstTouch && firstTouch.clientX <= 36) || (lastTouch && lastTouch.clientX <= 36);
+              if (!$this.openable()) return false;
+              if ($this.$blockDrawerOpen || exports.$scrollState == 'scroll') {
+                return false;
+              } else if (this.beganPan) {
+                return true;
+              } else {
+                var firstTouch = e.touches[0];
+                var lastTouch = this.lastTouch;
+                if ($this.isFlipped()) {
+                  var rightScreenThreshold = window.innerWidth - 36;
+                  return (firstTouch && firstTouch.clientX >= rightScreenThreshold) || (lastTouch && lastTouch.clientX >= rightScreenThreshold);
+                } else {
+                  return (firstTouch && firstTouch.clientX <= 36) || (lastTouch && lastTouch.clientX <= 36);
+                }
+              }
+            };
+
+            swiper.onSwipe = function () {
+              return !$this.$blockDrawerOpen && exports.$scrollState != 'scroll';
             };
       
             swiper.applyChanges = function (percent) {
@@ -2704,7 +2734,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __after__: function () {
       var $this = this;
       var content = $this.el.firstChild;
-      if (content) UI.addClass(content, 'uk-offcanvas-bar');
+      if (content) addClass(content, 'uk-offcanvas-bar');
 
       var swipeGesture = $this.closeSwipe = new DrawerSwipe(
         $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL,
@@ -2723,6 +2753,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.onPanStart = function (e) {
+        if (!$this.closable()) return false;
         var firstTouch = e.touches[0];
         return this.beganPan || (firstTouch && document.elementFromPoint(firstTouch.clientX, firstTouch.clientY) != $this.element);
       };
@@ -2736,7 +2767,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           var transition = "none";
           var bgTransition = "background-color 100ms linear";
           var backface = "hidden";
-          var bgColor = "rgba(0,0,0," + 0.42*(1-Math.abs(percent)/100) + ')';
+          var bgColor = "rgba(0,0,0," + 0.53*(1-Math.min(Math.abs(percent)+10, 100)/100) + ')';
           contentElementStyle.webkitTransform = transform;
           contentElementStyle.transform = transform;
           contentElementStyle.webkitTransition = transition;
@@ -2763,7 +2794,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
     finalize: function () {
       $('body').removeClass('uk-offcanvas-page');
-      UI.removeClass(this.element, 'uk-active');
+      removeClass(this.element, 'uk-active');
       this.content().removeClass('uk-offcanvas-bar-show');
     },
 
@@ -2807,7 +2838,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     isFlipped: function () {
-      return UI.hasClass(this.el, "uk-offcanvas-flip");
+      return hasClass(this.el, "uk-offcanvas-flip");
     }
   }, $definitions.element);
 
@@ -2850,7 +2881,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       args = [self.config, self.el, args];
       self.dispatch("onOpen", args);
       self.el.style.display = 'block';
-      UI.addClass(self.el, ACTIVE_CLASS);
+      addClass(self.el, ACTIVE_CLASS);
       self.dispatch("onOpened", []);
       if (timeout) {
         setTimeout(function () {
@@ -2867,7 +2898,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       args = [self.config, self.el, args];
       self.dispatch("onClose", args);
       self.el.style.display = null;
-      UI.removeClass(self.el, ACTIVE_CLASS);
+      removeClass(self.el, ACTIVE_CLASS);
       self.dispatch("onClosed", args);
     }
   }, $definitions.element, exports.AbsolutePositionMethods);
@@ -3826,7 +3857,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           self.$components.push(itemTemplate);
         }
         else if (isObject(itemTemplate)) {
-          var component = UI.new(itemTemplate, el);
+          var component = exports.new(itemTemplate, el);
           self.$itemComponents[itemTemplate.id] = component;
           self.$components.push(component);
         }
@@ -4276,19 +4307,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }),
     __after__: function (config) {
       var $this = this;
-      var dragHandle = UI.createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
-      var dragBackdrop = UI.createElement('div', {class: 'uk-hidden uk-resizer-drag-backdrop'});
+      var dragHandle = createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
+      var dragBackdrop = createElement('div', {class: 'uk-hidden uk-resizer-drag-backdrop'});
       $this.dragHandle = dragHandle;
       $this.dragBackdrop = dragBackdrop;
       $this.el.appendChild(dragHandle);
       $this.el.appendChild(dragBackdrop);
 
-      UI.addListener($this.el, 'mousedown', function (e) {
+      addListener($this.el, 'mousedown', function (e) {
         if (!$this.dragging) {
-          UI.preventEvent(e);
+          preventEvent(e);
           updateDragHandlePosition(e);
-          UI.removeClass(dragHandle, 'uk-hidden');
-          UI.removeClass(dragBackdrop, 'uk-hidden');
+          removeClass(dragHandle, 'uk-hidden');
+          removeClass(dragBackdrop, 'uk-hidden');
           var parentRect = $this.el.parentNode.getBoundingClientRect();
           extend(dragBackdrop.style, {
             left: parentRect.left + 'px',
@@ -4300,16 +4331,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         }
       });
 
-      UI.addListener(document.body, 'mousemove', function (e) {
+      addListener(document.body, 'mousemove', function (e) {
         if ($this.dragging) {
           updateDragHandlePosition(e);
         }
       });
 
-      UI.addListener(document.body, 'mouseup', function (e) {
+      addListener(document.body, 'mouseup', function (e) {
         if ($this.dragging) {
-          UI.addClass(dragHandle, 'uk-hidden');
-          UI.addClass(dragBackdrop, 'uk-hidden');
+          addClass(dragHandle, 'uk-hidden');
+          addClass(dragBackdrop, 'uk-hidden');
           $this.dragging = false;
           $this.dispatch("onHandleResized", [updateDragHandlePosition(e), $this.el, e]);
         }
@@ -4351,12 +4382,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: 'spacer',
     __init__: function (config) {
       var self = this;
-      self.element = self.el = UI.createElement("DIV");
+      self.element = self.el = createElement("DIV");
       self.config = config;
       var width = (isNumber(config.width) ? config.width + 'px' : config.width) || 'auto';
       var height = (isNumber(config.height) ? config.height + 'px' : config.height) || 'auto';
-      UI.addClass(self.el, config.cls);
-      UI.extend(self.el.style, {minWidth: width, minHeight: height});
+      addClass(self.el, config.cls);
+      extend(self.el.style, {minWidth: width, minHeight: height});
     }
   });
 
@@ -4372,16 +4403,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var $this = this;
       var el = $this.el;
       var scrollDirection = $this.scrollDirection = config.scrollDirection;
-      $this.bar = UI.createElement('DIV');
-      $this.wrapper = UI.createElement('DIV');
+      $this.bar = createElement('DIV');
+      $this.wrapper = createElement('DIV');
       
-      UI.addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
-      UI.addClass($this.wrapper, 'uk-scroller-wrapper');
+      addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
+      addClass($this.wrapper, 'uk-scroller-wrapper');
 
       el.appendChild($this.wrapper);
       el.appendChild($this.bar);
 
-      $this.$content = UI.new({
+      $this.$content = exports.new({
         cls: ["uk-scroller-content", scrollDirection],
         cells: config.cells,
         flexLayout: scrollDirection == 'y' ? 'column' : 'row'
@@ -4408,7 +4439,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       el.addEventListener('mousedown', function(e) {
         lastPageY = e.pageY;
         lastPageX = e.pageX;
-        UI.addClass(el, 'uk-scroller-grabbed');
+        addClass(el, 'uk-scroller-grabbed');
         document.addEventListener('mousemove', drag);
         document.addEventListener('mouseup', stop);
         return false;
@@ -4430,7 +4461,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
 
       function stop() {
-        UI.removeClass(el, 'uk-scroller-grabbed');
+        removeClass(el, 'uk-scroller-grabbed');
         document.removeEventListener('mousemove', drag);
         document.removeEventListener('mouseup', stop);
       }
@@ -4449,9 +4480,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       raf(function() {
         // Hide scrollbar if no scrolling is possible
         if($this.scrollRatio >= 1) {
-          UI.addClass($this.bar, 'uk-hidden');
+          addClass($this.bar, 'uk-hidden');
         } else {
-          UI.removeClass($this.bar, 'uk-hidden');
+          removeClass($this.bar, 'uk-hidden');
 
           if ($this.scrollDirection == 'y') {
             $this.bar.style.cssText = 'height:' + Math.max($this.scrollRatio * 100, 10) + '%; top:' +
@@ -4612,7 +4643,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        */
       var result = {};
       this.$fieldsets.forEach(function (fs) {
-        UI.extend(result, fs.getValues());
+        extend(result, fs.getValues());
       });
       return result;
     },
