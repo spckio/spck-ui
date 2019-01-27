@@ -93,7 +93,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     addListener: addListener,
     removeListener: removeListener
   });
-  
+
   function isArray(obj) {
     return Array.isArray ? Array.isArray(obj) : (Object.prototype.toString.call(obj) == '[object Array]');
   }
@@ -376,7 +376,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     else if (isNumber(templateObject)) {
       templateObject = templateObject.toString();
     }
-    
+
     if (isString(templateObject)) {
       parentNode.innerHTML = interpolate(templateObject, config);
     }
@@ -961,13 +961,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   function createElement(name, attributes, html) {
     attributes = attributes || {};
-    
+
     var element = name.toLowerCase() == "svg" ?
       document.createElementNS("http://www.w3.org/2000/svg", "svg") :
       document.createElement(name);
 
     setAttributes(element, attributes);
-    
+
     if (attributes.style)
       element.style.cssText = attributes.style;
     if (attributes.class)
@@ -1501,11 +1501,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       title: function (value) {
         setAttributes(this.el, {
           "title": value
-        }); 
+        });
       },
       tooltip: function (value) {
         if (!value) return;
-        
+
         var self = this;
         var config = self.config;
         var tooltipOptions = config.tooltipOptions;
@@ -1689,7 +1689,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }
   }, exports.Dispatcher, exports.Responder, exports.CommonEvents, exports.CommonStyles, exports.PropertySetter);
 
-  
+
   $definitions.flexgrid = def({
     __name__: "flexgrid",
     $defaults: {
@@ -2146,8 +2146,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       var config = self.config;
       self.dispatch("onOpen", [config, self.el, args]);
-      UIkit.modal('#' + config.id).one('show.uk.modal', function() {
+      var modal = UIkit.modal('#' + config.id);
+      modal.one('show.uk.modal', function() {
         self.dispatch("onOpened", [config, self.el, args]);
+      });
+      modal.one('hide.uk.modal', function() {
+        self.dispatch("onClosed", [config, self.el, args]);
       });
       UIkit.modal('#' + config.id, {
         center: config.center,
@@ -2168,10 +2172,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var modal = UIkit.modal('#' + config.id);
 
       self.dispatch("onClose", [config, self.el, args]);
-      modal.one('hide.uk.modal', function() {
-        self.dispatch("onClosed", [config, self.el, args]);
-      });
-      
+
       if (modal.isActive()) {
         modal.hide();
       }
@@ -2684,11 +2685,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
             // Tricky: Go in opposite direction of drawer
             var swiper = new DrawerSwipe(direction, document.body);
             $this.openSwipe = swiper;
-      
+
             swiper.getWidth = function () {
               return $this.content().width();
             };
-      
+
             swiper.onPanStart = function (e) {
               if (!$this.openable()) return false;
               if ($this.$blockDrawerOpen || exports.$scrollState == 'scroll') {
@@ -2710,7 +2711,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
             swiper.onSwipe = function () {
               return !$this.$blockDrawerOpen && exports.$scrollState != 'scroll';
             };
-      
+
             swiper.applyChanges = function (percent) {
               if (this.beganPan) {
                 $this.showDrawer();
@@ -2718,11 +2719,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
                 $this.closeSwipe.applyChanges(percent);
               }
             };
-      
+
             swiper.onCompleteSwipe = function () {
               $this.closeSwipe.reset();
             };
-      
+
             swiper.onIncompleteSwipe = function () {
               $this.close();
             };
@@ -3403,7 +3404,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       if (!node) {
         node = self.createItemElement(obj);
-      
+
         if (obj.$tailNode)
           self.containerElement(obj).insertBefore(node, self._addToDOM(obj.$tailNode));
         else
@@ -3710,7 +3711,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, self);
 
       var offset, doResponsive;
-      
+
       forInLoop(function (key, node) {
         if (offset && node.offsetTop != offset) {
           doResponsive = true;
@@ -4138,7 +4139,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       if (node) node.parentNode.replaceChild(self.createItemElement(item), node);
 
       self._hideChildren(item);
-      
+
       item.$hidden = this._checkItemHidden(item);
 
       self.dispatch("onClosed", [item.id]);
@@ -4371,7 +4372,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var relativeValue = value - (isDirectionEqualX ?
           clientRect.left - parentRect.left : clientRect.top - parentRect.top);
         dragHandle.style = (isDirectionEqualX ? 'left:' : 'top:') + relativeValue + 'px';
-        
+
         return value;
       }
     }
@@ -4405,7 +4406,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var scrollDirection = $this.scrollDirection = config.scrollDirection;
       $this.bar = createElement('DIV');
       $this.wrapper = createElement('DIV');
-      
+
       addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
       addClass($this.wrapper, 'uk-scroller-wrapper');
 
@@ -4435,7 +4436,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
     initScrollbar: function (el, context) {
       var lastPageY, lastPageX;
-  
+
       el.addEventListener('mousedown', function(e) {
         lastPageY = e.pageY;
         lastPageX = e.pageX;
@@ -4444,12 +4445,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         document.addEventListener('mouseup', stop);
         return false;
       });
-  
+
       function drag(e) {
         var delta = context.scrollDirection == 'y' ? e.pageY - lastPageY : e.pageX - lastPageX;
         lastPageY = e.pageY;
         lastPageX = e.pageX;
-  
+
         raf(function() {
           if (context.scrollDirection == 'y') {
             context.content.scrollTop += delta / context.scrollRatio;
@@ -4466,7 +4467,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         document.removeEventListener('mouseup', stop);
       }
     },
-  
+
     moveBar: function(e) {
       var $this = this;
       var totalHeight = $this.content.scrollHeight || 1,
@@ -4476,7 +4477,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var isRtl = $this.direction === 'rtl';
 
       $this.scrollRatio = $this.scrollDirection == 'y' ? ownHeight / totalHeight : ownWidth / totalWidth;
-  
+
       raf(function() {
         // Hide scrollbar if no scrolling is possible
         if($this.scrollRatio >= 1) {
