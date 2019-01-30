@@ -2146,20 +2146,20 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       var config = self.config;
       self.dispatch("onOpen", [config, self.el, args]);
-      var modal = UIkit.modal('#' + config.id);
+      var modal = UIkit.modal('#' + config.id, {
+        center: config.center,
+        bgclose: config.bgClose,
+        keyboard: config.keyboard,
+        modal: config.closeModals,
+        minScrollHeight: config.minScrollHeight
+      });
       modal.one('show.uk.modal', function() {
         self.dispatch("onOpened", [config, self.el, args]);
       });
       modal.one('hide.uk.modal', function() {
         self.dispatch("onClosed", [config, self.el, args]);
       });
-      UIkit.modal('#' + config.id, {
-        center: config.center,
-        bgclose: config.bgClose,
-        keyboard: config.keyboard,
-        modal: config.closeModals,
-        minScrollHeight: config.minScrollHeight
-      }).show();
+      modal.show();
     },
     close: function (args) {
       /**
