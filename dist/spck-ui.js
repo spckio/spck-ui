@@ -9064,6 +9064,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       /**
        * Add a child to the tree.
        * @param item A child of the tree. The parent id of the object should be specified in its $parent property.
+       * @returns {string} The object id after adding.
        */
       obj.$branch = !!obj.$branch; // Convert to boolean
       if (obj.$branch) obj.$children = [];
@@ -9085,7 +9086,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var refChild = self.findLast(function (other) {
         return self.orderAfter(obj, other);
       }, parent);
-      self.insertAfter(obj, refChild);
+      return self.insertAfter(obj, refChild);
     },
     remove: function (obj) {
       /**
