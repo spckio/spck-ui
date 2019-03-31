@@ -16,10 +16,14 @@
   position: relative;
   padding: 0;
   box-sizing: border-box;
+  -ms-overflow-style: none; // IE10-11
+  scrollbar-width: none; // firefox
 
   &::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 18px;
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   &.rtl {
@@ -29,13 +33,12 @@
   &.y {
     overflow-y: scroll;
     height: 100%;
-    width: calc(~"100% + 18px");
+    width: 100%;
   }
 
   &.x {
     overflow-x: scroll;
     width: 100%;
-    margin-bottom: -18px;
   }
 }
 
