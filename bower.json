@@ -8,7 +8,7 @@
   ],
   "dependencies": {
     "uikit": "uikit/uikit#^2.27.x",
-    "drawer-swipe": "^0.1.1",
+    "drawer-swipe": "^0.1.2",
     "indent.js": "^0.3.2"
   },
   "ignore": [

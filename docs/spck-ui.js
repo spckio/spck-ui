@@ -24,6 +24,7 @@ var DrawerSwipe = function (direction, element) {
   $this.getWidth = function () { return 0 };
   $this.onPanStart = function () { return true };
   $this.onPan = function () { return true };
+  $this.onSwipe = function () { return true };
   $this.onCompleteSwipe = function () {};
   $this.onIncompleteSwipe = function () {};
   $this.applyChanges = function () {};
@@ -33,8 +34,9 @@ var DrawerSwipe = function (direction, element) {
     if ($this.onPanStart(e)) {
       if ($this.lastTouch) {
         var deltaX = firstTouch.screenX - $this.lastTouch.screenX;
+        var deltaY = firstTouch.screenY - $this.lastTouch.screenY;
         $this._distanceX += deltaX;
-        $this.addBuffer(deltaX);
+        $this.addBuffer(deltaX, deltaY);
         $this.pan($this._distanceX);
         $this.beganPan = true;
       }
@@ -46,8 +48,23 @@ var DrawerSwipe = function (direction, element) {
     $this.lastTouch = null;
     $this._distanceX = 0;
 
-    var maxValue = Math.max.apply(null, $this._buffer);
-    var minValue = Math.min.apply(null, $this._buffer);
+    var buffer = $this._buffer;
+    var maxValue = buffer.filter(function (change) {
+      var angle = Math.abs(Math.atan2(change.dy, change.dx))
+      return angle < Math.PI/10;
+    }).map(function (change) {
+      return change.dx;
+    }).reduce(function (max, dx) {
+      return max < dx ? dx : max;
+    }, 0);
+    var minValue = buffer.filter(function (change) {
+      var angle = Math.abs(Math.atan2(change.dy, change.dx))
+      return angle > Math.PI*9/10;
+    }).map(function (change) {
+      return change.dx;
+    }).reduce(function (min, dx) {
+      return min > dx ? dx : min;
+    }, 0);
     $this._buffer.length = 0;
 
     var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
@@ -55,7 +72,7 @@ var DrawerSwipe = function (direction, element) {
     var closeToRight = leftToRight && maxValue >= $this.speedThreshold;
     var closeToLeft = rightToLeft && minValue <= -$this.speedThreshold;
 
-    if (Math.abs($this.percent) >= $this.positionThreshold || closeToRight || closeToLeft) {
+    if ($this.onSwipe() && (Math.abs($this.percent) >= $this.positionThreshold || closeToRight || closeToLeft)) {
       $this.animate({
         maxValue: closeToRight && maxValue,
         minValue: closeToLeft && minValue
@@ -71,10 +88,10 @@ var DrawerSwipe = function (direction, element) {
   var raf = window.requestAnimationFrame || window.setImmediate || function(c) { return setTimeout(c, 0); };
 
   DrawerSwipe.prototype = {
-    addBuffer: function (value) {
+    addBuffer: function (dx, dy) {
       var buffer = this._buffer;
       var bufferLength = this._bufferLength;
-      if (buffer.unshift(value) > bufferLength) buffer.length = bufferLength;
+      if (buffer.unshift({dx: dx, dy: dy}) > bufferLength) buffer.length = bufferLength;
     },
 
     pan: function (distanceX) {
