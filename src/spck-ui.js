@@ -2681,9 +2681,15 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         edge: function (value) {
           if (value) {
             var $this = this;
-            var direction = $this.isFlipped() ? DrawerSwipe.Direction.RTL : DrawerSwipe.Direction.LTR;
-            // Tricky: Go in opposite direction of drawer
-            var swiper = new DrawerSwipe(direction, document.body);
+            var flipped = $this.isFlipped()
+            var direction = flipped ? DrawerSwipe.Direction.RTL : DrawerSwipe.Direction.LTR;
+            var swiper = new DrawerSwipe(document.body, {
+              direction: direction,
+              minThreshold: flipped ? 0   : -100,
+              maxThreshold: flipped ? 100 : 0,
+              posThreshold: flipped ? 40 : -40,
+              startPos: flipped ? 100 : -100
+            });
             $this.openSwipe = swiper;
 
             swiper.getWidth = function () {
@@ -2715,17 +2721,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
             swiper.applyChanges = function (percent) {
               if (this.beganPan) {
                 $this.showDrawer();
-                var percent = $this.closeSwipe.percent = -100 + percent;
+                percent = $this.closeSwipe.percent = percent;
                 $this.closeSwipe.applyChanges(percent);
               }
             };
 
             swiper.onCompleteSwipe = function () {
               $this.closeSwipe.reset();
-            };
-
-            swiper.onIncompleteSwipe = function () {
-              $this.close();
             };
           }
         }
@@ -2737,9 +2739,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var content = $this.el.firstChild;
       if (content) addClass(content, 'uk-offcanvas-bar');
 
-      var swipeGesture = $this.closeSwipe = new DrawerSwipe(
-        $this.isFlipped() ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL,
-        $this.element);
+      var flipped = $this.isFlipped();
+      var swipeGesture = $this.closeSwipe = new DrawerSwipe($this.element, {
+        direction: flipped ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL,
+        minThreshold: flipped ? 0   : -100,
+        maxThreshold: flipped ? 100 : 0,
+        posThreshold: flipped ? 60 : -60,
+        startPos: flipped ? 100 : -100
+      });
 
       swipeGesture.getWidth = function () {
         return $this.content().width();
@@ -2760,6 +2767,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.applyChanges = function (percent) {
+        $this.openSwipe.percent = $this.closeSwipe.percent = percent;
         var contentElement = $this.element.firstChild;
         if (contentElement) {
           var elementStyle = $this.element.style;
@@ -4786,6 +4794,193 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
     }
   }, $definitions.stack);
+
+  function DrawerSwipe(element, options) {
+    var $this = this;
+    $this.percent = options.startPos;
+    $this.lastTouch = null;
+    $this._buffer = [];
+    $this._bufferLength = 5;
+    $this.closeInProgress = false;
+    $this.speedThreshold = 30;
+    $this.minimumSpeed = 20;
+    $this.minimumPercentageThreshold = 5;
+    $this.direction = options.direction;
+    $this.minThreshold = options.minThreshold;
+    $this.maxThreshold = options.maxThreshold;
+    $this.posThreshold = options.posThreshold;
+    $this.beganPan = false;
+    $this.getWidth = function () { return 0 };
+    $this.onPanStart = function () { return true };
+    $this.onPan = function () { return true };
+    $this.onSwipe = function () { return true };
+    $this.onCompleteSwipe = function () {};
+    $this.applyChanges = function () {};
+  
+    element.addEventListener("touchmove", function (e) {
+      var firstTouch = e.touches[0];
+      if ($this.onPanStart(e)) {
+        if ($this.lastTouch) {
+          var deltaX = firstTouch.screenX - $this.lastTouch.screenX;
+          var deltaY = firstTouch.screenY - $this.lastTouch.screenY;
+          $this.addBuffer(deltaX, deltaY);
+          $this.pan(deltaX);
+          $this.beganPan = true;
+        }
+        $this.lastTouch = firstTouch;
+      }
+    });
+  
+    element.addEventListener("touchend", function (e) {
+      $this.lastTouch = null;
+  
+      var buffer = $this._buffer;
+      var maxValue = buffer.filter(function (change) {
+        var angle = Math.abs(Math.atan2(change.dy, change.dx))
+        return angle < Math.PI/10;
+      }).map(function (change) {
+        return change.dx;
+      }).reduce(function (max, dx) {
+        return max < dx ? dx : max;
+      }, 0);
+      var minValue = buffer.filter(function (change) {
+        var angle = Math.abs(Math.atan2(change.dy, change.dx))
+        return angle > Math.PI*9/10;
+      }).map(function (change) {
+        return change.dx;
+      }).reduce(function (min, dx) {
+        return min > dx ? dx : min;
+      }, 0);
+      $this._buffer.length = 0;
+  
+      var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
+      var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
+      var closeToRight = leftToRight && (
+        maxValue >= $this.speedThreshold || $this.percent >= $this.posThreshold);
+      var closeToLeft = rightToLeft && (
+        minValue <= -$this.speedThreshold || $this.percent <= $this.posThreshold);
+      
+      if ($this.onSwipe() && (closeToRight || closeToLeft)) {
+        $this.animate({
+          maxValue: closeToRight && maxValue,
+          minValue: closeToLeft && minValue
+        });
+      }
+      else if ($this.beganPan) {
+        $this.animate(null, true);
+      }
+    });
+  };
+  
+  DrawerSwipe.prototype = {
+    addBuffer: function (dx, dy) {
+      var buffer = this._buffer;
+      var bufferLength = this._bufferLength;
+      if (buffer.unshift({dx: dx, dy: dy}) > bufferLength) buffer.length = bufferLength;
+    },
+
+    pan: function (distanceX) {
+      var $this = this;
+
+      if ($this.closeInProgress) {
+        return;
+      }
+      else if (!$this.onPan(distanceX)) {
+        $this.reset();
+        return;
+      }
+
+      var width = $this.getWidth();
+      var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
+      var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
+      var percent = $this.percent + (distanceX / width * 100);
+
+      if (percent >= $this.maxThreshold) percent = $this.maxThreshold;
+      else if (percent <= $this.minThreshold) percent = $this.minThreshold;
+
+      if ((leftToRight && percent >= $this.maxThreshold) ||
+          (rightToLeft && percent <= $this.minThreshold)) {
+        $this.animate();
+      }
+      else {
+        $this.applyChanges(percent);
+        $this.percent = percent;
+      }
+    },
+
+    animate: function (speed, reverse, restart) {
+      var $this = this;
+      var width = $this.getWidth();
+
+      if (restart) {
+        $this.closeInProgress = false;
+      }
+
+      if (!$this.closeInProgress) {
+        if (raf) {
+          $this.closeInProgress = true;
+          raf(update);
+        }
+        else {
+          $this.onCompleteSwipe();
+          $this.reset();
+        }
+      }
+
+      function update() {
+        var deltaPercent = 0;
+        var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
+        var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
+
+        if (speed && speed.maxValue) {
+          deltaPercent = Math.max(speed.maxValue/3, $this.minimumSpeed)/width * 100;
+        }
+        else if (speed && speed.minValue) {
+          deltaPercent = Math.min(speed.minValue/3, -$this.minimumSpeed)/width * 100;
+        }
+        else if (leftToRight) {
+          deltaPercent = $this.minimumSpeed/width * (reverse ? -100 : 100);
+        }
+        else if (rightToLeft) {
+          deltaPercent = -$this.minimumSpeed/width * (reverse ? -100 : 100);
+        }
+        $this.percent += deltaPercent;
+        var percent = $this.percent;
+
+        if (percent >= $this.maxThreshold) percent = $this.maxThreshold;
+        else if (percent <= $this.minThreshold) percent = $this.minThreshold;
+        $this.percent = percent;
+        $this.applyChanges(percent);
+
+        if ((leftToRight && percent >= $this.maxThreshold) ||
+            (rightToLeft && percent <= $this.minThreshold)) {
+          $this.reset();
+          $this.onCompleteSwipe();
+        }
+        else if (
+          (leftToRight && percent === $this.minThreshold) ||
+          (rightToLeft && percent === $this.maxThreshold)) {
+          $this.reset();
+        }
+        else {
+          raf(update);
+        }
+      }
+    },
+
+    reset: function () {
+      this.beganPan = false;
+      this.closeInProgress = false;
+    }
+  }
+
+  DrawerSwipe.Direction = {
+    LEFT_TO_RIGHT: 1,
+    LTR: 1,
+    RIGHT_TO_LEFT: 2,
+    RTL: 2,
+    BOTH: 3
+  }
 
   window.$$ = $$;
 
