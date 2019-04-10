@@ -4804,15 +4804,15 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $this.percent = options.startPos;
     $this.lastTouch = null;
     $this._buffer = [];
-    $this._bufferLength = 7;
+    $this._bufferLength = 8;
     $this.closeInProgress = false;
-    $this.speedThreshold = 0.5;
+    $this.speedThreshold = 0.38;
     $this.minimumSpeed = 20;
     $this.direction = options.direction;
     $this.minThreshold = options.minThreshold;
     $this.maxThreshold = options.maxThreshold;
     $this.posThreshold = options.posThreshold;
-    $this.minPosThreshold = 6;
+    $this.minPosThreshold = 7;
     $this.beganPan = false;
     $this.getWidth = function () { return 0 };
     $this.onPanStart = function () { return true };
@@ -4888,7 +4888,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           });
         }
         else if ($this.beganPan) {
-          $this.animate(null, true);
+          if ((leftToRight && !closeToRight) ||
+              (rightToLeft && !closeToLeft)) {
+            $this.animate(null, true);
+          } 
         }
       }
     });
