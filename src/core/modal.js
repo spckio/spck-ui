@@ -56,7 +56,7 @@
                 } else {
                     $this.bgclose_mousedown = false
                 }
-            }).on('mousedown', function(e) {
+            }).on('mouseup', function(e) {
 
                 var target = UI.$(e.target);
 
