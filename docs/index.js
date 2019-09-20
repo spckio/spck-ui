@@ -59,6 +59,11 @@ function findKeyWithValue(object, value) {
   }
 }
 
+function CommentedStringValue(value, comment) {
+  var str = new String(value);
+  str.$comment = comment;
+  return str;
+}
 
 var Model = {
   containers: {
@@ -1196,7 +1201,7 @@ var Examples = [
               {
                 batch: 'heart',
                 view: 'label',
-                label: "<i class='uk-icon-heart'></i> Heart",
+                label: CommentedStringValue("<i class='uk-icon-heart'></i> Heart", "You can use HTML directly in fields!"),
                 htmlTag: 'H2'
               },
               {
@@ -1230,33 +1235,56 @@ var Examples = [
             margin: 'bottom',
             on: {
               onInput: function () {
-                $$('tree').refresh();
+                $$('tree').refresh();  // Refresh tree after input
               }
             }
           },
           {
             scroll: 'y',
             style: {
-              maxHeight: '345px',
-              height: '345px'
+              maxHeight: CommentedStringValue('345px', 'You can use any CSS property as a key in the style object.'),
+              height: CommentedStringValue('345px', 'All CSS property values work also (like auto, vh, %)')
             },
             cells: [
               inheritanceTree('tree', {
                 filter: function (item) {
+                  // Search phrase
                   var searchPhrase = $$('search').getValue().toLowerCase();
                   var match = true;
 
                   if (searchPhrase) {
+                    // Check keyword match in current node
                     match = item.id.indexOf(searchPhrase) != -1;
-
+                    // Highlight keyword by modifying the 'label' field
+                    if (match) {
+                      var regExpr = RegExp('(' + escapeRegExp(searchPhrase) + ')', 'ig')
+                      item.label = item.value.replace(regExpr, '<span class="accent-text">$&</span>');
+                      item.$dirty = true;
+                    } else {
+                      item.$dirty = item.label !== item.value;
+                      item.label = item.value;
+                    }
+                    // Check if any children of current node matches keyword
                     if (!match && item.$branch) {
                       match = item.$children.some(function (child) {
                         return child.id.indexOf(searchPhrase) != -1;
                       });
                     }
+                  } else {
+                    item.$dirty = item.label !== item.value;
+                    item.label = item.value;
                   }
-
+                  // Rerenders the current node
+                  if (item.$dirty) {
+                    this.refreshItem(item);
+                    item.$dirty = false;
+                  }
+                  // Return true if node should show up in the tree
                   return !item.$parentClosed && match;
+                  // Helper utility to escape special characters in the RegExp parser
+                  function escapeRegExp(string) {
+                    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                  }
                 }
               })
             ]
@@ -1267,7 +1295,7 @@ var Examples = [
   },
   function () {
     var contacts = [
-      { name: 'Ambrose', phone: 'XXX-222-1234', icon: 'user' },
+      { name: 'Ambrose', phone: CommentedStringValue('<a>XXX-222-1234</a>', 'You can use HTML in fields!'), icon: 'user' },
       { name: 'Clarine', phone: 'XXX-333-1234', icon: 'users' },
       { name: 'Mickie', phone: 'XXX-555-1234', icon: 'mail' },
       { name: 'Sammie', phone: 'XXX-111-1234', icon: 'heart' },
@@ -1388,34 +1416,37 @@ function inheritanceTree(id, props) {
     id: id,
     view: 'tree',
     data: [
-      { label: 'Element', id: 'element' },
-      { label: 'Flexgrid', id: 'flexgrid', $parent: 'element' },
-      { label: 'Stack', id: 'stack', $parent: 'element' },
-      { label: 'Input', id: 'input', $parent: 'element' },
-      { label: 'Autocomplete', id: 'autocomplete', $parent: 'input' },
-      { label: 'List', id: 'list', $parent: 'stack' },
-      { label: 'Button', id: 'button', $parent: 'element' },
-      { label: 'Drawer', id: 'drawer', $parent: 'element' },
-      { label: 'Dropdown', id: 'dropdown', $parent: 'flexgrid' },
-      { label: 'Fieldset', id: 'fieldset', $parent: 'stack' },
-      { label: 'Form', id: 'form', $parent: 'element' },
-      { label: 'Icon', id: 'icon', $parent: 'element' },
-      { label: 'Image', id: 'image', $parent: 'element' },
-      { label: 'Label', id: 'label', $parent: 'element' },
-      { label: 'Link', id: 'link', $parent: 'button' },
-      { label: 'Modal', id: 'modal', $parent: 'flexgrid' },
-      { label: 'Progress', id: 'progress', $parent: 'element' },
-      { label: 'Resizer', id: 'resizer', $parent: 'element' },
-      { label: 'Scroller', id: 'scroller', $parent: 'element' },
-      { label: 'Search', id: 'search', $parent: 'input' },
-      { label: 'Select', id: 'select', $parent: 'list' },
-      { label: 'Spacer', id: 'spacer', inherits: '' },
-      { label: 'Tab', id: 'tab', $parent: 'stack' },
-      { label: 'Table', id: 'table', $parent: 'list' },
-      { label: 'Toggle', id: 'toggle', $parent: 'element' },
-      { label: 'Tooltip', id: 'tooltip', $parent: 'element' },
-      { label: 'Tree', id: 'tree', $parent: 'list' }
-    ]
+      { label: 'Element', id: id + '-element' },
+      { label: 'Flexgrid', id: id + '-flexgrid', $parent: id + '-element' },
+      { label: 'Stack', id: id + '-stack', $parent: id + '-element' },
+      { label: 'Input', id: id + '-input', $parent: id + '-element' },
+      { label: 'Autocomplete', id: 'autocomplete', $parent: id + '-input' },
+      { label: 'List', id: id + '-list', $parent: id + '-stack' },
+      { label: 'Button', id: id + '-button', $parent: id + '-element' },
+      { label: 'Drawer', id: id + '-drawer', $parent: id + '-element' },
+      { label: 'Dropdown', id: id + '-dropdown', $parent: id + '-flexgrid' },
+      { label: 'Fieldset', id: id + '-fieldset', $parent: id + '-stack' },
+      { label: 'Form', id: id + '-form', $parent: id + '-element' },
+      { label: 'Icon', id: id + '-icon', $parent: id + '-element' },
+      { label: 'Image', id: id + '-image', $parent: id + '-element' },
+      { label: 'Label', id: id + '-label', $parent: id + '-element' },
+      { label: 'Link', id: id + '-link', $parent: id + '-button' },
+      { label: 'Modal', id: id + '-modal', $parent: id + '-flexgrid' },
+      { label: 'Progress', id: id + '-progress', $parent: id + '-element' },
+      { label: 'Resizer', id: id + '-resizer', $parent: id + '-element' },
+      { label: 'Scroller', id: id + '-scroller', $parent: id + '-element' },
+      { label: 'Search', id: id + '-search', $parent: id + '-input' },
+      { label: 'Select', id: id + '-select', $parent: id + '-list' },
+      { label: 'Spacer', id: id + '-spacer', inherits: '' },
+      { label: 'Tab', id: id + '-tab', $parent: id + '-stack' },
+      { label: 'Table', id: id + '-table', $parent: id + '-list' },
+      { label: 'Toggle', id: id + '-toggle', $parent: id + '-element' },
+      { label: 'Tooltip', id: id + '-tooltip', $parent: id + '-element' },
+      { label: 'Tree', id: id + '-tree', $parent: id + '-list' }
+    ].map(function (item) {
+      item.value = item.label;
+      return item;
+    })
   }, props);
 }
 
@@ -1538,7 +1569,18 @@ UI.def({
     var localCode = Object.keys(locals).map(function (key) {
       return UI.interpolate('var {{variable}} = {{value}};', {
         variable: key,
-        value: JSON.stringify(locals[key], null, '  ')
+        value: JSON.stringify(locals[key], function (name, value) {
+          if (typeof value == 'function') {
+            return value.toString();
+          } else if (value && value.$comment) {
+            return value + '[[' + value.$comment + ']]';
+          } else {
+            return value;
+          }
+        }, '  ')
+          .replace(/\[\[(.+)]]"(,?)/g, '"$2  // $1')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
       });
     }).join('\n').replace(/"([\$\w]+)":/g, '$1:');
 
@@ -1550,16 +1592,20 @@ UI.def({
           return value.toString();
         } else if (key) {
           return '~' + key + '~';
+        } else if (value && value.$comment) {
+          return value + '[[' + value.$comment + ']]';
         } else {
           return value;
         }
       }, "  ")
+      .replace(/\[\[(.+)]]"(,?)/g, '"$2  // $1')
       .replace(/"function/g, 'function')
       .replace(/}"/g, '}')
       .replace(/"([\$\w]+)":/g, '$1:')
       .replace(/"~/g, '')
       .replace(/~"/g, '')
       .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '')
       .replace(/&/g, '&amp;')
       .replace(/"/g, '&quot;')
       .replace(/</g, '&lt;')
