@@ -3846,6 +3846,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         return exports.new(item);
       }
     },
+    /**
+     * Refreshes/rerenders a single item.
+     * @param item The item to refresh.
+     */
+    refreshItem: function (item) {
+      var el = this.getItemNode(item.id);
+      this.buildItemElement(el, item);
+    },
     buildItemElement: function (el, item) {
       var self = this;
       var templateArray = self.template(item);
