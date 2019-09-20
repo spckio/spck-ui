@@ -1,5 +1,6 @@
 .idea
 .vscode
+.DS_Store
 
 node_modules
 bower_components
@@ -8,6 +9,3 @@ coverage
 .~
 *~
 *.sh
-
-.DS_Store
-package-lock.json
