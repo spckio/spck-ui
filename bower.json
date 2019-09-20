@@ -4,11 +4,10 @@
   "homepage": "https://github.com/spckio/spck-ui",
   "main": [
     "./dist/spck-ui.css",
-    "./dist/spck-ui.js"
+    "./dist/spck-ui.js",
+    "./dist/spck-ui-icons.css",
+    "./dist/spck-ui-icons.ttf"
   ],
-  "dependencies": {
-    "uikit": "uikit/uikit#^2.27.x"
-  },
   "ignore": [
     ".idea",
     "node_modules",

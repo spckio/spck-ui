@@ -7,10 +7,11 @@ var cleanCSS = require('gulp-clean-css');
 var DEST = './dist';
 var DOCS = './docs'
 var FILES = [
-  './bower_components/uikit/js/uikit.js',
-  './bower_components/uikit/js/components/autocomplete.js',
-  './bower_components/uikit/js/components/notify.js',
-  './bower_components/uikit/js/components/sticky.js',
+  './src/core/core.js',
+  './src/core/*.js',
+  './src/components/autocomplete.js',
+  './src/components/notify.js',
+  './src/components/sticky.js',
   './src/spck-ui.js'];
 
 gulp.task('build', ['build-meta'], function () {
