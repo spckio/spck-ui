@@ -1,3 +1,8 @@
+Version 0.3.3
+-----------
+- Add `refreshItem` to `list`
+- Fix modal early close issue
+
 Version 0.3.2 (unreleased)
 -----------
 - Add `sortValue` to `tree`
