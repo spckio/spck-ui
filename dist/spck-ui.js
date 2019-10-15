@@ -8683,7 +8683,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
      */
     refreshItem: function (item) {
       var el = this.getItemNode(item.id);
-      this.buildItemElement(el, item);
+      if (el) this.buildItemElement(el, item);
     },
     buildItemElement: function (el, item) {
       var self = this;
@@ -9660,7 +9660,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $this.onSwipe = function () { return true };
     $this.onCompleteSwipe = function () {};
     $this.applyChanges = function () {};
-  
+
     element.addEventListener("touchstart", function (e) {
       if ($this.onPanStart(e)) {
         var firstTouch = e.touches[0];
@@ -9680,7 +9680,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         $this.lastTouch = firstTouch;
       }
     });
-  
+
     element.addEventListener("touchend", function (e) {
       $this.lastTouch = null;
       if ($this.onPanStart(e)) {
@@ -9712,14 +9712,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           return record
         }, {value: 0, prev: null}).value;
         buffer.length = 0;
-    
+
         var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
         var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
         var closeToRight = leftToRight && (
           maxValue >= $this.speedThreshold || $this.percent >= $this.posThreshold);
         var closeToLeft = rightToLeft && (
           minValue <= -$this.speedThreshold || $this.percent <= $this.posThreshold);
-        
+
         if ($this.onSwipe() && (closeToRight && maxValue || closeToLeft && minValue)) {
           $this.animate({
             maxValue: closeToRight && maxValue,
@@ -9730,12 +9730,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           if ((leftToRight && !closeToRight) ||
               (rightToLeft && !closeToLeft)) {
             $this.animate(null, true);
-          } 
+          }
         }
       }
     });
   };
-  
+
   DrawerSwipe.prototype = {
     addBuffer: function (x, y) {
       var buffer = this._buffer;
@@ -9761,7 +9761,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
       var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
       var percent = $this.percent + (distanceX / width * 100);
-      
+
       if (percent >= $this.maxThreshold) percent = $this.maxThreshold;
       else if (percent <= $this.minThreshold) percent = $this.minThreshold;
 
