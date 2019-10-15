@@ -3842,6 +3842,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       else if (item.$divider) {
         return '';
       }
+      else if (item.el) {
+        return item
+      }
       else {
         return exports.new(item);
       }
