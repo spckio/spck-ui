@@ -6589,9 +6589,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * @returns {Component} The child component
        */
       var self = this;
-      var component = config.element ? config : exports.new(config, function (el) {
-        self.el.appendChild(el);
-      });
+      var component = config.el ? config : exports.new(config);
+      self.el.appendChild(component.el);
       self.$components.push(component);
       return component;
     },
