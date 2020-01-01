@@ -354,14 +354,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     return '<i class="{{iconClass}}' + classes + icon + iconSize + '">{{iconContent}}</i>';
   }
 
-  function elementIconTemplate(templateString) {
+  function elementIconTemplate(templateFn) {
     return function (config) {
       if (config.icon) {
         var iconTemplate = isFunction(config.iconTemplate) ? config.iconTemplate.call(this, config) : (config.iconTemplate || '');
-        return config.alignIconRight ? templateString + iconTemplate : iconTemplate + templateString;
+        return config.alignIconRight ? templateFn(config) + iconTemplate : iconTemplate + templateFn(config);
       }
       else {
-        return templateString;
+        return templateFn(config);
       }
     };
   }
@@ -2212,7 +2212,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         "": ""
       }, 'uk-button-', true)
     }),
-    template: elementIconTemplate('<span class="{{labelClass}}">{{label}}</span>'),
+    template: elementIconTemplate(function (config) {
+      return config.label ? '<span class="{{labelClass}}">{{label}}</span>' : ''
+    }),
     select: function () {
       /**
        * Change the button state to selected.
@@ -2641,7 +2643,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       inputClass: "uk-search-field",
       type: "search"
     },
-    template: elementIconTemplate('<input class="{{inputClass}}">'),
+    template: elementIconTemplate(function () {
+      return '<input class="{{inputClass}}">'
+    }),
     getFormControl: function () {
       /**
        * Gets the HTML input element.
