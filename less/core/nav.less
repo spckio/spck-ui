@@ -36,17 +36,15 @@
 // Variables
 // ========================================================================
 
-@nav-padding-vertical:                          6px;
-@nav-padding-horizontal:                        24px;
+@nav-padding-vertical:                          0.25em;
+@nav-padding-horizontal:                        1.5em;
 
 @nav-header-padding-vertical:                   @nav-padding-vertical;
 @nav-header-padding-horizontal:                 @nav-padding-horizontal;
 @nav-header-font-size:                          8pt;
-@nav-header-font-weight:                        bold;
 @nav-header-text-transform:                     uppercase;
-@nav-header-margin:                             @global-margin 0 @global-margin-small 0;
 
-@nav-divider-margin-vertical:                   9px;
+@nav-divider-margin-vertical:                   0.5em;
 @nav-divider-margin-horizontal:                 @nav-padding-horizontal;
 
 @nav-side-color:                                #5e6d82;
@@ -108,12 +106,9 @@
 .uk-nav-header {
     padding: @nav-header-padding-vertical @nav-header-padding-horizontal;
     text-transform: @nav-header-text-transform;
-    font-weight: @nav-header-font-weight;
     font-size: @nav-header-font-size;
     .hook-nav-header;
 }
-
-.uk-nav-header:not(:first-child) { margin: @nav-header-margin; }
 
 
 /* Sub-object: `uk-nav-divider`

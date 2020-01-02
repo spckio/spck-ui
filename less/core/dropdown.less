@@ -33,10 +33,11 @@
 // Variables
 // ========================================================================
 
+@dropdown-padding-vertical:                     0.5em;
 @dropdown-z-index:                              @global-z-index + 40;
 @dropdown-width:                                200px;
 @dropdown-background:                           @global-background;
-@dropdown-dark-background:                      #242e38;
+@dropdown-dark-background:                      #333e49;
 @dropdown-color:                                @global-color;
 @dropdown-dark-color:                           @global-dark-color;
 @dropdown-font-size:                            1rem;
@@ -78,7 +79,7 @@
  */
 
 .uk-dropdown {
-    padding: 10px 0;
+    padding: @dropdown-padding-vertical 0;
     background: @dropdown-background;
     color: @dropdown-color;
     /* 1 */
@@ -86,7 +87,6 @@
     vertical-align: top;
 
     box-shadow: @dropdown-box-shadow;
-    border-radius: @global-border-radius;
 
     .dark & {
         background: @dropdown-dark-background;
