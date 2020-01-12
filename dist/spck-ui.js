@@ -5310,7 +5310,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     function Component(config, callback) {
       var self = this;
       defaults(config, self.$defaults);
-      defaults(self, config);
+      extend(self, config);
       self.template = config.template || self.template;
       if (self.__init__) self.__init__(config);
       if (callback) callback(self.el);
@@ -7765,7 +7765,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       dropdown: function (value) {
         var self = this;
         var dropdownContainer = createElement("DIV",
-          {class: classString(self.dropdownClass())});
+          {class: classString(self.getDropdownClass())});
 
         if (!value.listStyle) {
           value.listStyle = "dropdown";
@@ -7789,7 +7789,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self._inner.dispatch("onClosed", args);
       });
     },
-    dropdownClass: function () {
+    getDropdownClass: function () {
       var config = getConfig(this);
       var result = config.dropdownClass;
       result += config.blank ? " uk-dropdown-blank" : " uk-dropdown";
@@ -7864,7 +7864,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       this.$items = {};
       this.$count = 0;
     },
-    id: function (data) {
+    _id: function (data) {
       /**
        * Assigns an id to an object if one doesn't exist.
        * @param data The object to assign an id to.
@@ -7947,7 +7947,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       assertPropertyValidator(item, 'item', isObject);
       assert(!self.$items[item.id], "Circular reference detected with node insert!");
 
-      item.id = self.id(item);
+      item.id = self._id(item);
 
       if (!node && self.tailNode) {
         // Insert as last node
@@ -7993,7 +7993,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       assertPropertyValidator(item, 'item object ' + item, isObject);
       assert(!self.$items[item.id], "Circular reference detected with node insert!");
 
-      item.id = self.id(item);
+      item.id = self._id(item);
 
       if (!node && self.headNode) {
         // Insert as first node
