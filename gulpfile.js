@@ -14,41 +14,41 @@ var FILES = [
   './src/components/sticky.js',
   './src/spck-ui.js'];
 
-gulp.task('build', ['build-meta'], function () {
+const buildMeta = function () {
+  return gulp.src(['./src/spck-ui.meta.js'])
+    .pipe(gulp.dest(DEST));
+};
+  
+const build = function () {
   return gulp.src(FILES)
     .pipe(concat('spck-ui.js'))
     .pipe(gulp.dest(DEST))
     .pipe(gulp.dest(DOCS));
-});
+};
 
-gulp.task('build-min', ['build'], function () {
+const buildMin = function () {
   return gulp.src('./dist/spck-ui.js')
     .pipe(uglify())
     .pipe(concat('spck-ui.min.js'))
     .pipe(gulp.dest(DEST));
-});
+};
 
-gulp.task('build-meta', function () {
-  return gulp.src(['./src/spck-ui.meta.js'])
-    .pipe(gulp.dest(DEST));
-});
-
-gulp.task('build-docs', ['build'], function () {
+const buildDocs = function () {
   return gulp.src([
     './dist/spck-ui.meta.js',
     './dist/spck-ui-icons.css'
   ], {base: './dist'})
     .pipe(gulp.dest(DOCS));
-});
+};
 
-
-
-gulp.task('build-less', function () {
+const buildLess =  function () {
   return gulp.src(['less/spck-ui.less'])
     .pipe(less())
     .pipe(cleanCSS())
     .pipe(gulp.dest(DEST))
     .pipe(gulp.dest(DOCS));
-});
+};
 
-gulp.task('default', ['build', 'build-min', 'build-less', 'build-meta', 'build-docs']);
+module.exports = {
+  build: gulp.series(buildMeta, build, gulp.parallel(buildLess, buildDocs, buildMin))
+}
