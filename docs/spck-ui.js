@@ -4908,6 +4908,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     template: template,
 
     createElement: createElement,
+    removeAllChildren: removeAllChildren,
     preventEvent: preventEvent,
     stopPropagation: stopPropagation,
     setAttributes: setAttributes,
@@ -5803,6 +5804,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     if (html)
       element.innerHTML = html;
     return element;
+  }
+
+  function removeAllChildren(element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
   }
 
   function setAttributes(element, attributes) {
@@ -8211,6 +8218,23 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        */
       return this.$elements[id];
     },
+    disposeItemNode: function (id) {
+      /**
+       * Removes all children and disposes all components of the item node.
+       */
+      var self = this
+      var component = self.$itemComponents[id]
+      if (component) {
+        removeFromArray(self.$components, component)
+        component.dispose()
+      }
+      var listeners = self.$itemListeners[id]
+      if (listeners && listeners.length) {
+        listeners.forEach(removeListener);
+      }
+      var el = self.getItemNode(id);
+      if (el) removeAllChildren(el);
+    },
     render: function () {
       // Do nothing, overwrites render function.
     },
@@ -8686,7 +8710,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
      */
     refreshItem: function (item) {
       var el = this.getItemNode(item.id);
-      if (el) this.buildItemElement(el, item);
+      if (el) {
+        this.disposeItemNode(item.id);
+        this.buildItemElement(el, item);
+      }
     },
     buildItemElement: function (el, item) {
       var self = this;
@@ -9863,4 +9890,4 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   return exports;
 })({}, window, window.UIkit);
 
-window.UI.VERSION = '0.3.1';
+window.UI.VERSION = '0.3.4';

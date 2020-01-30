@@ -983,7 +983,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       element.removeChild(element.firstChild);
     }
   }
-  
+
   function setAttributes(element, attributes) {
     forInLoop(element.setAttribute, attributes, element);
   }
@@ -5062,4 +5062,4 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   return exports;
 })({}, window, window.UIkit);
 
-window.UI.VERSION = '0.3.1';
+window.UI.VERSION = '0.3.4';

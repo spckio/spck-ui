@@ -1,3 +1,7 @@
+Version 0.3.4
+-----------
+- Fix `refreshItem` duplicating items
+
 Version 0.3.3
 -----------
 - Add `refreshItem` to `list`
