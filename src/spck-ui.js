@@ -3400,10 +3400,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         removeFromArray(self.$components, component)
         component.dispose()
       }
-      var listeners = self.$itemListeners[id]
-      if (listeners && listeners.length) {
-        listeners.forEach(removeListener);
-      }
       var el = self.getItemNode(id);
       if (el) removeAllChildren(el);
     },
