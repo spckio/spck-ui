@@ -4829,7 +4829,8 @@
 window.UI = window.ui = (function (exports, window, UIkit) {
   var
     ACTIVE_CLASS = 'uk-active',
-    HIDDEN_CLASS = 'uk-hidden';
+    HIDDEN_CLASS = 'uk-hidden',
+    PASSIVE_EVENT = {passive: true};
 
   var
     $counters = {},
@@ -5177,10 +5178,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function iconTemplate(config) {
-    var classes = classes || '';
     var iconSize = config.iconSize ? ' uk-icon-{{iconSize}}' : '';
     var icon = config.icon ? ' uk-icon-{{icon}}' : '';
-    return '<i class="{{iconClass}}' + classes + icon + iconSize + '">{{iconContent}}</i>';
+    return '<i class="{{iconClass}}' + icon + iconSize + '">{{iconContent}}</i>';
   }
 
   function elementIconTemplate(templateFn) {
@@ -5357,7 +5357,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     return obj.config;
   }
 
-  function addListener(element, event, handler, thisArg) {
+  function addListener(element, event, handler, thisArg, opts) {
     assertPropertyValidator(element, 'element', isDefined);
     assertPropertyValidator(handler, 'handler', isDefined);
 
@@ -5369,7 +5369,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $listeners[id] = [element, event, handler];	//store event info, for detaching
 
     // Not officially supporting, or going out of the way to support IE10-
-    element.addEventListener(event, handler);
+    element.addEventListener(event, handler, opts);
 
     return id;
   }
@@ -5493,7 +5493,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
               if (!listenerConfig.defaultEvent) preventEvent(e);
               $this.dispatch(listenerConfig.dispatch, [config, $this.el, e]);
               return retVal;
-            })
+            }, listenerConfig.passive && PASSIVE_EVENT)
           );
         }
       }, defaults(config.$events || {}, $this.$events));
@@ -5869,7 +5869,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   if (exports.support.touch) {
-    $globalListenerIds.touchstart = addListener(window, "touchstart", buildWindowListener($windowListeners.touchstart));
+    $globalListenerIds.touchstart = addListener(window, "touchstart", buildWindowListener($windowListeners.touchstart), window, PASSIVE_EVENT);
     $globalListenerIds.touchend = addListener(window, "touchend", buildWindowListener($windowListeners.touchend));
     $globalListenerIds.touchmove = addListener(window, "touchmove", buildWindowListener($windowListeners.touchmove));
   }
@@ -6319,6 +6319,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       tooltipEvent: 'onMouseEnter'
     },
     $setters: {
+      attributes: function (value) {
+        setAttributes(this.el, value)
+      },
       disabled: function (value) {
         if (value)
           this.disable();
@@ -8785,7 +8788,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self.$listeners.push(listenerId);
 
         if (exports.support.touch) {
-          listenerId = addListener(el, "touchstart", onMouseDown, self);
+          listenerId = addListener(el, "touchstart", onMouseDown, self, PASSIVE_EVENT);
           $listeners.push(listenerId);
           self.$listeners.push(listenerId);
         }
@@ -9692,7 +9695,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var firstTouch = e.touches[0];
         $this.addBuffer(firstTouch.screenX, firstTouch.screenY);
       }
-    });
+    }, PASSIVE_EVENT);
 
     element.addEventListener("touchmove", function (e) {
       if ($this.onPanStart(e)) {
@@ -9705,7 +9708,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         $this.addBuffer(firstTouch.screenX, firstTouch.screenY);
         $this.lastTouch = firstTouch;
       }
-    });
+    }, PASSIVE_EVENT);
 
     element.addEventListener("touchend", function (e) {
       $this.lastTouch = null;
@@ -9886,4 +9889,4 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   return exports;
 })({}, window, window.UIkit);
 
-window.UI.VERSION = '0.3.4';
+window.UI.VERSION = '0.3.6';

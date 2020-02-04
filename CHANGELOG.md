@@ -1,3 +1,7 @@
+Version 0.3.5
+-----------
+- Fix `refreshItem` removing item listeners
+
 Version 0.3.4
 -----------
 - Fix `refreshItem` duplicating items
