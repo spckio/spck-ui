@@ -9585,9 +9585,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         this.$itemComponents[item.id] = component;
         this.$components.push(component);
 
-        if (item.formLabel) {
-          var label = component.label = createElement("LABEL", {class: "uk-form-label", for: item.id});
-          label.innerHTML = item.formLabel;
+        if (item.formLabel || item.formLabelAttributes) {
+          var attrs = {class: "uk-form-label", for: item.id}
+          if (item.formLabelAttributes) extend(attrs, item.formLabelAttributes)
+          var label = component.label = createElement("LABEL", attrs);
+          if (item.formLabel) label.innerHTML = item.formLabel;
           if (item.$inline) addClass(label, "uk-display-inline");
           el.insertBefore(label, el.firstChild);
         }
