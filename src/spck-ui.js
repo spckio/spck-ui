@@ -574,9 +574,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       var handlers = self._listenersByEvent[type];
       if (handlers) {
-        handlers.forEach(function (cb) {
-          cb.apply(self, params);
-        });
+        return Promise.all(handlers.map(function (cb) {
+          return cb.apply(self, params);
+        }));
       }
     },
     addListener: function (type, func, id) {
