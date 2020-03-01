@@ -101,7 +101,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function isString(obj) {
-    return typeof obj === 'string';
+    return typeof obj === 'string' || Object.prototype.toString.call(obj) == '[object String]';
   }
 
   function isObject(obj) {
