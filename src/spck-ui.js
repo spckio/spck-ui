@@ -2704,14 +2704,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       {
         edge: function (value) {
           if (value) {
+            var edgeBorder = 45;
             var $this = this;
             var flipped = $this.isFlipped()
             var direction = flipped ? DrawerSwipe.Direction.RTL : DrawerSwipe.Direction.LTR;
             var swiper = new DrawerSwipe(document.body, {
               direction: direction,
+              friction: 0.01,
               minThreshold: flipped ? 0   : -100,
               maxThreshold: flipped ? 100 : 0,
-              posThreshold: flipped ? 40 : -40,
+              posThreshold: flipped ? 18 : -18,
               startPos: flipped ? 100 : -100
             });
             $this.openSwipe = swiper;
@@ -2722,18 +2724,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
             swiper.onPanStart = function (e) {
               if (!$this.openable()) return false;
-              if ($this.$blockDrawerOpen || exports.$scrollState == 'scroll') {
-                return false;
-              } else if (this.beganPan) {
+              if (this.beganPan) {
                 return true;
+              } else if ($this.$blockDrawerOpen || exports.$scrollState == 'scroll') {
+                return false;
               } else {
                 var firstTouch = e.touches[0];
                 var lastTouch = this.lastTouch;
                 if ($this.isFlipped()) {
-                  var rightScreenThreshold = window.innerWidth - 36;
+                  var rightScreenThreshold = window.innerWidth - edgeBorder;
                   return (firstTouch && firstTouch.clientX >= rightScreenThreshold) || (lastTouch && lastTouch.clientX >= rightScreenThreshold);
                 } else {
-                  return (firstTouch && firstTouch.clientX <= 36) || (lastTouch && lastTouch.clientX <= 36);
+                  return (firstTouch && firstTouch.clientX <= edgeBorder) || (lastTouch && lastTouch.clientX <= edgeBorder);
                 }
               }
             };
@@ -2768,7 +2770,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         direction: flipped ? DrawerSwipe.Direction.LTR : DrawerSwipe.Direction.RTL,
         minThreshold: flipped ? 0   : -100,
         maxThreshold: flipped ? 100 : 0,
-        posThreshold: flipped ? 60 : -60,
+        posThreshold: flipped ? 40 : -40,
         startPos: flipped ? 100 : -100
       });
 
@@ -4491,17 +4493,20 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, $this.wrapper);
       $this.content = $this.$content.el;
 
+      $this.content.addEventListener('scroll', function (e) {
+        if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
+        if (!config.nativeScroll) {
+          $this.moveBar();
+        }
+        $this.dispatch("onScroll", [config, $this.content, e]);
+      });
+
       if (!config.nativeScroll) {
         $this.bar = createElement('DIV');
         addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
         el.appendChild($this.bar);
 
         $windowListeners.resize.push($this.moveBar.bind($this));
-        $this.content.addEventListener('scroll', function (e) {
-          if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
-          $this.moveBar();
-          $this.dispatch("onScroll", [config, $this.content, e]);
-        });
         $this.content.addEventListener('mouseenter', $this.moveBar.bind($this));
       }
     },
@@ -4874,13 +4879,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $this._buffer = [];
     $this._bufferLength = 8;
     $this.closeInProgress = false;
-    $this.speedThreshold = 0.38;
-    $this.minimumSpeed = 20;
+    // Friction coefficient
+    $this.friction = options.friction || 0.015;
+    // Threshold to aggregate speed
+    $this.speedTimeDeltaThreshold = options.speedTimeDeltaThreshold || 160;
+    $this.minimumSpeed = options.minimumSpeed || 20;
     $this.direction = options.direction;
     $this.minThreshold = options.minThreshold;
     $this.maxThreshold = options.maxThreshold;
     $this.posThreshold = options.posThreshold;
-    $this.minPosThreshold = 7;
+    $this.minPosThreshold = 8;
+    $this.minTimeThreshold = 120;
+    $this.initialTime = 0;
     $this.beganPan = false;
     $this.getWidth = function () { return 0 };
     $this.onPanStart = function () { return true };
@@ -4893,6 +4903,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     element.addEventListener("touchstart", function (e) {
       if ($this.onPanStart(e)) {
         var firstTouch = e.touches[0];
+        $this.initialTime = Date.now();
         $this.addBuffer(firstTouch.screenX, firstTouch.screenY);
       }
     }, PASSIVE_EVENT);
@@ -4902,8 +4913,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var firstTouch = e.touches[0];
         if ($this.lastTouch) {
           var deltaX = firstTouch.screenX - $this.lastTouch.screenX;
-          $this.pan(deltaX);
-          $this.beganPan = true;
+          var beginPan = $this.pan(deltaX);
+          if (!$this.beganPan && beginPan) {
+            $this.beganPan = true;
+          }
         }
         $this.addBuffer(firstTouch.screenX, firstTouch.screenY);
         $this.lastTouch = firstTouch;
@@ -4912,47 +4925,58 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
     element.addEventListener("touchend", function (e) {
       $this.lastTouch = null;
-      if ($this.onPanStart(e)) {
-        var buffer = $this._buffer;
-        var maxValue = buffer.reduce(function (record, change) {
-          if (record.prev) {
-            var dx = change.x - record.prev.x;
-            var dy = change.y - record.prev.y;
-            var angle = Math.abs(Math.atan2(dy, dx));
-            if (angle < Math.PI/10) {
-              var dx_dt = dx/(change.t - record.prev.t);
-              record.value = record.value > dx_dt ? record.value : dx_dt;
+      var buffer = $this._buffer;
+      if ($this.onPanStart(e) && buffer.length) {
+        var i = 1;
+        var averageSpeed = 0;
+        var newest = buffer[0];
+        var initialTime = newest.t;
+        var initialX = newest.x;
+        var initialY = newest.y;
+        var lastSpeed = 0;
+        var prev;
+        while (i < buffer.length) {
+          prev = buffer[i];
+          var dt = initialTime - prev.t;
+          if (dt < $this.speedTimeDeltaThreshold) {
+            var dx = initialX - prev.x;
+            var dy = initialY - prev.y;
+            // Ensure going in the same direction
+            if (lastSpeed*dx >= 0) {
+              // Angle between prev and current pos
+              var angle = Math.abs(Math.atan2(dy, dx));
+              if (angle < Math.PI/7) {
+                // Positive direction
+                lastSpeed = dx/dt;
+                averageSpeed = (initialX - prev.x)/(initialTime - prev.t);
+              } else if (angle > Math.PI*6/7) {
+                // Negative direction
+                lastSpeed = dx/dt;
+                averageSpeed = (initialX - prev.x)/(initialTime - prev.t);
+              }
+            } else {
+              break;
             }
+          } else {
+            break;
           }
-          record.prev = change
-          return record
-        }, {value: 0, prev: null}).value;
-        var minValue = buffer.reduce(function (record, change) {
-          if (record.prev) {
-            var dx = change.x - record.prev.x;
-            var dy = change.y - record.prev.y;
-            var angle = Math.abs(Math.atan2(dy, dx))
-            if (angle > Math.PI*9/10) {
-              var dx_dt = dx/(change.t - record.prev.t);
-              record.value = record.value < dx_dt ? record.value : dx_dt;
-            }
-          }
-          record.prev = change
-          return record
-        }, {value: 0, prev: null}).value;
+          i++;
+        }
         buffer.length = 0;
 
+        var stoppingDistance = averageSpeed*Math.abs(averageSpeed)/$this.friction;
+        var deltaPercent = Math.max(-100, Math.min(100, 100*stoppingDistance/$this.getWidth()));
+        var finalPercent = $this.percent + deltaPercent;
         var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
         var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
-        var closeToRight = leftToRight && (
-          maxValue >= $this.speedThreshold || $this.percent >= $this.posThreshold);
-        var closeToLeft = rightToLeft && (
-          minValue <= -$this.speedThreshold || $this.percent <= $this.posThreshold);
 
-        if ($this.onSwipe() && (closeToRight && maxValue || closeToLeft && minValue)) {
+        var closeToRight = leftToRight && finalPercent >= $this.posThreshold;
+        var closeToLeft = rightToLeft && finalPercent <= $this.posThreshold;
+
+        if ($this.onSwipe() && (closeToRight || closeToLeft)) {
           $this.animate({
-            maxValue: closeToRight && maxValue,
-            minValue: closeToLeft && minValue
+            maxValue: closeToRight && (deltaPercent + 0.01),
+            minValue: closeToLeft && (deltaPercent + 0.01)
           });
         }
         else if ($this.beganPan) {
@@ -4969,9 +4993,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     addBuffer: function (x, y) {
       var buffer = this._buffer;
       var bufferLength = this._bufferLength;
-      if (buffer.push({
+      if (buffer.unshift({
         x: x, y: y,
-        t: (new Date()).getTime()
+        t: Date.now()
       }) > bufferLength) buffer.length = bufferLength;
     },
 
@@ -4990,26 +5014,32 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
       var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
       var percent = $this.percent + (distanceX / width * 100);
+      var maxPercent = $this.maxThreshold;
+      var minPercent = $this.minThreshold;
 
-      if (percent >= $this.maxThreshold) percent = $this.maxThreshold;
-      else if (percent <= $this.minThreshold) percent = $this.minThreshold;
+      if (percent >= maxPercent) percent = maxPercent;
+      else if (percent <= minPercent) percent = minPercent;
 
-      if (Math.abs(percent - $this.minThreshold) > $this.minPosThreshold &&
-          Math.abs(percent - $this.maxThreshold) > $this.minPosThreshold) {
-        if ((leftToRight && percent >= $this.maxThreshold) ||
-            (rightToLeft && percent <= $this.minThreshold)) {
+      var minTimeThresholdMet = (Date.now() - $this.initialTime) > $this.minTimeThreshold;
+      var beganPan = false;
+      if (minTimeThresholdMet &&
+          Math.abs(percent - minPercent) > $this.minPosThreshold &&
+          Math.abs(percent - maxPercent) > $this.minPosThreshold) {
+        if ((leftToRight && percent >= maxPercent) ||
+            (rightToLeft && percent <= minPercent)) {
           $this.animate();
-        }
-        else {
+        } else {
+          beganPan = true;
           $this.applyChanges(percent);
         }
       }
       $this.percent = percent;
+      return beganPan;
     },
 
     animate: function (speed, reverse, restart) {
       var $this = this;
-      var width = $this.getWidth();
+      var minSpeedPercent = $this.minimumSpeed/$this.getWidth() * 100;
 
       if (restart) {
         $this.closeInProgress = false;
@@ -5030,18 +5060,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var deltaPercent = 0;
         var leftToRight = $this.direction & DrawerSwipe.Direction.LTR;
         var rightToLeft = $this.direction & DrawerSwipe.Direction.RTL;
+        var denom = 0.075/$this.friction;
 
         if (speed && speed.maxValue) {
-          deltaPercent = Math.max(speed.maxValue/3, $this.minimumSpeed)/width * 100;
+          deltaPercent = Math.max(speed.maxValue/denom, minSpeedPercent);
         }
         else if (speed && speed.minValue) {
-          deltaPercent = Math.min(speed.minValue/3, -$this.minimumSpeed)/width * 100;
+          deltaPercent = Math.min(speed.minValue/denom, -minSpeedPercent);
         }
         else if (leftToRight) {
-          deltaPercent = $this.minimumSpeed/width * (reverse ? -100 : 100);
+          deltaPercent = minSpeedPercent * (reverse ? -1 : 1);
         }
         else if (rightToLeft) {
-          deltaPercent = -$this.minimumSpeed/width * (reverse ? -100 : 100);
+          deltaPercent = -minSpeedPercent * (reverse ? -1 : 1);
         }
         $this.percent += deltaPercent;
         var percent = $this.percent;
