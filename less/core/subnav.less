@@ -73,7 +73,7 @@
  * 3. Create position context for dropdowns
  */
 
-.uk-subnav > * {
+.uk-subnav > li {
     /* 1 */
     -ms-flex: none;
     -webkit-flex: none;
@@ -96,7 +96,7 @@
  * 3. Text transition
  */
 
-.uk-subnav > * > :first-child {
+.uk-subnav > li > a:first-child {
     /* 1 */
     display: block;
     /* 2 */
@@ -111,8 +111,8 @@
 }
 
 /* Hover + Focus */
-.uk-subnav > * > a:hover,
-.uk-subnav > * > a:focus {
+.uk-subnav > li > a:hover,
+.uk-subnav > li > a:focus {
     color: @subnav-item-hover-color;
     text-decoration: @subnav-item-hover-text-decoration;
     outline: none;
@@ -131,7 +131,7 @@
  * 1. Align items and divider vertically
  */
 
-.uk-subnav-line > * {
+.uk-subnav-line > li {
     /* 1 */
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -158,22 +158,24 @@
 /* Pill modifier
  ========================================================================== */
 
-.uk-subnav-pill > * > :first-child {
+.uk-subnav-pill > li > a:first-child {
     padding: @subnav-pill-item-padding-vertical @subnav-pill-item-padding-horizontal;
     background: @subnav-pill-item-background;
     color: @subnav-pill-item-color;
 }
 
-/* OnClick + Hover + Focus */
-.uk-subnav-pill > * > a:active,
-.uk-subnav-pill > * > a:hover,
-.uk-subnav-pill > * > a:focus {
-    background-color: @subnav-pill-item-hover-background;
-    color: @subnav-pill-item-hover-color;
+.uk-notouch {
+  /* OnClick + Hover + Focus */
+  .uk-subnav-pill > li > a:active,
+  .uk-subnav-pill > li > a:hover,
+  .uk-subnav-pill > li > a:focus {
+      background-color: @subnav-pill-item-hover-background;
+      color: @subnav-pill-item-hover-color;
 
-    .dark & {
-        color: @subnav-pill-item-dark-hover-color;
-    }
+      .dark & {
+          color: @subnav-pill-item-dark-hover-color;
+      }
+  }
 }
 
 /* Active */

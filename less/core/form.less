@@ -163,18 +163,6 @@
     .hook-form-legend;
 }
 
-/*
- * 1. Fixes IE9
- */
-
-.uk-form legend:after {
-    content: "";
-    display: block;
-    border-bottom: @form-legend-border-width solid @form-legend-border;
-    /* 1 */
-    width: 100%;
-}
-
 
 /* Size modifiers
  * Higher specificity needed to override defaults
@@ -314,13 +302,6 @@ select.uk-form-width-mini { width: (@form-mini-width + 25px); }
 /* Controls content
  * Sub-object: `uk-form-controls`, `uk-form-controls-condensed`
  ========================================================================== */
-
-/*
- * Remove margins
- */
-
-.uk-form-controls > :first-child { margin-top: 0; }
-.uk-form-controls > :last-child { margin-bottom: 0; }
 
 /*
  * Group controls and text into blocks with a small spacing between blocks

@@ -551,16 +551,6 @@ template { display: none; }
 iframe { border: 0; }
 
 
-/* Fix viewport for IE10 snap mode
- ========================================================================== */
-
-@media screen and (max-width: 400px) {
-    @-ms-viewport{
-        width: device-width;
-    }
-}
-
-
 // Hooks
 // ========================================================================
 
@@ -572,12 +562,6 @@ iframe { border: 0; }
 }
 .hook-base-link() {}
 .hook-base-link-hover() {}
-.hook-base-code() {
-    white-space: normal;       /* css-3 */
-    word-wrap: break-word;     /* Internet Explorer 5.5+ */
-}
+.hook-base-code() {}
 .hook-base-blockquote() {}
-.hook-base-pre() {
-    white-space: pre-wrap;       /* css-3 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
+.hook-base-pre() {}

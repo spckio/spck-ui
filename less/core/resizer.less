@@ -3,7 +3,7 @@
 
 @resizer-drag-handle-z-index:                  @global-z-index + 20;
 @resizer-drag-backdrop-z-index:                @global-z-index + 10;
-@resizer-drag-backdrop-background:             rgba(0, 102, 255, 0.05);
+@resizer-drag-backdrop-background:             rgba(0, 102, 255, 0.1);
 @resizer-background-color:                     darken(@global-border, 5%);
 @resizer-dark-background-color:                @global-dark-border;
 
@@ -17,7 +17,7 @@
   position: relative;
   opacity: 0.7;
 
-  &:hover, &:focus {
+  .uk-notouch &:hover, .uk-notouch &:focus {
     opacity: 1;
   }
 

@@ -136,10 +136,8 @@
     background: @modal-dialog-background;
     /* 4 */
     opacity: 0;
-    -webkit-transform: translateY(50vh);
-    transform: translateY(50vh);
-    -webkit-transition: opacity 0.3s linear, -webkit-transform 0.3s ease-out;
-    transition: opacity 0.3s linear, transform 0.3s ease-out;
+    -webkit-transition: opacity 0.3s linear;
+    transition: opacity 0.3s linear;
     .hook-modal-dialog;
 }
 
@@ -182,16 +180,7 @@
 .uk-open .uk-modal-dialog {
     /* 4 */
     opacity: 1;
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
 }
-
-/*
- * Remove margin from the last-child
- */
-
-.uk-modal-dialog > :not([class*='uk-modal-']):last-child { margin-bottom: 0; }
-
 
 /* Close in modal
  ========================================================================== */
@@ -202,13 +191,6 @@
     right: 10px;
     padding: 5px;
 }
-
-/*
- * Remove margin from adjacent element
- */
-
- .uk-modal-dialog > .uk-close:first-child + :not([class*='uk-modal-']) { margin-top: 0; }
-
 
 /* Modifier: `uk-modal-dialog-lightbox`
  ========================================================================== */
@@ -302,13 +284,6 @@
     margin: @modal-footer-margin-top -@modal-dialog-padding -@modal-dialog-padding;
     .hook-modal-footer;
 }
-
-/*
- * Remove margin from the last-child
- */
-
-.uk-modal-header  > :last-child,
-.uk-modal-footer  > :last-child { margin-bottom: 0; }
 
 
 /* Sub-Object: `uk-modal-caption`

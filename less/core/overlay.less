@@ -116,18 +116,16 @@
     overflow: hidden;
     /* 6 */
     -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     /* 7 */
     margin: 0;
 }
 
 /* 6 for Safari */
-.uk-overlay.uk-border-circle { -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%); }
-
-/*
- * Remove margin from content
- */
-
-.uk-overlay > :first-child { margin-bottom: 0; }
+.uk-overlay.uk-border-circle {
+  -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+  mask-image: radial-gradient(circle, white 100%, black 100%);
+}
 
 
 /* Sub-object `uk-overlay-panel`
@@ -150,13 +148,6 @@
     color: @overlay-panel-color;
     .hook-overlay-panel;
 }
-
-/*
- * Remove margin from the last-child
- */
-
-.uk-overlay-panel > :last-child,
-.uk-overlay-panel.uk-flex > * > :last-child { margin-bottom: 0; }
 
 /*
  * Keep color for headings if the default heading color is changed
@@ -461,12 +452,6 @@
     color: @overlay-area-content-color;
     .hook-overlay-area-content;
 }
-
-/*
- * Remove margin from the last-child
- */
-
-.uk-overlay-area-content > :last-child { margin-bottom: 0; }
 
 /*
  * Links in overlay area

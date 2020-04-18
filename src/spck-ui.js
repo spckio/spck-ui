@@ -11,9 +11,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $windowListeners = {
       mousedown: [windowOnMouseDown],
       mousemove: [windowOnMouseMove],
-      mouseup: [windowOnMouseUp],
+      mouseup: [windowOnMouseUp, windowResizerOnMouseUp],
       touchstart: [windowOnMouseDown],
-      touchend: [windowOnMouseUp],
+      touchend: [windowOnMouseUp, windowResizerOnMouseUp],
       touchmove: [windowOnMouseMove],
       load: [windowOnLoad],
       resize: []
@@ -349,16 +349,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     else return '';
   }
 
-  function iconTemplate(config) {
+  function iconTemplate(config, linkIcon) {
     var iconSize = config.iconSize ? ' uk-icon-{{iconSize}}' : '';
     var icon = config.icon ? ' uk-icon-{{icon}}' : '';
-    return '<i class="{{iconClass}}' + icon + iconSize + '">{{iconContent}}</i>';
+    return '<i class="{{iconClass}}' + icon + iconSize + (linkIcon ? ' uk-link-icon' : '') + '">{{iconContent}}</i>';
   }
 
   function elementIconTemplate(templateFn) {
     return function (config) {
-      if (config.icon) {
-        var iconTemplate = isFunction(config.iconTemplate) ? config.iconTemplate.call(this, config) : (config.iconTemplate || '');
+      if (config.icon || config.iconClass) {
+        var iconTemplate = isFunction(config.iconTemplate) ? config.iconTemplate.call(this, config, true) : (config.iconTemplate || '');
         return config.alignIconRight ? templateFn(config) + iconTemplate : iconTemplate + templateFn(config);
       }
       else {
@@ -1077,6 +1077,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     exports.$scrollState = null;
   }
 
+  function windowResizerOnMouseUp(e) {
+    var resizer = exports.$activeResizer;
+    if (resizer) {
+      if (resizer.dragging) {
+        addClass(resizer.dragHandle, 'uk-hidden');
+        addClass(resizer.dragBackdrop, 'uk-hidden');
+        resizer.dragging = false;
+        resizer.dispatch("onHandleResized", [resizer.updateDragHandlePosition(e), resizer.el, e]);
+      }
+      exports.$activeResizer = null;
+    }
+  }
+
   function windowOnMouseDown() {
     exports.$scrollState = 'start';
   }
@@ -1505,11 +1518,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       cls: function (value) {
         addClass(this.el, classString(value));
       },
-      sticky: function (value) {
-        if (value) {
-          this._sticky = UIkit.sticky(this.el, value);
-        }
-      },
       title: function (value) {
         setAttributes(this.el, {
           "title": value
@@ -1717,7 +1725,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
         for (var config, i = 0; i < value.length; i++) {
           config = value[i];
-          self.addChild(config);
+          // null is a special value that will be ignored (for prettier code)
+          if (config !== null) self.addChild(config);
         }
 
         if (self.config.defaultBatch)
@@ -2201,7 +2210,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       buttonStyle: "link",
       labelClass: "",
       iconContent: "",
-      iconClass: "uk-link-icon",
+      iconClass: "",
       iconTemplate: iconTemplate
     },
     $setters: classSetters({
@@ -3575,7 +3584,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       data = $this.beforeSetData(data);
 
       data.forEach(function (item) {
-        $this.add(item);
+        // null is a special value that will be ignored (for prettier code)
+        if (item !== null) $this.add(item);
       });
 
       $this.data = data;
@@ -4350,7 +4360,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: 'resizer',
     $defaults: {
       tagClass: 'uk-resizer',
-      device: 'notouch',
       direction: 'x',
       minValue: 0,
       maxValue: Number.MAX_VALUE
@@ -4363,16 +4372,35 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }),
     __after__: function (config) {
       var $this = this;
+      var el = $this.el
       var dragHandle = createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
       var dragBackdrop = createElement('div', {class: 'uk-hidden uk-resizer-drag-backdrop'});
+      var body = document.body
       $this.dragHandle = dragHandle;
       $this.dragBackdrop = dragBackdrop;
-      $this.el.appendChild(dragHandle);
-      $this.el.appendChild(dragBackdrop);
+      $this.updateDragHandlePosition = updateDragHandlePosition
+      el.appendChild(dragHandle);
+      el.appendChild(dragBackdrop);
 
-      addListener($this.el, 'mousedown', function (e) {
-        if (!$this.dragging) {
-          preventEvent(e);
+      addListener(el, 'mousedown', mouseDown);
+      addListener(body, 'mousemove', mouseMove);
+      addListener(body, 'touchstart', mouseDown, $this, {passive: false});
+      addListener(body, 'touchmove', mouseMove);
+
+      function transformTouchToMouse(touchEvent) {
+        if (touchEvent.touches && touchEvent.changedTouches) {
+          var firstTouch = touchEvent.touches[0] || touchEvent.changedTouches[0];
+          if (firstTouch) {
+            touchEvent.clientX = firstTouch.clientX
+            touchEvent.clientY = firstTouch.clientY
+          }
+        }
+      }
+
+      function mouseDown(e) {
+        if (!$this.dragging && e.target === el) {
+          preventEvent(e)  // Stop Chrome changing to globe icon
+          exports.$activeResizer = $this;
           updateDragHandlePosition(e);
           removeClass(dragHandle, 'uk-hidden');
           removeClass(dragBackdrop, 'uk-hidden');
@@ -4385,24 +4413,17 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           });
           $this.dragging = true;
         }
-      });
+      }
 
-      addListener(document.body, 'mousemove', function (e) {
+      function mouseMove(e) {
         if ($this.dragging) {
           updateDragHandlePosition(e);
         }
-      });
+      }
 
-      addListener(document.body, 'mouseup', function (e) {
-        if ($this.dragging) {
-          addClass(dragHandle, 'uk-hidden');
-          addClass(dragBackdrop, 'uk-hidden');
-          $this.dragging = false;
-          $this.dispatch("onHandleResized", [updateDragHandlePosition(e), $this.el, e]);
-        }
-      });
+      function updateDragHandlePosition (event) {
+        transformTouchToMouse(event)
 
-      function updateDragHandlePosition (mouseEvent) {
         var isDirectionEqualX = config.direction == 'x';
         var el = $this.el;
 
@@ -4416,9 +4437,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         maxValue = isFunction(maxValue) ? maxValue() : maxValue;
         maxValue = Math.min(maxValue, (isDirectionEqualX ? parentRect.width : parentRect.height));
 
-        var value = isDirectionEqualX ?
-          mouseEvent.clientX - parentRect.left:
-          mouseEvent.clientY - parentRect.top;
+        var value = isDirectionEqualX ? event.clientX - parentRect.left: event.clientY - parentRect.top;
 
         if (minValue >= maxValue) value = 0;
         else if (value < minValue) value = minValue;
@@ -4453,20 +4472,17 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       tagClass: 'uk-scroller-container',
       scrollDirection: 'y',
+      nativeScroll: false,
       flex: true
     },
     __init__: function (config) {
       var $this = this;
       var el = $this.el;
       var scrollDirection = $this.scrollDirection = config.scrollDirection;
-      $this.bar = createElement('DIV');
+
       $this.wrapper = createElement('DIV');
-
-      addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
       addClass($this.wrapper, 'uk-scroller-wrapper');
-
       el.appendChild($this.wrapper);
-      el.appendChild($this.bar);
 
       $this.$content = exports.new({
         cls: ["uk-scroller-content", scrollDirection],
@@ -4475,18 +4491,26 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, $this.wrapper);
       $this.content = $this.$content.el;
 
-      window.addEventListener('resize', $this.moveBar.bind($this));
-      $this.content.addEventListener('scroll', function (e) {
-        if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
-        $this.moveBar();
-        $this.dispatch("onScroll", [config, $this.content, e]);
-      });
-      $this.content.addEventListener('mouseenter', $this.moveBar.bind($this));
+      if (!config.nativeScroll) {
+        $this.bar = createElement('DIV');
+        addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
+        el.appendChild($this.bar);
+
+        $windowListeners.resize.push($this.moveBar.bind($this));
+        $this.content.addEventListener('scroll', function (e) {
+          if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
+          $this.moveBar();
+          $this.dispatch("onScroll", [config, $this.content, e]);
+        });
+        $this.content.addEventListener('mouseenter', $this.moveBar.bind($this));
+      }
     },
 
-    __after__: function () {
-      this.initScrollbar(this.bar, this);
-      this.moveBar();
+    __after__: function (config) {
+      if (!config.nativeScroll) {
+        this.initScrollbar(this.bar, this);
+        this.moveBar();
+      }
     },
 
     initScrollbar: function (el, context) {

@@ -511,8 +511,10 @@
 .uk-link-muted,
 .uk-link-muted a { color: @utility-link-muted-color; }
 
-.uk-link-muted:hover,
-.uk-link-muted a:hover { color: @utility-link-muted-hover-color; }
+.uk-notouch {
+  .uk-link-muted:hover,
+  .uk-link-muted a:hover { color: @utility-link-muted-hover-color; }
+}
 
 /*
  * Reset link style
@@ -556,8 +558,6 @@
     .hook-scrollable-box;
 }
 
-.uk-scrollable-box > :last-child { margin-bottom: 0; }
-
 
 /* Overflow
  ========================================================================== */
@@ -571,8 +571,6 @@
 .uk-overflow-container {
     overflow: auto;
 }
-
-.uk-overflow-container > :last-child { margin-bottom: 0; }
 
 .uk-overflow-ycontainer {
     overflow-y: auto;

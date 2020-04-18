@@ -137,19 +137,19 @@
  * 1. Apply hover style also to focus state
  * 2. Remove default focus style
  */
-
-.uk-nav-side > li > a:hover,
-.uk-nav-side > li > a:focus { // 1
-    background: @nav-side-hover-background;
-    color: @nav-side-hover-color;
-    /* 2 */
-    outline: none;
-    .hook-nav-side-hover;
+.uk-notouch {
+  .uk-nav-side > li > a:hover,
+  .uk-nav-side > li > a:focus { // 1
+      background: @nav-side-hover-background;
+      /* 2 */
+      outline: none;
+      .hook-nav-side-hover;
+  }
 }
 
 /* Active */
 .uk-nav-side > li.uk-active > a {
-    &, &:hover {
+    & {
         color: @nav-side-active-color;
         background: none;
     }
@@ -215,14 +215,15 @@
  * 1. Apply hover style also to focus state
  * 2. Remove default focus style
  */
-
-.uk-nav-dropdown > li > a:hover,
-.uk-nav-dropdown > li > a:focus { // 1
-    background: @nav-dropdown-hover-background;
-    color: @nav-dropdown-hover-color;
-    /* 2 */
-    outline: none;
-    .hook-nav-dropdown-hover;
+.uk-notouch {
+  .uk-nav-dropdown > li > a:hover,
+  .uk-nav-dropdown > li > a:focus { // 1
+      background: @nav-dropdown-hover-background;
+      color: @nav-dropdown-hover-color;
+      /* 2 */
+      outline: none;
+      .hook-nav-dropdown-hover;
+  }
 }
 
 /*
@@ -261,7 +262,7 @@
     }
 }
 .hook-nav-side-active() {
-    .dark &, .dark &:hover {
+    .dark & {
         color: @nav-side-active-dark-color;
     }
 }

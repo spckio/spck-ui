@@ -10,7 +10,6 @@ module.exports = function (config) {
       'bower_components/uikit/js/uikit.js',
       'bower_components/uikit/js/components/autocomplete.js',
       'bower_components/uikit/js/components/notify.js',
-      'bower_components/uikit/js/components/sticky.js',
       'src/spck-ui.js',
       'src/spck-ui.spec.js'
     ],

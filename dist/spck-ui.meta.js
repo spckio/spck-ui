@@ -44,8 +44,6 @@
   (function ($setters) {
     $setters.disabled.$$desc = 'Set the <code>disabled</code> attribute.';
     $setters.disabled.$$type = 'boolean';
-    $setters.sticky.$$type = 'object';
-    $setters.sticky.$$desc = 'Makes the component sticky on the screen.';
     $setters.uploader.$$type = 'boolean';
     $setters.uploader.$$desc = 'Turns the component into an upload button.';
     $setters.tooltip.$$desc = 'Add a tooltip to the component.';
@@ -257,7 +255,7 @@
     };
   }($definitions.autocomplete.prototype.$setters));
 
-  
+
   (function ($setters) {
     $setters.readonly.$$type = 'boolean';
     $setters.readonly.$$desc = 'Set the <code>readonly</code> attribute of the input.';
@@ -381,7 +379,7 @@
     };
   }($definitions.tree.prototype.$setters));
 
-  
+
   (function ($setters) {
     $setters.tableStyle.$$desc = 'Predefined table style classes.';
     $setters.columns.$$desc = "List of schema objects containing data display info.";
@@ -420,7 +418,7 @@
     var setters = $definitions[def].prototype.$setters;
     var bases = $definitions[def].prototype.__bases__;
     var meta = setters.$$meta || {};
-    
+
     setters.$$meta = meta;
     bases.forEach(function (base) {
       if (UI.isFunction(base)) base = base.prototype;
@@ -428,6 +426,6 @@
       UI.defaults(meta, $setters.$$meta || {});
     });
   });
-  
+
   exports.debug = true;
 }(UI));

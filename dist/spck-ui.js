@@ -4462,370 +4462,6 @@
     return notify;
 });
 
-(function(addon) {
-
-    var component;
-
-    if (window.UIkit2) {
-        component = addon(UIkit2);
-    }
-
-    if (typeof define == 'function' && define.amd) {
-        define('uikit-sticky', ['uikit'], function(){
-            return component || addon(UIkit2);
-        });
-    }
-
-})(function(UI){
-
-    "use strict";
-
-    var $win         = UI.$win,
-        $doc         = UI.$doc,
-        sticked      = [],
-        direction    = 1;
-
-    UI.component('sticky', {
-
-        defaults: {
-            top          : 0,
-            bottom       : 0,
-            animation    : '',
-            clsinit      : 'uk-sticky-init',
-            clsactive    : 'uk-active',
-            clsinactive  : '',
-            getWidthFrom : '',
-            showup       : false,
-            boundary     : false,
-            media        : false,
-            target       : false,
-            disabled     : false
-        },
-
-        boot: function() {
-
-            // should be more efficient than using $win.scroll(checkscrollposition):
-            UI.$doc.on('scrolling.uk.document', function(e, data) {
-                if (!data || !data.dir) return;
-                direction = data.dir.y;
-                checkscrollposition();
-            });
-
-            UI.$win.on('resize orientationchange', UI.Utils.debounce(function() {
-
-                if (!sticked.length) return;
-
-                for (var i = 0; i < sticked.length; i++) {
-                    sticked[i].reset(true);
-                    sticked[i].self.computeWrapper();
-                }
-
-                checkscrollposition();
-            }, 100));
-
-            // init code
-            UI.ready(function(context) {
-
-                setTimeout(function(){
-
-                    UI.$('[data-uk-sticky]', context).each(function(){
-
-                        var $ele = UI.$(this);
-
-                        if (!$ele.data('sticky')) {
-                            UI.sticky($ele, UI.Utils.options($ele.attr('data-uk-sticky')));
-                        }
-                    });
-
-                    checkscrollposition();
-                }, 0);
-            });
-        },
-
-        init: function() {
-
-            var boundary = this.options.boundary, boundtoparent;
-
-            this.wrapper = this.element.wrap('<div class="uk-sticky-placeholder"></div>').parent();
-            this.computeWrapper();
-            this.wrapper.css({
-                'margin-top'    : this.element.css('margin-top'),
-                'margin-bottom' : this.element.css('margin-bottom'),
-                'margin-left'   : this.element.css('margin-left'),
-                'margin-right'  : this.element.css('margin-right')
-            })
-            this.element.css('margin', 0);
-
-            if (boundary) {
-
-                if (boundary === true || boundary[0] === '!') {
-
-                    boundary      = boundary === true ? this.wrapper.parent() : this.wrapper.closest(boundary.substr(1));
-                    boundtoparent = true;
-
-                } else if (typeof boundary === "string") {
-                    boundary = UI.$(boundary);
-                }
-            }
-
-            this.sticky = {
-                self          : this,
-                options       : this.options,
-                element       : this.element,
-                currentTop    : null,
-                wrapper       : this.wrapper,
-                init          : false,
-                getWidthFrom  : UI.$(this.options.getWidthFrom || this.wrapper),
-                boundary      : boundary,
-                boundtoparent : boundtoparent,
-                top           : 0,
-                calcTop       : function() {
-
-                    var top = this.options.top;
-
-                    // dynamic top parameter
-                    if (this.options.top && typeof(this.options.top) == 'string') {
-
-                        // e.g. 50vh
-                        if (this.options.top.match(/^(-|)(\d+)vh$/)) {
-                            top = window.innerHeight * parseInt(this.options.top, 10)/100;
-                        // e.g. #elementId, or .class-1,class-2,.class-3 (first found is used)
-                        } else {
-
-                            var topElement = UI.$(this.options.top).first();
-
-                            if (topElement.length && topElement.is(':visible')) {
-                                top = -1 * ((topElement.offset().top + topElement.outerHeight()) - this.wrapper.offset().top);
-                            }
-                        }
-
-                    }
-
-                    this.top = top;
-                },
-
-                reset: function(force) {
-
-                    this.calcTop();
-
-                    var finalize = function() {
-                        this.element.css({position:'', top:'', width:'', left:'', margin:'0'});
-                        this.element.removeClass([this.options.animation, 'uk-animation-reverse', this.options.clsactive].join(' '));
-                        this.element.addClass(this.options.clsinactive);
-                        this.element.trigger('inactive.uk.sticky');
-
-                        this.currentTop = null;
-                        this.animate    = false;
-
-                    }.bind(this);
-
-
-                    if (!force && this.options.animation && UI.support.animation && !UI.Utils.isInView(this.wrapper)) {
-
-                        this.animate = true;
-
-                        this.element.removeClass(this.options.animation).one(UI.support.animation.end, function(){
-                            finalize();
-                        }).width(); // force redraw
-
-                        this.element.addClass(this.options.animation+' '+'uk-animation-reverse');
-                    } else {
-                        finalize();
-                    }
-                },
-
-                check: function() {
-
-                    if (this.options.disabled) {
-                        return false;
-                    }
-
-                    if (this.options.media) {
-
-                        switch(typeof(this.options.media)) {
-                            case 'number':
-                                if (window.innerWidth < this.options.media) {
-                                    return false;
-                                }
-                                break;
-                            case 'string':
-                                if (window.matchMedia && !window.matchMedia(this.options.media).matches) {
-                                    return false;
-                                }
-                                break;
-                        }
-                    }
-
-                    var scrollTop      = $win.scrollTop(),
-                        documentHeight = $doc.height(),
-                        dwh            = documentHeight - window.innerHeight,
-                        extra          = (scrollTop > dwh) ? dwh - scrollTop : 0,
-                        elementTop     = this.wrapper.offset().top,
-                        etse           = elementTop - this.top - extra,
-                        active         = (scrollTop  >= etse);
-
-                    if (active && this.options.showup) {
-
-                        // set inactiv if scrolling down
-                        if (direction == 1) {
-                            active = false;
-                        }
-
-                        // set inactive when wrapper is still in view
-                        if (direction == -1 && !this.element.hasClass(this.options.clsactive) && UI.Utils.isInView(this.wrapper)) {
-                            active = false;
-                        }
-                    }
-
-                    return active;
-                }
-            };
-
-            this.sticky.calcTop();
-
-            sticked.push(this.sticky);
-        },
-
-        update: function() {
-            checkscrollposition(this.sticky);
-        },
-
-        enable: function() {
-            this.options.disabled = false;
-            this.update();
-        },
-
-        disable: function(force) {
-            this.options.disabled = true;
-            this.sticky.reset(force);
-        },
-
-        computeWrapper: function() {
-
-            this.wrapper.css({
-                'height'        : ['absolute','fixed'].indexOf(this.element.css('position')) == -1 ? this.element.outerHeight() : '',
-                'float'         : this.element.css('float') != 'none' ? this.element.css('float') : ''
-            });
-
-            if (this.element.css('position') == 'fixed') {
-                this.element.css({
-                    width: this.sticky.getWidthFrom.length ? this.sticky.getWidthFrom.width() : this.element.width()
-                });
-            }
-        }
-    });
-
-    function checkscrollposition(direction) {
-
-        var stickies = arguments.length ? arguments : sticked;
-
-        if (!stickies.length || $win.scrollTop() < 0) return;
-
-        var scrollTop       = $win.scrollTop(),
-            documentHeight  = $doc.height(),
-            windowHeight    = $win.height(),
-            dwh             = documentHeight - windowHeight,
-            extra           = (scrollTop > dwh) ? dwh - scrollTop : 0,
-            newTop, containerBottom, stickyHeight, sticky;
-
-        for (var i = 0; i < stickies.length; i++) {
-
-            sticky = stickies[i];
-
-            if (!sticky.element.is(':visible') || sticky.animate) {
-                continue;
-            }
-
-            if (!sticky.check()) {
-
-                if (sticky.currentTop !== null) {
-                    sticky.reset();
-                }
-
-            } else {
-
-                if (sticky.top < 0) {
-                    newTop = 0;
-                } else {
-                    stickyHeight = sticky.element.outerHeight();
-                    newTop = documentHeight - stickyHeight - sticky.top - sticky.options.bottom - scrollTop - extra;
-                    newTop = newTop < 0 ? newTop + sticky.top : sticky.top;
-                }
-
-                if (sticky.boundary && sticky.boundary.length) {
-
-                    var bTop = sticky.boundary.offset().top;
-
-                    if (sticky.boundtoparent) {
-                        containerBottom = documentHeight - (bTop + sticky.boundary.outerHeight()) + parseInt(sticky.boundary.css('padding-bottom'));
-                    } else {
-                        containerBottom = documentHeight - bTop;
-                    }
-
-                    newTop = (scrollTop + stickyHeight) > (documentHeight - containerBottom - (sticky.top < 0 ? 0 : sticky.top)) ? (documentHeight - containerBottom) - (scrollTop + stickyHeight) : newTop;
-                }
-
-
-                if (sticky.currentTop != newTop) {
-
-                    sticky.element.css({
-                        position : 'fixed',
-                        top      : newTop,
-                        width    : sticky.getWidthFrom.length ? sticky.getWidthFrom.width() : sticky.element.width()
-                    });
-
-                    if (!sticky.init) {
-
-                        sticky.element.addClass(sticky.options.clsinit);
-
-                        if (location.hash && scrollTop > 0 && sticky.options.target) {
-
-                            var $target = UI.$(location.hash);
-
-                            if ($target.length) {
-
-                                setTimeout((function($target, sticky){
-
-                                    return function() {
-
-                                        sticky.element.width(); // force redraw
-
-                                        var offset       = $target.offset(),
-                                            maxoffset    = offset.top + $target.outerHeight(),
-                                            stickyOffset = sticky.element.offset(),
-                                            stickyHeight = sticky.element.outerHeight(),
-                                            stickyMaxOffset = stickyOffset.top + stickyHeight;
-
-                                        if (stickyOffset.top < maxoffset && offset.top < stickyMaxOffset) {
-                                            scrollTop = offset.top - stickyHeight - sticky.options.target;
-                                            window.scrollTo(0, scrollTop);
-                                        }
-                                    };
-
-                                })($target, sticky), 0);
-                            }
-                        }
-                    }
-
-                    sticky.element.addClass(sticky.options.clsactive).removeClass(sticky.options.clsinactive);
-                    sticky.element.trigger('active.uk.sticky');
-                    sticky.element.css('margin', '');
-
-                    if (sticky.options.animation && sticky.init && !UI.Utils.isInView(sticky.wrapper)) {
-                        sticky.element.addClass(sticky.options.animation);
-                    }
-
-                    sticky.currentTop = newTop;
-                }
-            }
-
-            sticky.init = true;
-        }
-    }
-
-    return UI.sticky;
-});
-
 window.UI = window.ui = (function (exports, window, UIkit) {
   var
     ACTIVE_CLASS = 'uk-active',
@@ -4839,9 +4475,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $windowListeners = {
       mousedown: [windowOnMouseDown],
       mousemove: [windowOnMouseMove],
-      mouseup: [windowOnMouseUp],
+      mouseup: [windowOnMouseUp, windowResizerOnMouseUp],
       touchstart: [windowOnMouseDown],
-      touchend: [windowOnMouseUp],
+      touchend: [windowOnMouseUp, windowResizerOnMouseUp],
       touchmove: [windowOnMouseMove],
       load: [windowOnLoad],
       resize: []
@@ -4929,7 +4565,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function isString(obj) {
-    return Object.prototype.toString.call(obj) == '[object String]';
+    return typeof obj === 'string' || Object.prototype.toString.call(obj) == '[object String]';
   }
 
   function isObject(obj) {
@@ -4949,15 +4585,15 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function isNumber(obj) {
-    return Object.prototype.toString.call(obj) == '[object Number]';
+    return typeof obj === 'number';
   }
 
   function isBoolean(obj) {
-    return Object.prototype.toString.call(obj) == '[object Boolean]';
+    return typeof obj === 'boolean';
   }
 
   function isFunction(obj) {
-    return Object.prototype.toString.call(obj) == '[object Function]';
+    return typeof obj === 'function';
   }
 
   function isElement(obj) {
@@ -5177,16 +4813,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     else return '';
   }
 
-  function iconTemplate(config) {
+  function iconTemplate(config, linkIcon) {
     var iconSize = config.iconSize ? ' uk-icon-{{iconSize}}' : '';
     var icon = config.icon ? ' uk-icon-{{icon}}' : '';
-    return '<i class="{{iconClass}}' + icon + iconSize + '">{{iconContent}}</i>';
+    return '<i class="{{iconClass}}' + icon + iconSize + (linkIcon ? ' uk-link-icon' : '') + '">{{iconContent}}</i>';
   }
 
   function elementIconTemplate(templateFn) {
     return function (config) {
-      if (config.icon) {
-        var iconTemplate = isFunction(config.iconTemplate) ? config.iconTemplate.call(this, config) : (config.iconTemplate || '');
+      if (config.icon || config.iconClass) {
+        var iconTemplate = isFunction(config.iconTemplate) ? config.iconTemplate.call(this, config, true) : (config.iconTemplate || '');
         return config.alignIconRight ? templateFn(config) + iconTemplate : iconTemplate + templateFn(config);
       }
       else {
@@ -5402,9 +5038,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       var handlers = self._listenersByEvent[type];
       if (handlers) {
-        handlers.forEach(function (cb) {
-          cb.apply(self, params);
-        });
+        return Promise.all(handlers.map(function (cb) {
+          return cb.apply(self, params);
+        }));
       }
     },
     addListener: function (type, func, id) {
@@ -5905,6 +5541,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     exports.$scrollState = null;
   }
 
+  function windowResizerOnMouseUp(e) {
+    var resizer = exports.$activeResizer;
+    if (resizer) {
+      if (resizer.dragging) {
+        addClass(resizer.dragHandle, 'uk-hidden');
+        addClass(resizer.dragBackdrop, 'uk-hidden');
+        resizer.dragging = false;
+        resizer.dispatch("onHandleResized", [resizer.updateDragHandlePosition(e), resizer.el, e]);
+      }
+      exports.$activeResizer = null;
+    }
+  }
+
   function windowOnMouseDown() {
     exports.$scrollState = 'start';
   }
@@ -6333,11 +5982,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       cls: function (value) {
         addClass(this.el, classString(value));
       },
-      sticky: function (value) {
-        if (value) {
-          this._sticky = UIkit.sticky(this.el, value);
-        }
-      },
       title: function (value) {
         setAttributes(this.el, {
           "title": value
@@ -6545,7 +6189,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
         for (var config, i = 0; i < value.length; i++) {
           config = value[i];
-          self.addChild(config);
+          // null is a special value that will be ignored (for prettier code)
+          if (config !== null) self.addChild(config);
         }
 
         if (self.config.defaultBatch)
@@ -7029,7 +6674,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       buttonStyle: "link",
       labelClass: "",
       iconContent: "",
-      iconClass: "uk-link-icon",
+      iconClass: "",
       iconTemplate: iconTemplate
     },
     $setters: classSetters({
@@ -8403,7 +8048,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       data = $this.beforeSetData(data);
 
       data.forEach(function (item) {
-        $this.add(item);
+        // null is a special value that will be ignored (for prettier code)
+        if (item !== null) $this.add(item);
       });
 
       $this.data = data;
@@ -9178,7 +8824,6 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: 'resizer',
     $defaults: {
       tagClass: 'uk-resizer',
-      device: 'notouch',
       direction: 'x',
       minValue: 0,
       maxValue: Number.MAX_VALUE
@@ -9191,16 +8836,35 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }),
     __after__: function (config) {
       var $this = this;
+      var el = $this.el
       var dragHandle = createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
       var dragBackdrop = createElement('div', {class: 'uk-hidden uk-resizer-drag-backdrop'});
+      var body = document.body
       $this.dragHandle = dragHandle;
       $this.dragBackdrop = dragBackdrop;
-      $this.el.appendChild(dragHandle);
-      $this.el.appendChild(dragBackdrop);
+      $this.updateDragHandlePosition = updateDragHandlePosition
+      el.appendChild(dragHandle);
+      el.appendChild(dragBackdrop);
 
-      addListener($this.el, 'mousedown', function (e) {
-        if (!$this.dragging) {
-          preventEvent(e);
+      addListener(el, 'mousedown', mouseDown);
+      addListener(body, 'mousemove', mouseMove);
+      addListener(body, 'touchstart', mouseDown, $this, {passive: false});
+      addListener(body, 'touchmove', mouseMove);
+
+      function transformTouchToMouse(touchEvent) {
+        if (touchEvent.touches && touchEvent.changedTouches) {
+          var firstTouch = touchEvent.touches[0] || touchEvent.changedTouches[0];
+          if (firstTouch) {
+            touchEvent.clientX = firstTouch.clientX
+            touchEvent.clientY = firstTouch.clientY
+          }
+        }
+      }
+
+      function mouseDown(e) {
+        if (!$this.dragging && e.target === el) {
+          preventEvent(e)  // Stop Chrome changing to globe icon
+          exports.$activeResizer = $this;
           updateDragHandlePosition(e);
           removeClass(dragHandle, 'uk-hidden');
           removeClass(dragBackdrop, 'uk-hidden');
@@ -9213,24 +8877,17 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           });
           $this.dragging = true;
         }
-      });
+      }
 
-      addListener(document.body, 'mousemove', function (e) {
+      function mouseMove(e) {
         if ($this.dragging) {
           updateDragHandlePosition(e);
         }
-      });
+      }
 
-      addListener(document.body, 'mouseup', function (e) {
-        if ($this.dragging) {
-          addClass(dragHandle, 'uk-hidden');
-          addClass(dragBackdrop, 'uk-hidden');
-          $this.dragging = false;
-          $this.dispatch("onHandleResized", [updateDragHandlePosition(e), $this.el, e]);
-        }
-      });
+      function updateDragHandlePosition (event) {
+        transformTouchToMouse(event)
 
-      function updateDragHandlePosition (mouseEvent) {
         var isDirectionEqualX = config.direction == 'x';
         var el = $this.el;
 
@@ -9244,9 +8901,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         maxValue = isFunction(maxValue) ? maxValue() : maxValue;
         maxValue = Math.min(maxValue, (isDirectionEqualX ? parentRect.width : parentRect.height));
 
-        var value = isDirectionEqualX ?
-          mouseEvent.clientX - parentRect.left:
-          mouseEvent.clientY - parentRect.top;
+        var value = isDirectionEqualX ? event.clientX - parentRect.left: event.clientY - parentRect.top;
 
         if (minValue >= maxValue) value = 0;
         else if (value < minValue) value = minValue;
@@ -9281,20 +8936,17 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       tagClass: 'uk-scroller-container',
       scrollDirection: 'y',
+      nativeScroll: false,
       flex: true
     },
     __init__: function (config) {
       var $this = this;
       var el = $this.el;
       var scrollDirection = $this.scrollDirection = config.scrollDirection;
-      $this.bar = createElement('DIV');
+
       $this.wrapper = createElement('DIV');
-
-      addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
       addClass($this.wrapper, 'uk-scroller-wrapper');
-
       el.appendChild($this.wrapper);
-      el.appendChild($this.bar);
 
       $this.$content = exports.new({
         cls: ["uk-scroller-content", scrollDirection],
@@ -9303,18 +8955,26 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, $this.wrapper);
       $this.content = $this.$content.el;
 
-      window.addEventListener('resize', $this.moveBar.bind($this));
-      $this.content.addEventListener('scroll', function (e) {
-        if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
-        $this.moveBar();
-        $this.dispatch("onScroll", [config, $this.content, e]);
-      });
-      $this.content.addEventListener('mouseenter', $this.moveBar.bind($this));
+      if (!config.nativeScroll) {
+        $this.bar = createElement('DIV');
+        addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
+        el.appendChild($this.bar);
+
+        $windowListeners.resize.push($this.moveBar.bind($this));
+        $this.content.addEventListener('scroll', function (e) {
+          if (exports.$scrollState == 'start') exports.$scrollState = 'scroll';
+          $this.moveBar();
+          $this.dispatch("onScroll", [config, $this.content, e]);
+        });
+        $this.content.addEventListener('mouseenter', $this.moveBar.bind($this));
+      }
     },
 
-    __after__: function () {
-      this.initScrollbar(this.bar, this);
-      this.moveBar();
+    __after__: function (config) {
+      if (!config.nativeScroll) {
+        this.initScrollbar(this.bar, this);
+        this.moveBar();
+      }
     },
 
     initScrollbar: function (el, context) {

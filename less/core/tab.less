@@ -76,7 +76,7 @@
  * 3. Create position context for dropdowns
  */
 
-.uk-tab > * {
+.uk-tab > li {
     /* 1 */
     -ms-flex: none;
     -webkit-flex: none;
@@ -97,7 +97,7 @@
  * 2. Style
  */
 
-.uk-tab > * > a {
+.uk-tab > li > a {
     display: block;
     box-sizing: border-box;
     /* 1 */
@@ -106,14 +106,6 @@
     padding: @tab-item-padding-vertical @tab-item-padding-horizontal;
     color: @tab-item-color;
     .hook-tab-item;
-}
-
-/* Hover + Focus */
-.uk-tab > * > a:hover,
-.uk-tab > * > a:focus {
-    color: @tab-item-hover-color;
-    text-decoration: @tab-item-hover-text-decoration;
-    .hook-tab-item-hover;
 }
 
 /* Active */
@@ -140,7 +132,7 @@
     .hook-tab-bottom;
 }
 
-.uk-tab-bottom > * > a {
+.uk-tab-bottom > li > a {
     .hook-tab-bottom-item;
 }
 
@@ -159,8 +151,8 @@
 }
 
 /* 1 */
-.uk-tab-left > *,
-.uk-tab-right > * { padding-left: 0; }
+.uk-tab-left > li,
+.uk-tab-right > li { padding-left: 0; }
 
 .uk-tab-left {
     .hook-tab-left;
@@ -170,12 +162,12 @@
     .hook-tab-right;
 }
 
-.uk-tab-left > * > a {
+.uk-tab-left > li > a {
     text-align: right;
     .hook-tab-left-item;
 }
 
-.uk-tab-right > * > a {
+.uk-tab-right > li > a {
     text-align: left;
     .hook-tab-right-item;
 }

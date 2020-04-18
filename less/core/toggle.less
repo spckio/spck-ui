@@ -54,13 +54,16 @@
   box-shadow: @toggle-button-shadow;
   border-radius: @toggle-height;
   -webkit-transition: .3s;
-  transition: .3s;}
+  transition: .3s;
+}
 
-.uk-toggle-slider:hover:before {
-  height: round(@toggle-height*1.125);
-  width: round(@toggle-height*1.125);
-  bottom: -5px;
-  left: -1px;
+.uk-notouch {
+  .uk-toggle-slider:hover:before {
+    height: round(@toggle-height*1.125);
+    width: round(@toggle-height*1.125);
+    bottom: -5px;
+    left: -1px;
+  }
 }
 
 .uk-toggle-success {

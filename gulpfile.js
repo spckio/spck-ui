@@ -11,14 +11,13 @@ var FILES = [
   './src/core/*.js',
   './src/components/autocomplete.js',
   './src/components/notify.js',
-  './src/components/sticky.js',
   './src/spck-ui.js'];
 
 const buildMeta = function () {
   return gulp.src(['./src/spck-ui.meta.js'])
     .pipe(gulp.dest(DEST));
 };
-  
+
 const build = function () {
   return gulp.src(FILES)
     .pipe(concat('spck-ui.js'))

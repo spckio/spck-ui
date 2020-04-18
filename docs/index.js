@@ -2188,22 +2188,22 @@ UI.new({
                     view: 'element',
                     template: [
                       '<dl class="uk-description-list-horizontal">',
-                      '<dt><code>{{name}}</code></dt><dd>{{summary}}</dd>',
+                      '<dt><code>{{$$name}}</code></dt><dd>{{$$summary}}</dd>',
                       '</dl>',
                       '<dl class="uk-description-list-horizontal">',
                       (method.params && method.params.length ?
-                        '<dt class="uk-margin-small-left">Parameters</dt><dd>&nbsp;</dd>{{parameters}}' : ''),
-                      (method.dispatch ? '<dt class="uk-margin-small-left">Dispatch</dt><dd><code>{{dispatch}}</code></dd>' : ''),
-                      (method.returns ? '<dt class="uk-margin-small-left">Returns</dt><dd>{{returns}}</dd>' : ''),
-                      (method.example ? '<dt class="uk-margin-small-left">Example</dt><dd><code>{{example}}</code></dd>' : ''),
+                        '<dt class="uk-margin-small-left">Parameters</dt><dd>&nbsp;</dd>{{$$parameters}}' : ''),
+                      (method.dispatch ? '<dt class="uk-margin-small-left">Dispatch</dt><dd><code>{{$$dispatch}}</code></dd>' : ''),
+                      (method.returns ? '<dt class="uk-margin-small-left">Returns</dt><dd>{{$$returns}}</dd>' : ''),
+                      (method.example ? '<dt class="uk-margin-small-left">Example</dt><dd><code>{{$$example}}</code></dd>' : ''),
                       '</dl>'
                     ].join(''),
-                    name: method.name,
-                    summary: method.summary,
-                    dispatch: method.dispatch,
-                    returns: method.returns ? formatReturnsString(method.returns) : null,
-                    example: method.example,
-                    parameters: method.params.map(function (n) {
+                    $$name: method.name,
+                    $$summary: method.summary,
+                    $$dispatch: method.dispatch,
+                    $$returns: method.returns ? formatReturnsString(method.returns) : null,
+                    $$example: method.example,
+                    $$parameters: method.params.map(function (n) {
                       return UI.interpolate(
                         '<dt class="uk-text-muted uk-margin-left">{{name}}</dt><dd>{{description}}</dd>', n);
                     }).join('')
