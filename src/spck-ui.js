@@ -1494,7 +1494,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       dropdownOptions: {
         pos: "bottom-center",
         marginX: 0,
-        marginY: 8
+        marginY: 8,
+        lazy: false
       },
       tooltipOptions: {
         pos: "top-center",
@@ -1559,16 +1560,22 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           dropdown: value
         }, dropdownOptions);
 
-        var ui = self.dropdownPopup = exports.new(dropdown, document.body);
+        if (!dropdown.lazy) {
+          self.dropdownPopup = exports.new(dropdown, document.body);
+        }
 
         config.on = config.on || {};
         self.addListener(config.dropdownEvent, function (config, node) {
           var relativeNode = $$(dropdown.relativeTo);
           relativeNode = relativeNode ? relativeNode.el : node;
           var bb = {left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight};
-          ui.open(config);
-          ui.positionNextTo(relativeNode, dropdown.pos, dropdown.marginX, dropdown.marginY);
-          ui.moveWithinBoundary(bb);
+          if (!self.dropdownPopup) {
+            self.dropdownPopup = exports.new(dropdown, document.body);
+          }
+          var popup = self.dropdownPopup
+          popup.open(config);
+          popup.positionNextTo(relativeNode, dropdown.pos, dropdown.marginX, dropdown.marginY);
+          popup.moveWithinBoundary(bb);
         });
       },
       uploader: function (value) {
@@ -2726,7 +2733,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
               if (!$this.openable()) return false;
               if (this.beganPan) {
                 return true;
-              } else if ($this.$blockDrawerOpen || exports.$scrollState == 'scroll') {
+              } else if (!exports.support.animation || $this.$blockDrawerOpen || exports.$scrollState == 'scroll') {
                 return false;
               } else {
                 var firstTouch = e.touches[0];
@@ -5046,12 +5053,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
 
       if (!$this.closeInProgress && $this.onAnimate()) {
-        if (raf) {
+        if (exports.support.animation && raf) {
           $this.closeInProgress = true;
           raf(update);
         }
         else {
-          $this.onCompleteSwipe();
+          if (!reverse) {
+            $this.onCompleteSwipe();
+          }
           $this.reset();
         }
       }
