@@ -9157,9 +9157,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         fieldsets: function (value) {
           assertPropertyValidator(value, 'fieldsets', isArray);
           var self = this;
-
+          var fieldsetOptions = self.config.fieldsetOptions || {};
           value.forEach(function (config) {
-            var ui = exports.new(config, self.el);
+            var ui = exports.new(extend(config, fieldsetOptions), self.el);
             self.$fieldsets.push(ui);
             self.$components.push(ui);
           });
