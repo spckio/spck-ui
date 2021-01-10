@@ -2218,7 +2218,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       labelClass: "",
       iconContent: "",
       iconClass: "",
-      iconTemplate: iconTemplate
+      iconTemplate: iconTemplate,
+      activeClass: ACTIVE_CLASS
     },
     $setters: classSetters({
       buttonStyle: prefixClassOptions({
@@ -2248,7 +2249,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * Change the button state to selected.
        */
       getConfig(this).$selected = true;
-      addClass(this.el, ACTIVE_CLASS);
+      addClass(this.el, this.activeClass);
     },
     isSelected: function () {
       /**
@@ -2262,7 +2263,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * Change the button state to deselected.
        */
       getConfig(this).$selected = false;
-      removeClass(this.el, ACTIVE_CLASS);
+      removeClass(this.el, this.activeClass);
     },
     getLabel: function () {
       /**
@@ -2895,7 +2896,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       label: "",
       tagClass: "uk-tooltip",
       direction: "top",
-      device: "notouch"
+      device: "notouch",
+      activeClass: ACTIVE_CLASS
     },
     $setters: classSetters({
       direction: prefixClassOptions({
@@ -2915,7 +2917,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * Returns if the tooltip is open.
        * @returns {boolean}
        */
-      return hasClass(this.el, ACTIVE_CLASS);
+      return hasClass(this.el, this.activeClass);
     },
     open: function (args, timeout) {
       /**
@@ -2927,7 +2929,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       args = [self.config, self.el, args];
       self.dispatch("onOpen", args);
       self.el.style.display = 'block';
-      addClass(self.el, ACTIVE_CLASS);
+      addClass(self.el, self.activeClass);
       self.dispatch("onOpened", []);
       if (timeout) {
         setTimeout(function () {
@@ -2944,7 +2946,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       args = [self.config, self.el, args];
       self.dispatch("onClose", args);
       self.el.style.display = null;
-      removeClass(self.el, ACTIVE_CLASS);
+      removeClass(self.el, self.activeClass);
       self.dispatch("onClosed", args);
     }
   }, $definitions.element, exports.AbsolutePositionMethods);
@@ -3381,7 +3383,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       },
       droppable: returnTrue,
       itemTag: 'DIV',
-      itemTagClass: ''
+      itemTagClass: '',
+      activeClass: ACTIVE_CLASS
     },
     $setters: {
       filter: function (value) {
@@ -3437,7 +3440,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     itemClass: function (item) {
       var itemClass = classString(getConfig(this).itemTagClass);
-      itemClass += item.$selected ? ' ' + ACTIVE_CLASS : '';
+      itemClass += item.$selected ? ' ' + this.activeClass : '';
       itemClass += ' ' + classString(item.$cls);
       return itemClass;
     },
@@ -3472,8 +3475,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       if (obj.$hidden) addClass(node, HIDDEN_CLASS);
       else removeClass(node, HIDDEN_CLASS);
 
-      if (obj.$selected) addClass(node, ACTIVE_CLASS);
-      else removeClass(node, ACTIVE_CLASS);
+      if (obj.$selected) addClass(node, this.activeClass);
+      else removeClass(node, this.activeClass);
 
       return node;
     },
@@ -3630,7 +3633,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       selectable: false,
       closeButton: false,
       listStyle: "list",
-      dropdownEvent: "onItemClick"
+      dropdownEvent: "onItemClick",
+      activeClass: ACTIVE_CLASS
     },
     $setters: extend(
       classSetters({
@@ -3833,13 +3837,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         item = this.getItem(item);
       item.$selected = true;
       var node = this.getItemNode(item.id);
-      if (node) addClass(node, ACTIVE_CLASS);
+      if (node) addClass(node, this.activeClass);
     },
     deselect: function (item) {
       if (isString(item)) item = this.getItem(item);
       item.$selected = false;
       var node = this.getItemNode(item.id);
-      if (node) removeClass(node, ACTIVE_CLASS);
+      if (node) removeClass(node, this.activeClass);
     },
     deselectAll: function () {
       /**
@@ -4021,7 +4025,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       selectable: false,
       indentWidth: 15,
       dataTransfer: 'id',
-      draggable: true
+      draggable: true,
+      activeClass: ACTIVE_CLASS
     },
     __after__: function () {
       var self = this;
@@ -4043,10 +4048,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     _dragOver: function (item) {
       if (getConfig(this).droppable(item, exports.$dragged.config, exports.$dragged.node))
-        addClass(this._addToDOM(item), ACTIVE_CLASS);
+        addClass(this._addToDOM(item), this.activeClass);
     },
     _dragLeave: function (item) {
-      removeClass(this._addToDOM(item), ACTIVE_CLASS);
+      removeClass(this._addToDOM(item), this.activeClass);
     },
     _showChildren: function (item) {
       forEachUntil(function (child, queue) {
