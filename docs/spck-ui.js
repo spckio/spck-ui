@@ -6070,7 +6070,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       if (isString(config.tagClass))
         setAttributes(self.el, {class: config.tagClass});
 
-      extend(self.el.style, config.style || {});
+      if (config.style)
+        extend(self.el.style, config.style);
 
       self.render();
 
