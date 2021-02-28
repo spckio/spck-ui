@@ -29,12 +29,12 @@
         boot: function() {
 
             // init code
-            UI.$html.on('focus.timepicker.uikit', '[data-uk-timepicker]', function(e) {
+            UI.$html.on('focus.timepicker.uikit', '[data-sp-timepicker]', function(e) {
 
                 var ele = UI.$(this);
 
                 if (!ele.data('timepicker')) {
-                    var obj = UI.timepicker(ele, UI.Utils.options(ele.attr('data-uk-timepicker')));
+                    var obj = UI.timepicker(ele, UI.Utils.options(ele.attr('data-sp-timepicker')));
 
                     setTimeout(function(){
                         obj.autocomplete.input.focus();
@@ -48,21 +48,21 @@
             var $this  = this, times = getTimeRange(this.options.start, this.options.end), container;
 
             this.options.minLength = 0;
-            this.options.template  = '<ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">{{~items}}<li data-value="{{$item.value}}"><a>{{$item.value}}</a></li>{{/items}}</ul>';
+            this.options.template  = '<ul class="sp-nav sp-nav-autocomplete sp-autocomplete-results">{{~items}}<li data-value="{{$item.value}}"><a>{{$item.value}}</a></li>{{/items}}</ul>';
 
             this.options.source = function(release) {
                 release(times[$this.options.format] || times['12h']);
             };
 
             if (this.element.is('input')) {
-                this.element.wrap('<div class="uk-autocomplete"></div>');
+                this.element.wrap('<div class="sp-autocomplete"></div>');
                 container = this.element.parent();
             } else {
-                container = this.element.addClass('uk-autocomplete');
+                container = this.element.addClass('sp-autocomplete');
             }
 
             this.autocomplete = UI.autocomplete(container, this.options);
-            this.autocomplete.dropdown.addClass('uk-dropdown-small uk-dropdown-scrollable');
+            this.autocomplete.dropdown.addClass('sp-dropdown-small sp-dropdown-scrollable');
 
             this.autocomplete.on('show.uk.autocomplete', function() {
 

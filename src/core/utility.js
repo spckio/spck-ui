@@ -7,7 +7,7 @@
     UI.component('stackMargin', {
 
         defaults: {
-            cls: 'uk-margin-small-top',
+            cls: 'sp-margin-small-top',
             rowfirst: false,
             observe: false
         },
@@ -17,12 +17,12 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-margin]', context).each(function() {
+                UI.$('[data-sp-margin]', context).each(function() {
 
                     var ele = UI.$(this);
 
                     if (!ele.data('stackMargin')) {
-                        UI.stackMargin(ele, UI.Utils.options(ele.attr('data-uk-margin')));
+                        UI.stackMargin(ele, UI.Utils.options(ele.attr('data-sp-margin')));
                     }
                 });
             });
@@ -117,7 +117,7 @@
                 // init code
                 UI.ready(function(context) {
 
-                    UI.$('iframe.uk-responsive-width, [data-uk-responsive]', context).each(function() {
+                    UI.$('iframe.sp-responsive-width, [data-sp-responsive]', context).each(function() {
 
                         var ele = UI.$(this), obj;
 
@@ -164,7 +164,7 @@
     UI.Utils.stackMargin = function(elements, options) {
 
         options = UI.$.extend({
-            cls: 'uk-margin-small-top'
+            cls: 'sp-margin-small-top'
         }, options);
 
         elements = UI.$(elements).removeClass(options.cls);
@@ -307,7 +307,7 @@
 
         // init code
         UI.ready(function(context) {
-            UI.Utils.inlineSvg('[data-uk-svg]', context);
+            UI.Utils.inlineSvg('[data-sp-svg]', context);
         });
 
     })({});

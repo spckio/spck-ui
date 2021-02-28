@@ -1,199 +1,67 @@
-// Name:            Navbar
-// Description:     Defines styles for the navigation bar
-//
-// Component:       `uk-navbar`
-//
-// Sub-objects:     `uk-navbar-nav`
-//                  `uk-navbar-nav-subtitle`
-//                  `uk-navbar-content`
-//                  `uk-navbar-brand`
-//                  `uk-navbar-toggle`
-//                  `uk-navbar-toggle-alt`
-//                  `uk-navbar-center`
-//                  `uk-navbar-flip`
-//
-// Modifiers:       `uk-navbar-attached`
-//
-// States:          `uk-active`
-//                  `uk-parent`
-//                  `uk-open`
-//
-// Used by:         Dropdown
-//
-// Markup:
-//
-// <!-- uk-navbar -->
-// <nav class="uk-navbar">
-//     <ul class="uk-navbar-nav">
-//         <li class="uk-active"><a href=""></a></li>
-//         <li><a href=""></a></li>
-//     </ul>
-// </nav>
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@navbar-z-index:                                @global-z-index + 30;
-
-@navbar-background:                             @global-background;
-@navbar-dark-background:                        #181818;
-@navbar-color:                                  @global-color;
-@navbar-link-color:                             @global-link-color;
-
 @navbar-nav-height:                             64px;
-@navbar-nav-line-height:                        @navbar-nav-height;
-@navbar-nav-color:                              #8391a5;
-@navbar-nav-hover-background:                   transparent;
-@navbar-nav-onclick-background:                 @navbar-nav-hover-background;
-@navbar-nav-active-background:                  @navbar-nav-onclick-background;
-@navbar-nav-active-color:                       @navbar-nav-color;
-@navbar-nav-subtitle-font-size:                 10px;
-@navbar-nav-subtitle-offset:                    2px;
-
-@navbar-brand-font-size:                        18px;
-@navbar-brand-color:                            @global-color;
-
-@navbar-toggle-font-size:                       18px;
-@navbar-toggle-color:                           @global-color;
-@navbar-toggle-icon:                            "\f0c9";
-@navbar-toggle-icon-alt:                        "\f002";
-
 
 /* ========================================================================
    Component: Navbar
  ========================================================================== */
 
-.uk-navbar {
-    background: @navbar-background;
-    color: @navbar-color;
-    z-index: @navbar-z-index;
-    
-    .dark & {
-        background-color: @navbar-dark-background;
-    }
+.sp-navbar {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  z-index: @global-z-index + 30;
 }
 
-/*
- * Micro clearfix
- */
-
-.uk-navbar:before,
-.uk-navbar:after {
-    content: "";
-    display: table;
-}
-
-.uk-navbar:after { clear: both; }
-
-
-/* Sub-object: `uk-navbar-nav`
+/* Sub-object: `sp-navbar-nav`
  ========================================================================== */
 
-.uk-navbar-nav {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    float: left;
+.sp-navbar-nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  float: left;
 }
 
 /*
  * 1. Create position context for dropdowns
  */
 
-.uk-navbar-nav > li {
-    float: left;
-    /* 1 */
-    position: relative;
-}
-
-/*
- * 1. Dimensions
- * 2. Style
- */
-
-.uk-navbar-nav > li > a {
-    display: block;
-    box-sizing: border-box;
-    text-decoration: none;
-    /* 1 */
-    height: @navbar-nav-height;
-    line-height: @navbar-nav-line-height;
-    /* 2 */
-    color: @navbar-nav-color;
-    .hook-navbar-nav;
+.sp-navbar-nav > li {
+  float: left;
+  /* 1 */
+  position: relative;
 }
 
 /* Appear not as link */
-.uk-navbar-nav > li > a[href='#'] { cursor: text; }
-
-/*
- * Hover
- * 1. Apply hover style also to focus state
- * 2. Also apply if dropdown is opened
- * 3. Remove default focus style
- */
-
-.uk-navbar-nav > li:hover > a,
-.uk-navbar-nav > li > a:focus, // 1
-.uk-navbar-nav > li.uk-open > a { // 2
-    background-color: @navbar-nav-hover-background;
-    /* 3 */
-    outline: none;
-    .hook-navbar-nav-hover;
-}
-
-/* OnClick */
-.uk-navbar-nav > li > a:active {
-    background-color: @navbar-nav-onclick-background;
-    .hook-navbar-nav-onclick;
-}
+.sp-navbar-nav > li > a[href='#'] { cursor: text; }
 
 /* Active */
-.uk-navbar-nav > li.uk-active > a {
-    background-color: @navbar-nav-active-background;
-    color: @navbar-nav-active-color;
-    .hook-navbar-nav-active;
+.sp-navbar-nav > .sp-list-item > a:active,
+.sp-navbar-nav > .sp-list-item.sp-active > a {
+  opacity: 0.75;
 }
 
-
-/* Sub-objects: `uk-navbar-nav-subtitle`
- ========================================================================== */
-
-.uk-navbar-nav .uk-navbar-nav-subtitle { line-height: @navbar-nav-line-height - @navbar-nav-subtitle-font-size - @navbar-nav-subtitle-offset; }
-
-.uk-navbar-nav-subtitle > div {
-    font-size: @navbar-nav-subtitle-font-size;
-    line-height: @navbar-nav-subtitle-font-size + @navbar-nav-subtitle-offset;
-}
-
-
-/* Sub-objects: `uk-navbar-content`, `uk-navbar-brand`, `uk-navbar-toggle`
+/* Sub-objects: `sp-navbar-content`, `sp-navbar-brand`, `sp-navbar-toggle`
  ========================================================================== */
 
 /*
  * Imitate navbar items
  */
 
-.uk-navbar-content,
-.uk-navbar-brand,
-.uk-navbar-toggle {
+.sp-navbar-content,
+.sp-navbar-brand,
+.sp-navbar-toggle {
     box-sizing: border-box;
     display: block;
-    height: @navbar-nav-height;
     float: left;
-    .hook-navbar-content;
 }
 
 /*
  * Helper to center all child elements vertically
  */
 
-.uk-navbar-content:before,
-.uk-navbar-brand:before,
-.uk-navbar-toggle:before {
+.sp-navbar-content:before,
+.sp-navbar-brand:before,
+.sp-navbar-toggle:before {
     content: '';
     display: inline-block;
     height: 100%;
@@ -201,29 +69,22 @@
 }
 
 
-/* Sub-objects: `uk-navbar-content`
+/* Sub-objects: `sp-navbar-content`
  ========================================================================== */
 
 /*
  * Better sibling spacing
  */
 
-.uk-navbar-content + .uk-navbar-content:not(.uk-navbar-center) { padding-left: 0; }
-
-/*
- * Link colors
- */
-
-.uk-navbar-content > a:not([class]) { color: @navbar-link-color; }
+.sp-navbar-content + .sp-navbar-content:not(.sp-navbar-center) { padding-left: 0; }
 
 
-/* Sub-objects: `uk-navbar-brand`
+/* Sub-objects: `sp-navbar-brand`
  ========================================================================== */
 
-.uk-navbar-brand {
-    font-size: @navbar-brand-font-size;
-    color: @navbar-brand-color;
-    text-decoration: none;
+.sp-navbar-brand {
+  font-size: 18px;
+  text-decoration: none;
 }
 
 /*
@@ -231,50 +92,43 @@
  * 2. Remove default focus style
  */
 
-.uk-navbar-brand:hover,
-.uk-navbar-brand:focus { // 1
+.sp-navbar-brand:hover,
+.sp-navbar-brand:focus { // 1
     text-decoration: none;
     /* 2 */
     outline: none;
 }
 
 
-/* Sub-object: `uk-navbar-toggle`
+/* Sub-object: `sp-navbar-toggle`
  ========================================================================== */
 
-.uk-navbar-toggle {
-    font-size: @navbar-toggle-font-size;
-    color: @navbar-toggle-color;
-    text-decoration: none;
+.sp-navbar-toggle {
+  font-size: 18px;
+  text-decoration: none;
+  opacity: 0.75;
 }
 
 /*
  * 1. Apply hover style also to focus state
- * 2. Remove default focus style
+ * 2.
  */
 
-.uk-navbar-toggle:hover,
-.uk-navbar-toggle:focus { // 1
+.sp-navbar-toggle:hover,
+.sp-navbar-toggle:focus {
     text-decoration: none;
-    /* 2 */
+    /* Remove default focus style */
     outline: none;
 }
 
-/*
- * 1. Center icon vertically
- */
-
-.uk-navbar-toggle:after {
-    content: @navbar-toggle-icon;
-    font-family: FontAwesome;
-    /* 1 */
+.sp-navbar-toggle:after {
+    content: '\e971';
+    font-family: spck-ui-icons;
+    /* Center icon vertically */
     vertical-align: middle;
 }
 
-.uk-navbar-toggle-alt:after { content: @navbar-toggle-icon-alt; }
-
-
-/* Sub-object: `uk-navbar-center`
+/* Sub-object: `sp-navbar-center`
  ========================================================================== */
 
 /*
@@ -282,7 +136,7 @@
  * 1. This hack is needed because other float elements shift centered text
  */
 
-.uk-navbar-center {
+.sp-navbar-center {
     float: none;
     text-align: center;
     /* 1 */
@@ -292,17 +146,7 @@
 }
 
 
-/* Sub-object: `uk-navbar-flip`
+/* Sub-object: `sp-navbar-flip`
  ========================================================================== */
 
-.uk-navbar-flip { float: right; }
-
-
-// Hooks
-// ========================================================================
-
-.hook-navbar-nav() {}
-.hook-navbar-nav-hover() {}
-.hook-navbar-nav-onclick() {}
-.hook-navbar-nav-active() {}
-.hook-navbar-content() {}
+.sp-navbar-flip { float: right; }

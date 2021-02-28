@@ -5,7 +5,7 @@
     UI.component('tab', {
 
         defaults: {
-            target    : '>li:not(.uk-tab-responsive, .uk-disabled)',
+            target    : '>li:not(.sp-tab-responsive, .sp-disabled)',
             connect   : false,
             active    : 0,
             animation : false,
@@ -18,12 +18,12 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-tab]', context).each(function() {
+                UI.$('[data-sp-tab]', context).each(function() {
 
                     var tab = UI.$(this);
 
                     if (!tab.data('tab')) {
-                        var obj = UI.tab(tab, UI.Utils.options(tab.attr('data-uk-tab')));
+                        var obj = UI.tab(tab, UI.Utils.options(tab.attr('data-sp-tab')));
                     }
                 });
             });
@@ -45,9 +45,9 @@
 
                 var current = $this.find($this.options.target).not(this);
 
-                current.removeClass('uk-active').blur();
+                current.removeClass('sp-active').blur();
 
-                $this.trigger('change.uk.tab', [UI.$(this).addClass('uk-active'), $this.current]);
+                $this.trigger('change.uk.tab', [UI.$(this).addClass('sp-active'), $this.current]);
 
                 $this.current = UI.$(this);
 
@@ -63,13 +63,13 @@
             }
 
             // init responsive tab
-            this.responsivetab = UI.$('<li class="uk-tab-responsive uk-active"><a></a></li>').append('<div class="uk-dropdown uk-dropdown-small"><ul class="uk-nav uk-nav-dropdown"></ul><div>');
+            this.responsivetab = UI.$('<li class="sp-tab-responsive sp-active"><a></a></li>').append('<div class="sp-dropdown sp-dropdown-small"><ul class="sp-nav sp-nav-dropdown"></ul><div>');
 
-            this.responsivetab.dropdown = this.responsivetab.find('.uk-dropdown');
+            this.responsivetab.dropdown = this.responsivetab.find('.sp-dropdown');
             this.responsivetab.lst      = this.responsivetab.dropdown.find('ul');
             this.responsivetab.caption  = this.responsivetab.find('a:first');
 
-            if (this.element.hasClass('uk-tab-bottom')) this.responsivetab.dropdown.addClass('uk-dropdown-up');
+            if (this.element.hasClass('sp-tab-bottom')) this.responsivetab.dropdown.addClass('sp-dropdown-up');
 
             // handle click
             this.responsivetab.lst.on('click.uk.tab', 'a', function(e) {
@@ -79,7 +79,7 @@
 
                 var link = UI.$(this);
 
-                $this.element.children('li:not(.uk-tab-responsive)').eq(link.data('index')).trigger('click');
+                $this.element.children('li:not(.sp-tab-responsive)').eq(link.data('index')).trigger('click');
             });
 
             this.on('show.uk.switcher change.uk.tab', function(e, tab) {
@@ -92,7 +92,7 @@
             if (this.options.connect) {
 
                 this.switcher = UI.switcher(this.element, {
-                    toggle    : '>li:not(.uk-tab-responsive)',
+                    toggle    : '>li:not(.sp-tab-responsive)',
                     connect   : this.options.connect,
                     active    : this.options.active,
                     animation : this.options.animation,
@@ -104,7 +104,7 @@
             UI.dropdown(this.responsivetab, {mode: 'click', preventflip: 'y'});
 
             // init
-            $this.trigger('change.uk.tab', [this.element.find(this.options.target).not('.uk-tab-responsive').filter('.uk-active')]);
+            $this.trigger('change.uk.tab', [this.element.find(this.options.target).not('.sp-tab-responsive').filter('.sp-active')]);
 
             this.check();
 
@@ -119,10 +119,10 @@
 
         check: function() {
 
-            var children = this.element.children('li:not(.uk-tab-responsive)').removeClass('uk-hidden');
+            var children = this.element.children('li:not(.sp-tab-responsive)').removeClass('sp-hidden');
 
             if (!children.length) {
-                this.responsivetab.addClass('uk-hidden');
+                this.responsivetab.addClass('sp-hidden');
                 return;
             }
 
@@ -146,9 +146,9 @@
                     item  = UI.$(children.eq(i));
                     link  = item.find('a');
 
-                    if (item.css('float') != 'none' && !item.attr('uk-dropdown')) {
+                    if (item.css('float') != 'none' && !item.attr('sp-dropdown')) {
 
-                        if (!item.hasClass('uk-disabled')) {
+                        if (!item.hasClass('sp-disabled')) {
 
                             clone = UI.$(item[0].outerHTML);
                             clone.find('a').data('index', i);
@@ -156,12 +156,12 @@
                             this.responsivetab.lst.append(clone);
                         }
 
-                        item.addClass('uk-hidden');
+                        item.addClass('sp-hidden');
                     }
                 }
             }
 
-            this.responsivetab[this.responsivetab.lst.children('li').length ? 'removeClass':'addClass']('uk-hidden');
+            this.responsivetab[this.responsivetab.lst.children('li').length ? 'removeClass':'addClass']('sp-hidden');
         }
     });
 

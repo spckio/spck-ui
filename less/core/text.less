@@ -1,75 +1,49 @@
-// Name:            Text
-// Description:     Collection of useful text utility classes to style your content
-//
-// Component:       `uk-text-*`
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@text-small-font-size:                          12px;
-@text-small-line-height:                        16px;
-@text-large-font-size:                          16px;
-@text-large-line-height:                        32px;
-@text-large-font-weight:                        normal;
-
-@text-muted-color:                              #999;
-@text-primary-color:                            @global-primary-background;
-@text-success-color:                            @global-success-background;
-@text-warning-color:                            @global-warning-background;
-@text-danger-color:                             @global-danger-background;
-@text-contrast-color:                           @global-contrast-color;
-
-
-/* ========================================================================
-   Component: Text
- ========================================================================== */
-
 /* Size modifiers
  ========================================================================== */
 
-.uk-text-small {
-    font-size: @text-small-font-size;
-    line-height: @text-small-line-height;
+.sp-text-small {
+  font-size: 14px;
+  line-height: 18px;
 }
 
-.uk-text-large {
-    font-size: @text-large-font-size;
-    line-height: @text-large-line-height;
-    font-weight: @text-large-font-weight;
+.sp-text-large {
+  font-size: 20px;
+  line-height: 36px;
 }
 
 
 /* Weight modifiers
  ========================================================================== */
 
-.uk-text-bold { font-weight: bold; }
-
+.sp-text-bold { font-weight: bold; }
 
 /* Color modifiers
  ========================================================================== */
 
-.uk-text-muted { color: @text-muted-color !important; }
-.uk-text-primary { color: @text-primary-color !important; }
-.uk-text-success { color: @text-success-color !important; }
-.uk-text-warning { color: @text-warning-color !important; }
-.uk-text-danger { color: @text-danger-color !important; }
-.uk-text-contrast { color: @text-contrast-color !important; }
+.sp-text-muted { color: @global-muted-color !important; }
+.dark .sp-text-muted { color: @global-dark-muted-color !important; }
+.sp-text-primary { color: @global-primary !important; }
+.dark .sp-text-primary { color: @global-dark-primary !important; }
+.sp-text-success { color: @global-success !important; }
+.dark .sp-text-success { color: @global-dark-success !important; }
+.sp-text-warning { color: @global-warning !important; }
+.dark .sp-text-warning { color: @global-dark-warning !important; }
+.sp-text-danger { color: @global-danger !important; }
+.dark .sp-text-danger { color: @global-dark-danger !important; }
+.sp-text-contrast { color: @global-contrast-color !important; }
 
 
 /* Alignment modifiers
  ========================================================================== */
 
-.uk-text-left { text-align: left !important; }
-.uk-text-right { text-align: right !important; }
-.uk-text-center { text-align: center !important; }
-.uk-text-justify { text-align: justify !important; }
+.sp-text-left { text-align: left !important; }
+.sp-text-right { text-align: right !important; }
+.sp-text-center { text-align: center !important; }
+.sp-text-justify { text-align: justify !important; }
 
-.uk-text-top { vertical-align: top !important; }
-.uk-text-middle { vertical-align: middle !important; }
-.uk-text-bottom { vertical-align: bottom !important; }
+.sp-text-top { vertical-align: top !important; }
+.sp-text-middle { vertical-align: middle !important; }
+.sp-text-bottom { vertical-align: bottom !important; }
 
 
 /* Wrap modifiers
@@ -79,13 +53,13 @@
  * Prevent text from wrapping onto multiple lines
  */
 
-.uk-text-nowrap { white-space: nowrap; }
+.sp-text-nowrap { white-space: nowrap; }
 
 /*
  * Prevent text from wrapping onto multiple lines, and truncate with an ellipsis
  */
 
-.uk-text-truncate {
+.sp-text-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -95,26 +69,24 @@
  * Break strings if their length exceeds the width of their container
  */
 
-.uk-text-break {
+.sp-text-break {
     word-wrap: break-word;
     -webkit-hyphens: auto;
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
     hyphens: auto;
 }
 
 /* Transform modifiers
  ========================================================================== */
 
-.uk-text-capitalize {
+.sp-text-capitalize {
     text-transform: capitalize !important;
 }
 
-.uk-text-lowercase {
+.sp-text-lowercase {
     text-transform: lowercase !important;
 }
 
-.uk-text-uppercase{
+.sp-text-uppercase{
     text-transform: uppercase !important;
 }
 

@@ -5,7 +5,7 @@
     var active = false, activeCount = 0, $html = UI.$html, body;
 
     UI.$win.on('resize orientationchange', UI.Utils.debounce(function(){
-        UI.$('.uk-modal.uk-open').each(function(){
+        UI.$('.sp-modal.sp-open').each(function(){
             return UI.$(this).data('modal') && UI.$(this).data('modal').resize();
         });
     }, 150));
@@ -33,18 +33,18 @@
             var $this = this;
 
             $this.paddingdir = 'padding-' + (UI.langdirection == 'left' ? 'right':'left');
-            $this.dialog     = $this.find('.uk-modal-dialog');
+            $this.dialog     = $this.find('.sp-modal-dialog');
 
             $this.active     = false;
 
             // Update ARIA
-            $this.element.attr('aria-hidden', $this.element.hasClass('uk-open'));
+            $this.element.attr('aria-hidden', $this.element.hasClass('sp-open'));
 
-            $this.on('click', '.uk-modal-close', function(e) {
+            $this.on('click', '.sp-modal-close', function(e) {
 
                 e.preventDefault();
 
-                var modal = UI.$(e.target).closest('.uk-modal');
+                var modal = UI.$(e.target).closest('.sp-modal');
                 if (modal[0] === $this.element[0]) $this.hide();
 
             }).on('mousedown', function(e) {
@@ -87,7 +87,7 @@
                 active.hide(true);
             }
 
-            $this.element.removeClass('uk-open').show();
+            $this.element.removeClass('sp-open').show();
             $this.resize(true);
 
             if ($this.options.modal) {
@@ -103,13 +103,13 @@
                 $this.element.one(UI.support.transition.end, function(){
                     $this.hasTransitioned = true;
                     finalize();
-                }).addClass('uk-open');
+                }).addClass('sp-open');
             } else {
-                $this.element.addClass('uk-open');
+                $this.element.addClass('sp-open');
                 finalize();
             }
 
-            $html.addClass('uk-modal-page').height(); // force browser engine redraw
+            $html.addClass('sp-modal-page').height(); // force browser engine redraw
 
             // Update ARIA
             $this.element.attr('aria-hidden', 'false');
@@ -129,7 +129,7 @@
 
                 this.one(UI.support.transition.end, function() {
                     $this._hide();
-                }).removeClass('uk-open');
+                }).removeClass('sp-open');
 
             } else {
 
@@ -167,7 +167,7 @@
         updateScrollable: function() {
 
             // has scrollable?
-            var scrollable = this.dialog.find('.uk-overflow-container:visible:first');
+            var scrollable = this.dialog.find('.sp-overflow-container:visible:first');
 
             if (scrollable.length) {
 
@@ -195,14 +195,14 @@
             if (activeCount > 0) activeCount--;
             else activeCount = 0;
 
-            this.element.hide().removeClass('uk-open');
+            this.element.hide().removeClass('sp-open');
             this.dialog.css('transform', '');
 
             // Update ARIA
             this.element.attr('aria-hidden', 'true');
 
             if (!activeCount) {
-                $html.removeClass('uk-modal-page');
+                $html.removeClass('sp-modal-page');
                 body.css(this.paddingdir, "");
             }
 
@@ -212,7 +212,7 @@
         },
 
         isActive: function() {
-            return this.element.hasClass('uk-open');
+            return this.element.hasClass('sp-open');
         }
 
     });
@@ -222,7 +222,7 @@
         boot: function() {
 
             // init code
-            UI.$html.on('click.modal.uikit', '[data-uk-modal]', function(e) {
+            UI.$html.on('click.modal.uikit', '[data-sp-modal]', function(e) {
 
                 var ele = UI.$(this);
 
@@ -231,7 +231,7 @@
                 }
 
                 if (!ele.data('modalTrigger')) {
-                    var modal = UI.modalTrigger(ele, UI.Utils.options(ele.attr('data-uk-modal')));
+                    var modal = UI.modalTrigger(ele, UI.Utils.options(ele.attr('data-sp-modal')));
                     modal.show();
                 }
 
@@ -284,15 +284,15 @@
         return modal;
     };
 
-    UI.modal.dialog.template = '<div class="uk-modal"><div class="uk-modal-dialog" style="min-height:0;"></div></div>';
+    UI.modal.dialog.template = '<div class="sp-modal"><div class="sp-modal-dialog" style="min-height:0;"></div></div>';
 
     UI.modal.alert = function(content, options) {
 
         options = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
 
         var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-button-primary uk-modal-close">'+options.labels.Ok+'</button></div>'
+            '<div class="sp-margin sp-modal-content">'+String(content)+'</div>',
+            '<div class="sp-modal-footer sp-text-right"><button class="sp-button sp-button-primary sp-modal-close">'+options.labels.Ok+'</button></div>'
         ]).join(""), options);
 
         modal.on('show.uk.modal', function(){
@@ -313,8 +313,8 @@
         options   = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, UI.$.isFunction(options) ? {}:options);
 
         var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button js-modal-confirm-cancel">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-confirm">'+options.labels.Ok+'</button></div>'
+            '<div class="sp-margin sp-modal-content">'+String(content)+'</div>',
+            '<div class="sp-modal-footer sp-text-right"><button class="sp-button js-modal-confirm-cancel">'+options.labels.Cancel+'</button> <button class="sp-button sp-button-primary js-modal-confirm">'+options.labels.Ok+'</button></div>'
         ]).join(""), options);
 
         modal.element.find(".js-modal-confirm, .js-modal-confirm-cancel").on("click", function(){
@@ -337,9 +337,9 @@
         options  = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
 
         var modal = UI.modal.dialog(([
-            text ? '<div class="uk-modal-content uk-form">'+String(text)+'</div>':'',
-            '<div class="uk-margin-small-top uk-modal-content uk-form"><p><input type="text" class="uk-width-1-1"></p></div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-modal-close">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-ok">'+options.labels.Ok+'</button></div>'
+            text ? '<div class="sp-modal-content sp-form">'+String(text)+'</div>':'',
+            '<div class="sp-margin-small-top sp-modal-content sp-form"><p><input type="text" class="sp-width-1-1"></p></div>',
+            '<div class="sp-modal-footer sp-text-right"><button class="sp-button sp-modal-close">'+options.labels.Cancel+'</button> <button class="sp-button sp-button-primary js-modal-ok">'+options.labels.Ok+'</button></div>'
         ]).join(""), options),
 
         input = modal.element.find("input[type='text']").val(value || '').on('keyup', function(e){
@@ -360,10 +360,10 @@
     UI.modal.blockUI = function(content, options) {
 
         var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content || '<div class="uk-text-center">...</div>')+'</div>'
+            '<div class="sp-margin sp-modal-content">'+String(content || '<div class="sp-text-center">...</div>')+'</div>'
         ]).join(""), UI.$.extend({bgclose:false, keyboard:false, modal:false}, options));
 
-        modal.content = modal.element.find('.uk-modal-content:first');
+        modal.content = modal.element.find('.sp-modal-content:first');
 
         return modal.show();
     };
@@ -395,7 +395,7 @@
                 content = UI.$('<div></div>').html('UIkit2.modal Error: Unsupported data type: ' + typeof content);
         }
 
-        content.appendTo(modal.element.find('.uk-modal-dialog'));
+        content.appendTo(modal.element.find('.sp-modal-dialog'));
 
         return modal;
     }

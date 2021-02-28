@@ -20,19 +20,19 @@
 
         defaults: {
             target: '>span:first',
-            activeClass: 'uk-active'
+            activeClass: 'sp-active'
         },
 
         boot: function() {
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-form-select]', context).each(function(){
+                UI.$('[data-sp-form-select]', context).each(function(){
 
                     var ele = UI.$(this);
 
                     if (!ele.data('formSelect')) {
-                        UI.formSelect(ele, UI.Utils.options(ele.attr('data-uk-form-select')));
+                        UI.formSelect(ele, UI.Utils.options(ele.attr('data-sp-form-select')));
                     }
                 });
             });
@@ -70,10 +70,10 @@
                     return fn();
                 })(),
 
-                focus: function(){ $this.target.addClass('uk-focus') },
-                blur: function(){ $this.target.removeClass('uk-focus') },
-                mouseenter: function(){ $this.target.addClass('uk-hover') },
-                mouseleave: function(){ $this.target.removeClass('uk-hover') }
+                focus: function(){ $this.target.addClass('sp-focus') },
+                blur: function(){ $this.target.removeClass('sp-focus') },
+                mouseenter: function(){ $this.target.addClass('sp-hover') },
+                mouseleave: function(){ $this.target.removeClass('sp-hover') }
             });
 
             this.element.data("formSelect", this);

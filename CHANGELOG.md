@@ -21,7 +21,7 @@ Version 0.3.1
 - **Breaking**: Renamed property `dropdownCSS` to `dropdownClass`
 - **Breaking**: Renamed property `link` to `buttonStyle`
 - **Breaking**: Renamed `ClickEvents` mixin to `MouseEvents`
-- **Breaking**: Refactor `uk-form` to `uk-input`, `uk-select`, `uk-textarea`
+- **Breaking**: Refactor `sp-form` to `sp-input`, `sp-select`, `sp-textarea`
 - **Breaking**: Removed `singleView` and `defaultView` for `defaultBatch` on `flexgrid`
 - **Breaking**: Change `onClick` event to be lazy
 - Added `scroller`, `drawer`, `resizer`, `spacer` components

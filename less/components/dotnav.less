@@ -1,18 +1,18 @@
 // Name:            Dotnav
 // Description:     Defines styles for a dot navigation
 //
-// Component:       `uk-dotnav`
+// Component:       `sp-dotnav`
 //
-// Modifier:        `uk-dotnav-contrast`
-//                  `uk-dotnav-vertical`
+// Modifier:        `sp-dotnav-contrast`
+//                  `sp-dotnav-vertical`
 //
-// States:          `uk-active`
+// States:          `sp-active`
 //
 // Markup:
 //
-// <!-- uk-dotnav -->
-// <ul class="uk-dotnav">
-//     <li class="uk-active"><a href=""></a></li>
+// <!-- sp-dotnav -->
+// <ul class="sp-dotnav">
+//     <li class="sp-active"><a href=""></a></li>
 //     <li><a href=""></a></li>
 // </ul>
 //
@@ -48,7 +48,7 @@
  * 2. Remove default list style
  */
 
-.uk-dotnav {
+.sp-dotnav {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
@@ -65,10 +65,10 @@
 
 /*
  * 1. Space is allocated solely based on content dimensions
- * 2. Horizontal gutter is using `padding` so `uk-width-*` classes can be applied
+ * 2. Horizontal gutter is using `padding` so `sp-width-*` classes can be applied
  */
 
-.uk-dotnav > * {
+.sp-dotnav > * {
     /* 1 */
     -ms-flex: none;
     -webkit-flex: none;
@@ -82,16 +82,16 @@
  * DEPRECATED IE9 Support
  */
 
-.uk-dotnav:before,
-.uk-dotnav:after {
+.sp-dotnav:before,
+.sp-dotnav:after {
     content: "";
     display: block;
     overflow: hidden;
 }
 
-.uk-dotnav:after { clear: both; }
+.sp-dotnav:after { clear: both; }
 
-.uk-dotnav > * { float: left; }
+.sp-dotnav > * { float: left; }
 
 
 /* Items
@@ -102,7 +102,7 @@
  * 1. Hide text if present
  */
 
-.uk-dotnav > * > * {
+.sp-dotnav > * > * {
     display: block;
     box-sizing: content-box;
     width: @dotnav-width;
@@ -122,8 +122,8 @@
  * 2. Remove default focus style
  */
 
-.uk-dotnav > * > :hover,
-.uk-dotnav > * > :focus { // 1
+.sp-dotnav > * > :hover,
+.sp-dotnav > * > :focus { // 1
     background: @dotnav-hover-background;
     /* 2 */
     outline: none;
@@ -131,22 +131,22 @@
 }
 
 /* OnClick */
-.uk-dotnav > * > :active {
+.sp-dotnav > * > :active {
     background: @dotnav-onclick-background;
     .hook-dotnav-item-onclick;
 }
 
 /* Active */
-.uk-dotnav > .uk-active > * {
+.sp-dotnav > .sp-active > * {
     background: @dotnav-active-background;
     .hook-dotnav-item-active;
 }
 
 
-/* Modifier: `uk-dotnav-contrast`
+/* Modifier: `sp-dotnav-contrast`
  ========================================================================== */
 
-.uk-dotnav-contrast > * > * {
+.sp-dotnav-contrast > * > * {
     background: @dotnav-contrast-background;
     .hook-dotnav-contrast-item;
 }
@@ -156,20 +156,20 @@
  * 1. Apply hover style also to focus state
  */
 
-.uk-dotnav-contrast > * > :hover,
-.uk-dotnav-contrast > * > :focus { // 1
+.sp-dotnav-contrast > * > :hover,
+.sp-dotnav-contrast > * > :focus { // 1
     background: @dotnav-contrast-hover-background;
     .hook-dotnav-contrast-item-hover;
 }
 
 /* OnClick */
-.uk-dotnav-contrast > * > :active {
+.sp-dotnav-contrast > * > :active {
     background: @dotnav-contrast-onclick-background;
     .hook-dotnav-contrast-item-onclick;
 }
 
 /* Active */
-.uk-dotnav-contrast > .uk-active > * {
+.sp-dotnav-contrast > .sp-active > * {
     background: @dotnav-contrast-active-background;
     .hook-dotnav-contrast-item-active;
 }

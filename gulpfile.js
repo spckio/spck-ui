@@ -9,7 +9,6 @@ var DOCS = './docs'
 var FILES = [
   './src/core/core.js',
   './src/core/*.js',
-  './src/components/autocomplete.js',
   './src/components/notify.js',
   './src/spck-ui.js'];
 

@@ -26,7 +26,7 @@
             animation: false,
             delay: 0, // in miliseconds
             cls: '',
-            activeClass: 'uk-active',
+            activeClass: 'sp-active',
             src: function(ele) {
                 var title = ele.attr('title');
 
@@ -43,11 +43,11 @@
         boot: function() {
 
             // init code
-            UI.$html.on('mouseenter.tooltip.uikit focus.tooltip.uikit', '[data-uk-tooltip]', function(e) {
+            UI.$html.on('mouseenter.tooltip.uikit focus.tooltip.uikit', '[data-sp-tooltip]', function(e) {
                 var ele = UI.$(this);
 
                 if (!ele.data('tooltip')) {
-                    UI.tooltip(ele, UI.Utils.options(ele.attr('data-uk-tooltip')));
+                    UI.tooltip(ele, UI.Utils.options(ele.attr('data-sp-tooltip')));
                     ele.trigger('mouseenter');
                 }
             });
@@ -58,7 +58,7 @@
             var $this = this;
 
             if (!$tooltip) {
-                $tooltip = UI.$('<div class="uk-tooltip"></div>').appendTo("body");
+                $tooltip = UI.$('<div class="sp-tooltip"></div>').appendTo("body");
             }
 
             this.on({
@@ -79,7 +79,7 @@
             if (typeof(this.tip) === 'string' ? !this.tip.length:true) return;
 
             $tooltip.stop().css({top: -2000, visibility: 'hidden'}).removeClass(this.options.activeClass).show();
-            $tooltip.html('<div class="uk-tooltip-inner">' + this.tip + '</div>');
+            $tooltip.html('<div class="sp-tooltip-inner">' + this.tip + '</div>');
 
             var $this      = this,
                 pos        = UI.$.extend({}, this.element.offset(), {width: this.element[0].offsetWidth, height: this.element[0].offsetHeight}),
@@ -170,7 +170,7 @@
 
             tooltipdelay = setTimeout(function(){
 
-                $tooltip.css(tcss).attr('class', ['uk-tooltip', 'uk-tooltip-'+position, $this.options.cls].join(' '));
+                $tooltip.css(tcss).attr('class', ['sp-tooltip', 'sp-tooltip-'+position, $this.options.cls].join(' '));
 
                 if ($this.options.animation) {
                     $tooltip.css({opacity: 0, display: 'block'}).addClass($this.options.activeClass).animate({opacity: 1}, parseInt($this.options.animation, 10) || 400);

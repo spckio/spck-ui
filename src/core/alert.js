@@ -7,19 +7,19 @@
         defaults: {
             fade: true,
             duration: 200,
-            trigger: '.uk-alert-close'
+            trigger: '.sp-alert-close'
         },
 
         boot: function() {
 
             // init code
-            UI.$html.on('click.alert.uikit', '[data-uk-alert]', function(e) {
+            UI.$html.on('click.alert.uikit', '[data-sp-alert]', function(e) {
 
                 var ele = UI.$(this);
 
                 if (!ele.data('alert')) {
 
-                    var alert = UI.alert(ele, UI.Utils.options(ele.attr('data-uk-alert')));
+                    var alert = UI.alert(ele, UI.Utils.options(ele.attr('data-sp-alert')));
 
                     if (UI.$(e.target).is(alert.options.trigger)) {
                         e.preventDefault();

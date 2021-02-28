@@ -1,31 +1,28 @@
 window.onload = function () {
   handleHashChange();
-  UI.removeClass(document.body, "uk-hidden");
-  $$('navBar').set('sticky', true);
+  UI.removeClass(document.body, "sp-hidden");
 };
 window.onhashchange = handleHashChange;
 
 
 document.body.onscroll = function () {
-  var navElem = $$('navBar').el;
+  var navElem = $$('navBar').element;
   if (document.documentElement.scrollTop > 5) {
-    UI.addClass(navElem, 'uk-box-shadow');
+    UI.addClass(navElem, 'sp-box-shadow');
   } else {
-    UI.removeClass(navElem, 'uk-box-shadow');
+    UI.removeClass(navElem, 'sp-box-shadow');
   }
 };
 
 
 var phrases1 = [
-  "I'm having a party",
-  "Everyone can come",
-  "By the way, you're invited",
-  "You seem pretty fun",
-  "I've got a massive sound system",
-  "Biggest in the world",
-  "DJ spins all the tunes",
-  "That will make you move",
-  "- Kero Kero Bonito"
+  'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+  'Aliquam tincidunt mauris eu risus.',
+  'Vestibulum auctor dapibus neque.',
+  'Nunc dignissim risus id metus.',
+  'Cras ornare tristique elit.',
+  'Vivamus vestibulum ntulla nec ante.',
+  'Praesent placerat risus quis eros.'
 ];
 
 
@@ -68,83 +65,57 @@ function CommentedStringValue(value, comment) {
 var Model = {
   containers: {
     input: wrapInForm,
-    autocomplete: wrapInForm,
     select: wrapInForm,
     fieldset: function (fieldset) {
       return {
         view: 'form',
+        padding: true,
         fieldsets: [fieldset]
       }
     }
   },
   aliases: {
     breadcrumb: 'list',
+    badge: 'element',
     card: 'element',
+    notify: 'spacer',
     tab: 'list'
   },
   components: {
-    autocomplete: function () {
-      var quotes = mapToProperty(phrases2, 'value');
+    badge: function () {
       return {
-        locals: {
-          quotes: quotes
-        },
         component: {
+          padding: true,
           cells: [
             {
-              flexLayout: "column",
-              cells: [
-                {
-                  view: "label",
-                  label: "Basic Autocomplete",
-                  htmlTag: "H6",
-                  margin: "bottom"
-                },
-                {
-                  view: 'autocomplete',
-                  placeholder: 'Type something...',
-                  sources: quotes
-                },
-                {
-                  view: "label",
-                  badge: "primary",
-                  label: 'Type "free" or "nice" for example.',
-                  margin: "top"
-                }
-              ]
+              view: 'label',
+              badge: true,
+              label: 'Default',
+              margin: 'y'
             },
             {
-              margin: "left-lg",
-              flexLayout: "column",
-              cells: [
-                {
-                  view: "label",
-                  label: "Remote Source",
-                  htmlTag: "H6",
-                  margin: "bottom"
-                },
-                {
-                  view: 'autocomplete',
-                  placeholder: 'Type something else...',
-                  minLength: 3,
-                  autocomplete: function (release) {
-                    var searchValue = this.getValue();
-                    setTimeout(function () {
-                      release(
-                        quotes.filter(function (item) {
-                          return item.value.indexOf(searchValue) != -1;
-                        })
-                      );
-                    }, 250);
-                  }
-                },
-                {
-                  view: "label",
-                  badge: "primary",
-                  label: 'Type at least 3 characters.',
-                  margin: "top"
-                }
-              ]
+              view: 'label',
+              badge: 'success',
+              label: 'Success',
+              margin: 'y'
+            },
+            {
+              view: 'label',
+              badge: 'primary',
+              label: 'Primary',
+              margin: 'y'
+            },
+            {
+              view: 'label',
+              badge: 'warning',
+              label: 'Warning',
+              margin: 'y'
+            },
+            {
+              view: 'label',
+              badge: 'danger',
+              label: 'Danger',
+              margin: 'y'
             }
           ]
         }
@@ -155,6 +126,7 @@ var Model = {
         component: {
           view: 'list',
           listStyle: 'breadcrumb',
+          padding: true,
           data: [
             { view: 'link', label: 'Root' },
             { view: 'link', label: 'Parent' },
@@ -166,100 +138,132 @@ var Model = {
     button: function () {
       return {
         component: {
-          cells: [
-            {
-              flexLayout: 'column',
-              cells: [
-                {
-                  view: 'button',
-                  size: 'small',
-                  label: 'Small Link',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Default Link',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Muted Link',
-                  color: 'muted',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Success Link',
-                  color: 'success',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Primary Large Link',
-                  color: 'primary',
-                  icon: 'heart',
-                  size: 'large',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Danger Large Link',
-                  size: 'large',
-                  color: 'danger',
-                  margin: 'y'
-                }
-              ]
-            },
-            {
-              flexLayout: 'column',
-              cells: [
-                {
-                  view: 'button',
-                  size: 'small',
-                  label: 'Small Button',
-                  buttonStyle: 'button',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Default Button',
-                  buttonStyle: 'button',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Muted Button',
-                  buttonStyle: 'button',
-                  color: 'muted',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Success Button',
-                  buttonStyle: 'button',
-                  color: 'success',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Primary Large Button',
-                  buttonStyle: 'button',
-                  icon: 'heart',
-                  color: 'primary',
-                  size: 'large',
-                  margin: 'y'
-                },
-                {
-                  view: 'button',
-                  label: 'Danger Large Button',
-                  buttonStyle: 'button',
-                  size: 'large',
-                  color: 'danger',
-                  margin: 'y'
-                }
-              ]
-            }
-          ]
+          scroll: 'x',
+          template: {
+            flexLayout: 'column',
+            cells: [
+              {
+                flexAlign: 'middle',
+                cells: [
+                  {
+                    view: 'button',
+                    size: 'mini',
+                    label: 'Mini Link',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    size: 'small',
+                    label: 'Small Link',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Default Link',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Muted Link',
+                    color: 'muted',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Success Link',
+                    color: 'success',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Primary Large Link',
+                    color: 'primary',
+                    icon: 'heart',
+                    size: 'large',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Danger Large Link',
+                    size: 'large',
+                    color: 'danger',
+                    margin: 'y'
+                  }
+                ]
+              },
+              {
+                flexAlign: 'middle',
+                cells: [
+                  {
+                    view: 'button',
+                    size: 'small',
+                    label: 'Small Button',
+                    buttonStyle: 'button',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Default Button',
+                    buttonStyle: 'button',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Muted Button',
+                    buttonStyle: 'button',
+                    color: 'muted',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Success Button',
+                    buttonStyle: ['button', 'shadow'],
+                    color: 'success',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Primary Large Button',
+                    buttonStyle: 'button',
+                    icon: 'heart',
+                    color: 'primary',
+                    size: 'large',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Danger Large Button',
+                    buttonStyle: 'button',
+                    size: 'large',
+                    color: 'danger',
+                    margin: 'x'
+                  }
+                ]
+              },
+              {
+                cls: 'sp-button-group',
+                margin: 'y x',
+                template: [
+                  {
+                    view: 'button',
+                    label: 'Left Button',
+                    buttonStyle: 'button',
+                  },
+                  {
+                    view: 'button',
+                    label: 'Middle Button',
+                    buttonStyle: 'button',
+                  },
+                  {
+                    view: 'button',
+                    label: 'Right Button',
+                    buttonStyle: 'button',
+                    color: 'success',
+                  }
+                ]
+              }
+            ]
+          }
         }
       };
     },
@@ -267,41 +271,69 @@ var Model = {
       return {
         component: {
           flexLayout: 'column',
+          padding: true,
           cells: [
             {
-              flexSpace: 'between',
-              margin: 'bottom-lg',
+              view: 'label',
+              flexSize: 'flex',
+              label: 'Default Card',
+              card: true
+            },
+            {
+              margin: 'y',
+              flexLayout: 'column',
+              card: true,
               cells: [
                 {
                   view: 'label',
-                  flexSize: 'flex',
-                  label: 'Default Card',
-                  card: true
+                  htmlTag: 'h5',
+                  label: 'Card with Header',
+                  card: 'header'
                 },
                 {
                   view: 'label',
-                  flexSize: 'flex',
                   label: 'Primary Card',
-                  card: 'primary',
-                  margin: 'left-lg'
+                  card: 'body'
+                },
+                {
+                  template: 'Teaser Card',
+                  card: 'teaser'
                 }
               ]
             },
             {
               flexLayout: 'column',
               card: true,
+              cardStyle: 'primary',
               cells: [
-                {
-                  view: 'label',
-                  card: 'badge',
-                  badge: 'danger',
-                  label: 'Awesome'
-                },
                 {
                   view: 'label',
                   htmlTag: 'h5',
                   label: 'Card with Header',
-                  card: 'header title'
+                  card: 'header'
+                },
+                {
+                  view: 'label',
+                  label: 'Primary Card',
+                  card: 'body'
+                },
+                {
+                  template: 'Teaser Card',
+                  card: 'teaser'
+                }
+              ]
+            },
+            {
+              flexLayout: 'column',
+              card: true,
+              cardStyle: 'success',
+              margin: 'y',
+              cells: [
+                {
+                  view: 'label',
+                  htmlTag: 'h5',
+                  label: 'Card with Header',
+                  card: 'header'
                 },
                 {
                   view: 'label',
@@ -317,6 +349,7 @@ var Model = {
     drawer: function () {
       return {
         component: {
+          padding: true,
           cells: [
             {
               view: 'button',
@@ -342,6 +375,7 @@ var Model = {
             {
               id: 'drawerLeft',
               view: 'drawer',
+              edge: true,
               template: {
                 flex: true,
                 flexAlign: 'center middle',
@@ -358,6 +392,7 @@ var Model = {
               id: 'drawerRight',
               view: 'drawer',
               flipped: true,
+              edge: true,
               template: {
                 flex: true,
                 flexAlign: 'center middle',
@@ -377,12 +412,13 @@ var Model = {
     dropdown: function () {
       return {
         component: {
+          padding: true,
           cells: [
             {
               view: 'button',
               label: 'Show dropdown',
               color: 'primary',
-              buttonStyle: 'button',
+              buttonStyle: ['button', 'shadow'],
               dropdown: {
                 view: 'list',
                 data: [
@@ -407,7 +443,7 @@ var Model = {
                   },
                   {
                     view: 'image',
-                    src: "logo.svg"
+                    src: "logo-mark.svg"
                   }
                 ]
               }
@@ -419,6 +455,7 @@ var Model = {
     element: function () {
       return {
         component: {
+          padding: true,
           template: '<h6>Element {{name}}</h6><p>{{name}} can be anything.</p>',
           name: 'Template'
         }
@@ -431,7 +468,7 @@ var Model = {
           data: [
             { formLabel: 'User', view: 'input', value: 'Hello' },
             { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' },
-            { view: 'button', color: 'primary', buttonStyle: 'button', label: 'Login', inputWidth: 'medium', margin: 'top' }
+            { view: 'button', color: 'primary', buttonStyle: 'button', label: 'Login', inputWidth: 'medium' }
           ]
         }
       };
@@ -439,11 +476,33 @@ var Model = {
     form: function () {
       return {
         component: {
-          view: 'form',
-          fieldset: [
-            { formLabel: 'User', view: 'input', value: 'Hello' },
-            { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' },
-            { view: 'button', color: 'primary', buttonStyle: 'button', label: 'Login', inputWidth: 'medium', margin: 'top' }
+          padding: true,
+          fill: 'width',
+          template: [
+            {
+              view: 'form',
+              fieldset: [
+                { formLabel: 'User', view: 'input', value: 'Hello' },
+                { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' },
+              ]
+            },
+            {
+              view: 'form',
+              margin: 'y-lg',
+              formStyle: 'horizontal',
+              fieldset: [
+                { formLabel: 'User', view: 'input', value: 'Hello' },
+                { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' }
+              ]
+            },
+            {
+              view: 'form',
+              formStyle: ['horizontal', 'line'],
+              fieldset: [
+                { formLabel: 'User', view: 'input', value: 'Hello' },
+                { formLabel: 'Password', view: 'input', type: 'password', placeholder: 'Password' }
+              ]
+            }
           ]
         }
       };
@@ -451,6 +510,7 @@ var Model = {
     flexgrid: function () {
       return {
         component: {
+          padding: true,
           flexLayout: 'column',
           cells: [
             {
@@ -541,48 +601,60 @@ var Model = {
     icon: function () {
       return {
         component: {
+          padding: true,
           flexWrap: 'wrap',
           cells: [
-            'album', 'arrow-down', 'arrow-left', 'arrow-right', 'arrow-up', 'bold',
-            'bolt', 'bookmark', 'calendar', 'camera', 'cart', 'check',
-            'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up', 'close',
-            'cloud-download', 'cloud-upload', 'code', 'cog', 'comment', 'commenting', 'comments',
-            'copy', 'credit-card', 'desktop', 'download', 'expand', 'file-edit', 'file',
-            'folder', 'forward', 'future', 'git-branch', 'git-fork', 'github-alt', 'github',
-            'gitter', 'google-plus', 'google', 'grid', 'hashtag', 'heart', 'history',
-            'home', 'image', 'instagram', 'italic', 'laptop', 'link', 'list', 'location',
-            'lock', 'mail', 'menu', 'minus', 'more-vertical', 'more', 'move', 'paint-bucket',
-            'pencil', 'phone-landscape', 'phone', 'play', 'plus', 'pull', 'push', 'receiver',
-            'refresh', 'reply', 'rss', 'search', 'server', 'settings', 'shrink', 'sign-in',
-            'sign-out', 'social', 'star', 'strikethrough', 'table', 'tablet-landscape', 'tablet',
-            'tag', 'thumbnails', 'trash', 'triangle-down', 'triangle-left', 'triangle-right',
-            'triangle-up', 'unlock', 'user', 'users', 'video-camera'
+            'alert', 'archive', 'arrow-both', 'arrow-down', 'arrow-left', 'arrow-right', 'arrow-up', 'arrow-switch',
+            'arrow-up-left', 'arrow-up-right', 'arrow-down-left', 'arrow-down-right', 'beaker', 'bell',
+            'bell-slash', 'bell-fill', 'bold', 'book', 'bookmark', 'briefcase', 'broadcast', 'bug',
+            'calendar', 'check', 'check-circle', 'check-circle-fill', 'checklist',
+            'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up', 'circle', 'circle-slash', 'clippy',
+            'clock', 'code', 'code-review', 'code-square', 'comment', 'comment-discussion', 'commit', 'container',
+            'copy', 'cpu', 'credit-card', 'cross-reference', 'dash', 'database', 'desktop-download',
+            'device-camera-video', 'device-desktop', 'device-mobile', 'diff', 'dot', 'dot-fill',
+            'download', 'eye-closed', 'eye', 'file', 'file-binary', 'file-code', 'file-diff', 'file-directory',
+            'file-directory-fill', 'file-media', 'file-submodule', 'file-symlink-file', 'file-zip',
+            'filter', 'flame', 'fold', 'fold-down', 'fold-up', 'gear', 'gift',
+            'git-branch', 'git-commit', 'git-compare', 'git-fork', 'git-merge', 'git-pull-request',
+            'globe', 'grabber', 'graph', 'heading', 'heart', 'heart-fill', 'history', 'home', 'home-fill',
+            'horizontal-rule', 'hourglass', 'hubot', 'image', 'inbox', 'infinity', 'info', 'insights', 'issue-closed',
+            'issue-opened', 'issue-reopened', 'italic', 'kebab-horizontal', 'key', 'law', 'light-bulb', 'link', 'link-external',
+            'list-ordered', 'list-unordered', 'location', 'lock', 'mail',
+            'megaphone', 'mention', 'milestone', 'mirror', 'moon', 'mortar-board', 'multi-select', 'mute',
+            'no-entry', 'north-star', 'note', 'number', 'octoface', 'organization',
+            'package', 'package-dependencies', 'package-dependents', 'paper-airplane', 'pencil',
+            'people', 'person', 'pin', 'play', 'plug', 'plus', 'project', 'pulse', 'question', 'quote', 'reply',
+            'repo', 'repo-push', 'repo-template', 'report', 'rocket',
+            'rss', 'ruby', 'screen-full', 'screen-normal', 'search', 'server', 'share',
+            'share-android', 'shield', 'shield-check', 'shield-lock', 'shield', 'sign-in', 'sign-out',
+            'skip', 'smiley', 'square', 'square-fill', 'squirrel', 'star', 'star-fill', 'stop', 'stopwatch',
+            'strikethrough', 'sun', 'sync', 'tab', 'tag', 'tasklist', 'telescope', 'terminal', 'thumbsdown',
+            'thumbsup', 'tools', 'trash', 'triangle-down', 'triangle-up', 'triangle-left', 'triangle-right',
+            'typography', 'unfold', 'unlock', 'unmute', 'unverified', 'upload', 'verified', 'versions', 'video',
+            'workflow', 'x', 'x-circle', 'x-circle-fill', 'zap'
           ].map(function (icon) {
             return {
               flexLayout: "column",
               flexSize: "none",
               card: true,
               style: {
-                minWidth: '96px',
-                width: '96px',
+                minWidth: '96px'
               },
               margin: 'x-sm y-sm',
               cells: [
                 {
                   view: 'label',
-                  label: icon,
+                  label: icon + '-24',
+                  wrap: 'nowrap',
                   card: 'header',
                   textAlign: 'center',
-                  selectable: true,
-                  style: {
-                    height: '48px'
-                  }
+                  selectable: true
                 },
                 {
                   view: 'icon',
                   card: 'body',
                   textAlign: 'center',
-                  icon: icon,
+                  icon: icon + '-24',
                   size: 'xlarge'
                 }
               ]
@@ -595,35 +667,84 @@ var Model = {
       return {
         component: {
           view: 'image',
-          src: "logo.svg"
+          src: "logo-mark.svg"
         }
       };
     },
     input: function () {
       return {
         component: {
-          flexLayout: 'column',
           cells: [
             {
-              view: 'input',
-              placeholder: 'Default Size'
+              flexLayout: 'column',
+              margin: 'right',
+              cells: [
+                {
+                  view: 'input',
+                  inputStyle: 'line',
+                  placeholder: 'Default Size'
+                },
+                {
+                  view: 'input',
+                  inputStyle: 'line',
+                  size: 'small',
+                  placeholder: 'Small Size',
+                  margin: 'y'
+                },
+                {
+                  view: 'input',
+                  inputStyle: 'line',
+                  size: 'large',
+                  placeholder: 'Large Size',
+                },
+                {
+                  view: 'input',
+                  inputStyle: 'line',
+                  readonly: true,
+                  placeholder: 'Readonly',
+                  margin: 'y'
+                }
+              ]
             },
             {
-              view: 'input',
-              size: 'small',
-              placeholder: 'Small Size',
-              margin: 'y'
-            },
-            {
-              view: 'input',
-              size: 'large',
-              placeholder: 'Large Size',
-            },
-            {
-              view: 'input',
-              readonly: true,
-              placeholder: 'Readonly',
-              margin: 'y'
+              flexLayout: 'column',
+              cells: [
+                {
+                  cls: 'sp-input-group',
+                  template: [
+                    {
+                      view: 'button',
+                      buttonStyle: 'button',
+                      label: 'Field'
+                    },
+                    {
+                      view: 'input',
+                      placeholder: 'Default Size'
+                    }
+                  ]
+                },
+                {
+                  cls: 'sp-input-group-stacked',
+                  margin: 'y',
+                  template: [
+                    {
+                      view: 'input',
+                      size: 'small',
+                      placeholder: 'Small Size',
+                    },
+                    {
+                      view: 'input',
+                      size: 'large',
+                      placeholder: 'Large Size',
+                    }
+                  ]
+                },
+                {
+                  view: 'input',
+                  readonly: true,
+                  placeholder: 'Readonly'
+                }
+              ]
             }
           ]
         }
@@ -632,6 +753,7 @@ var Model = {
     label: function () {
       return {
         component: {
+          padding: true,
           view: 'label',
           label: 'Curl into a furry donut.'
         }
@@ -640,6 +762,7 @@ var Model = {
     link: function () {
       return {
         component: {
+          padding: true,
           cells: [
             {
               view: 'link',
@@ -678,6 +801,7 @@ var Model = {
           text: text
         },
         component: {
+          padding: true,
           cells: [
             {
               view: 'button',
@@ -695,7 +819,6 @@ var Model = {
               header: {
                 view: 'label',
                 htmlTag: 'h5',
-                padding: true,
                 label: 'Coffee is exquisite!'
               },
               body: {
@@ -704,7 +827,6 @@ var Model = {
               },
               footer: {
                 flexAlign: 'right',
-                padding: true,
                 cells: [
                   {
                     view: 'button',
@@ -733,9 +855,29 @@ var Model = {
         }
       }
     },
+    notify: function () {
+      return {
+        component: {
+          padding: true,
+          cells: [
+            {
+              view: 'button',
+              label: 'Show message',
+              buttonStyle: 'button',
+              on: {
+                onClick: function () {
+                  UI.message({ message: "I'm a nice message!" })
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     progress: function () {
       return {
         component: {
+          padding: true,
           flexLayout: 'column',
           cells: [
             {
@@ -854,19 +996,7 @@ var Model = {
             height: '240px'
           },
           cells: [
-            {
-              view: "label",
-              label: "Scroll down to see more...",
-              htmlTag: "H6",
-              margin: "bottom-lg"
-            },
             listTemplate(['side', 'line', 'striped'], phrases1),
-            {
-              view: "label",
-              label: "Quotes",
-              htmlTag: "H6",
-              margin: "y-lg"
-            },
             listTemplate(['side', 'line', 'striped'], phrases2)
           ]
         }
@@ -875,6 +1005,7 @@ var Model = {
     search: function () {
       return {
         component: {
+          padding: true,
           view: 'search'
         }
       };
@@ -888,23 +1019,48 @@ var Model = {
               margin: 'right',
               cells: [
                 {
-                  view: "label",
-                  label: "Basic Select",
-                  htmlTag: "H6",
-                  margin: "bottom-lg"
+                  view: 'select',
+                  data: mapToProperty(phrases1, 'label')
                 },
                 {
                   view: 'select',
+                  selectStyle: 'input',
+                  size: 'mini',
+                  margin: 'y',
+                  data: mapToProperty(phrases1, 'label')
+                },
+                {
+                  view: 'select',
+                  selectStyle: 'input',
+                  data: mapToProperty(phrases1, 'label')
+                },
+                {
+                  view: 'select',
+                  selectStyle: 'input',
+                  size: 'small',
+                  margin: 'y',
+                  data: mapToProperty(phrases1, 'label')
+                },
+                {
+                  view: 'select',
+                  selectStyle: 'input',
+                  size: 'large',
+                  data: mapToProperty(phrases1, 'label')
+                },
+                {
+                  view: 'select',
+                  selectStyle: 'line',
+                  margin: 'y',
                   data: mapToProperty(phrases1, 'label')
                 },
                 {
                   view: "label",
                   label: "Opt Group",
                   htmlTag: "H6",
-                  margin: "y-lg"
                 },
                 {
                   view: 'select',
+                  margin: "y",
                   data: [
                     { label: 'Apple', optgroup: 'Fruit' },
                     { label: 'Banana', optgroup: 'Fruit' },
@@ -924,7 +1080,7 @@ var Model = {
                   view: "label",
                   label: "Multi Select",
                   htmlTag: "H6",
-                  margin: "bottom-lg"
+                  margin: "x y"
                 },
                 {
                   view: 'select',
@@ -946,6 +1102,7 @@ var Model = {
           },
           cells: [
             {
+              padding: true,
               view: "label",
               label: "Scroll Down Please",
               htmlTag: "H6"
@@ -955,6 +1112,7 @@ var Model = {
               height: 500
             },
             {
+              padding: true,
               view: "label",
               label: "Bottom",
               htmlTag: "H6"
@@ -966,8 +1124,8 @@ var Model = {
     table: function () {
       return {
         component: {
+          margin: 'x y',
           view: 'table',
-          tableStyle: ['hover', 'striped'],
           header: true,
           footer: true,
           columns: [
@@ -989,17 +1147,13 @@ var Model = {
     tab: function () {
       return {
         component: {
+          padding: true,
           flexLayout: 'column',
           cells: [
             {
-              view: "label",
-              label: "Basic Tab",
-              htmlTag: "H6",
-              margin: "bottom-lg"
-            },
-            {
               view: 'list',
               listStyle: 'tab',
+              margin: 'y',
               tab: true,
               data: [
                 { view: 'link', label: 'Apple', $selected: true },
@@ -1008,14 +1162,19 @@ var Model = {
               ]
             },
             {
-              view: "label",
-              label: "Tab-Bottom",
-              htmlTag: "H6",
-              margin: "y-lg"
+              view: 'list',
+              listStyle: 'tab-primary',
+              tab: true,
+              data: [
+                { view: 'link', label: 'Apple', $selected: true },
+                { view: 'link', label: 'Banana' },
+                { view: 'link', label: 'Celery' }
+              ]
             },
             {
               view: 'list',
-              listStyle: 'tab-bottom',
+              listStyle: 'tab-danger',
+              margin: 'y',
               tab: true,
               data: [
                 { view: 'link', label: 'Apple' },
@@ -1024,58 +1183,24 @@ var Model = {
               ]
             },
             {
-              view: "label",
-              label: "Tab-Left & Tab-Right",
-              htmlTag: "H6",
-              margin: "y-lg"
+              view: 'list',
+              listStyle: 'tab-success',
+              tab: true,
+              data: [
+                { view: 'link', label: 'Apple' },
+                { view: 'link', label: 'Banana', $selected: true },
+                { view: 'link', label: 'Celery' }
+              ]
             },
             {
-              flexSpace: 'between',
-              cells: [
-                {
-                  view: 'list',
-                  listStyle: 'tab-left',
-                  tab: true,
-                  margin: 'right',
-                  data: [
-                    { view: 'link', label: 'X' },
-                    { view: 'link', label: 'Y', $selected: true },
-                    { view: 'link', label: 'Z' }
-                  ]
-                },
-                {
-                  view: 'list',
-                  listStyle: 'tab-right',
-                  tab: true,
-                  margin: 'left',
-                  data: [
-                    { view: 'link', label: 'X', $selected: true },
-                    { view: 'link', label: 'Y' },
-                    { view: 'link', label: 'Z' }
-                  ]
-                },
-                {
-                  view: 'list',
-                  listStyle: 'tab-left',
-                  tab: true,
-                  margin: 'left',
-                  data: [
-                    { view: 'icon', icon: 'heart', size: 'large', $selected: true },
-                    { view: 'icon', icon: 'bolt', size: 'large' },
-                    { view: 'icon', icon: 'paint-bucket', size: 'large' }
-                  ]
-                },
-                {
-                  view: 'list',
-                  listStyle: 'tab-right',
-                  tab: true,
-                  margin: 'left',
-                  data: [
-                    { view: 'icon', icon: 'heart', size: 'large' },
-                    { view: 'icon', icon: 'bolt', size: 'large' },
-                    { view: 'icon', icon: 'paint-bucket', size: 'large', $selected: true }
-                  ]
-                }
+              view: 'list',
+              listStyle: 'tab-muted',
+              margin: 'y',
+              tab: true,
+              data: [
+                { view: 'link', label: 'Apple', $selected: true },
+                { view: 'link', label: 'Banana' },
+                { view: 'link', label: 'Celery' }
               ]
             }
           ]
@@ -1085,11 +1210,17 @@ var Model = {
     toggle: function () {
       return {
         component: {
+          padding: true,
           flexSpace: 'around',
           cells: [
             {
               view: 'toggle',
               checked: true
+            },
+            {
+              view: 'toggle',
+              checked: true,
+              color: 'primary'
             },
             {
               view: 'toggle',
@@ -1113,6 +1244,7 @@ var Model = {
     tooltip: function () {
       return {
         component: {
+          padding: true,
           cells: [
             {
               view: 'button',
@@ -1127,6 +1259,7 @@ var Model = {
     tree: function () {
       return {
         component: {
+          padding: true,
           view: 'tree',
           data: [
             { label: 'Chicken', id: '1' },
@@ -1154,31 +1287,31 @@ var Examples = [
           {
             batch: 'tab',
             view: 'list',
-            listStyle: "tab-left",
+            listStyle: "tab-vertical",
             tab: true,
             data: [
               {
                 view: 'icon',
-                icon: 'heart',
+                icon: 'heart-24',
                 size: 'large',
                 value: 'heart',
                 $selected: true
               },
               {
                 view: 'icon',
-                icon: 'bolt',
+                icon: 'zap-24',
                 value: 'bolt',
                 size: 'large'
               },
               {
                 view: 'icon',
-                icon: 'star',
+                icon: 'star-24',
                 value: 'star',
                 size: 'large'
               },
               {
                 view: 'icon',
-                icon: 'list',
+                icon: 'globe-24',
                 value: ['heart', 'bolt', 'star'],
                 size: 'large'
               }
@@ -1197,23 +1330,26 @@ var Examples = [
             defaultBatch: 'heart',
             card: true,
             margin: 'x-lg y-lg',
+            style: {
+              minWidth: '200px'
+            },
             cells: [
               {
                 batch: 'heart',
                 view: 'label',
-                label: CommentedStringValue("<i class='uk-icon-heart'></i> Heart", "You can use HTML directly in fields!"),
+                label: CommentedStringValue("<i class='sp-icon-heart'></i> Heart", "You can use HTML directly in fields!"),
                 htmlTag: 'H2'
               },
               {
                 batch: 'bolt',
                 view: 'label',
-                label: "<i class='uk-icon-bolt'></i> Bolt",
+                label: "<i class='sp-icon-bolt'></i> Bolt",
                 htmlTag: 'H2'
               },
               {
                 batch: 'star',
                 view: 'label',
-                label: "<i class='uk-icon-star'></i> Star",
+                label: "<i class='sp-icon-star'></i> Star",
                 htmlTag: 'H2'
               }
             ]
@@ -1395,6 +1531,7 @@ var Examples = [
 
 function wrapInForm(input) {
   return {
+    padding: true,
     view: 'form',
     fieldset: [input]
   }
@@ -1420,7 +1557,6 @@ function inheritanceTree(id, props) {
       { label: 'Flexgrid', id: id + '-flexgrid', $parent: id + '-element' },
       { label: 'Stack', id: id + '-stack', $parent: id + '-element' },
       { label: 'Input', id: id + '-input', $parent: id + '-element' },
-      { label: 'Autocomplete', id: 'autocomplete', $parent: id + '-input' },
       { label: 'List', id: id + '-list', $parent: id + '-stack' },
       { label: 'Button', id: id + '-button', $parent: id + '-element' },
       { label: 'Drawer', id: id + '-drawer', $parent: id + '-element' },
@@ -1457,7 +1593,7 @@ function handleHashChange() {
   var landing = document.getElementById('landing');
 
   if (introViews.indexOf(hash) != -1) {
-    UI.addClass(landing, 'uk-hidden');
+    UI.addClass(landing, 'sp-hidden');
     $$('mainView').hide();
     $$('introView').showBatch(hash);
     $$('introView').show();
@@ -1466,10 +1602,10 @@ function handleHashChange() {
     window.scrollTo(0, 0);
   }
   else if (Model.components[hash]) {
-    UI.addClass(landing, 'uk-hidden');
+    UI.addClass(landing, 'sp-hidden');
     $$('introView').hide();
     var view = Model.aliases[hash] || hash;
-    $$('methodList').parseMethods(UI.definitions[view]);
+    $$('methodTable').parseMethods(UI.definitions[view]);
     $$('propertiesTable').parseProperties(UI.definitions[view]);
     var config = $$('codeView').parseCode(Model.components[hash]());
     $$('componentView').parseConfig(config, view);
@@ -1482,7 +1618,7 @@ function handleHashChange() {
   else {
     $$('mainView').hide();
     $$('introView').hide();
-    UI.removeClass(landing, 'uk-hidden');
+    UI.removeClass(landing, 'sp-hidden');
   }
 
   gtag('event', 'change_hash', {
@@ -1514,8 +1650,7 @@ UI.def({
   __name__: 'codeview',
   $defaults: {
     cls: 'dark',
-    code: '',
-    position: 'relative'
+    code: ''
   },
   template: function () {
     var self = this;
@@ -1526,12 +1661,12 @@ UI.def({
           view: 'icon',
           iconStyle: 'hover',
           position: 'absolute z-index',
-          icon: 'copy',
+          icon: 'copy-24',
           title: 'Copy',
           size: 'large',
           style: {
-            top: '10px',
-            right: '16px'
+            top: '16px',
+            right: '24px'
           },
           on: {
             onClick: function () {
@@ -1549,15 +1684,13 @@ UI.def({
       view: 'scroller',
       flexSize: 'flex',
       style: {
-        maxHeight: '400px',
-        height: '400px',
-        borderRadius: '4px'
+        maxHeight: '400px'
       },
       cells: []
     }, wrapper.el);
 
     self.inner = UI.new({
-      template: '<pre class="uk-margin-remove">' +
+      template: '<pre class="sp-margin-remove">' +
         '<code class="javascript">{{locals}}UI.new({{code}}, document.body);</code></pre>'
     }, scroller.content);
 
@@ -1619,76 +1752,83 @@ UI.def({
 
 
 UI.new({
-  id: "navBar",
-  cls: 'uk-navbar',
-  template: {
-    padding: 'x',
-    cells: [
-      {
-        view: 'list',
-        listStyle: 'navbar',
-        flexSize: 'none',
-        data: [
+  template: [
+    {
+      style: {
+        height: '64px'
+      }
+    },
+    {
+      id: "navBar",
+      cls: ['sp-navbar', 'sp-position-fixed', 'sp-position-cover', 'sp-card-muted'],
+      template: {
+        padding: 'x',
+        flexAlign: 'middle',
+        fill: 'height',
+        cells: [
           {
-            view: 'image',
-            src: 'logo.svg',
-            width: 145,
+            view: 'link',
+            cls: 'sp-navbar-toggle',
+            device: 'touch',
+            margin: 'right-sm',
             on: {
               onClick: function () {
                 $$('sideDrawer').open();
               }
             }
-          }
-        ]
-      },
-      {
-        view: 'list',
-        listStyle: 'navbar',
-        cls: 'uk-form',
-        flex: true,
-        flexAlign: 'middle',
-        style: {
-          marginLeft: 'auto'
-        },
-        data: [
-          {
-            view: 'link',
-            screen: 'except-small',
-            label: 'Github',
-            icon: 'github',
-            href: 'https://github.com/spckio/spck-ui',
-            target: '_blank',
-            margin: 'right-lg'
           },
           {
-            view: 'select',
-            margin: 'right',
+            view: 'image',
+            src: 'logo-mark.svg',
+            width: 42
+          },
+          {
+            view: 'label',
+            htmlTag: 'h4',
+            textColor: 'contrast',
+            label: 'UI'
+          },
+          {
+            view: 'list',
+            listStyle: 'navbar',
+            cls: 'sp-form',
+            flex: true,
+            flexAlign: 'middle',
+            style: {
+              marginLeft: 'auto'
+            },
             data: [
-              { value: 'light', label: 'Light' },
-              { value: 'dark', label: 'Dark' }
-            ],
-            on: {
-              onChange: function () {
-                switch (this.getValue()) {
-                  case 'dark':
-                    UI.addClass(document.documentElement, 'dark');
-                    break;
-                  default:
-                    UI.removeClass(document.documentElement, 'dark');
+              {
+                view: 'link',
+                screen: 'except-small',
+                icon: 'logo-github-16',
+                href: 'https://github.com/spckio/spck-ui',
+                target: '_blank'
+              },
+              {
+                view: 'link',
+                icon: 'moon-16',
+                margin: 'x',
+                cls: 'sp-button-circle',
+                on: {
+                  onClick: function () {
+                    this.darkMode = !this.darkMode
+                    if (this.darkMode) {
+                      UI.addClass(document.documentElement, 'dark')
+                      UI.addClass(this.element, 'sp-primary')
+                    } else {
+                      UI.removeClass(document.documentElement, 'dark')
+                      UI.removeClass(this.element, 'sp-primary')
+                    }
+                  }
                 }
               }
-            }
-          },
-          {
-            view: 'select',
-            data: [
-              { value: UI.VERSION, label: UI.VERSION, optgroup: 'Latest' }
             ]
           }
         ]
       }
-    ]
-  }
+    }
+  ]
 }, document.getElementById('navbar'));
 
 UI.new({
@@ -1706,7 +1846,7 @@ UI.new({
       {
         id: 'sideBar',
         view: 'list',
-        listStyle: 'side',
+        listStyle: 'nav-side-primary',
         data: [
           {
             view: 'spacer',
@@ -1717,21 +1857,18 @@ UI.new({
           },
           {
             view: 'link',
-            linkStyle: 'line',
             label: 'Introduction',
             $selected: true,
             margin: 'left'
           },
           {
             view: 'link',
-            linkStyle: 'line',
             label: 'Installation',
             value: 'installation',
             margin: 'left'
           },
           {
             view: 'link',
-            linkStyle: 'line',
             label: 'Examples',
             value: 'examples',
             margin: 'left'
@@ -1741,7 +1878,6 @@ UI.new({
         ].concat(Object.keys(Model.components).sort().map(function (n) {
           return {
             view: 'link',
-            linkStyle: 'line',
             label: UI.capitalize(n),
             margin: 'left',
             value: n
@@ -1793,7 +1929,7 @@ UI.new({
           label: 'The library is available on popular package repositories.'
         },
         {
-          template: '<ul><li>To install with bower, run the following command: <code>bower install spck-ui</code></li><li>Likewise, to install with npm, run the following: <code>npm install spck-ui</code></li><li>To install the newest <b class="uk-text-primary">unreleased</b> code, run the following: <code>bower install spck-ui#master</code></li></ul>'
+          template: '<ul><li>To install with bower, run the following command: <code>bower install spck-ui</code></li><li>Likewise, to install with npm, run the following: <code>npm install spck-ui</code></li><li>To install the newest <b class="sp-text-primary">unreleased</b> code, run the following: <code>bower install spck-ui#master</code></li></ul>'
         },
         {
           view: 'label',
@@ -1812,7 +1948,6 @@ UI.new({
         },
         {
           margin: 'y-lg',
-          card: 'primary',
           flexLayout: 'column',
           cells: [
             {
@@ -1871,9 +2006,6 @@ UI.new({
               cells: [
                 {
                   flexSize: 'none',
-                  style: {
-                    minWidth: '360px'
-                  },
                   cells: [data.component]
                 },
                 {
@@ -1936,12 +2068,6 @@ UI.new({
   hidden: true,
   cells: [
     {
-      id: 'mainTitle',
-      view: 'label',
-      htmlTag: 'H1',
-      margin: 'bottom-lg'
-    },
-    {
       id: 'exampleView',
       card: true,
       flexSize: 'none',
@@ -1949,37 +2075,48 @@ UI.new({
       cells: [
         {
           batch: 'tab',
-          view: 'list',
-          listStyle: 'tab',
-          tab: true,
           card: 'header',
-          margin: 'bottom-lg',
-          data: [
-            { view: 'link', label: 'Preview', value: 'component', $selected: true },
-            { view: 'link', label: 'Code', value: 'code' }
-          ],
-          on: {
-            onItemClick: function (item) {
-              this.setActiveLabel(item.label);
-              var view = $$('exampleView');
-              switch (item.value) {
-                case 'component':
-                  view.showBatch(['tab', 'component']);
-                  break;
+          flexAlign: 'middle',
+          flexSpace: 'between',
+          cells: [
+            {
+              id: 'mainTitle',
+              view: 'label',
+              htmlTag: 'H5'
+            },
+            {
+              view: 'list',
+              listStyle: 'tab-primary',
+              tab: true,
+              data: [
+                { view: 'link', label: 'Preview', value: 'component', $selected: true },
+                { view: 'link', label: 'Code', value: 'code' }
+              ],
+              on: {
+                onItemClick: function (item) {
+                  this.setActiveLabel(item.label);
+                  var view = $$('exampleView');
+                  switch (item.value) {
+                    case 'component':
+                      view.showBatch(['tab', 'component']);
+                      break;
 
-                case 'code':
-                  view.showBatch(['tab', 'code']);
-                  highlightBlocks();
-                  break;
+                    case 'code':
+                      view.showBatch(['tab', 'code']);
+                      highlightBlocks();
+                      break;
+                  }
+                }
               }
             }
-          }
+          ]
         },
         {
           id: 'componentView',
           batch: 'component',
           flexSize: 'none',
-          card: 'body',
+          scroll: 'x',
+          card: 'body-blank',
           cells: [],
           parseConfig: function (config, componentName) {
             if (this.childComponent) {
@@ -1995,7 +2132,7 @@ UI.new({
           id: 'codeView',
           batch: 'code',
           view: 'codeview',
-          card: 'body'
+          card: 'body-blank'
         }
       ]
     },
@@ -2008,58 +2145,79 @@ UI.new({
       cells: [
         {
           batch: 'tab',
-          view: 'list',
-          listStyle: 'tab',
-          tab: true,
           card: 'header',
-          data: [
-            { view: 'link', label: 'Properties', value: 'properties', $selected: true },
-            { view: 'link', label: 'Methods', value: 'methods' }
-          ],
-          on: {
-            onItemClick: function (item) {
-              this.setActiveLabel(item.label);
-              var view = $$('apiView');
+          flexAlign: 'middle',
+          flexSpace: 'between',
+          cells: [
+            {
+              id: 'propsTitle',
+              view: 'label',
+              htmlTag: 'H5',
+              label: 'Properties'
+            },
+            {
+              view: 'list',
+              listStyle: 'tab-primary',
+              tab: true,
+              data: [
+                { view: 'link', label: 'Props', value: 'properties', $selected: true },
+                { view: 'link', label: 'Methods', value: 'methods' }
+              ],
+              on: {
+                onItemClick: function (item) {
+                  this.setActiveLabel(item.label);
+                  var view = $$('apiView');
+                  var title = $$('propsTitle')
 
-              switch (item.value) {
-                case 'properties':
-                  view.showBatch(['tab', 'props']);
-                  break;
+                  switch (item.value) {
+                    case 'properties':
+                      title.setValue('Properties')
+                      view.showBatch(['tab', 'props']);
+                      break;
 
-                case 'methods':
-                  view.showBatch(['tab', 'methods']);
-                  break;
+                    case 'methods':
+                      title.setValue('Methods')
+                      view.showBatch(['tab', 'methods']);
+                      break;
+                  }
+                }
               }
             }
-          }
+          ]
         },
         {
           batch: 'props',
           flexLayout: 'column',
-          card: 'body',
+          card: 'body-blank',
+          scroll: 'x',
           cells: [
             {
               id: 'propertiesTable',
               view: 'table',
+              tableStyle: 'flat',
               header: true,
-              margin: 'top',
+              style: {
+                minWidth: '600px'
+              },
               columns: [
                 {
                   header: 'Name',
                   template: function (item) {
                     if (item.title) {
-                      return '<h5 style="margin:32px 0 8px -16px">{{name}}</h5>';
+                      return '<h6>{{name}}</h6>';
                     } else if (item.header) {
-                      return '<div class="uk-text-capitalize" style="margin: 16px 0 8px -8px"><b>{{name}}</b></div>';
+                      return '<div class="sp-text-capitalize sp-text-primary">{{name}}</div>';
                     } else {
-                      return '<code class="uk-text-nowrap">{{name}}</code>';
+                      return '<span class="sp-text-nowrap">{{name}}</span>';
                     }
                   }
                 },
                 {
                   header: 'Type',
                   template: function (item) {
-                    return item.type ? '<span class="uk-badge uk-badge-notification">{{type}}</code>' : '';
+                    return item.types.reduce(function (html, type) {
+                      return html + '<span class="sp-badge sp-margin-small-x sp-margin-mini-y">' + type + '</span>'
+                    }, '');
                   }
                 },
                 {
@@ -2067,12 +2225,12 @@ UI.new({
                   name: 'desc'
                 },
                 {
-                  header: 'Options',
+                  header: 'Opts',
                   template: function (item) {
                     return item.options ? {
                       view: 'button',
-                      cls: 'uk-text-nowrap',
-                      label: 'Options',
+                      cls: 'sp-text-nowrap',
+                      icon: 'more',
                       size: 'small',
                       dropdownOptions: {
                         marginY: Object.keys(item.options).length > 12 ? -300 : 8
@@ -2114,7 +2272,7 @@ UI.new({
                     return {
                       name: n,
                       sortKey: baseOrder[meta[n].__class__] + '_' + n,
-                      type: meta[n].$$type || 'string',
+                      types: meta[n].$$types || [],
                       desc: UI.isString(meta[n]) ? meta[n] : meta[n].$$desc || '',
                       options: meta[n].options
                     }
@@ -2129,7 +2287,7 @@ UI.new({
                     return {
                       name: s,
                       sortKey: baseOrder[setters[s].__class__] + '_' + s,
-                      type: setters[s].$$type || (setters[s].options ? 'string | string[]' : 'any'),
+                      types: setters[s].$$types || (setters[s].options ? ['string', 'string[]'] : []),
                       desc: setters[s].$$desc || '',
                       options: setters[s].options
                     }
@@ -2140,7 +2298,7 @@ UI.new({
                       sortKey: b == name ? '$_' : baseOrder[b],
                       header: true,
                       title: b == name,
-                      type: '',
+                      types: [],
                       desc: ''
                     }
                   }))
@@ -2160,58 +2318,71 @@ UI.new({
           ]
         },
         {
-          id: 'methodList',
           batch: 'methods',
-          view: 'list',
-          listStyle: 'line',
-          card: 'body',
-          selectable: true,
-          parseMethods: function (component) {
-            this.setData(getComponentMethods(component)
-              .map(function (method) {
-                if (method.header) {
-                  return {
-                    view: 'label',
-                    text: 'capitalize',
-                    htmlTag: method.title ? 'h5' : 'div',
-                    label: method.title ? method.header : '<b>' + method.header + '</b>',
-                    style: method.title ? {
-                      marginTop: '40px',
-                      marginBottom: '24px'
-                    } : {
-                        marginTop: '24px',
-                        marginBottom: '16px'
-                      }
+          flexLayout: 'column',
+          card: 'body-blank',
+          scroll: 'x',
+          cells: [
+            {
+              id: 'methodTable',
+              view: 'table',
+              header: true,
+              tableStyle: 'flat',
+              columns: [
+                {
+                  header: 'Name',
+                  template: function (item) {
+                    if (item.title) {
+                      return '<h6>{{header}}</h6>';
+                    } else if (item.header) {
+                      return '<div class="sp-text-capitalize sp-text-primary">{{header}}</div>';
+                    } else {
+                      return '<span class="sp-text-nowrap">{{name}}</span>';
+                    }
                   }
-                } else {
-                  return {
-                    view: 'element',
-                    template: [
-                      '<dl class="uk-description-list-horizontal">',
-                      '<dt><code>{{$$name}}</code></dt><dd>{{$$summary}}</dd>',
-                      '</dl>',
-                      '<dl class="uk-description-list-horizontal">',
-                      (method.params && method.params.length ?
-                        '<dt class="uk-margin-small-left">Parameters</dt><dd>&nbsp;</dd>{{$$parameters}}' : ''),
-                      (method.dispatch ? '<dt class="uk-margin-small-left">Dispatch</dt><dd><code>{{$$dispatch}}</code></dd>' : ''),
-                      (method.returns ? '<dt class="uk-margin-small-left">Returns</dt><dd>{{$$returns}}</dd>' : ''),
-                      (method.example ? '<dt class="uk-margin-small-left">Example</dt><dd><code>{{$$example}}</code></dd>' : ''),
-                      '</dl>'
-                    ].join(''),
-                    $$name: method.name,
-                    $$summary: method.summary,
-                    $$dispatch: method.dispatch,
-                    $$returns: method.returns ? formatReturnsString(method.returns) : null,
-                    $$example: method.example,
-                    $$parameters: method.params.map(function (n) {
-                      return UI.interpolate(
-                        '<dt class="uk-text-muted uk-margin-left">{{name}}</dt><dd>{{description}}</dd>', n);
-                    }).join('')
+                },
+                {
+                  header: 'Description',
+                  template: function (method) {
+                    var params = method.params
+                    return {
+                      margin: 'y',
+                      template: [
+                        method.summary,
+                        params && params.length ? {
+                          view: 'table',
+                          header: true,
+                          margin: 'top',
+                          data: params,
+                          columns: [
+                            {
+                              header: 'Parameter',
+                              name: 'name'
+                            },
+                            {
+                              header: 'Description',
+                              name: 'description'
+                            }
+                          ]
+                        } : null,
+                        method.dispatch ? '<h6 class="sp-margin-top sp-margin-small-bottom">Dispatch</h6>' + method.dispatch : null,
+                        method.example ? '<h6 class="sp-margin-top sp-margin-small-bottom">Example</h6>{{$$code}}' : null,
+                        method.returns ? '<h6 class="sp-margin-top sp-margin-small-bottom">Return</h6>{{$$returns}}' : null
+                      ],
+                      $$returns: method.returns ? formatReturnsString(method.returns) : null,
+                      $$code: method.example ? '<code>' + method.example + '</code>' : null
+                    }
                   }
                 }
-              })
-            );
-          }
+              ],
+              style: {
+                minWidth: '600px'
+              },
+              parseMethods: function (component) {
+                this.setData(getComponentMethods(component));
+              }
+            }
+          ]
         }
       ]
     }
@@ -2230,7 +2401,7 @@ function formatReturnsString(str) {
   var type = str.match(regex);
   type = type ? type[0].slice(1, -1) : '';
   return str.replace(regex, UI.interpolate(
-    '<span class="uk-badge uk-badge-notification uk-margin-right">{{type}}</span>', { type: type }))
+    '<span class="sp-badge sp-badge-notification sp-margin-right">{{type}}</span>', { type: type }))
 }
 
 function getComponentMethods(component) {

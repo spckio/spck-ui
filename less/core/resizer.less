@@ -1,28 +1,14 @@
-// Variables
-// ========================================================================
-
-@resizer-drag-handle-z-index:                  @global-z-index + 20;
-@resizer-drag-backdrop-z-index:                @global-z-index + 10;
-@resizer-drag-backdrop-background:             rgba(0, 102, 255, 0.1);
-@resizer-background-color:                     darken(@global-border, 5%);
-@resizer-dark-background-color:                @global-dark-border;
-
-/* ========================================================================
-   Component: Pagination
- ========================================================================== */
-
-
-.uk-resizer {
-  background: @resizer-background-color;
+.sp-resizer {
+  background: darken(@global-border, 5%);
   position: relative;
   opacity: 0.7;
 
-  .uk-notouch &:hover, .uk-notouch &:focus {
+  .sp-notouch &:hover, .sp-notouch &:focus {
     opacity: 1;
   }
 
   .dark & {
-    background-color: @resizer-dark-background-color;
+    background-color: @global-dark-border;
   }
 
   &.x {
@@ -30,7 +16,7 @@
     width: 3px; // For IE, Edge
     cursor: ew-resize;
 
-    .uk-resizer-drag-handle {
+    .sp-resizer-drag-handle {
       width: 3px;
       height: 100%;
     }
@@ -41,25 +27,25 @@
     height: 3px; // For IE, Edge
     cursor: ns-resize;
 
-    .uk-resizer-drag-handle {
+    .sp-resizer-drag-handle {
       height: 3px;
       width: 100%;
     }
   }
 }
 
-.uk-resizer-drag-handle {
-  z-index: @resizer-drag-handle-z-index;
-  background: @resizer-background-color;
+.sp-resizer-drag-handle {
+  z-index: @global-z-index + 20;
+  background: darken(@global-border, 5%);
   position: absolute;
 
   .dark & {
-    background-color: @resizer-dark-background-color;
+    background-color: @global-dark-border;
   }
 }
 
-.uk-resizer-drag-backdrop {
-  z-index: @resizer-drag-backdrop-z-index;
-  background: @resizer-drag-backdrop-background;
+.sp-resizer-drag-backdrop {
+  z-index: @global-z-index + 10;
+  background: rgba(0, 102, 255, 0.1);
   position: fixed;
 }

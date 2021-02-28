@@ -33,12 +33,12 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-grid]', context).each(function(){
+                UI.$('[data-sp-grid]', context).each(function(){
 
                     var ele = UI.$(this);
 
                     if(!ele.data('grid')) {
-                        UI.grid(ele, UI.Utils.options(ele.attr('data-uk-grid')));
+                        UI.grid(ele, UI.Utils.options(ele.attr('data-sp-grid')));
                     }
                 });
             });
@@ -62,15 +62,15 @@
                 this.controls = UI.$(this.options.controls);
 
                 // filter
-                this.controls.on('click', '[data-uk-filter]', function(e){
+                this.controls.on('click', '[data-sp-filter]', function(e){
                     e.preventDefault();
-                    $this.filter(UI.$(this).attr('data-uk-filter'));
+                    $this.filter(UI.$(this).attr('data-sp-filter'));
                 });
 
                 // sort
-                this.controls.on('click', '[data-uk-sort]', function(e){
+                this.controls.on('click', '[data-sp-sort]', function(e){
                     e.preventDefault();
-                    var cmd = UI.$(this).attr('data-uk-sort').split(':');
+                    var cmd = UI.$(this).attr('data-sp-sort').split(':');
                     $this.sort(cmd[0], cmd[1]);
                 });
             }
@@ -251,7 +251,7 @@
 
             children.each(function(index){
 
-                var ele = UI.$(this), f = ele.attr('data-uk-filter'), infilter = filter.length ? false : true;
+                var ele = UI.$(this), f = ele.attr('data-sp-filter'), infilter = filter.length ? false : true;
 
                 if (f) {
 
@@ -275,7 +275,7 @@
             $this.update(elements.visible);
 
             if (this.controls && this.controls.length) {
-                this.controls.find('[data-uk-filter]').removeClass('uk-active').filter('[data-uk-filter="'+filter+'"]').addClass('uk-active');
+                this.controls.find('[data-sp-filter]').removeClass('sp-active').filter('[data-sp-filter="'+filter+'"]').addClass('sp-active');
             }
         },
 
@@ -302,7 +302,7 @@
             this.update(elements.filter(':visible'));
 
             if (this.controls && this.controls.length) {
-                this.controls.find('[data-uk-sort]').removeClass('uk-active').filter('[data-uk-sort="'+by+':'+(order == -1 ? 'desc':'asc')+'"]').addClass('uk-active');
+                this.controls.find('[data-sp-sort]').removeClass('sp-active').filter('[data-sp-sort="'+by+':'+(order == -1 ? 'desc':'asc')+'"]').addClass('sp-active');
             }
         }
     });

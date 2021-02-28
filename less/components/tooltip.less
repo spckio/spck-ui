@@ -1,66 +1,31 @@
-// Name:            Tooltip
-// Description:     Defines styles for tooltips
-//
-// Component:       `uk-tooltip`
-//
-// Modifiers        `uk-tooltip-top`
-//                  `uk-tooltip-top-left`
-//                  `uk-tooltip-top-right`
-//                  `uk-tooltip-bottom`
-//                  `uk-tooltip-bottom-left`
-//                  `uk-tooltip-bottom-right`
-//                  `uk-tooltip-left`
-//                  `uk-tooltip-right`
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@tooltip-z-index:                               @global-z-index + 50;
-@tooltip-max-width:                             200px;
-@tooltip-padding-vertical:                      5px;
-@tooltip-padding-horizontal:                    8px;
-@tooltip-background:                            #333;
+@tooltip-background:                            @global-dark-muted-color;
 @tooltip-triangle-size:                         5px;
-@tooltip-border-radius:                         @global-border-radius;
-
-@tooltip-color:                                 rgba(255,255,255,0.7);
-@tooltip-font-size:                             12px;
-@tooltip-line-height:                           18px;
-
-@tooltip-offset-horizontal:                     10px;
-
 
 /* ========================================================================
    Component: Tooltip
  ========================================================================== */
 
-/*
- * 1. Hide by default
- * 2. Set fixed position
- * 3. Set dimensions
- * 4. Set style
- */
-
-.uk-tooltip {
-    /* 1 */
-    display: none;
-    /* 2 */
-    position: absolute;
-    z-index: @tooltip-z-index;
-    /* 3 */
-    box-sizing: border-box;
-    max-width: @tooltip-max-width;
-    padding: @tooltip-padding-vertical @tooltip-padding-horizontal;
-    /* 4 */
-    background: @tooltip-background;
-    color: @tooltip-color;
-    font-size: @tooltip-font-size;
-    line-height: @tooltip-line-height;
-    border-radius: @tooltip-border-radius;
-    .hook-tooltip;
+.sp-tooltip {
+  /* Hide by default */
+  display: none;
+  /* Set fixed position */
+  position: absolute;
+  z-index: @global-z-index + 50;
+  /* Set dimensions */
+  box-sizing: border-box;
+  max-width: 200px;
+  padding: 6px 12px;
+  /* Style */
+  background-color: @tooltip-background;
+  color: @global-contrast-color;
+  font-size: 0.75em;
+  line-height: 1.25em;
+  border-radius: @global-border-radius;
+  box-shadow: @global-box-shadow;
+  .dark & {
+    box-shadow: @global-dark-box-shadow;
+    background-color: black;
+  }
 }
 
 
@@ -71,14 +36,16 @@
  * 1. Dashed is less antialised than solid
  */
 
-.uk-tooltip:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 0;
-    height: 0;
-    /* 1 */
-    border: @tooltip-triangle-size dashed @tooltip-background;
+.sp-tooltip:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: @tooltip-triangle-size dashed @tooltip-background;
+  .dark & {
+    border-color: black;
+  }
 }
 
 
@@ -89,88 +56,94 @@
  * Top
  */
 
-.uk-tooltip-top:after,
-.uk-tooltip-top-left:after,
-.uk-tooltip-top-right:after {
-    bottom: -@tooltip-triangle-size;
-    border-top-style: solid;
-    border-bottom: none;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: @tooltip-background;
+.sp-tooltip-top:after,
+.sp-tooltip-top-left:after,
+.sp-tooltip-top-right:after {
+  bottom: -@tooltip-triangle-size;
+  border-top-style: solid;
+  border-bottom: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: @tooltip-background;
+  .dark & {
+    border-top-color: black;
+  }
 }
 
 /*
  * Bottom
  */
 
-.uk-tooltip-bottom:after,
-.uk-tooltip-bottom-left:after,
-.uk-tooltip-bottom-right:after {
-    top: -@tooltip-triangle-size;
-    border-bottom-style: solid;
-    border-top: none;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: @tooltip-background;
+.sp-tooltip-bottom:after,
+.sp-tooltip-bottom-left:after,
+.sp-tooltip-bottom-right:after {
+  top: -@tooltip-triangle-size;
+  border-bottom-style: solid;
+  border-top: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: @tooltip-background;
+  .dark & {
+    border-bottom-color: black;
+  }
 }
 
 /*
  * Top/Bottom center
  */
 
-.uk-tooltip-top:after,
-.uk-tooltip-bottom:after {
-    left: 50%;
-    margin-left: -@tooltip-triangle-size;
+.sp-tooltip-top:after,
+.sp-tooltip-bottom:after {
+  left: 50%;
+  margin-left: -@tooltip-triangle-size;
 }
 
 /*
  * Top/Bottom left
  */
 
-.uk-tooltip-top-left:after,
-.uk-tooltip-bottom-left:after { left: @tooltip-offset-horizontal; }
+.sp-tooltip-top-left:after,
+.sp-tooltip-bottom-left:after { left: 12px; }
 
 /*
  * Top/Bottom right
  */
 
-.uk-tooltip-top-right:after,
-.uk-tooltip-bottom-right:after { right: @tooltip-offset-horizontal; }
+.sp-tooltip-top-right:after,
+.sp-tooltip-bottom-right:after { right: 12px; }
 
 /*
  * Left
  */
 
-.uk-tooltip-left:after {
-    right: -@tooltip-triangle-size;
-    top: 50%;
-    margin-top: -@tooltip-triangle-size;
-    border-left-style: solid;
-    border-right: none;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: @tooltip-background;
+.sp-tooltip-left:after {
+  right: -@tooltip-triangle-size;
+  top: 50%;
+  margin-top: -@tooltip-triangle-size;
+  border-left-style: solid;
+  border-right: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: @tooltip-background;
+  .dark & {
+    border-left-color: black;
+  }
 }
 
 /*
  * Right
  */
 
-.uk-tooltip-right:after {
-    left: -@tooltip-triangle-size;
-    top: 50%;
-    margin-top: -@tooltip-triangle-size;
-    border-right-style: solid;
-    border-left: none;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    border-right-color: @tooltip-background;
+.sp-tooltip-right:after {
+  left: -@tooltip-triangle-size;
+  top: 50%;
+  margin-top: -@tooltip-triangle-size;
+  border-right-style: solid;
+  border-left: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-color: @tooltip-background;
+  .dark & {
+    border-right-color: black;
+  }
 }
-
-
-// Hooks
-// ========================================================================
-
-.hook-tooltip() {}

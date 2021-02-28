@@ -8,7 +8,7 @@
 
         defaults: {
             target    : false,
-            cls       : 'uk-hidden',
+            cls       : 'sp-hidden',
             animation : false,
             duration  : 200
         },
@@ -18,11 +18,11 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-toggle]', context).each(function() {
+                UI.$('[data-sp-toggle]', context).each(function() {
                     var ele = UI.$(this);
 
                     if (!ele.data('toggle')) {
-                        var obj = UI.toggle(ele, UI.Utils.options(ele.attr('data-uk-toggle')));
+                        var obj = UI.toggle(ele, UI.Utils.options(ele.attr('data-sp-toggle')));
                     }
                 });
 
@@ -40,7 +40,7 @@
 
             var $this = this;
 
-            this.aria = (this.options.cls.indexOf('uk-hidden') !== -1);
+            this.aria = (this.options.cls.indexOf('sp-hidden') !== -1);
 
             this.on('click', function(e) {
 
@@ -88,7 +88,7 @@
 
                     } else {
 
-                        UI.Utils.animate(this, animations[1]+' uk-animation-reverse').then(function(){
+                        UI.Utils.animate(this, animations[1]+' sp-animation-reverse').then(function(){
                             ele.toggleClass($this.options.cls).css('animation-duration', '');
                             UI.Utils.checkDisplay(ele);
                         });
@@ -114,7 +114,7 @@
         updateAria: function() {
             if (this.aria && this.totoggle.length) {
                 this.totoggle.not('[aria-hidden]').each(function(){
-                    UI.$(this).attr('aria-hidden', UI.$(this).hasClass('uk-hidden'));
+                    UI.$(this).attr('aria-hidden', UI.$(this).hasClass('sp-hidden'));
                 });
             }
         }

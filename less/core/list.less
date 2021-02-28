@@ -1,99 +1,29 @@
-// Name:            List
-// Description:     Defines styles for ordered and unordered lists
-//
-// Component:       `uk-list`
-//
-// Modifiers:       `uk-list-line`
-//                  `uk-list-striped`
-//                  `uk-list-space`
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@list-nested-padding-left:                      0;
-
-@list-line-margin-top:                          0;
-@list-line-border:                              fade(@global-border, 75%);
-@list-dark-line-border:                         fade(@global-dark-border, 60%);
-@list-line-border-width:                        1px;
-
-@list-striped-background:                       rgba(178, 189, 206, 0.08);
-
-@list-space-margin-top:                         @global-margin-small;
-
-
 /* ========================================================================
    Component: List
  ========================================================================== */
 
-.uk-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.sp-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 8px 16px;
+  margin: 0;
 }
 
-/*
- * Micro clearfix to make list more robust
- */
-
-.uk-list > li:before,
-.uk-list > li:after {
-    content: "";
-    display: table;
-}
-
-.uk-list > li:after { clear: both; }
-
-/*
- * Nested lists
- */
-
-.uk-list ul {
-    margin: 0;
-    padding-left: @list-nested-padding-left;
-    list-style: none;
-}
-
-
-/* Modifier: `uk-list-line`
+/* Modifier: `sp-list-line`
  ========================================================================== */
 
-.uk-list-line > li:nth-child(n+2) {
-    margin-top: @list-line-margin-top;
-    padding-top: @list-line-margin-top;
-    border-top: @list-line-border-width solid @list-line-border;
-    .hook-list-line;
+.sp-list-line > .sp-list-item:nth-child(n+2) {
+  border-top: 1px solid @global-border;
+
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }
 
-
-/* Modifier: `uk-list-striped`
+/* Modifier: `sp-list-striped`
  ========================================================================== */
 
-.uk-list-striped > li {
-    .hook-list-striped;
+.sp-list-striped > li:nth-of-type(even) {
+  background: @global-muted-color;
 }
-
-.uk-list-striped > li:nth-of-type(odd) { background: @list-striped-background; }
-
-
-/* Modifier: `uk-list-space`
- ========================================================================== */
-
-.uk-list-space > li:nth-child(n+2) { margin-top: @list-space-margin-top; }
-
-
-// Hooks
-// ========================================================================
-
-.hook-list-misc;
-
-.hook-list-line() {
-    .dark & {
-        border-color: @list-dark-line-border;
-    }
-}
-.hook-list-striped() {}
-.hook-list-misc() {}

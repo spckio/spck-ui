@@ -1,90 +1,25 @@
-// Name:            Base
-// Description:     Sets default values for HTML elements
-//
-// Component:       `uk-h1`, `uk-h2`, `uk-h3`, `uk-h4`, `uk-h5`, `uk-h6`
-//                  `uk-link`
-//                  `uk-img-preserve`
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
 @base-body-background:                          @global-background;
 @base-body-dark-background:                     @global-dark-background;
 @base-body-font-family:                         -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
 @base-body-font-weight:                         normal;
-@base-body-font-size:                           @global-font-size;
-@base-body-line-height:                         @global-line-height;
-@base-body-color:                               @global-color;
-@base-body-dark-color:                          @global-dark-color;
 
-@base-link-color:                               @global-link-color;
-@base-link-text-decoration:                     none;
-@base-link-hover-color:                         @global-link-hover-color;
-@base-link-hover-text-decoration:               none;
-
-@base-code-color:                               @global-danger-background;
-@base-code-font-size:                           12px;
 @base-code-font-family:                         Menlo,Monaco,Droid Sans Mono,Ubuntu Mono,Consolas,source-code-pro,monospace;
-@base-code-border:                              @global-border;
-@base-code-dark-border:                         fade(@global-dark-border, 60%);
-@base-code-border-radius:                       @global-border-radius;
-@base-code-padding:                             @global-margin-mini;
 
-@base-em-color:                                 @global-primary-background;
-@base-ins-background:                           #ffa;
-@base-ins-color:                                @global-color;
-@base-mark-background:                          #ffa;
-@base-mark-color:                               @global-color;
-@base-quote-font-style:                         italic;
-@base-margin-vertical:                          @global-margin;
-
-@base-heading-text-transform:                   none;
-@base-heading-font-weight:                      500;
-@base-heading-color:                            #474747;
-@base-heading-dark-color:                       #ebebeb;
-@base-heading-margin-top:                       0;
-@base-h1-font-size:                             40px;
+@base-h1-font-size:                             36px;
 @base-h1-line-height:                           56px;
 @base-h2-font-size:                             32px;
 @base-h2-line-height:                           48px;
 @base-h3-font-size:                             24px;
 @base-h3-line-height:                           40px;
-@base-h4-font-size:                             18px;
+@base-h4-font-size:                             20px;
 @base-h4-line-height:                           32px;
-@base-h5-font-size:                             16px;
-@base-h5-line-height:                           24px;
-@base-h6-font-size:                             14px;
-@base-h6-line-height:                           20px;
-
-@base-list-padding-left:                        @global-margin-large;
-
-@base-hr-margin-vertical:                       @global-margin;
-@base-hr-border:                                @global-border;
-@base-hr-dark-border:                           @global-dark-border;
-
-@base-blockquote-padding-left:                  @global-margin;
-@base-blockquote-border:                        #ddd;
-@base-blockquote-border-width:                  5px;
-@base-blockquote-font-size:                     16px;
-@base-blockquote-line-height:                   22px;
-@base-blockquote-font-style:                    italic;
-
-@base-pre-padding:                              @global-margin-small;
-@base-pre-color:                                @global-color;
-@base-pre-background:                           @global-default-active-background;
-@base-pre-font-size:                            12px;
-@base-pre-line-height:                          18px;
-@base-pre-font-family:                          @base-code-font-family;
-@base-pre-border:                               @global-border;
-@base-pre-dark-border:                          @base-code-dark-border;
-@base-pre-border-radius:                        @global-border-radius;
+@base-h5-font-size:                             18px;
+@base-h5-line-height:                           28px;
+@base-h6-font-size:                             16px;
+@base-h6-line-height:                           24px;
 
 @base-selection-background:                     #39f;
 @base-selection-color:                          #fff;
-
 
 /* ========================================================================
    Component: Base
@@ -97,7 +32,7 @@
 
 html {
     /* 1 */
-    font: @base-body-font-weight @base-body-font-size e("/") @base-body-line-height @base-body-font-family;
+    font: @base-body-font-weight @global-font-size e("/") @global-line-height @base-body-font-family;
     /* 2 */
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -110,9 +45,13 @@ html {
 body {
     margin: 0;
     /* Style */
-    background: @base-body-background;
-    color: @base-body-color;
-    .hook-base-body;
+    background: @global-background;
+    color: @global-color;
+
+    .dark & {
+      color: @global-dark-color;
+      background: @global-dark-background;
+    }
 }
 
 
@@ -120,7 +59,9 @@ body {
  * Removes tap highlight on some browsers
  */
 button, a {
-    -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+  font: inherit;
+  color: inherit;
 }
 
 /* Links
@@ -130,7 +71,10 @@ button, a {
  * Remove the gray background color from active links in IE 10.
  */
 
-a { background: transparent; }
+a {
+  background: transparent;
+  text-decoration: none;
+}
 
 /*
  * Improve readability of focused elements when they are also in an active/hover state.
@@ -143,21 +87,14 @@ a:hover { outline: 0; }
  * Style
  */
 
-a,
-.uk-link {
-    color: @base-link-color;
-    text-decoration: @base-link-text-decoration;
-    cursor: pointer;
-    .hook-base-link;
-}
+.sp-link {
+  color: @global-primary;
+  text-decoration: none;
+  cursor: pointer;
 
-.uk-notouch {
-    a:hover,
-    .uk-link:hover {
-        color: @base-link-hover-color;
-        text-decoration: @base-link-hover-text-decoration;
-        .hook-base-link-hover;
-    }
+  .dark & {
+    color: @global-dark-primary;
+  }
 }
 
 /* Text-level semantics
@@ -184,54 +121,32 @@ strong { font-weight: 500; }
 :not(pre) > code,
 :not(pre) > kbd,
 :not(pre) > samp {
-    /* 1 */
-    font-size: @base-code-font-size;
-    /* 2 */
-    font-family: @base-code-font-family;
-    /* 3 */
-    color: @base-code-color;
-    border: 1px solid @base-code-border;
-    border-radius: @base-code-border-radius;
-    padding: 0 @base-code-padding;
+  /* 1 */
+  font-size: 0.75em;
+  /* 2 */
+  font-family: @base-code-font-family;
+  /* 3 */
+  color: @global-danger;
+  border: 1px solid @global-border;
+  border-radius: @global-border-radius;
+  padding: 4px;
 
-    .dark & {
-        border-color: @base-code-dark-border;
-    }
-
-    .hook-base-code;
+  .dark & {
+    color: @global-dark-danger;
+    border-color: @global-dark-border;
+  }
 }
 
 /*
  * Emphasize
  */
 
-em { color: @base-em-color; }
-
-/*
- * Insert
- */
-
-ins {
-    background: @base-ins-background;
-    color: @base-ins-color;
-    text-decoration: none;
+em {
+  color: @global-primary;
+  .dark & {
+    color: @global-dark-primary;
+  }
 }
-
-/*
- * Mark
- * Note: Addresses styling not present in IE 8/9.
- */
-
-mark {
-    background: @base-mark-background;
-    color: @base-mark-color;
-}
-
-/*
- * Quote
- */
-
-q { font-style: @base-quote-font-style; }
 
 /*
  * Addresses inconsistent and variable font size in all browsers.
@@ -289,8 +204,8 @@ img {
  * Preserve original image dimensions
  */
 
-.uk-img-preserve,
-.uk-img-preserve img { max-width: none; }
+.sp-img-preserve,
+.sp-img-preserve img { max-width: none; }
 
 /*
  * Correct overflow not hidden in IE 9/10/11.
@@ -309,41 +224,20 @@ svg:not(:root) { overflow: hidden; }
 blockquote,
 figure { margin: 0; }
 
-/*
- * Margins
- */
-
-p,
-ol,
-blockquote,
-pre,
-address,
-fieldset,
-figure { margin-bottom: @base-margin-vertical; }
-
-* + p,
-* + ul,
-* + dt,
-* + ol,
-* + blockquote,
-* + pre,
-* + address,
-* + fieldset,
-* + figure { margin-top: @base-margin-vertical; }
-
 
 /* Headings
  ========================================================================== */
 
 h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    text-transform: @base-heading-text-transform;
-    color: @base-heading-color;
-    font-weight: @base-heading-font-weight;
+  margin: 0;
+  text-transform: none;
+  color: @global-heading-color;
+  font-weight: 500;
+  white-space: nowrap;
 
-    .dark & {
-        color: @base-heading-dark-color;
-    }
+  .dark & {
+    color: @global-dark-heading-color;
+  }
 }
 
 /*
@@ -355,38 +249,38 @@ h1, h2, h3, h4, h5, h6 {
 * + h3,
 * + h4,
 * + h5,
-* + h6 {margin-top: @base-heading-margin-top; }
+* + h6 { margin-top: 0; }
 
 /*
  * Sizes
  */
 
-h1, .uk-h1 {
+h1, .sp-h1 {
     font-size: @base-h1-font-size;
     line-height: @base-h1-line-height;
 }
 
-h2, .uk-h2 {
+h2, .sp-h2 {
     font-size: @base-h2-font-size;
     line-height: @base-h2-line-height;
 }
 
-h3, .uk-h3 {
+h3, .sp-h3 {
     font-size: @base-h3-font-size;
     line-height: @base-h3-line-height;
 }
 
-h4, .uk-h4 {
+h4, .sp-h4 {
     font-size: @base-h4-font-size;
     line-height: @base-h4-line-height;
 }
 
-h5, .uk-h5 {
+h5, .sp-h5 {
     font-size: @base-h5-font-size;
     line-height: @base-h5-line-height;
 }
 
-h6, .uk-h6 {
+h6, .sp-h6 {
     font-size: @base-h6-font-size;
     line-height: @base-h6-line-height;
 }
@@ -394,9 +288,6 @@ h6, .uk-h6 {
 
 /* Lists
  ========================================================================== */
-
-ul,
-ol { padding-left: @base-list-padding-left; }
 
 /*
  * Reset margin for nested lists
@@ -407,34 +298,21 @@ ul > li > ol,
 ol > li > ol,
 ol > li > ul { margin: 0; }
 
-
-/* Description lists
- ========================================================================== */
-
-dt { font-weight: 500; }
-dd { margin-left: 0; }
-
-
 /* Horizontal rules
  ========================================================================== */
 
-/*
- * 1. Address differences between Firefox and other browsers.
- * 2. Style
- */
-
 hr {
-    /* 1 */
-    box-sizing: content-box;
-    height: 0;
-    /* 2 */
-    margin: @base-hr-margin-vertical 0;
-    border: 0;
-    border-top: 1px solid @base-hr-border;
+  /* Address differences between Firefox and other browsers. */
+  box-sizing: content-box;
+  height: 0;
+  /* Style */
+  margin: @global-margin 0;
+  border: 0;
+  border-top: 1px solid @global-border;
 
-    .dark & {
-        border-color: @base-hr-dark-border;
-    }
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }
 
 
@@ -443,47 +321,20 @@ hr {
 
 address { font-style: normal; }
 
-
-/* Blockquotes
- ========================================================================== */
-
-blockquote {
-    padding-left: @base-blockquote-padding-left;
-    border-left: @base-blockquote-border-width solid @base-blockquote-border;
-    font-size: @base-blockquote-font-size;
-    line-height: @base-blockquote-line-height;
-    font-style: @base-blockquote-font-style;
-    .hook-base-blockquote;
-}
-
-
 /* Preformatted text
  ========================================================================== */
 
-/*
- * 1. Contain overflow in all browsers.
- */
-
 pre {
-    font: @base-pre-font-size e("/") @base-pre-line-height @base-pre-font-family;
-    color: @base-pre-color;
-    background: @base-pre-background;
-    padding: @base-pre-padding;
-    border: 1px solid @base-pre-border;
-    border-radius: @base-pre-border-radius;
-    -moz-tab-size: 4;
-    tab-size: 4;
-    /* 1 */
-    overflow: auto;
-
-    .dark & {
-        border-color: @base-pre-dark-border;
-    }
-    .hook-base-pre;
+  font: 0.75em / 1.25em @base-code-font-family;
+  background: @global-muted-color;
+  padding: 16px;
+  tab-size: 4;
+  /* Contain overflow in all browsers. */
+  overflow: auto;
 }
 
 pre > code {
-    font: inherit;
+  font: inherit;
 }
 
 
@@ -491,15 +342,15 @@ pre > code {
  ========================================================================== */
 
 ::-moz-selection {
-    background: @base-selection-background;
-    color: @base-selection-color;
-    text-shadow: none;
+  background: @base-selection-background;
+  color: @base-selection-color;
+  text-shadow: none;
 }
 
 ::selection {
-    background: @base-selection-background;
-    color: @base-selection-color;
-    text-shadow: none;
+  background: @base-selection-background;
+  color: @base-selection-color;
+  text-shadow: none;
 }
 
 
@@ -549,19 +400,3 @@ template { display: none; }
  ========================================================================== */
 
 iframe { border: 0; }
-
-
-// Hooks
-// ========================================================================
-
-.hook-base-body() {
-    .dark & {
-        color: @base-body-dark-color;
-        background: @base-body-dark-background;
-    }
-}
-.hook-base-link() {}
-.hook-base-link-hover() {}
-.hook-base-code() {}
-.hook-base-blockquote() {}
-.hook-base-pre() {}

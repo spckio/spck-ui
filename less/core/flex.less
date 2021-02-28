@@ -1,122 +1,64 @@
-// Name:            Flex
-// Description:     Defines styles to create layouts with flexbox
-//
-// Component:       `uk-flex-*`
-//
-// Used by:         Caption
-//
-//
-// ========================================================================
-
-
-/* ========================================================================
-   Component: Flex
- ========================================================================== */
-
-.uk-flex {
-    display: -ms-flexbox;
-    display: -webkit-flex;
+.sp-flex {
     display: flex;
 }
 
-.uk-flex-inline {
-    display: -ms-inline-flexbox;
-    display: -webkit-inline-flex;
+.sp-flex-inline {
     display: inline-flex;
 }
 
-
-/* Alignment
- ========================================================================== */
-
-/*
- * Vertical alignment
- * Default value is `stretch`
- */
-
-// .uk-flex-stretch { align-items: stretch; }
-
-.uk-flex-top {
-    -ms-flex-align: start;
-    -webkit-align-items: flex-start;
+.sp-flex-top {
     align-items: flex-start;
 }
 
-.uk-flex-middle {
-    -ms-flex-align: center;
-    -webkit-align-items: center;
+.sp-flex-middle {
     align-items: center;
 }
 
-.uk-flex-bottom {
-    -ms-flex-align: end;
-    -webkit-align-items: flex-end;
+.sp-flex-bottom {
     align-items: flex-end;
 }
 
-/*
- * Horizontal alignment
- * Default value is `flex-start`
- */
-
-// .uk-flex-left { justify-content: flex-start; }
-
-.uk-flex-center {
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
+.sp-flex-center {
     justify-content: center;
 }
 
-.uk-flex-right {
-    -ms-flex-pack: end;
-    -webkit-justify-content: flex-end;
+.sp-flex-right {
     justify-content: flex-end;
 }
 
-.uk-flex-space-between {
-    -ms-flex-pack: justify;
-    -webkit-justify-content: space-between;
+.sp-flex-space-between {
     justify-content: space-between;
 }
 
-.uk-flex-space-around {
-    -ms-flex-pack: distribute;
-    -webkit-justify-content: space-around;
+.sp-flex-space-around {
     justify-content: space-around;
 }
 
-
-/* Direction
- ========================================================================== */
-
-// .uk-flex-row { flex-direction: row; }
-
-.uk-flex-row-reverse {
-    .hook-flex-row-reverse();
+.sp-flex-row-reverse {
+    flex-direction: row-reverse;
 }
 
-.uk-flex-column {
-    .hook-flex-column();
+.sp-flex-column {
+    flex-direction: column;
 }
 
-.uk-flex-column-reverse {
-    .hook-flex-column-reverse();
+.sp-flex-column-reverse {
+    flex-direction: column-reverse;
 }
-
 
 /* Desktop and bigger */
 @media (min-width: @breakpoint-large) {
 
-    .uk-flex-column-large {
-        .hook-flex-column();
+    .sp-flex-column-large {
+        flex-direction: column;
     }
 
-    .uk-flex-column-reverse-large {
-        .hook-flex-column-reverse();
+    .sp-flex-column-reverse-large {
+        flex-direction: column-reverse;
     }
 
-    .uk-flex-row-reverse-large {
-        .hook-flex-row-reverse();
+    .sp-flex-row-reverse-large {
+        flex-direction: row-reverse;
     }
 
 }
@@ -124,40 +66,29 @@
 /* Phone landscape and smaller*/
 @media (max-width: @breakpoint-small-max) {
 
-    .uk-flex-column-small {
-        .hook-flex-column();
+    .sp-flex-column-small {
+        flex-direction: column;
     }
 
-    .uk-flex-column-reverse-small {
-        .hook-flex-column-reverse();
+    .sp-flex-column-reverse-small {
+        flex-direction: column-reverse;
     }
 
-    .uk-flex-row-reverse-small {
-        .hook-flex-row-reverse();
+    .sp-flex-row-reverse-small {
+        flex-direction: row-reverse;
     }
 
 }
 
-
-/* Wrap
- ========================================================================== */
-
-// Default
-.uk-flex-nowrap {
-    -ms-flex-wrap: nowrap;
-    -webkit-flex-wrap: nowrap;
+.sp-flex-nowrap {
     flex-wrap: nowrap;
 }
 
-.uk-flex-wrap {
-    -ms-flex-wrap: wrap;
-    -webkit-flex-wrap: wrap;
+.sp-flex-wrap {
     flex-wrap: wrap;
 }
 
-.uk-flex-wrap-reverse {
-    -ms-flex-wrap: wrap-reverse;
-    -webkit-flex-wrap: wrap-reverse;
+.sp-flex-wrap-reverse {
     flex-wrap: wrap-reverse;
 }
 
@@ -166,55 +97,35 @@
  * Default value is `stretch`
  */
 
-// .uk-flex-wrap-stretch { align-content: stretch; }
-
-.uk-flex-wrap-top {
-    -ms-flex-line-pack: start;
-    -webkit-align-content: flex-start;
+.sp-flex-wrap-top {
     align-content: flex-start;
 }
 
-.uk-flex-wrap-middle {
-    -ms-flex-line-pack: center;
-    -webkit-align-content: center;
+.sp-flex-wrap-middle {
     align-content: center;
 }
 
-.uk-flex-wrap-bottom {
-    -ms-flex-line-pack: end;
-    -webkit-align-content: flex-end;
+.sp-flex-wrap-bottom {
     align-content: flex-end;
 }
 
-.uk-flex-wrap-space-between {
-    -ms-flex-line-pack: justify;
-    -webkit-align-content: space-between;
+.sp-flex-wrap-space-between {
     align-content: space-between;
 }
 
-.uk-flex-wrap-space-around {
-    -ms-flex-line-pack: distribute;
-    -webkit-align-content: space-around;
+.sp-flex-wrap-space-around {
     align-content: space-around;
 }
-
-
-/* Item ordering
- ========================================================================== */
 
 /*
  * Default is 0
  */
 
-.uk-flex-order-first {
-    -ms-flex-order: -1;
-    -webkit-order: -1;
+.sp-flex-order-first {
     order: -1;
 }
 
-.uk-flex-order-last {
-    -ms-flex-order: 99;
-    -webkit-order: 99;
+.sp-flex-order-last {
     order: 99;
 }
 
@@ -222,15 +133,11 @@
 /* Phone landscape and bigger */
 @media (min-width: @breakpoint-small) {
 
-    .uk-flex-order-first-small {
-        -ms-flex-order: -1;
-        -webkit-order: -1;
+    .sp-flex-order-first-small {
         order: -1;
     }
 
-    .uk-flex-order-last-small {
-        -ms-flex-order: 99;
-        -webkit-order: 99;
+    .sp-flex-order-last-small {
         order: 99;
     }
 
@@ -239,15 +146,11 @@
 /* Tablet and bigger */
 @media (min-width: @breakpoint-medium) {
 
-    .uk-flex-order-first-medium {
-        -ms-flex-order: -1;
-        -webkit-order: -1;
+    .sp-flex-order-first-medium {
         order: -1;
     }
 
-    .uk-flex-order-last-medium {
-        -ms-flex-order: 99;
-        -webkit-order: 99;
+    .sp-flex-order-last-medium {
         order: 99;
     }
 
@@ -256,15 +159,11 @@
 /* Desktop and bigger */
 @media (min-width: @breakpoint-large) {
 
-    .uk-flex-order-first-large {
-        -ms-flex-order: -1;
-        -webkit-order: -1;
+    .sp-flex-order-first-large {
         order: -1;
     }
 
-    .uk-flex-order-last-large {
-        -ms-flex-order: 99;
-        -webkit-order: 99;
+    .sp-flex-order-last-large {
         order: 99;
     }
 
@@ -273,24 +172,15 @@
 /* Large screen and bigger */
 @media (min-width: @breakpoint-xlarge) {
 
-    .uk-flex-order-first-xlarge {
-        -ms-flex-order: -1;
-        -webkit-order: -1;
+    .sp-flex-order-first-xlarge {
         order: -1;
     }
 
-    .uk-flex-order-last-xlarge {
-        -ms-flex-order: 99;
-        -webkit-order: 99;
+    .sp-flex-order-last-xlarge {
         order: 99;
     }
 
 }
-
-
-
-/* Item dimensions
- ========================================================================== */
 
 /*
  * Initial: 0 1 auto
@@ -302,9 +192,7 @@
  * Content dimensions
  */
 
-.uk-flex-item-none {
-    -ms-flex: none;
-    -webkit-flex: none;
+.sp-flex-item-none {
     flex: none;
 }
 
@@ -313,9 +201,7 @@
  * Space is allocated considering content
  */
 
-.uk-flex-item-auto {
-    -ms-flex: auto;
-    -webkit-flex: auto;
+.sp-flex-item-auto {
     flex: auto;
 }
 
@@ -324,30 +210,6 @@
  * Space is allocated solely based on flex
  */
 
-.uk-flex-item-1 {
-    -ms-flex: 1;
-    -webkit-flex: 1;
+.sp-flex-item-1 {
     flex: 1;
-}
-
-
-// Hooks
-// ========================================================================
-
-.hook-flex-column() {
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-}
-
-.hook-flex-column-reverse() {
-    -ms-flex-direction: column-reverse;
-    -webkit-flex-direction: column-reverse;
-    flex-direction: column-reverse;
-}
-
-.hook-flex-row-reverse() {
-    -ms-flex-direction: row-reverse;
-    -webkit-flex-direction: row-reverse;
-    flex-direction: row-reverse;
 }

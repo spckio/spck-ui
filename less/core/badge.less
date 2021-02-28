@@ -1,97 +1,89 @@
-// Name:            Badge
-// Description:     Defines styles for badges
-//
-// Component:       `uk-badge`
-//
-// Modifiers:       `uk-badge-notification`
-//                  `uk-badge-success`
-//                  `uk-badge-danger`
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@badge-padding-horizontal:                      @global-margin-small;
-@badge-font-size:                               10px;
-@badge-line-height:                             @global-line-height;
-@badge-color:                                   @global-primary-background;
-
-@badge-success-color:                           @global-success-background;
-@badge-warning-color:                           @global-warning-background;
-@badge-danger-color:                            @global-danger-background;
-
-
-/* ========================================================================
-   Component: Badge
- ========================================================================== */
-
-.uk-badge {
-    display: inline-block;
-    box-sizing: border-box;
-    padding: 0 @badge-padding-horizontal;
-    font-size: @badge-font-size;
-    line-height: @badge-line-height;
-    color: @badge-color;
-    background: fade(@badge-color, 10%);
-    border: 1px solid fade(@badge-color, 20%);
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    .hook-badge;
+.sp-badge {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 6px 12px;
+  font-size: 0.75em;
+  line-height: 1em;
+  color: @global-color;
+  background-color: fade(@global-color, 5%);
+  border-radius: 500px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  transition: background-color 0.6s ease;
+  .dark & {
+    color: @global-dark-color;
+    background-color: fade(@global-dark-color, 10%);
+  }
 }
 
-
-/* Modifier: `uk-badge-notification`;
- ========================================================================== */
-
-.uk-badge-notification {
-    border-radius: 500px;
+.sp-badge:hover {
+  background-color: fade(@global-color, 10%);
+  .dark & {
+    background-color: fade(@global-dark-color, 15%);
+  }
 }
 
-
-/* Color modifier
- ========================================================================== */
-
-/*
- * Modifier: `uk-badge-success`
- */
-
-.uk-badge-success {
-    color: @badge-success-color;
-    background-color: fade(@badge-success-color, 10%);
-    border: 1px solid fade(@badge-success-color, 10%);
-    .hook-badge-success;
+.sp-badge-primary {
+  color: @global-primary;
+  background-color: fade(@global-primary, 5%);
+  .dark & {
+    color: @global-dark-primary;
+    background-color: fade(@global-dark-primary, 15%);
+  }
 }
 
-/*
- * Modifier: `uk-badge-warning`
- */
-
-.uk-badge-warning {
-    color: @badge-warning-color;
-    background-color: fade(@badge-warning-color, 10%);
-    border: 1px solid fade(@badge-warning-color, 10%);
-    .hook-badge-warning;
+.sp-badge-primary:hover {
+  background-color: fade(@global-primary, 10%);
+  .dark & {
+    background-color: fade(@global-dark-primary, 20%);
+  }
 }
 
-/*
- * Modifier: `uk-badge-danger`
- */
-
-.uk-badge-danger {
-    color: @badge-danger-color;
-    background-color: fade(@badge-danger-color, 10%);
-    border: 1px solid fade(@badge-danger-color, 10%);
-    .hook-badge-danger;
+.sp-badge-success {
+  color: @global-success;
+  background-color: fade(@global-success, 5%);
+  .dark & {
+    color: @global-dark-success;
+    background-color: fade(@global-dark-success, 15%);
+  }
 }
 
+.sp-badge-success:hover {
+  background-color: fade(@global-success, 10%);
+  .dark & {
+    background-color: fade(@global-dark-success, 20%);
+  }
+}
 
-// Hooks
-// ======================================================================== dd
+.sp-badge-warning {
+  color: @global-warning;
+  background-color: fade(@global-warning, 5%);
+  .dark & {
+    color: @global-dark-warning;
+    background-color: fade(@global-dark-warning, 15%);
+  }
+}
 
-.hook-badge() {}
-.hook-badge-success() {}
-.hook-badge-warning() {}
-.hook-badge-danger() {}
+.sp-badge-warning:hover {
+  background-color: fade(@global-warning, 10%);
+  .dark & {
+    background-color: fade(@global-dark-warning, 20%);
+  }
+}
+
+.sp-badge-danger {
+  color: @global-danger;
+  background-color: fade(@global-danger, 5%);
+  .dark & {
+    color: @global-dark-danger;
+    background-color: fade(@global-dark-danger, 15%);
+  }
+}
+
+.sp-badge-danger:hover {
+  background-color: fade(@global-danger, 8%);
+  .dark & {
+    background-color: fade(@global-dark-danger, 20%);
+  }
+}

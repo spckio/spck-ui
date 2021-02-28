@@ -1,148 +1,34 @@
-// Name:            Utility
-// Description:     Collection of useful utility classes to style your content
-//
-// Component:       `uk-container-*`
-//                  `uk-clearfix`
-//                  `uk-nbfc-*`
-//                  `uk-float-*`
-//                  `uk-align-*`
-//                  `uk-vertical-align-*`
-//                  `uk-height-*`
-//                  `uk-responsive-*`
-//                  `uk-margin-*`
-//                  `uk-padding-*`
-//                  `uk-border-*`
-//                  `uk-heading-*`
-//                  `uk-link-*`
-//                  `uk-scrollable-*`
-//                  `uk-overflow-*`
-//                  `uk-position-*`
-//                  `uk-display-*`
-//                  `uk-visible-*`
-//                  `uk-hidden-*`
-//                  `uk-invisible`
-//
-// Used by:         Overlay
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@utility-container-max-width:                   980px;
-@utility-container-padding-horizontal:          32px;
-
-@utility-container-large-max-width:             1200px;
-@utility-container-large-padding-horizontal:    48px;
-
-@utility-align-horizontal:                      0px;
-@utility-align-vertical:                        0px;
-
-@utility-height-viewport-min-height:            600px;
-
-@utility-margin:                                @global-margin;
-@utility-margin-mini:                           @global-margin-mini;
-@utility-margin-small:                          @global-margin-small;
-@utility-margin-large:                          @global-margin-large;
-
-@utility-border-rounded:                        3px;
-
-@utility-heading-large-small-font-size:         36px;
-@utility-heading-large-small-line-height:       42px;
-@utility-heading-large-font-size:               52px;
-@utility-heading-large-line-height:             64px;
-
-@utility-link-muted-color:                      #444;
-@utility-link-muted-hover-color:                #444;
-
-@utility-scrollable-text-height:                300px;
-
-@utility-scrollable-box-height:                 170px;
-@utility-scrollable-box-padding:                10px;
-@utility-scrollable-box-border:                 #ddd;
-@utility-scrollable-box-border-width:           1px;
-
-
-/* ========================================================================
-   Component: Utility
- ========================================================================== */
-
 /* Container
  ========================================================================== */
 
-.uk-container {
-    box-sizing: border-box;
-    max-width: @utility-container-max-width;
-    padding: 0 @utility-container-padding-horizontal;
-    .hook-container;
+.sp-container {
+  box-sizing: border-box;
+  max-width: 980px;
+  padding: 0 32px;
 }
 
-/* Large screen and bigger */
+@media (max-width: @breakpoint-small-max) {
+  .sp-container {
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
 @media (min-width: @breakpoint-xlarge) {
-
-    .uk-container {
-        max-width: @utility-container-large-max-width;
-        padding: 0 @utility-container-large-padding-horizontal;
-    }
-
+  .sp-container {
+    max-width: 1200px;
+    padding: 0 48px;
+  }
 }
-
-/*
- * Micro clearfix
- */
-
-.uk-container:before,
-.uk-container:after {
-    content: "";
-    display: table;
-}
-
-.uk-container:after { clear: both; }
 
 /*
  * Center container
  */
 
-.uk-container-center {
-    margin-left: auto;
-    margin-right: auto;
+.sp-container-center {
+  margin-left: auto;
+  margin-right: auto;
 }
-
-
-/* Clearing
- ========================================================================== */
-
-/*
- * Micro clearfix
-* `table-cell` is used with `:before` because `table` creates a 1px gap when it becomes a flex item, only in Webkit
- * `table` is used again with `:after` because `clear` only works with block elements.
- * Note: `display: block` with `overflow: hidden` is currently not working in the latest Safari
- */
-
-.uk-clearfix:before {
-    content: "";
-    display: table-cell;
-}
-
-.uk-clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-
-/*
- *  Create a new block formatting context
- */
-
-.uk-nbfc { overflow: hidden; }
-
-.uk-nbfc-alt {
-    display: table-cell;
-    width: 10000px;
-}
-
 
 /* Alignment of block elements
  ========================================================================== */
@@ -152,92 +38,16 @@
  * 1. Prevent content overflow on small devices
  */
 
-.uk-float-left { float: left; }
-.uk-float-right { float: right; }
+.sp-float-left { float: left; }
+.sp-float-right { float: right; }
 
 /* 1 */
-[class*='uk-float-'] { max-width: 100%; }
+[class*='sp-float-'] { max-width: 100%; }
 
-
-/* Alignment of images and objects
- ========================================================================== */
-
-/*
- * Alignment
- */
-
-[class*='uk-align-'] {
-    display: block;
-    margin-bottom: @utility-align-vertical;
+.sp-align-center {
+  margin-left: auto;
+  margin-right: auto;
 }
-
-.uk-align-left {
-    margin-right: @utility-align-horizontal;
-    float: left;
-}
-
-.uk-align-right {
-    margin-left: @utility-align-horizontal;
-    float: right;
-}
-
-/* Tablet and bigger */
-@media (min-width: @breakpoint-medium) {
-
-    .uk-align-medium-left {
-        margin-right: @utility-align-horizontal;
-        float: left;
-    }
-
-    .uk-align-medium-right {
-        margin-left: @utility-align-horizontal;
-        float: right;
-    }
-
-}
-
-.uk-align-center {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-/* Vertical alignment
- ========================================================================== */
-
-/*
- * Remove whitespace between child elements when using `inline-block`
- */
-
-.uk-vertical-align { font-size: 0.001px; }
-
-/*
- *  The `uk-vertical-align` container needs a specific height
- */
-
-.uk-vertical-align:before {
-    content: '';
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-}
-
-/*
- * Sub-object which can have any height
- * 1. Reset whitespace hack
- */
-
-.uk-vertical-align-middle,
-.uk-vertical-align-bottom {
-    display: inline-block;
-    max-width: 100%;
-    /* 1 */
-    font-size: 1rem;
-}
-
-.uk-vertical-align-middle { vertical-align: middle; }
-.uk-vertical-align-bottom { vertical-align: bottom; }
-
 
 /* Height
  ========================================================================== */
@@ -246,152 +56,145 @@
  * More robust if padding and border are used
  */
 
-[class*='uk-height'] { box-sizing: border-box; }
+[class*='sp-height'] { box-sizing: border-box; }
 
 /*
  * Useful to extend the `html` and `body` element to the full height of the page.
  */
 
-.uk-height-1-1 { height: 100%; }
+.sp-height-1-1 { height: 100%; }
+
+[class*='sp-width'] {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.sp-width-1-1 { width: 100%; }
 
 /*
  * Useful to create image teasers
  */
 
-.uk-height-viewport {
-    height: 100vh;
-    min-height: @utility-height-viewport-min-height;
+.sp-height-viewport {
+  height: 100vh;
 }
 
-
-/* Responsive objects
- * Note: Images are already responsive by default, see Base component
- ========================================================================== */
-
-/*
- * 1. Corrects `max-width` and `max-height` behavior if padding and border are used
- */
-
-.uk-responsive-width,
-.uk-responsive-height { box-sizing: border-box; }
-
-/*
- * Responsiveness: Sets a maximum width relative to the parent and auto scales the height
- * `important` needed to override `uk-img-preserve img`
- */
-
-.uk-responsive-width {
-    max-width: 100% !important;
-    height: auto;
+.sp-responsive-width {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
 }
 
-/*
- * Responsiveness: Sets a maximum height relative to the parent and auto scales the width
- * Only works if the parent element has a fixed height.
- */
-
-.uk-responsive-height {
-    max-height: 100%;
-    width: auto;
+.sp-responsive-height {
+  box-sizing: border-box;
+  min-height: 0;
+  max-height: 100%;
+  width: auto;
 }
 
 
 /* Margin
  ========================================================================== */
 
+@utility-margin:                                @global-margin;
+@utility-margin-mini:                           @global-margin-mini;
+@utility-margin-small:                          @global-margin-small;
+@utility-margin-large:                          @global-margin-large;
+
 /*
  * Create a block with the same margin of a paragraph
  * Add margin if adjacent element
  */
 
-.uk-margin { margin-bottom: @utility-margin; }
-* + .uk-margin { margin-top: @utility-margin; }
+.sp-margin { margin-bottom: @utility-margin; }
+* + .sp-margin { margin-top: @utility-margin; }
 
-.uk-margin-top { margin-top: @utility-margin !important; }
-.uk-margin-bottom { margin-bottom: @utility-margin !important; }
-.uk-margin-left { margin-left: @utility-margin !important; }
-.uk-margin-right { margin-right: @utility-margin !important; }
+.sp-margin-top { margin-top: @utility-margin !important; }
+.sp-margin-bottom { margin-bottom: @utility-margin !important; }
+.sp-margin-left { margin-left: @utility-margin !important; }
+.sp-margin-right { margin-right: @utility-margin !important; }
 
-.uk-margin-y {
-    margin-top: @utility-margin !important;
-    margin-bottom: @utility-margin !important;
+.sp-margin-y {
+  margin-top: @utility-margin !important;
+  margin-bottom: @utility-margin !important;
 }
-.uk-margin-x {
-    margin-left: @utility-margin !important;
-    margin-right: @utility-margin !important;
-}
-
-.uk-margin-large {
-    margin-bottom: @utility-margin-large;
+.sp-margin-x {
+  margin-left: @utility-margin !important;
+  margin-right: @utility-margin !important;
 }
 
-* + .uk-margin-large {
-    margin-top: @utility-margin-large;
+.sp-margin-large {
+  margin-bottom: @utility-margin-large;
 }
 
-.uk-margin-large-top {
-    margin-top: @utility-margin-large !important;
+* + .sp-margin-large {
+  margin-top: @utility-margin-large;
 }
 
-.uk-margin-large-bottom {
-    margin-bottom: @utility-margin-large !important;
+.sp-margin-large-top {
+  margin-top: @utility-margin-large !important;
 }
 
-.uk-margin-large-left {
-    margin-left: @utility-margin-large !important;
+.sp-margin-large-bottom {
+  margin-bottom: @utility-margin-large !important;
 }
 
-.uk-margin-large-right {
-    margin-right: @utility-margin-large !important;
+.sp-margin-large-left {
+  margin-left: @utility-margin-large !important;
 }
 
-.uk-margin-large-y {
-    margin-top: @utility-margin-large !important;
-    margin-bottom: @utility-margin-large !important;
-}
-.uk-margin-large-x {
-    margin-left: @utility-margin-large !important;
-    margin-right: @utility-margin-large !important;
+.sp-margin-large-right {
+  margin-right: @utility-margin-large !important;
 }
 
-/*
- * Smaller margins
- */
-
-.uk-margin-small { margin-bottom: @utility-margin-small; }
-* + .uk-margin-small { margin-top: @utility-margin-small; }
-
-.uk-margin-small-top { margin-top: @utility-margin-small !important; }
-.uk-margin-small-bottom { margin-bottom: @utility-margin-small !important; }
-.uk-margin-small-left { margin-left: @utility-margin-small !important; }
-.uk-margin-small-right { margin-right: @utility-margin-small !important; }
-
-.uk-margin-small-y {
-    margin-top: @utility-margin-small !important;
-    margin-bottom: @utility-margin-small !important;
+.sp-margin-large-y {
+  margin-top: @utility-margin-large !important;
+  margin-bottom: @utility-margin-large !important;
 }
-.uk-margin-small-x {
-    margin-left: @utility-margin-small !important;
-    margin-right: @utility-margin-small !important;
+.sp-margin-large-x {
+  margin-left: @utility-margin-large !important;
+  margin-right: @utility-margin-large !important;
 }
 
 /*
  * Smaller margins
  */
 
-.uk-margin-mini { margin-bottom: @utility-margin-mini; }
-* + .uk-margin-mini { margin-top: @utility-margin-mini; }
+.sp-margin-small { margin-bottom: @utility-margin-small; }
+* + .sp-margin-small { margin-top: @utility-margin-small; }
 
-.uk-margin-mini-top { margin-top: @utility-margin-mini !important; }
-.uk-margin-mini-bottom { margin-bottom: @utility-margin-mini !important; }
-.uk-margin-mini-left { margin-left: @utility-margin-mini !important; }
-.uk-margin-mini-right { margin-right: @utility-margin-mini !important; }
+.sp-margin-small-top { margin-top: @utility-margin-small !important; }
+.sp-margin-small-bottom { margin-bottom: @utility-margin-small !important; }
+.sp-margin-small-left { margin-left: @utility-margin-small !important; }
+.sp-margin-small-right { margin-right: @utility-margin-small !important; }
 
-.uk-margin-mini-y {
+.sp-margin-small-y {
+  margin-top: @utility-margin-small !important;
+  margin-bottom: @utility-margin-small !important;
+}
+.sp-margin-small-x {
+  margin-left: @utility-margin-small !important;
+  margin-right: @utility-margin-small !important;
+}
+
+/*
+ * Smaller margins
+ */
+
+.sp-margin-mini { margin-bottom: @utility-margin-mini; }
+* + .sp-margin-mini { margin-top: @utility-margin-mini; }
+
+.sp-margin-mini-top { margin-top: @utility-margin-mini !important; }
+.sp-margin-mini-bottom { margin-bottom: @utility-margin-mini !important; }
+.sp-margin-mini-left { margin-left: @utility-margin-mini !important; }
+.sp-margin-mini-right { margin-right: @utility-margin-mini !important; }
+
+.sp-margin-mini-y {
     margin-top: @utility-margin-mini !important;
     margin-bottom: @utility-margin-mini !important;
 }
-.uk-margin-mini-x {
+.sp-margin-mini-x {
     margin-left: @utility-margin-mini !important;
     margin-right: @utility-margin-mini !important;
 }
@@ -400,106 +203,86 @@
  * Remove margins
  */
 
-.uk-margin-remove { margin: 0 !important; }
-.uk-margin-top-remove { margin-top: 0 !important; }
-.uk-margin-bottom-remove { margin-bottom: 0 !important; }
-.uk-margin-left-remove { margin-left: 0 !important; }
-.uk-margin-right-remove { margin-right: 0 !important; }
+.sp-margin-remove { margin: 0 !important; }
+.sp-margin-top-remove { margin-top: 0 !important; }
+.sp-margin-bottom-remove { margin-bottom: 0 !important; }
+.sp-margin-left-remove { margin-left: 0 !important; }
+.sp-margin-right-remove { margin-right: 0 !important; }
 
 
 /* Padding
  ========================================================================== */
 
-.uk-padding-remove { padding: 0 !important; }
-.uk-padding-top-remove { padding-top: 0 !important; }
-.uk-padding-bottom-remove { padding-bottom: 0 !important; }
+.sp-padding-remove { padding: 0 !important; }
+.sp-padding-top-remove { padding-top: 0 !important; }
+.sp-padding-bottom-remove { padding-bottom: 0 !important; }
 
-.uk-padding-vertical-remove {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+.sp-padding-vertical-remove {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
-.uk-padding-mini {
-    padding: @global-padding-mini;
+.sp-padding-mini {
+  padding: @global-padding-mini;
 }
 
-.uk-padding-mini-x {
-    padding-left: @global-padding-mini;
-    padding-right: @global-padding-mini;
+.sp-padding-mini-x {
+  padding-left: @global-padding-mini;
+  padding-right: @global-padding-mini;
 }
 
-.uk-padding-mini-y {
-    padding-top: @global-padding-mini;
-    padding-bottom: @global-padding-mini;
+.sp-padding-mini-y {
+  padding-top: @global-padding-mini;
+  padding-bottom: @global-padding-mini;
 }
 
-.uk-padding-small {
-    padding: @global-padding-small;
+.sp-padding-small {
+  padding: @global-padding-small;
 }
 
-.uk-padding-small-x {
-    padding-left: @global-padding-small;
-    padding-right: @global-padding-small;
+.sp-padding-small-x {
+  padding-left: @global-padding-small;
+  padding-right: @global-padding-small;
 }
 
-.uk-padding-small-y {
-    padding-top: @global-padding-small;
-    padding-bottom: @global-padding-small;
+.sp-padding-small-y {
+  padding-top: @global-padding-small;
+  padding-bottom: @global-padding-small;
 }
 
-.uk-padding {
-    padding: @global-padding;
+.sp-padding {
+  padding: @global-padding;
 }
 
-.uk-padding-x {
-    padding-left: @global-padding;
-    padding-right: @global-padding;
+.sp-padding-x {
+  padding-left: @global-padding;
+  padding-right: @global-padding;
 }
 
-.uk-padding-y {
-    padding-top: @global-padding;
-    padding-bottom: @global-padding;
+.sp-padding-y {
+  padding-top: @global-padding;
+  padding-bottom: @global-padding;
 }
 
-.uk-padding-large {
-    padding: @global-padding-large;
+.sp-padding-large {
+  padding: @global-padding-large;
 }
 
-.uk-padding-large-x {
-    padding-left: @global-padding-large;
-    padding-right: @global-padding-large;
+.sp-padding-large-x {
+  padding-left: @global-padding-large;
+  padding-right: @global-padding-large;
 }
 
-.uk-padding-large-y {
-    padding-top: @global-padding-large;
-    padding-bottom: @global-padding-large;
+.sp-padding-large-y {
+  padding-top: @global-padding-large;
+  padding-bottom: @global-padding-large;
 }
 
 /* Border
  ========================================================================== */
 
-.uk-border-circle { border-radius: 50%; }
-.uk-border-rounded { border-radius: @utility-border-rounded; }
-
-
-/* Headings
- ========================================================================== */
-
-.uk-heading-large {
-    font-size: @utility-heading-large-small-font-size;
-    line-height: @utility-heading-large-small-line-height;
-}
-
-/* Tablet and bigger */
-@media (min-width: @breakpoint-medium) {
-
-    .uk-heading-large {
-        font-size: @utility-heading-large-font-size;
-        line-height: @utility-heading-large-line-height;
-    }
-
-}
-
+.sp-border-circle { border-radius: 50%; }
+.sp-border-rounded { border-radius: 8px; }
 
 /* Link
  ========================================================================== */
@@ -508,26 +291,26 @@
  * Let links appear in default text color
  */
 
-.uk-link-muted,
-.uk-link-muted a { color: @utility-link-muted-color; }
+.sp-link-muted,
+.sp-link-muted a { color: @global-color; }
 
-.uk-notouch {
-  .uk-link-muted:hover,
-  .uk-link-muted a:hover { color: @utility-link-muted-hover-color; }
+.sp-notouch {
+  .sp-link-muted:hover,
+  .sp-link-muted a:hover { color: @global-color; }
 }
 
 /*
  * Reset link style
  */
 
-.uk-link-reset,
-.uk-link-reset a,
-.uk-link-reset:hover,
-.uk-link-reset a:hover,
-.uk-link-reset:focus,
-.uk-link-reset a:focus {
-    color: inherit;
-    text-decoration: none;
+.sp-link-reset,
+.sp-link-reset a,
+.sp-link-reset:hover,
+.sp-link-reset a:hover,
+.sp-link-reset:focus,
+.sp-link-reset a:focus {
+  color: inherit;
+  text-decoration: none;
 }
 
 
@@ -538,113 +321,100 @@
  * Enable scrolling for preformatted text
  */
 
-.uk-scrollable-text {
-    height: @utility-scrollable-text-height;
-    overflow-y: scroll;
-    resize: both;
-}
-
-/*
- * Box with scrolling enabled
- */
-
-.uk-scrollable-box {
-    box-sizing: border-box;
-    height: @utility-scrollable-box-height;
-    padding: @utility-scrollable-box-padding;
-    border: @utility-scrollable-box-border-width solid @utility-scrollable-box-border;
-    overflow: auto;
-    resize: both;
-    .hook-scrollable-box;
+.sp-scrollable-text {
+  overflow-y: scroll;
+  resize: both;
 }
 
 
 /* Overflow
  ========================================================================== */
 
-.uk-overflow-hidden { overflow: hidden; }
+.sp-overflow-hidden { overflow: hidden; }
 
 /*
  * Enable scrollbars if content is clipped
  */
 
-.uk-overflow-container {
-    overflow: auto;
+.sp-overflow-container {
+  overflow: auto;
 }
 
-.uk-overflow-ycontainer {
-    overflow-y: auto;
-    overflow-x: hidden;
+.sp-overflow-ycontainer {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.uk-overflow-xcontainer {
-    overflow-x: auto;
-    overflow-y: hidden;
+.sp-overflow-xcontainer {
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* Position
  ========================================================================== */
 
-.uk-position-absolute,
-[class*='uk-position-top'],
-[class*='uk-position-bottom'] { position: absolute !important; }
+.sp-position-absolute,
+[class*='sp-position-top'],
+[class*='sp-position-bottom'] { position: absolute !important; }
 
 /* Don't use `width: 100%` because it is wrong if the parent has padding. */
-.uk-position-top {
-    top: 0;
-    left: 0;
-    right: 0;
+.sp-position-top {
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
-.uk-position-bottom {
-    bottom: 0;
-    left: 0;
-    right: 0;
+.sp-position-bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
-.uk-position-top-left {
-    top: 0;
-    left: 0;
+.sp-position-top-left {
+  top: 0;
+  left: 0;
 }
 
-.uk-position-top-right {
-    top: 0;
-    right: 0;
+.sp-position-top-right {
+  top: 0;
+  right: 0;
 }
 
-.uk-position-bottom-left {
-    bottom: 0;
-    left: 0;
+.sp-position-bottom-left {
+  bottom: 0;
+  left: 0;
 }
 
-.uk-position-bottom-right {
-    bottom: 0;
-    right: 0;
+.sp-position-bottom-right {
+  bottom: 0;
+  right: 0;
 }
 
 /*
  * Cover
  */
 
-.uk-position-cover {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+.sp-position-cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 /*
  * Relative
  */
 
-.uk-position-relative { position: relative !important; }
+.sp-position-relative { position: relative !important; }
 
 /*
  * Z-index
  */
 
-.uk-position-z-index { z-index: 10; }
+.sp-position-z-index { z-index: 10; }
+
+.sp-position-fixed { position: fixed !important; }
 
 
 /* Display
@@ -655,13 +425,13 @@
  * 1. Required if child is a responsive image
  */
 
-.uk-display-block { display: block !important; }
-.uk-display-inline { display: inline !important; }
+.sp-display-block { display: block !important; }
+.sp-display-inline { display: inline !important; }
 
-.uk-display-inline-block {
-    display: inline-block !important;
-    /* 1 */
-    max-width: 100%;
+.sp-display-inline-block {
+  display: inline-block !important;
+  /* 1 */
+  max-width: 100%;
 }
 
 /*
@@ -672,67 +442,63 @@
 /* Desktop and bigger */
 @media (min-width: @breakpoint-large) {
 
-    .uk-visible-small { display: none !important; }
-    .uk-visible-medium { display: none !important; }
-    .uk-hidden-large { display: none !important; }
+  .sp-visible-small { display: none !important; }
+  .sp-visible-medium { display: none !important; }
+  .sp-hidden-large { display: none !important; }
 
 }
 
 /* Tablets portrait */
 @media (min-width: @breakpoint-medium) and (max-width: @breakpoint-medium-max) {
 
-    .uk-visible-small { display: none !important; }
-    .uk-visible-large { display: none !important ; }
-    .uk-hidden-medium { display: none !important; }
+  .sp-visible-small { display: none !important; }
+  .sp-visible-large { display: none !important ; }
+  .sp-hidden-medium { display: none !important; }
 
 }
 
 /* Phone landscape and smaller*/
 @media (max-width: @breakpoint-small-max) {
 
-    .uk-visible-medium { display: none !important; }
-    .uk-visible-large { display: none !important; }
-    .uk-hidden-small { display: none !important; }
+  .sp-visible-medium { display: none !important; }
+  .sp-visible-large { display: none !important; }
+  .sp-hidden-small { display: none !important; }
 
 }
 
 /* Remove from the flow and screen readers on any device */
-.uk-hidden {
-    display: none !important;
-    visibility: hidden !important;
+.sp-hidden {
+  display: none !important;
+  visibility: hidden !important;
 }
 
 /* It's hidden, but still affects layout */
-.uk-invisible { visibility: hidden !important; }
+.sp-invisible { visibility: hidden !important; }
 
 /* Show on hover */
-.uk-visible-hover:hover .uk-hidden,
-.uk-visible-hover:hover .uk-invisible {
-    display: block !important;
-    visibility: visible !important;
+.sp-visible-hover:hover .sp-hidden,
+.sp-visible-hover:hover .sp-invisible {
+  display: block !important;
+  visibility: visible !important;
 }
 
-.uk-visible-hover-inline:hover .uk-hidden,
-.uk-visible-hover-inline:hover .uk-invisible {
-    display: inline-block !important;
-    visibility: visible !important;
+.sp-visible-hover-inline:hover .sp-hidden,
+.sp-visible-hover-inline:hover .sp-invisible {
+  display: inline-block !important;
+  visibility: visible !important;
 }
 
 /* Hide on touch */
-.uk-touch .uk-hidden-touch,
-.uk-notouch .uk-hidden-notouch { display: none !important; }
+.sp-touch .sp-hidden-touch,
+.sp-notouch .sp-hidden-notouch { display: none !important; }
 
 
 /*
  * Box Shaodw
  */
-.uk-box-shadow {
-    box-shadow: @global-box-shadow;
+.sp-box-shadow {
+  box-shadow: @global-box-shadow;
+  .dark & {
+    box-shadow: @global-dark-box-shadow;
+  }
 }
-
-
-// Hooks
-// ========================================================================
-
-.hook-container() {}
-.hook-scrollable-box() {}

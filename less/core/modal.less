@@ -1,324 +1,238 @@
-// Name:            Modal
-// Description:     Defines styles for modal dialogs
-//
-// Component:       `uk-modal`
-//
-// Sub-objects:     `uk-modal-dialog`
-//                  `uk-modal-close`
-//                  `uk-modal-header`
-//                  `uk-modal-footer`
-//                  `uk-modal-caption`
-//                  `uk-modal-spinner`
-//
-// Modifiers:       `uk-modal-dialog-lightbox`
-//                  `uk-modal-dialog-blank`
-//                  `uk-modal-dialog-large`
-//
-// States:          `uk-open`
-//
-// Uses:            Close: `uk-close`
-//
-// Markup:
-//
-// <!-- uk-modal -->
-// <a href="#modal" data-uk-modal=""></a>
-// <div id="modal" class="uk-modal">
-//     <div class="uk-modal-dialog">
-//         <a href="" class="uk-modal-close uk-close"></a>
-//         <p></p>
-//     </div>
-// </div>
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@modal-z-index:                                 @global-z-index + 1000;
-@modal-background:                              rgba(0,0,0,.3);
-
-@modal-dialog-margin-vertical:                  50px;
-@modal-dialog-padding:                          @global-padding;
-@modal-dialog-width:                            450px;
-@modal-dialog-background:                       #fff;
-@modal-dialog-dark-background:                  #242e38;
-@modal-dialog-box-shadow:                       @global-box-shadow;
-
-@modal-dialog-large-width:                      600px;
-@modal-dialog-large-width-large:                920px;
-@modal-dialog-border-rounded:                   @global-border-radius;
-
-@modal-header-margin-bottom:                    0;
-
-@modal-footer-margin-top:                       0;
-
-@modal-caption-margin-bottom:                   -@global-margin-small;
-@modal-caption-color:                           #fff;
-
+@modal-margin:                24px;
 
 /* ========================================================================
-   Component: Modal
- ========================================================================== */
+  Component: Modal
+========================================================================== */
 
 /*
- * This is the modal overlay and modal dialog container
- * 1. Hide by default
- * 2. Set fixed position
- * 3. Allow scrolling for the modal dialog
- * 4. Mask the background page
- * 5. Fade-in transition
- * 6. Deactivate browser history navigation in IE11
- * 7. force hardware acceleration to prevent browser rendering hiccups
- */
+* This is the modal overlay and modal dialog container
+* 1. Hide by default
+* 2. Set fixed position
+* 3. Allow scrolling for the modal dialog
+* 4. Mask the background page
+* 5. Fade-in transition
+* 6. Deactivate browser history navigation in IE11
+* 7. force hardware acceleration to prevent browser rendering hiccups
+*/
 
-.uk-modal {
-    /* 1 */
-    display: none;
-    /* 2 */
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: @modal-z-index;
-    /* 3 */
-    overflow-y: auto;
-    /* 4 */
-    background: @modal-background;
-    /* 5 */
-    opacity: 0;
-    -webkit-transition: opacity 0.3s linear;
-    transition: opacity 0.3s linear;
-    /* 6 */
-    touch-action: cross-slide-y pinch-zoom double-tap-zoom;
-    /* 7 */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    .hook-modal;
+.sp-modal {
+  /* 1 */
+  display: none;
+  /* 2 */
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: @global-z-index + 1000;
+  /* 3 */
+  overflow-y: auto;
+  /* 4 */
+  background: rgba(0,0,0,.3);
+  /* 5 */
+  opacity: 0;
+  -webkit-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+  /* 6 */
+  touch-action: cross-slide-y pinch-zoom double-tap-zoom;
+  /* 7 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /*
- * Open state
- */
+* Open state
+*/
 
-.uk-modal.uk-open { opacity: 1; }
-
-/*
- * Prevents duplicated scrollbar caused by 4.
- */
-
-.uk-modal-page,
-.uk-modal-page body { overflow: hidden; }
-
-
-/* Sub-object: `uk-modal-dialog`
- ========================================================================== */
+.sp-modal.sp-open { opacity: 1; }
 
 /*
- * 1. Create position context for caption, spinner and close button
- * 2. Set box sizing
- * 3. Set style
- * 4. Slide-in transition
- */
+* Prevents duplicated scrollbar caused by 4.
+*/
 
-.uk-modal-dialog {
-    /* 1 */
-    position: relative;
-    /* 2 */
-    box-sizing: border-box;
-    margin: @modal-dialog-margin-vertical auto;
-    padding: @modal-dialog-padding;
-    width: @modal-dialog-width;
-    border-radius: @modal-dialog-border-rounded;
-    max-width: ~"calc(100% - 32px)";
-    /* 3 */
-    background: @modal-dialog-background;
-    /* 4 */
-    opacity: 0;
-    -webkit-transition: opacity 0.3s linear;
-    transition: opacity 0.3s linear;
-    .hook-modal-dialog;
+.sp-modal-page,
+.sp-modal-page body { overflow: hidden; }
+
+
+/* Sub-object: `sp-modal-dialog`
+========================================================================== */
+
+.sp-modal-dialog {
+  /* Create position context for caption, spinner and close button */
+  position: relative;
+  /* Style */
+  box-sizing: border-box;
+  margin: 50px auto;
+  padding: @modal-margin;
+  width: 450px;
+  border-radius: 8px;
+  max-width: ~"calc(100% - 32px)";
+  box-shadow: @global-box-shadow;
+  background: #fff;
+  .dark & {
+    box-shadow: @global-dark-box-shadow;
+    background: darken(@global-dark-muted-color, 2%);
+  }
+  /* Slide-in transition */
+  opacity: 0;
+  -webkit-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
 }
 
-.uk-modal-dialog-scroll {
-    height: inherit; /* Hack to fix known vh vw issues in Safari */
-    max-height: ~"calc(100vh - 96px)";
+.sp-modal-dialog-scroll {
+  height: inherit; /* Hack to fix known vh vw issues in Safari */
+  max-height: ~"calc(100vh - 96px)";
 }
 
 @media (min-width: @breakpoint-mini-max) {
-    .uk-modal-dialog-full {
-        height: inherit; /* Hack to fix known vh vw issues in Safari */
-        max-height: ~"calc(100vh - 96px)";
-    }
+  .sp-modal-dialog-full {
+    height: inherit; /* Hack to fix known vh vw issues in Safari */
+    max-height: ~"calc(100vh - 96px)";
+  }
 }
 
 /* Phone landscape and smaller */
 @media (max-width: @breakpoint-mini-max) {
-    /*
-     * Fit in small screen
-     */
+  /*
+    * Fit in small screen
+    */
+  .sp-modal-dialog {
+    width: auto;
+    margin: @global-margin auto;
+  }
 
-    .uk-modal-dialog {
-        width: auto;
-        margin: @global-margin auto;
-    }
-
-    .uk-modal-dialog.uk-modal-dialog-full {
-        max-width: 100%;
-        margin: 0 auto;
-        max-height: 100vh;
-        height: 100vh;
-    }
-
+  .sp-modal-dialog.sp-modal-dialog-full {
+    max-width: 100%;
+    margin: 0 auto;
+    max-height: 100vh;
+    height: 100vh;
+  }
 }
 
 /*
  * Open state
  */
 
-.uk-open .uk-modal-dialog {
-    /* 4 */
-    opacity: 1;
+.sp-open .sp-modal-dialog {
+  /* 4 */
+  opacity: 1;
 }
 
 /* Close in modal
  ========================================================================== */
 
-.uk-modal-dialog > .uk-close:first-child {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px;
+.sp-modal-dialog > .sp-close:first-child {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 5px;
 }
 
-/* Modifier: `uk-modal-dialog-lightbox`
- ========================================================================== */
+/* Modifier: `sp-modal-dialog-lightbox`
+========================================================================== */
 
-.uk-modal-dialog-lightbox {
-    margin: @global-margin auto;
-    padding: 0;
-    //max-width: 95%;
-    max-width: ~"calc(100% - 30px)";
-    .hook-modal-dialog-lightbox;
-}
-
-/*
- * Close button
- */
-
-.uk-modal-dialog-lightbox > .uk-close:first-child {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    margin: 0;
-    float: none;
-}
-
-/* Phone landscape and smaller */
-@media (max-width: @breakpoint-small-max) {
-
-    .uk-modal-dialog-lightbox > .uk-close:first-child {
-        top: -7px;
-        right: -7px;
-    }
-
-}
-
-/* Modifier: `uk-modal-dialog-blank`
- ========================================================================== */
-
-.uk-modal-dialog-blank {
-    padding: 0;
+.sp-modal-dialog-lightbox {
+  margin: @global-margin auto;
+  padding: 0;
+  //max-width: 95%;
+  max-width: ~"calc(100% - 30px)";
 }
 
 /*
 * Close button
 */
 
-.uk-modal-dialog-blank > .uk-close:first-child {
-    position: absolute;
-    top: @global-margin;
-    right: @global-margin;
-    z-index: 1;
-    margin: 0;
-    float: none;
+.sp-modal-dialog-lightbox > .sp-close:first-child {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  margin: 0;
+  float: none;
 }
 
-.uk-modal-dialog-blank > .uk-modal-header {
-    margin: 0;
+/* Phone landscape and smaller */
+@media (max-width: @breakpoint-small-max) {
+
+  .sp-modal-dialog-lightbox > .sp-close:first-child {
+    top: -7px;
+    right: -7px;
+  }
+
 }
 
-.uk-modal-footer > .uk-modal-header {
-    margin: 0;
+/* Modifier: `sp-modal-dialog-blank`
+========================================================================== */
+
+.sp-modal-dialog-blank {
+  padding: 0;
+}
+
+/*
+* Close button
+*/
+
+.sp-modal-dialog-blank > .sp-close:first-child {
+  position: absolute;
+  top: @global-margin;
+  right: @global-margin;
+  z-index: 1;
+  margin: 0;
+  float: none;
+}
+
+.sp-modal-dialog-blank > .sp-modal-header {
+  margin: 0;
+}
+
+.sp-modal-footer > .sp-modal-header {
+  margin: 0;
 }
 
 
-/* Modifier: `uk-modal-dialog-large`
- ========================================================================== */
+/* Modifier: `sp-modal-dialog-large`
+========================================================================== */
 
 /* Tablet and bigger */
 @media (min-width: @breakpoint-medium) {
-
-    .uk-modal-dialog-large { width: @modal-dialog-large-width; }
+  .sp-modal-dialog-large { width: 600px; }
 
 }
 
 /* Large screen and bigger */
 @media (min-width: @breakpoint-xlarge) {
-
-    .uk-modal-dialog-large { width: @modal-dialog-large-width-large; }
+  .sp-modal-dialog-large { width: 920px; }
 
 }
 
 
-/* Sub-Object: `uk-modal-header` and `uk-modal-footer`
- ========================================================================== */
+/* Sub-Object: `sp-modal-header` and `sp-modal-footer`
+========================================================================== */
 
-.uk-modal-header {
-    margin: -@modal-dialog-padding -@modal-dialog-padding @modal-header-margin-bottom;
-    .hook-modal-header;
+.sp-modal-header {
+  margin: -@modal-margin -@modal-margin @modal-margin/2;
+  padding: @modal-margin @modal-margin @modal-margin/2;
 }
 
-.uk-modal-footer {
-    margin: @modal-footer-margin-top -@modal-dialog-padding -@modal-dialog-padding;
-    .hook-modal-footer;
-}
-
-
-/* Sub-Object: `uk-modal-caption`
- ========================================================================== */
-
-.uk-modal-caption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: (-@modal-dialog-padding);
-    margin-bottom: @modal-caption-margin-bottom;
-    color: @modal-caption-color;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    .hook-modal-caption;
+.sp-modal-footer {
+  margin: @modal-margin/2 -@modal-margin -@modal-margin;
+  padding: @modal-margin/2 @modal-margin;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 
-// Hooks
-// ========================================================================
+/* Sub-Object: `sp-modal-caption`
+========================================================================== */
 
-.hook-modal-misc;
-
-.hook-modal() {}
-.hook-modal-dialog() {
-    box-shadow: @modal-dialog-box-shadow;
-    .dark & {
-        background-color: @modal-dialog-dark-background;
-    }
+.sp-modal-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -@modal-margin;
+  margin-bottom: -8px;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.hook-modal-dialog-lightbox() {}
-.hook-modal-header() {}
-.hook-modal-footer() {}
-.hook-modal-caption() {}
-.hook-modal-spinner() {}
-.hook-modal-misc() {}

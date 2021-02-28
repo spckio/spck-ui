@@ -1,20 +1,20 @@
 // Name:            Slider
 // Description:     Defines styles for a horizontal slider
 //
-// Component:       `uk-slider`
+// Component:       `sp-slider`
 //
-// Sub-objects:     `uk-slider-container`
+// Sub-objects:     `sp-slider-container`
 //
-// Modifier:        `uk-slider-fullscreen`
+// Modifier:        `sp-slider-fullscreen`
 //
-// States:          `uk-drag`
+// States:          `sp-drag`
 //
 // Markup:
 //
-// <!-- uk-slider -->
-// <div data-uk-slider>
-//     <div class="uk-slider-container">
-//         <ul class="uk-slider">
+// <!-- sp-slider -->
+// <div data-sp-slider>
+//     <div class="sp-slider-container">
+//         <ul class="sp-slider">
 //             <li></li>
 //             <li></li>
 //         </ul>
@@ -34,7 +34,7 @@
  * 3. Deactivate browser history navigation in IE11
  */
 
-.uk-slider {
+.sp-slider {
     /* 1 */
     position: relative;
     /* 2 */
@@ -47,7 +47,7 @@
  * 1. Reset list style without interfering with grid
  */
 
-.uk-slider:not(.uk-grid) {
+.sp-slider:not(.sp-grid) {
     /* 1 */
     margin: 0;
     padding: 0;
@@ -59,7 +59,7 @@
  * 1. Position items above each other
  */
 
-.uk-slider > * {
+.sp-slider > * {
     /* 1 */
     position: absolute;
     top: 0;
@@ -70,13 +70,13 @@
  * Clip child elements
  */
 
-.uk-slider-container { overflow: hidden; }
+.sp-slider-container { overflow: hidden; }
 
 /*
  * Dragged
  */
 
-.uk-slider:not(.uk-drag) {
+.sp-slider:not(.sp-drag) {
     -webkit-transition: -webkit-transform 200ms linear;
     transition: transform 200ms linear;
 }
@@ -85,7 +85,7 @@
  * 1. Makes text unselectable
  */
 
-.uk-slider.uk-drag {
+.sp-slider.sp-drag {
     cursor: col-resize;
     /* 1 */
     -moz-user-select: none;
@@ -100,8 +100,8 @@
  * Currently only works in Webkit
  */
 
-.uk-slider a,
-.uk-slider img {
+.sp-slider a,
+.sp-slider img {
     /* 1 */
     -webkit-user-drag: none;
     user-drag: none;
@@ -113,14 +113,14 @@
  * 1. Prevents images and links from being dragged in Firefox
  */
 
-.uk-slider img { pointer-events: none; }
+.sp-slider img { pointer-events: none; }
 
 
-/* Modifier: `uk-slider-fullscreen`
+/* Modifier: `sp-slider-fullscreen`
  ========================================================================== */
 
-.uk-slider-fullscreen,
-.uk-slider-fullscreen > li { height: 100vh; }
+.sp-slider-fullscreen,
+.sp-slider-fullscreen > li { height: 100vh; }
 
 
 // Hooks

@@ -1,30 +1,3 @@
-// Name:            Progress
-// Description:     Defines styles for progress bars
-//
-// Component:       `uk-progress`
-//
-// Sub-objects:     `uk-progress-bar`
-//
-// Modifiers:       `uk-progress-mini`
-//                  `uk-progress-small`
-//                  `uk-progress-success`
-//                  `uk-progress-warning`
-//                  `uk-progress-danger`
-//                  `uk-progress-striped`
-//
-// Markup:
-//
-// <!-- uk-progress -->
-// <div class="uk-progress">
-//     <div class="uk-progress-bar" style="width: 40%;"></div>
-// </div>
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
 @progress-height:                               16px;
 @progress-mini-height:                          2px;
 @progress-small-height:                         8px;
@@ -32,21 +5,6 @@
 @progress-padding:                              2px;
 @progress-small-padding:                        1px;
 @progress-mini-padding:                         0;
-
-@progress-border-radius:                        @progress-height;
-
-@progress-bar-border-radius:                    @progress-height;
-@progress-bar-background:                       @global-border;
-@progress-bar-dark-background:                  @global-dark-border;
-@progress-bar-font-size:                        round((@global-font-size * 0.85)); // 12px / 14px
-@progress-bar-color:                            @global-contrast-color;
-
-@progress-bar-primary-background:               @global-primary-background;
-@progress-bar-success-background:               @global-success-background;
-@progress-bar-warning-background:               @global-warning-background;
-@progress-bar-danger-background:                @global-danger-background;
-
-@progress-bar-transition:                       width .3s linear;
 
 /* ========================================================================
    Component: Progress
@@ -57,21 +15,24 @@
  * 2. Vertical alignment if text is used
  */
 
-.uk-progress {
-    box-sizing: border-box;
-    height: @progress-height;
-    border-radius: @progress-border-radius;
-    border: solid 1px @progress-bar-background;
-    padding: @progress-padding;
-    /* 1 */
-    overflow: hidden;
-    /* 2 */
-    line-height: @progress-height;
-    .hook-progress;
+.sp-progress {
+  box-sizing: border-box;
+  height: @progress-height;
+  border-radius: @progress-height;
+  border: solid 1px @global-border;
+  padding: @progress-padding;
+  /* 1 */
+  overflow: hidden;
+  /* 2 */
+  line-height: @progress-height;
+
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }
 
 
-/* Sub-object: `uk-progress-bar`
+/* Sub-object: `sp-progress-bar`
  ========================================================================== */
 
 /*
@@ -79,20 +40,26 @@
  * 2. Needed for text
  */
 
-.uk-progress-bar {
-    width: 0;
-    height: 100%;
-    background: @progress-bar-background;
-    border-radius: @progress-bar-border-radius;
-    float: left;
-    /* 1 */
-    -webkit-transition: width 0.6s ease;
-    transition: width 0.6s ease;
-    /* 2 */
-    font-size: @progress-bar-font-size;
-    color: @progress-bar-color;
-    text-align: center;
-    .hook-progress-bar;
+.sp-progress-bar {
+  width: 0;
+  height: 100%;
+  background: @global-border;
+  border-radius: @progress-height;
+  float: left;
+  /* 1 */
+  -webkit-transition: width 0.6s ease;
+  transition: width 0.6s ease;
+  /* 2 */
+  font-size: 0.5em;
+  color: @global-contrast-color;
+  text-align: center;
+
+  -webkit-transition: width .3s linear;
+  transition: width .3s linear;
+
+  .dark & {
+    background-color: @global-dark-border;
+  }
 }
 
 
@@ -100,70 +67,80 @@
  ========================================================================== */
 
 /* Mini */
-.uk-progress-mini {
+.sp-progress-mini {
     height: @progress-mini-height;
     padding: @progress-mini-padding;
     border: none;
-    .hook-progress-mini;
 }
 
 
 /* Small */
-.uk-progress-small {
+.sp-progress-small {
     height: @progress-small-height;
     padding: @progress-small-padding;
-    .hook-progress-small;
 }
 
 
 /* Color modifiers
  ========================================================================== */
 
- .uk-progress-primary {
-    border-color: @progress-bar-primary-background !important;
-
-    .uk-progress-bar {
-        background-color: @progress-bar-primary-background !important;
+ .sp-progress.sp-progress-primary {
+  border-color: @global-primary;
+  .sp-progress-bar {
+    background-color: @global-primary;
+  }
+  .dark & {
+    border-color: @global-dark-primary;
+    .sp-progress-bar {
+      background-color: @global-dark-primary;
     }
-
-    .hook-progress-bar-primary;
+  }
 }
 
-.uk-progress-success {
-    border-color: @progress-bar-success-background !important;
-
-    .uk-progress-bar {
-        background-color: @progress-bar-success-background !important;
+.sp-progress.sp-progress-success {
+  border-color: @global-success;
+  .sp-progress-bar {
+      background-color: @global-success;
+  }
+  .dark & {
+    border-color: @global-dark-success;
+    .sp-progress-bar {
+      background-color: @global-dark-success;
     }
-
-    .hook-progress-bar-success;
+  }
 }
 
-.uk-progress-warning {
-    border-color: @progress-bar-warning-background !important;
-
-    .uk-progress-bar {
-        background-color: @progress-bar-warning-background !important;
+.sp-progress.sp-progress-warning {
+  border-color: @global-warning;
+  .sp-progress-bar {
+    background-color: @global-warning;
+  }
+  .dark & {
+    border-color: @global-dark-warning;
+    .sp-progress-bar {
+      background-color: @global-dark-warning;
     }
-    
-    .hook-progress-bar-warning;
+  }
 }
 
-.uk-progress-danger {
-    border-color: @progress-bar-danger-background !important;
-
-    .uk-progress-bar {
-        background-color: @progress-bar-danger-background !important;
+.sp-progress.sp-progress-danger {
+  border-color: @global-danger;
+  .sp-progress-bar {
+    background-color: @global-danger;
+  }
+  .dark & {
+    border-color: @global-dark-danger;
+    .sp-progress-bar {
+      background-color: @global-dark-danger;
     }
-
-    .hook-progress-bar-danger;
+  }
 }
 
 
-/* Modifier: `uk-progress-striped`
+/* Modifier: `sp-progress-striped`
  ========================================================================== */
 
-.uk-progress-striped .uk-progress-bar {
+.sp-progress-striped .sp-progress-bar {
     background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-size: 30px 30px;
@@ -173,44 +150,17 @@
  * Animation
  */
 
-.uk-progress-striped .uk-progress-bar {
-    -webkit-animation: uk-progress-bar-stripes 2s linear infinite;
-    animation: uk-progress-bar-stripes 2s linear infinite;
+.sp-progress-striped .sp-progress-bar {
+    -webkit-animation: sp-progress-bar-stripes 2s linear infinite;
+    animation: sp-progress-bar-stripes 2s linear infinite;
 }
 
-@-webkit-keyframes uk-progress-bar-stripes {
+@-webkit-keyframes sp-progress-bar-stripes {
     0% { background-position: 0 0;}
     100% { background-position: 30px 0; }
 }
 
-@keyframes uk-progress-bar-stripes {
+@keyframes sp-progress-bar-stripes {
     0% { background-position: 0 0;}
     100% { background-position: 30px 0; }
 }
-
-
-// Hooks
-// ========================================================================
-
-.hook-progress-misc;
-
-.hook-progress() {
-    .dark & {
-        border-color: @progress-bar-dark-background;
-    }
-}
-.hook-progress-bar() {
-    -webkit-transition: @progress-bar-transition;
-    transition: @progress-bar-transition;
-
-    .dark & {
-        background-color: @progress-bar-dark-background;
-    }
-}
-.hook-progress-mini() {}
-.hook-progress-small() {}
-.hook-progress-bar-primary() {}
-.hook-progress-bar-success() {}
-.hook-progress-bar-warning() {}
-.hook-progress-bar-danger() {}
-.hook-progress-misc() {}

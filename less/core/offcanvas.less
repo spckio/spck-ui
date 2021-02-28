@@ -1,42 +1,3 @@
-// Name:            Off-canvas
-// Description:     Defines styles for an off-canvas sidebar that slides in and out of the page
-//
-// Component:       `uk-offcanvas`
-//
-// Sub-objects:     `uk-offcanvas-page`
-//                  `uk-offcanvas-bar`
-//                  `uk-offcanvas-close`
-//
-// Modifiers:       `uk-offcanvas-bar-flip`
-//
-// States:          `uk-active`
-//
-//
-// Markup:
-//
-// <!-- uk-offcanvas -->
-// <a href="#offcanvas" data-uk-offcanvas>Open</a>
-// <div id="offcanvas" class="uk-offcanvas">
-//     <div class="uk-offcanvas-bar"></div>
-// </div>
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@offcanvas-z-index:                             @global-z-index;
-
-@offcanvas-bar-width:                           270px;
-@offcanvas-bar-shadow:                          0 5px 10px rgba(0,0,0,0.15);
-@offcanvas-bar-background:                      #fff;
-@offcanvas-bar-dark-background:                 @global-dark-background;
-
-/* ========================================================================
-   Component: Off-canvas
- ========================================================================== */
-
 /*
  * This is the offcanvas overlay and bar container
  * 1. Hide by default
@@ -44,41 +5,41 @@
  * 3. Deactivate browser touch actions in IE11
  */
 
-.uk-offcanvas {
-    /* 1 */
-    display: none;
-    /* 2 */
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: @offcanvas-z-index;
-    /* 3 */
-    touch-action: none;
-    .hook-offcanvas;
+.sp-offcanvas {
+  /* 1 */
+  display: none;
+  /* 2 */
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: @global-z-index;
+  /* 3 */
+  touch-action: none;
+  background-color: inherit;
 }
 
-.uk-offcanvas.uk-active {
+.sp-offcanvas.sp-active {
   display: block;
   background: rgba(0, 0, 0, 0.48);
 }
 
 
-/* Sub-object `uk-offcanvas-page`
+/* Sub-object `sp-offcanvas-page`
  ========================================================================== */
 
-.uk-offcanvas-page {
-    /* 1 */
-    position: static;
-    /* 2 */
-    -webkit-transition: none;
-    transition: none;
+.sp-offcanvas-page {
+  /* 1 */
+  position: static;
+  /* 2 */
+  -webkit-transition: none;
+  transition: none;
 }
 
 
-/* Sub-object `uk-offcanvas-bar`
- ========================================================================== */
+/* Sub-object `sp-offcanvas-bar`
+========================================================================== */
 
 /*
  * This is the offcanvas bar
@@ -89,57 +50,59 @@
  * 5. Deactivate scroll chaining in IE11
  */
 
-.uk-offcanvas-bar {
-    /* 1 */
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%);
-    z-index: @offcanvas-z-index + 1;
-    /* 2 */
-    width: @offcanvas-bar-width;
-    max-width: 100%;
-    background: @offcanvas-bar-background;
-    /* 3 */
-    overflow-y: auto;
-    /* 4 */
-    -webkit-transition: -webkit-transform 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out;
-    /* 5 */
-    -ms-scroll-chaining: none;
-    .hook-offcanvas-bar;
+.sp-offcanvas-bar {
+  /* 1 */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+  z-index: @global-z-index + 1;
+  /* 2 */
+  width: 270px;
+  max-width: 100%;
+  background: #fff;
+  box-shadow: @global-box-shadow;
+  .dark & {
+    background: darken(@global-dark-muted-color, 2%);
+    box-shadow: @global-dark-box-shadow;
+  }
+  /* 3 */
+  overflow-y: auto;
+  /* 4 */
+  -webkit-transition: -webkit-transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+  /* 5 */
+  -ms-scroll-chaining: none;
 }
 
-.uk-offcanvas.uk-active .uk-offcanvas-bar.uk-offcanvas-bar-show {
-    -webkit-transform: translateX(0%);
-    transform: translateX(0%);
+.sp-offcanvas-flip > .sp-offcanvas-bar {
+  -webkit-transform: translateX(100vw);
+  transform: translateX(100vw);
 }
 
-.uk-notouch {
-    .uk-offcanvas-touch.uk-offcanvas, .uk-offcanvas-touch .uk-offcanvas-bar {
-        display: block;
-        height: 100%;
-        position: static;
-
-        -webkit-transform: translateX(0%) !important;
-        transform: translateX(0%) !important;
-    }
+.sp-offcanvas.sp-active .sp-offcanvas-bar.sp-offcanvas-bar-show {
+  -webkit-transform: translateX(0%);
+  transform: translateX(0%);
 }
 
-.uk-notouch .uk-offcanvas-touch .uk-offcanvas-bar {
+.sp-offcanvas-flip.sp-offcanvas.sp-active .sp-offcanvas-bar.sp-offcanvas-bar-show {
+  -webkit-transform: translateX(100vw) translateX(-100%);
+  transform: translateX(100vw) translateX(-100%);
+}
+
+.sp-notouch {
+  .sp-offcanvas-touch.sp-offcanvas, .sp-offcanvas-touch .sp-offcanvas-bar {
+    display: flex;
+    height: 100%;
+    position: static;
+
+    -webkit-transform: translateX(0%) !important;
+    transform: translateX(0%) !important;
+  }
+}
+
+.sp-notouch .sp-offcanvas-touch .sp-offcanvas-bar {
     box-shadow: none;
 }
-
-// Hooks
-// ========================================================================
-
-.hook-offcanvas() {}
-.hook-offcanvas-bar() {
-    box-shadow: @offcanvas-bar-shadow;
-    .dark & {
-        background: @offcanvas-bar-dark-background;
-    }
-}
-.hook-offcanvas-panel() {}

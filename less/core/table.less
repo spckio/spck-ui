@@ -1,178 +1,89 @@
-// Name:            Table
-// Description:     Defines styles for tables
-//
-// Component:       `uk-table`
-//
-// Modifiers:       `uk-table-middle`
-//                  `uk-table-striped`
-//                  `uk-table-condensed`
-//                  `uk-table-hover`
-//
-// States:          `uk-active`
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@table-margin-vertical:                         @global-margin;
-@table-gutter:                                  20px;
-@table-padding-vertical:                        @global-margin-small;
-@table-padding-horizontal:                      @global-margin-small;
-
-@table-heading-font-size:                       12px;
-@table-heading-opacity:                         0.8;
-@table-heading-font-weight:                     normal;
-
-@table-caption-color:                           @global-color;
-@table-caption-font-size:                       12px;
-
-@table-striped-background:                      rgba(178, 189, 206, 0.08);;
-
-@table-condensed-padding-vertical:              @global-margin-mini;
-@table-condensed-padding-horizontal:            @global-margin-small;
-
-@table-hover-background:                        rgba(135, 184, 240, 0.1);
-
-@table-active-background:                       @table-hover-background;
-
-@table-border:                                  @global-border;
-@table-dark-border:                             @global-dark-border;
-
-/* ========================================================================
-   Component: Table
- ========================================================================== */
-
-/*
- * 1. Remove most spacing between table cells.
- * 2. Block element behavior
- * 3. Style
- */
-
-.uk-table {
-    /* 1 */
-    border-collapse: collapse;
-    border-spacing: 0;
-    /* 2 */
-    width: 100%;
-    /* 3 */
-    margin-bottom: @table-margin-vertical;
+.sp-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  .dark & {
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+  }
 }
 
-/*
- * Add margin if adjacent element
- */
+.sp-table.sp-table-flat {
+  box-shadow: none;
+  border-radius: 0;
+}
 
-* + .uk-table { margin-top: @table-margin-vertical; }
+.sp-table thead {
+  background-color: @global-muted-color;
+  .dark & {
+    background-color: @global-dark-muted-color;
+  }
+}
 
-.uk-table th,
-.uk-table td {
-    padding: @table-padding-vertical @table-padding-horizontal ;
-    border-bottom: 1px solid @table-border;
-
-    .dark & {
-        border-color: @table-dark-border;
-    }
-
-    .hook-table;
+.sp-table th,
+.sp-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid @global-border;
+  .dark & {
+    border-color: darken(@global-dark-border, 8%);
+  }
 }
 
 /*
  * Header
  */
 
-.uk-table th {
-    font-size: @table-heading-font-size;
-    font-weight: @table-heading-font-weight;
-    opacity: @table-heading-opacity;
-    text-transform: uppercase;
+.sp-table th {
+  font-size: 0.75em;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /*
  * Set alignment
  */
 
-.uk-table th { text-align: left; }
-.uk-table td { vertical-align: middle; }
+.sp-table th { text-align: left; }
+.sp-table td { vertical-align: middle; }
 
-.uk-table thead th { vertical-align: bottom; }
+.sp-table thead th { vertical-align: bottom; }
 
-.uk-table {
-    tr td:first-child, thead th:first-child {
-        padding-left: @table-gutter;
-    }
+.sp-table {
+  tr td:first-child, thead th:first-child {
+    padding-left: 20px;
+  }
 
-    tr td:last-child, thead th:last-child {
-        padding-right: @table-gutter;
-    }
-}
-
-/*
- * Caption and footer
- */
-
-.uk-table caption,
-.uk-table tfoot {
-    font-size: @table-caption-font-size;
-    font-style: italic;
-}
-
-.uk-table caption {
-    text-align: left;
-    color: @table-caption-color;
-}
-
-/*
- * Active State
- */
-
-.uk-table tbody tr.uk-active {
-    background: @table-active-background;
-    .hook-table-active;
-}
-
-
-/* Sub-modifier: `uk-table-middle`
- ========================================================================== */
-
-.uk-table-middle,
-.uk-table-middle td { vertical-align: middle !important; }
-
-
-/* Modifier: `uk-table-striped`
- ========================================================================== */
-
-.uk-table-striped tbody tr:nth-of-type(odd) {
-    background: @table-striped-background;
-}
-
-
-/* Modifier: `uk-table-condensed`
- ========================================================================== */
-
-.uk-table-condensed td {
-    padding: @table-condensed-padding-vertical @table-condensed-padding-horizontal;
-}
-
-
-/* Modifier: `uk-table-hover`
- ========================================================================== */
-
-.uk-table-hover tbody tr {
-    transition: background-color .25s ease;
-}
-
-.uk-notouch {
-  .uk-table-hover tbody tr:hover {
-    background: @table-hover-background;
-    .hook-table-hover;
+  tr td:last-child, thead th:last-child {
+    padding-right: 20px;
   }
 }
 
-// Hooks
-// ========================================================================
+/* Sub-modifier: `sp-table-middle`
+ ========================================================================== */
 
-.hook-table() {}
-.hook-table-active() {}
-.hook-table-hover() {}
+.sp-table-middle,
+.sp-table-middle td { vertical-align: middle !important; }
+
+.sp-table-striped tbody tr:nth-of-type(even) {
+  background: #f9fafb;
+}
+
+.sp-table-condensed td {
+  padding: 3px 6px;
+}
+
+.sp-table-hover tbody tr {
+  transition: background-color .25s ease;
+}
+
+.sp-notouch {
+  .sp-table-hover tbody tr:hover {
+    background-color: fade(@global-primary, 8%);
+  }
+  &.dark .sp-table-hover tbody tr:hover {
+    background-color: fade(@global-primary, 8%);
+  }
+}

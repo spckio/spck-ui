@@ -1,15 +1,4 @@
 //
-// Component:       Variables
-// Description:     Defines all color and style related values as variables
-//                  to allow easy customization for the most common cases.
-//
-// ========================================================================
-
-
-// Global variables
-// ========================================================================
-
-//
 // Breakpoints
 //
 @breakpoint-small:                              480px;
@@ -22,12 +11,6 @@
 @breakpoint-medium-max:                         (@breakpoint-large - 1);
 @breakpoint-large-max:                          (@breakpoint-xlarge - 1);
 
-//
-// Component: Variables
-//
-// ========================================================================
-
-
 // Global variables
 // ========================================================================
 
@@ -38,15 +21,12 @@
 @global-color:                                  #56585c;
 @global-dark-color:                             #d3d4da;
 @global-muted-color:                            #f9fafc;
-@global-text-shadow:                            #fff;
-
-@global-link-color:                             #409eff;
-@global-link-hover-color:                       #409eff;
+@global-dark-muted-color:                       #1e212b;
 
 @global-contrast-color:                         #fff;
-@global-contrast-text-shadow:                   rgba(0,0,0,0.1);
+@global-contrast-text-shadow:                   1px 1px rgba(0,0,0,0.15);
 
-@global-font-size:                              14px;
+@global-font-size:                              16px;
 @global-line-height:                            24px;
 
 //
@@ -54,26 +34,30 @@
 //
 
 @global-background:                             #fff;
-@global-dark-background:                        #20272e;
+@global-dark-background:                        #16181f;
 @global-border:                                 #e3e7f1;
-@global-dark-border:                            #4f5154;
-@global-border-radius:                          4px;
+@global-dark-border:                            #363d47;
+@global-border-radius:                          8px;
 
-@global-default-background:                     #fff;
-@global-default-hover-background:               #fff;
-@global-default-active-background:              #f9fafc;
-
-@global-muted-background:                       #8291af;
-@global-primary-background:                     #409eff;
-@global-success-background:                     #0dbf7f;
-@global-warning-background:                     #ffd04b;
-@global-danger-background:                      #f56c6c;
+@global-muted:                                  #18181a;
+@global-dark-muted:                             #21242e;
+@global-primary:                                #2f5bff;
+@global-dark-primary:                           #5eaeff;
+@global-success:                                #07afaf;
+@global-dark-success:                           #2ec5c5;
+@global-warning:                                #e04609;
+@global-dark-warning:                           #e45e29;
+@global-danger:                                 #c02e4e;
+@global-dark-danger:                            #d4506d;
+@global-heading-color:                          #111827;
+@global-dark-heading-color:                     #f1f2ff;
 
 //
 // Shadow
 //
 
-@global-box-shadow:                             0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);;
+@global-box-shadow:                             0 0 24px -6px rgba(0, 0, 0, 0.1), 0 12px 12px -6px rgba(0, 0, 0, 0.06);
+@global-dark-box-shadow:                        0 0 24px -6px rgba(0, 0, 0, 0.6), 0 12px 12px -6px rgba(0, 0, 0, 0.36);
 
 //
 // Spacings
@@ -89,15 +73,6 @@
 @global-padding-large:                          32px;
 @global-grid-gutter:                            24px;
 @global-grid-gutter-large:                      32px;
-
-//
-// Controls
-//
-
-@global-height:                                 32px;
-@global-height-mini:                            16px;
-@global-height-small:                           24px;
-@global-height-large:                           48px;
 
 //
 // Z-index

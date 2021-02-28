@@ -1,21 +1,19 @@
-.uk-scroller-container {
+.sp-scroller-container {
   overflow: hidden;
   width: 100%;
 }
 
-.uk-scroller-wrapper {
-  display: -ms-flexbox;
-  display: -webkit-flex;
+.sp-scroller-wrapper {
   display: flex;
   overflow: hidden;
   width: 100%;
   position: relative;
   z-index: 1;
-  margin-right: -8px;
+  margin-right: -6px;
   float: left;
 }
 
-.uk-scroller-content {
+.sp-scroller-content {
   position: relative;
   padding: 0;
   box-sizing: border-box;
@@ -24,6 +22,7 @@
 
   &::-webkit-scrollbar {
     -webkit-appearance: none;
+    appearance: none;
     display: none;
     width: 0;
     height: 0;
@@ -45,10 +44,10 @@
   }
 }
 
-.uk-scroller-bar {
+.sp-scroller-bar {
   position: relative;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  background: rgba(186, 187, 190, 0.2);
+  border-radius: 3px;
   top: 0;
   z-index: 2;
   cursor: pointer;
@@ -59,10 +58,10 @@
   -webkit-backface-visibility: hidden;
 
   &.y {
-    width: 8px;
+    width: 6px;
   }
   &.x {
-    height: 8px;
+    height: 6px;
   }
 
   .dark & {
@@ -70,12 +69,12 @@
   }
 }
 
-.uk-scroller-container:hover .uk-scroller-bar,
-.uk-scroller-container:active .uk-scroller-bar {
+.sp-scroller-container:hover .sp-scroller-bar,
+.sp-scroller-container:active .sp-scroller-bar {
   opacity: 1;
 }
 
-.uk-scroller-grabbed {
+.sp-scroller-grabbed {
   -o-user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;

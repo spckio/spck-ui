@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           embed: true,
           types: 'ttf,woff',
           templateOptions: {
-            classPrefix: 'uk-icon-'
+            classPrefix: 'sp-icon-'
           }
         }
       }

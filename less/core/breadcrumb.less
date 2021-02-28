@@ -1,99 +1,18 @@
-// Name:            Breadcrumb
-// Description:     Defines styles for a breadcrumb navigation
-//
-// Component:       `uk-breadcrumb`
-//
-// States:          `uk-active`
-//
-// Markup:
-//
-// <!-- uk-breadcrumb -->
-// <ul class="uk-breadcrumb">
-//     <li><a href=""></a></li>
-//     <li><span></span></li>
-//     <li class="uk-active"><span></span></li>
-// </ul>
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@breadcrumb-font-size:                          1rem;
-
-@breadcrumb-divider:                            "/";
-@breadcrumb-divider-margin:                     8px;
-@breadcrumb-disabled-color:                     #999;
-
-@breadcrumb-color:                              @global-color;
-@breadcrumb-dark-color:                         @global-dark-color;
-@breadcrumb-divider-color:                      darken(@global-border, 15%);
-@breadcrumb-divider-dark-color:                 lighten(@global-dark-border, 12%);
-
-/* ========================================================================
-   Component: Breadcrumb
- ========================================================================== */
-
-/*
- * 1. Remove default list style
- * 2. Remove whitespace between child elements when using `inline-block`
- */
-
-.uk-breadcrumb {
-    /* 1 */
-    padding: 0;
-    list-style: none;
-    /* 2 */
-    font-size: 0.001px;
-    .hook-breadcrumb;
+.sp-breadcrumb {
+  display: flex;
+  padding: 0;
+  list-style: none;
 }
 
-
-/* Items
- ========================================================================== */
-
-/*
- * Reset whitespace hack
- */
-
-.uk-breadcrumb > li {
-    font-size: @breadcrumb-font-size;
-    vertical-align: top;
+.sp-breadcrumb > .sp-list-item {
+  transition: color .2s cubic-bezier(.645,.045,.355,1);
 }
 
-.uk-breadcrumb > li,
-.uk-breadcrumb > li > a,
-.uk-breadcrumb > li > span { display: inline-block; }
+.sp-breadcrumb > .sp-list-item:nth-child(n+2):before {
+  display: inline-block;
+  content: "\e83a";
+  font-family: spck-ui-icons;
 
-.uk-breadcrumb > li > a {
-    transition: color .2s cubic-bezier(.645,.045,.355,1);
-    color: @breadcrumb-color;
-
-    .dark & {
-        color: @breadcrumb-dark-color;
-    }
+  margin: 0 6px;
+  opacity: 0.8;
 }
-
-.uk-breadcrumb > li:nth-child(n+2):before {
-    content: @breadcrumb-divider;
-    display: inline-block;
-    margin: 0 @breadcrumb-divider-margin;
-    color: @breadcrumb-divider-color;
-
-    .dark & {
-        color: @breadcrumb-divider-dark-color;
-    }
-}
-
-/*
- * Disabled
- */
-
-.uk-breadcrumb > li:not(.uk-active) > span { color: @breadcrumb-disabled-color; }
-
-
-// Hooks
-// ========================================================================
-
-.hook-breadcrumb() {}

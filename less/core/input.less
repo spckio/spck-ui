@@ -1,62 +1,84 @@
-// Variables
-// ========================================================================
-
-@input-color:                                    @global-color;
-@input-dark-color:                               @global-dark-color;
-@input-border:                                   @global-border;
-@input-dark-border:                              @global-dark-border;
-@input-padding:                                  6px 8px;
-
-@input-disabled-border:                          @global-border;
-@input-disabled-color:                           darken(@global-border, 15%);
-
 /* ========================================================================
    Component: Input
  ========================================================================== */
 
-.uk-input {
-  color: @input-color;
+ @input-box-shadow:         0 1px 2px 0 rgba(0, 0, 0, 0.06);
+ @input-dark-box-shadow:    0 1px 2px 0 rgba(0, 0, 0, 0.5);
+
+.sp-input {
   background: none;
   box-sizing: border-box;
-  padding: @input-padding;
-
-  // Remove `border-radius` in iOS.
-  border-radius: 0;
+  padding: 6px 12px;
 
   /*
    * Remove default style in iOS.
    */
   -webkit-appearance: none;
+  appearance: none;
 
   /*
    * Firefox will implicitly set a min-width on input elements which will overflow flex containers.
    * Reset min-width to 0 to get consistent behavior across Webkit, FF
    */
   min-width: 0;
-  
+
+  border-radius: 0;
   outline: none;
-  
   border: 0;
-  border-bottom: solid 1px @input-border;
-  
-  .dark & {
-    color: @input-dark-color;
-    border-color: @input-dark-border;
-  }
+  font: inherit;
+  color: inherit;
 
   // Disabled state
   &:disabled {
-    border-color: @input-disabled-border;
-    color: @input-disabled-color;
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;;
   }
 }
 
+.sp-input:not(.sp-input-line) {
+  background: @global-background;
+  border-radius: 8px;
+  border: solid 1px darken(@global-border, 5%);
+  box-shadow: @input-box-shadow;
+  .dark & {
+    background: @global-dark-muted-color;
+    border-color: @global-dark-border;
+    box-shadow: @input-dark-box-shadow;
+  }
+}
+
+.sp-input:not(.sp-input-line):focus {
+  border-color: @global-primary;
+  z-index: 1;
+  .dark & {
+    border-color: @global-dark-primary;
+  }
+}
+
+.sp-input.sp-input-round {
+  border-radius: 500px;
+}
+
+.sp-input-line {
+  border-bottom: solid 1px darken(@global-border, 5%);
+  .dark & {
+    border-color: @global-dark-border;
+  }
+}
+
+.sp-input-line:focus {
+  border-bottom: solid 1px @global-primary;
+  .dark & {
+    border-color: @global-dark-primary;
+  }
+}
 
 /*
  * Removes inner padding and border in Firefox 4+.
  */
 
-.uk-input::-moz-focus-inner {
+.sp-input::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
@@ -65,23 +87,15 @@
 * Removes excess padding in IE 8/9/10.
 */
 
-.uk-input[type="checkbox"],
-.uk-input[type="radio"] { padding: 0; }
+.sp-input[type="checkbox"],
+.sp-input[type="radio"] { padding: 0; }
 
 /*
 * Improves consistency of cursor style for clickable elements
 */
 
-.uk-input[type="checkbox"]:not(:disabled),
-.uk-input[type="radio"]:not(:disabled) { cursor: pointer; }
-
-
-/*
-* Remove inner padding and search cancel button in Chrome, Safari and Opera on OS X.
-*/
-
-.uk-input[type="search"]::-webkit-search-cancel-button,
-.uk-input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
+.sp-input[type="checkbox"]:not(:disabled),
+.sp-input[type="radio"]:not(:disabled) { cursor: pointer; }
 
 /*
 * Fix the cursor style for Chrome's increment/decrement buttons. For certain
@@ -89,11 +103,93 @@
 * decrement button to change from `default` to `text`.
 */
 
-.uk-input[type="number"]::-webkit-inner-spin-button,
-.uk-input[type="number"]::-webkit-outer-spin-button { height: auto; }
+.sp-input[type="number"]::-webkit-inner-spin-button,
+.sp-input[type="number"]::-webkit-outer-spin-button { height: auto; }
+
+
+.sp-input-group {
+  display: flex;
+  box-shadow: @input-box-shadow;
+
+  .sp-button {
+    height: 100%;
+  }
+
+  .sp-input, .sp-button, .sp-select-input {
+    box-shadow: none;
+  }
+}
 
 /*
- * Vertical alignment
- */
+* Reset border-radius
+*/
 
-.uk-input:not([type="radio"]):not([type="checkbox"]) { vertical-align: middle; }
+.sp-input-group > .sp-input:not(:first-child):not(:last-child),
+.sp-input-group > .sp-select-input:not(:first-child):not(:last-child),
+.sp-input-group > .sp-button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.sp-input-group > .sp-input:first-child,
+.sp-input-group > .sp-select-input:first-child,
+.sp-input-group > .sp-button:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sp-input-group > .sp-input:last-child,
+.sp-input-group > .sp-select-input:last-child,
+.sp-input-group > .sp-button:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/*
+* Collapse border
+*/
+
+.sp-input-group > .sp-input:nth-child(n+2),
+.sp-input-group > .sp-select-input:nth-child(n+2),
+.sp-input-group > .sp-button:nth-child(n+2) {
+  margin-left: -1px;
+}
+
+.sp-input-group-stacked {
+  display: flex;
+  flex-direction: column;
+  box-shadow: @input-box-shadow;
+
+  .sp-input, .sp-select-input {
+    box-shadow: none;
+  }
+}
+
+/*
+* Reset border-radius
+*/
+
+.sp-input-group-stacked > .sp-select-input:not(:first-child):not(:last-child),
+.sp-input-group-stacked > .sp-input:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.sp-input-group-stacked > .sp-select-input:first-child,
+.sp-input-group-stacked > .sp-input:first-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sp-input-group-stacked > .sp-select-input:last-child ,
+.sp-input-group-stacked > .sp-input:last-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/*
+* Collapse border
+*/
+
+.sp-input-group-stacked > .sp-select-input:nth-child(n+2),
+.sp-input-group-stacked > .sp-input:nth-child(n+2) {
+  margin-top: -1px;
+}

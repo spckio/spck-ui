@@ -243,7 +243,7 @@
 
     UI.Utils.checkDisplay = function(context, initanimation) {
 
-        var elements = UI.$('[data-uk-margin], [data-uk-grid-match], [data-uk-grid-margin], [data-uk-check-display]', context || document), animated;
+        var elements = UI.$('[data-sp-margin], [data-sp-grid-match], [data-sp-grid-margin], [data-sp-check-display]', context || document), animated;
 
         if (context && !elements.length) {
             elements = $(context);
@@ -255,14 +255,14 @@
         if (initanimation) {
 
             if (typeof(initanimation)!='string') {
-                initanimation = '[class*="uk-animation-"]';
+                initanimation = '[class*="sp-animation-"]';
             }
 
             elements.find(initanimation).each(function(){
 
                 var ele  = UI.$(this),
                     cls  = ele.attr('class'),
-                    anim = cls.match(/uk-animation-(.+)/);
+                    anim = cls.match(/sp-animation-(.+)/);
 
                 ele.removeClass(anim[0]).width();
 
@@ -730,15 +730,15 @@
             if (UI.support.touch) {
 
                 // remove css hover rules for touch devices
-                // UI.Utils.removeCssRules(/\.uk-(?!navbar).*:hover/);
+                // UI.Utils.removeCssRules(/\.sp-(?!navbar).*:hover/);
 
-                // viewport unit fix for uk-height-viewport - should be fixed in iOS 8
+                // viewport unit fix for sp-height-viewport - should be fixed in iOS 8
                 if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
 
                     UI.$win.on('load orientationchange resize', UI.Utils.debounce((function(){
 
                         var fn = function() {
-                            $('.uk-height-viewport').css('height', window.innerHeight);
+                            $('.sp-height-viewport').css('height', window.innerHeight);
                             return fn;
                         };
 
@@ -772,7 +772,7 @@
 
                             node = mutation.addedNodes[i];
 
-                            if (node.outerHTML && node.outerHTML.indexOf('data-uk-') !== -1) {
+                            if (node.outerHTML && node.outerHTML.indexOf('data-sp-') !== -1) {
                                 return (init = true) && false;
                             }
                         }
@@ -794,15 +794,15 @@
     }());
 
     // add touch identifier class
-    UI.$html.addClass(UI.support.touch ? 'uk-touch' : 'uk-notouch');
+    UI.$html.addClass(UI.support.touch ? 'sp-touch' : 'sp-notouch');
 
-    // add uk-hover class on tap to support overlays on touch devices
+    // add sp-hover class on tap to support overlays on touch devices
     if (UI.support.touch) {
 
         var hoverset = false,
             exclude,
-            hovercls = 'uk-hover',
-            selector = '.uk-overlay, .uk-overlay-hover, .uk-overlay-toggle, .uk-animation-hover, .uk-has-hover';
+            hovercls = 'sp-hover',
+            selector = '.sp-overlay, .sp-overlay-hover, .sp-overlay-toggle, .sp-animation-hover, .sp-has-hover';
 
         UI.$html.on('mouseenter touchstart MSPointerDown pointerdown', selector, function() {
 

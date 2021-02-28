@@ -1,244 +1,122 @@
-// Name:            Panel
-// Description:     Defines styles for reusable content areas
-//
-// Component:       `uk-card`
-//
-// Sub-objects:     `uk-card-title`
-//                  `uk-card-badge`
-//                  `uk-card-teaser`
-//                  `uk-card-body`
-//
-// Modifiers:       `uk-card-box`
-//                  `uk-card-box-primary`
-//                  `uk-card-header`
-//                  `uk-card-space`
-//                  `uk-card-divider`
-//
-// Uses:            Nav: `uk-nav-side`
-//
-// Used by:         Dropdown
-//                  Off-canvas
-//                  Grid
-//
-// Markup:
-//
-// <!-- uk-card -->
-// <div class="uk-card">
-//     <div class="uk-card-badge uk-badge"></div>
-//     <h3 class="uk-card-title"></h3>
-//     <p></p>
-// </div>
-//
-// ========================================================================
+@card-margin:                                  24px;
 
+.sp-card {
+  display: flex;
+  border-radius: 8px;
+  border: 1px solid @global-border;
+  padding: @card-margin;
+  overflow: hidden;
 
-// Variables
-// ========================================================================
+  h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+  }
 
-@card-title-margin-bottom:                     @global-margin;
-@card-title-text-transform:                    none;
-@card-title-padding:                           4px 0 12px;
-
-@card-teaser-margin-bottom:                    @card-title-margin-bottom;
-
-@card-box-padding:                             @global-margin-large;
-@card-box-background:                          @global-background;
-@card-box-dark-background:                     fade(#242e38, 70%);
-@card-box-badge-top:                           @global-margin;
-@card-box-badge-right:                         @card-box-badge-top;
-@card-box-header-margin:                       round(-@card-box-padding / 2);
-@card-box-teaser-margin:                       -@card-box-padding;
-@card-box-border:                              @global-border;
-@card-box-dark-border:                         fade(@global-dark-border, 60%);
-@card-box-border-radius:                       @global-border-radius;
-
-@card-box-primary-background:                  fade(@global-primary-background, 10%);
-@card-box-primary-border:                      #50bfff;
-
-@card-header-title-padding:                    @global-margin;
-
-@card-space-padding:                           30px;
-
-@card-divider-gutter:                          25px;
-@card-divider-gutter-large:                    35px;
-@card-divider-border:                          @global-border;
-@card-divider-border-width:                    1px;
-
-@card-body-padding:                            @global-margin-small;
-@card-box-shadow:                              0 0 8px 0 rgba(0,0,0,.05),
-                                               0 2px 4px 0 rgba(0,0,0,.03);
-
-
-/* ========================================================================
-   Component: Panel
- ========================================================================== */
-
-/*
- * 1. Needed for `a` elements
- * 2. Create position context for badges
- */
-
-.uk-card {
-    /* 1 */
-    display: block;
-    /* 2 */
-    position: relative;
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }
 
-/*
- * Allow panels to be anchors
- */
-
-.uk-card,
-.uk-card:hover { text-decoration: none; }
-
-/*
- * Micro clearfix to make panels more robust
- */
-
-.uk-card:before,
-.uk-card:after {
-    content: "";
-    display: table;
+.sp-card-shadow {
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-.uk-card:after { clear: both; }
+.sp-card-header {
+  margin: -@card-margin -@card-margin @card-margin;
+  padding: @card-margin/2 @card-margin;
+  border-bottom: 1px solid @global-border;
 
-
-/* Sub-object: `uk-card-title`
- ========================================================================== */
-
-.uk-card-title {
-    margin-top: 0;
-    padding: @card-title-padding;
-    margin-bottom: @card-title-margin-bottom;
-    text-transform: @card-title-text-transform;
-    border-bottom: solid 1px;
-    border-color: inherit;
-    .hook-card-title;
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }
 
+.sp-card-teaser {
+  margin: @card-margin -@card-margin -@card-margin;
+  padding: @card-margin/2 @card-margin;
+  border-top: 1px solid @global-border;
 
-/* Sub-object: `uk-card-badge`
- ========================================================================== */
-
-.uk-card-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
-    .hook-card-badge;
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }
 
-/* Sub-object: `uk-card-teaser`
- ========================================================================== */
-
-.uk-card-teaser { margin-bottom: @card-teaser-margin-bottom; }
-
-
-/* Sub-object: `uk-card-body`
- ========================================================================== */
-
-.uk-card-body { padding: @card-body-padding; }
-
-
-/* Modifier: `uk-card-box`
- ========================================================================== */
-
-.uk-card-box {
-    padding: @card-box-padding;
-    background: @card-box-background;
-    border: 1px solid @card-box-border;
-    border-radius: @card-box-border-radius;
-
-    .dark & {
-        background-color: @card-box-dark-background;
-        border-color: @card-box-dark-border;
-    }
+.sp-card-body {
+  margin: -@card-margin;
+  padding: @card-margin/2 @card-margin;
 }
 
-.uk-card-box:hover {
-    box-shadow: @card-box-shadow;
+.sp-card-body-blank {
+  margin: -@card-margin;
 }
 
-.uk-card-box .uk-card-badge {
-    top: @card-box-badge-top;
-    right: @card-box-badge-right;
-}
+.sp-card-divider {
+  margin-top: @card-margin;
+  margin-bottom: @card-margin;
+  border-top: 1px solid @global-border;
 
-.uk-card-box > .uk-card-teaser:first-child {
-    margin-top: @card-box-teaser-margin;
-}
-
-.uk-card-box > .uk-card-teaser {
-    margin-left: @card-box-teaser-margin;
-    margin-right: @card-box-teaser-margin;
-}
-
-/*
- * Sub-modifier: `uk-card-box-primary`
- */
-
-.uk-card-box-primary {
-    background-color: @card-box-primary-background !important;
-    border-left: 5px solid @card-box-primary-border !important;
-    .hook-card-box-primary;
-}
-
-
-/* Modifier: `uk-card-header`
- ========================================================================== */
-
-.uk-card-box .uk-card-header {
-    margin-top: @card-box-header-margin;
-}
-
-.uk-card-header .uk-card-title {
-    padding-bottom: @card-header-title-padding;
-    border-bottom: 1px solid @card-box-border;
-    .hook-card-header;
-}
-
-
-/* Modifier: `uk-card-space`
- ========================================================================== */
-
-.uk-card-space { padding: @card-space-padding; }
-
-.uk-card-space .uk-card-badge {
-    top: @card-space-padding;
-    right: @card-space-padding;
-}
-
-
-/* Modifier: `uk-card-divider`
- ========================================================================== */
-
-.uk-card + .uk-card-divider { margin-top: (@card-divider-gutter * 2) !important; }
-
-.uk-card + .uk-card-divider:before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -(@card-divider-gutter);
-    left: 0;
-    right: 0;
-    border-top: @card-divider-border-width solid @card-divider-border;
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }
 
 /* Large screen and bigger */
-@media (min-width: @breakpoint-xlarge) {
-
-    .uk-card + .uk-card-divider { margin-top: (@card-divider-gutter-large * 2) !important; }
-    .uk-card + .uk-card-divider:before { top: -(@card-divider-gutter-large); }
-
+@media (max-width: @breakpoint-small-max) {
+  .sp-card {
+    border-radius: 0;
+    border: none;
+  }
 }
 
+/* Color modifiers
+ ========================================================================== */
+.sp-card-primary,
+.sp-card-muted,
+.sp-card-success,
+.sp-card-warning,
+.sp-card-danger {
+  color: @global-contrast-color;
+  border-color: transparent;
+  .dark & {
+    border-color: transparent;
+  }
 
-// Hooks
-// ========================================================================
+  .sp-card-teaser,
+  .sp-card-header {
+    border-color: transparent;
+    .dark & {
+      border-color: transparent;
+    }
+  }
+}
 
-.hook-card-title() {}
-.hook-card-badge() {}
-.hook-card-box-primary() {}
-.hook-card-header() {}
+.sp-card-primary {
+  background-color: darken(desaturate(@global-primary, 20%), 5%);
+  .dark & {
+    background-color: darken(desaturate(@global-dark-primary, 20%), 25%);
+  }
+}
+
+.sp-card-muted {
+  background-color: @global-muted;
+}
+
+.sp-card-success {
+  background-color: darken(desaturate(@global-success, 20%), 5%);
+  .dark & {
+    background-color: darken(desaturate(@global-dark-success, 20%), 20%);
+  }
+}
+
+.sp-card-warning {
+  background-color: @global-warning;
+  .dark & {
+    background-color: darken(desaturate(@global-dark-warning, 20%), 15%);
+  }
+}
+
+.sp-card-danger {
+  background-color: darken(desaturate(@global-danger, 20%), 5%);
+  .dark & {
+    background-color: darken(desaturate(@global-dark-danger, 20%), 25%);
+  }
+}

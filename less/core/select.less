@@ -1,35 +1,24 @@
-// Variables
-// ========================================================================
-
-@select-color:                                    @global-color;
-@select-dark-color:                               @global-dark-color;
-@select-dark-background:                          @global-dark-background;
-@select-border:                                   @input-border;
-@select-dark-border:                              fade(@input-dark-border, 80%);
-@select-padding:                                  4px 24px 4px 8px;
+@select-padding:                                  6px 32px 6px 16px;
 
 /* ========================================================================
    Component: Select
  ========================================================================== */
 
-.uk-select {
+.sp-select {
   box-sizing: border-box;
   margin: 0;
   border-radius: 0;
   font: inherit;
+  color: inherit;
   vertical-align: middle;
 
   background: none;
   outline: none;
   border: 0;
 
-  color: @select-color;
-  
   .dark & {
-    color: @select-dark-color;
-
     > option, > optgroup {
-      background-color: @select-dark-background;
+      background-color: @global-dark-background;
     }
   }
 
@@ -39,23 +28,47 @@
    */
   text-transform: none;
   -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
 }
 
-.uk-select:not([multiple]) {
-  background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon.svg") no-repeat 100% 50%;
+.sp-select.sp-select-small:not([multiple]) {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.sp-select.sp-select-mini:not([multiple]) {
+  font-size: 14px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.sp-select.sp-select-large:not([multiple]) {
+  font-weight: 500;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.sp-select:not([multiple]) {
+  background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-chevron-down.svg") no-repeat 100% 50%;
   padding: @select-padding;
 
-  border-bottom: solid 1px @select-border;
-
   .dark & {
-    border-color: @select-dark-border;
-    background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-select-icon-dark.svg") no-repeat 100% 50%;
+    border-color: @global-dark-border;
+    background: data-uri('image/svg+xml;charset=UTF-8', "../fonts/svg/form-chevron-down-dark.svg") no-repeat 100% 50%;
   }
 }
 
-.uk-select[multiple] {
+.sp-select-input {
+  border-radius: 8px;
+  border: solid 1px darken(@global-border, 5%);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.sp-select-line {
+  border-bottom: solid 1px @global-border;
+}
+
+.sp-select[multiple] {
   > option, > optgroup {
     padding: @select-padding;
   }

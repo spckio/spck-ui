@@ -3,16 +3,16 @@
 //
 // Adapted from http://fortawesome.github.com/Font-Awesome (Version 4.2.0)
 //
-// Component:       `uk-icon-*`
+// Component:       `sp-icon-*`
 //
-// Sub-objects:     `uk-icon-hover`
-//                  `uk-icon-button`
+// Sub-objects:     `sp-icon-hover`
+//                  `sp-icon-button`
 //
-// Modifiers:       `uk-icon-small`
-//                  `uk-icon-medium`
-//                  `uk-icon-large`
-//                  `uk-icon-justify`
-//                  `uk-icon-spin`
+// Modifiers:       `sp-icon-small`
+//                  `sp-icon-medium`
+//                  `sp-icon-large`
+//                  `sp-icon-justify`
+//                  `sp-icon-spin`
 //
 // Uses:            Animation
 //
@@ -43,30 +43,12 @@
 @icon-button-hover-color:                       lighten(@global-color, 10%);
 
 @icon-button-active-background:                 transparent;
-@icon-button-active-color:                      lighten(@global-color, 10%);
-
-
-/* ========================================================================
-   Component: Icon
- ========================================================================== */
-
-/* 6 */
-[class*='uk-icon-'],
-[class*='uk-icon-']:hover,
-[class*='uk-icon-']:focus {
-    text-decoration: none;
-}
-
-[class*='uk-icon-']:before {
-    position: relative;
-    margin-top: -4px;
-}
 
 /* ========================================================================
    Component: Link-Icon
  ========================================================================== */
 
-.uk-link-icon {
+.sp-link-icon {
     width: 1em;
 
     &::before {
@@ -74,56 +56,56 @@
     }
 }
 
-.uk-link-icon + span {
+.sp-link-icon + span {
     margin-left: @link-icon-margin;
 }
 
-span + .uk-link-icon {
+span + .sp-link-icon {
     margin-left: @link-icon-margin;
 }
 
 /* Size modifiers
  ========================================================================== */
 
-.uk-icon-small {
+.sp-icon-small {
     font-size: @icon-small-font-size;
 }
 
-.uk-icon-medium {
+.sp-icon-medium {
     font-size: @icon-medium-font-size;
 }
 
-.uk-icon-large {
+.sp-icon-large {
     font-size: @icon-large-font-size;
 }
 
-.uk-icon-xlarge {
+.sp-icon-xlarge {
     font-size: @icon-xlarge-font-size;
 }
 
-/* Modifier: `uk-icon-justify`
+/* Modifier: `sp-icon-justify`
  ========================================================================== */
 
-.uk-icon-justify {
+.sp-icon-justify {
     width: 1em;
     text-align: center;
 }
 
 
-/* Modifier: `uk-icon-spin`
+/* Modifier: `sp-icon-spin`
  ========================================================================== */
 
-.uk-icon-spin {
+.sp-icon-spin {
     display: inline-block;
-    -webkit-animation: uk-rotate 2s infinite linear;
-    animation: uk-rotate 2s infinite linear;
+    -webkit-animation: sp-rotate 2s infinite linear;
+    animation: sp-rotate 2s infinite linear;
 }
 
 
-/* Modifier: `uk-icon-hover`
+/* Modifier: `sp-icon-hover`
  ========================================================================== */
 
-.uk-icon-hover {
+.sp-icon-hover {
     color: @icon-hover-color;
     .dark & {
         color: @icon-hover-dark-color;
@@ -133,24 +115,24 @@ span + .uk-link-icon {
 /*
  * Hover
  */
-.uk-notouch {
-  .uk-icon-hover:hover {
+.sp-notouch {
+  .sp-icon-hover:hover {
     color: @icon-hover-hover-color;
   }
 }
 
-/* Modifier: `uk-icon-blank`
+/* Modifier: `sp-icon-blank`
  ========================================================================== */
 
-.uk-icon-blank:before {
+.sp-icon-blank:before {
     content: "";
     width: 1em;
 }
 
-/* Modifier: `uk-icon-button`
+/* Modifier: `sp-icon-button`
  ========================================================================== */
 
-.uk-icon-button {
+.sp-icon-button {
     box-sizing: border-box;
     display: inline-block;
     width: @icon-button-width;
@@ -162,22 +144,19 @@ span + .uk-link-icon {
     text-align: center;
 }
 
-/*
- * Hover
- * 1. Apply hover style also to focus state
- * 2. Remove default focus style
- */
-
-.uk-icon-button:hover,
-.uk-icon-button:focus { // 1
-    background-color: @icon-button-hover-background;
-    color: @icon-button-hover-color;
-    /* 2 */
+.uk-notouch {
+  .sp-icon-button:hover,
+  .sp-icon-button:focus {
+    background-color: transparent;
+    color: lighten(@global-color, 15%);
+    /* Remove default focus style */
     outline: none;
+  }
 }
 
+
 /* Active */
-.uk-icon-button:active {
-    background-color: @icon-button-active-background;
-    color: @icon-button-active-color;
+.sp-icon-button:active {
+  background-color: transparent;
+  color: lighten(@global-color, 10%);
 }

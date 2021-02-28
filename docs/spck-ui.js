@@ -243,7 +243,7 @@
 
     UI.Utils.checkDisplay = function(context, initanimation) {
 
-        var elements = UI.$('[data-uk-margin], [data-uk-grid-match], [data-uk-grid-margin], [data-uk-check-display]', context || document), animated;
+        var elements = UI.$('[data-sp-margin], [data-sp-grid-match], [data-sp-grid-margin], [data-sp-check-display]', context || document), animated;
 
         if (context && !elements.length) {
             elements = $(context);
@@ -255,14 +255,14 @@
         if (initanimation) {
 
             if (typeof(initanimation)!='string') {
-                initanimation = '[class*="uk-animation-"]';
+                initanimation = '[class*="sp-animation-"]';
             }
 
             elements.find(initanimation).each(function(){
 
                 var ele  = UI.$(this),
                     cls  = ele.attr('class'),
-                    anim = cls.match(/uk-animation-(.+)/);
+                    anim = cls.match(/sp-animation-(.+)/);
 
                 ele.removeClass(anim[0]).width();
 
@@ -730,15 +730,15 @@
             if (UI.support.touch) {
 
                 // remove css hover rules for touch devices
-                // UI.Utils.removeCssRules(/\.uk-(?!navbar).*:hover/);
+                // UI.Utils.removeCssRules(/\.sp-(?!navbar).*:hover/);
 
-                // viewport unit fix for uk-height-viewport - should be fixed in iOS 8
+                // viewport unit fix for sp-height-viewport - should be fixed in iOS 8
                 if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
 
                     UI.$win.on('load orientationchange resize', UI.Utils.debounce((function(){
 
                         var fn = function() {
-                            $('.uk-height-viewport').css('height', window.innerHeight);
+                            $('.sp-height-viewport').css('height', window.innerHeight);
                             return fn;
                         };
 
@@ -772,7 +772,7 @@
 
                             node = mutation.addedNodes[i];
 
-                            if (node.outerHTML && node.outerHTML.indexOf('data-uk-') !== -1) {
+                            if (node.outerHTML && node.outerHTML.indexOf('data-sp-') !== -1) {
                                 return (init = true) && false;
                             }
                         }
@@ -794,15 +794,15 @@
     }());
 
     // add touch identifier class
-    UI.$html.addClass(UI.support.touch ? 'uk-touch' : 'uk-notouch');
+    UI.$html.addClass(UI.support.touch ? 'sp-touch' : 'sp-notouch');
 
-    // add uk-hover class on tap to support overlays on touch devices
+    // add sp-hover class on tap to support overlays on touch devices
     if (UI.support.touch) {
 
         var hoverset = false,
             exclude,
-            hovercls = 'uk-hover',
-            selector = '.uk-overlay, .uk-overlay-hover, .uk-overlay-toggle, .uk-animation-hover, .uk-has-hover';
+            hovercls = 'sp-hover',
+            selector = '.sp-overlay, .sp-overlay-hover, .sp-overlay-toggle, .sp-animation-hover, .sp-has-hover';
 
         UI.$html.on('mouseenter touchstart MSPointerDown pointerdown', selector, function() {
 
@@ -832,19 +832,19 @@
         defaults: {
             fade: true,
             duration: 200,
-            trigger: '.uk-alert-close'
+            trigger: '.sp-alert-close'
         },
 
         boot: function() {
 
             // init code
-            UI.$html.on('click.alert.uikit', '[data-uk-alert]', function(e) {
+            UI.$html.on('click.alert.uikit', '[data-sp-alert]', function(e) {
 
                 var ele = UI.$(this);
 
                 if (!ele.data('alert')) {
 
-                    var alert = UI.alert(ele, UI.Utils.options(ele.attr('data-uk-alert')));
+                    var alert = UI.alert(ele, UI.Utils.options(ele.attr('data-sp-alert')));
 
                     if (UI.$(e.target).is(alert.options.trigger)) {
                         e.preventDefault();
@@ -896,20 +896,20 @@
     UI.component('buttonRadio', {
 
         defaults: {
-            activeClass: 'uk-active',
-            target: '.uk-button'
+            activeClass: 'sp-active',
+            target: '.sp-button'
         },
 
         boot: function() {
 
             // init code
-            UI.$html.on('click.buttonradio.uikit', '[data-uk-button-radio]', function(e) {
+            UI.$html.on('click.buttonradio.uikit', '[data-sp-button-radio]', function(e) {
 
                 var ele = UI.$(this);
 
                 if (!ele.data('buttonRadio')) {
 
-                    var obj    = UI.buttonRadio(ele, UI.Utils.options(ele.attr('data-uk-button-radio'))),
+                    var obj    = UI.buttonRadio(ele, UI.Utils.options(ele.attr('data-sp-button-radio'))),
                         target = UI.$(e.target);
 
                     if (target.is(obj.options.target)) {
@@ -952,18 +952,18 @@
     UI.component('buttonCheckbox', {
 
         defaults: {
-            activeClass: 'uk-active',
-            target: '.uk-button'
+            activeClass: 'sp-active',
+            target: '.sp-button'
         },
 
         boot: function() {
 
-            UI.$html.on('click.buttoncheckbox.uikit', '[data-uk-button-checkbox]', function(e) {
+            UI.$html.on('click.buttoncheckbox.uikit', '[data-sp-button-checkbox]', function(e) {
                 var ele = UI.$(this);
 
                 if (!ele.data('buttonCheckbox')) {
 
-                    var obj    = UI.buttonCheckbox(ele, UI.Utils.options(ele.attr('data-uk-button-checkbox'))),
+                    var obj    = UI.buttonCheckbox(ele, UI.Utils.options(ele.attr('data-sp-button-checkbox'))),
                         target = UI.$(e.target);
 
                     if (target.is(obj.options.target)) {
@@ -1007,12 +1007,12 @@
 
         boot: function() {
 
-            UI.$html.on('click.button.uikit', '[data-uk-button]', function(e) {
+            UI.$html.on('click.button.uikit', '[data-sp-button]', function(e) {
                 var ele = UI.$(this);
 
                 if (!ele.data('button')) {
 
-                    var obj = UI.button(ele, UI.Utils.options(ele.attr('data-uk-button')));
+                    var obj = UI.button(ele, UI.Utils.options(ele.attr('data-sp-button')));
                     ele.trigger('click');
                 }
             });
@@ -1023,23 +1023,23 @@
             var $this = this;
 
             // Init ARIA
-            this.element.attr('aria-pressed', this.element.hasClass("uk-active"));
+            this.element.attr('aria-pressed', this.element.hasClass("sp-active"));
 
             this.on('click', function(e) {
 
                 if ($this.element.is('a[href="#"]')) e.preventDefault();
 
                 $this.toggle();
-                $this.trigger('change.uk.button', [$this.element.blur().hasClass('uk-active')]);
+                $this.trigger('change.uk.button', [$this.element.blur().hasClass('sp-active')]);
             });
 
         },
 
         toggle: function() {
-            this.element.toggleClass('uk-active');
+            this.element.toggleClass('sp-active');
 
             // Update ARIA
-            this.element.attr('aria-pressed', this.element.hasClass('uk-active'));
+            this.element.attr('aria-pressed', this.element.hasClass('sp-active'));
         }
     });
 
@@ -1060,12 +1060,12 @@
             // auto init
             UI.ready(function(context) {
 
-                UI.$('[data-uk-cover]', context).each(function(){
+                UI.$('[data-sp-cover]', context).each(function(){
 
                     var ele = UI.$(this);
 
                     if(!ele.data('cover')) {
-                        var plugin = UI.cover(ele, UI.Utils.options(ele.attr('data-uk-cover')));
+                        var plugin = UI.cover(ele, UI.Utils.options(ele.attr('data-sp-cover')));
                     }
                 });
             });
@@ -1191,7 +1191,7 @@
            justify         : false,
            boundary        : UI.$win,
            delay           : 0,
-           dropdownSelector: '.uk-dropdown,.uk-dropdown-blank',
+           dropdownSelector: '.sp-dropdown,.sp-dropdown-blank',
            hoverDelayIdle  : 250,
            preventflip     : false
         },
@@ -1203,13 +1203,13 @@
             var triggerevent = UI.support.touch ? 'click' : 'mouseenter';
 
             // init code
-            UI.$html.on(triggerevent+'.dropdown.uikit focus pointerdown', '[data-uk-dropdown]', function(e) {
+            UI.$html.on(triggerevent+'.dropdown.uikit focus pointerdown', '[data-sp-dropdown]', function(e) {
 
                 var ele = UI.$(this);
 
                 if (!ele.data('dropdown')) {
 
-                    var dropdown = UI.dropdown(ele, UI.Utils.options(ele.attr('data-uk-dropdown')));
+                    var dropdown = UI.dropdown(ele, UI.Utils.options(ele.attr('data-sp-dropdown')));
 
                     if (e.type=='click' || (e.type=='mouseenter' && dropdown.options.mode=='hover')) {
                         dropdown.element.trigger(triggerevent);
@@ -1235,7 +1235,7 @@
                 this.offsetParent = this.element;
             }
 
-            this.centered  = this.dropdown.hasClass('uk-dropdown-center');
+            this.centered  = this.dropdown.hasClass('sp-dropdown-center');
             this.justified = this.options.justify ? UI.$(this.options.justify) : false;
 
             this.boundary  = UI.$(this.options.boundary);
@@ -1245,20 +1245,20 @@
             }
 
             // legacy DEPRECATED!
-            if (this.dropdown.hasClass('uk-dropdown-up')) {
+            if (this.dropdown.hasClass('sp-dropdown-up')) {
                 this.options.pos = 'top-left';
             }
-            if (this.dropdown.hasClass('uk-dropdown-flip')) {
+            if (this.dropdown.hasClass('sp-dropdown-flip')) {
                 this.options.pos = this.options.pos.replace('left','right');
             }
-            if (this.dropdown.hasClass('uk-dropdown-center')) {
+            if (this.dropdown.hasClass('sp-dropdown-center')) {
                 this.options.pos = this.options.pos.replace(/(left|right)/,'center');
             }
             //-- end legacy
 
             // Init ARIA
             this.element.attr('aria-haspopup', 'true');
-            this.element.attr('aria-expanded', this.element.hasClass('uk-open'));
+            this.element.attr('aria-expanded', this.element.hasClass('sp-open'));
             this.dropdown.attr('aria-hidden', 'true');
 
             if (this.options.mode == 'click' || UI.support.touch) {
@@ -1276,13 +1276,13 @@
                         $target.blur();
                     }
 
-                    if (!$this.element.hasClass('uk-open')) {
+                    if (!$this.element.hasClass('sp-open')) {
 
                         $this.show();
 
                     } else {
 
-                        if (!$this.dropdown.find(e.target).length || $target.is('.uk-dropdown-close') || $target.parents('.uk-dropdown-close').length) {
+                        if (!$this.dropdown.find(e.target).length || $target.is('.sp-dropdown-close') || $target.parents('.sp-dropdown-close').length) {
                             $this.hide();
                         }
                     }
@@ -1339,7 +1339,7 @@
                     }
 
                     if (active && active == $this) {
-                        if (!$this.dropdown.find(e.target).length || $target.is('.uk-dropdown-close') || $target.parents('.uk-dropdown-close').length) {
+                        if (!$this.dropdown.find(e.target).length || $target.is('.sp-dropdown-close') || $target.parents('.sp-dropdown-close').length) {
                             $this.hide();
                         }
                         return;
@@ -1369,7 +1369,7 @@
             this.trigger('beforeshow.uk.dropdown', [this]);
 
             this.checkDimensions();
-            this.element.addClass('uk-open');
+            this.element.addClass('sp-open');
 
             // Update ARIA
             this.element.attr('aria-expanded', 'true');
@@ -1388,7 +1388,7 @@
 
             this.trigger('beforehide.uk.dropdown', [this, force]);
 
-            this.element.removeClass('uk-open');
+            this.element.removeClass('sp-open');
 
             if (this.remainIdle) {
                 clearTimeout(this.remainIdle);
@@ -1434,7 +1434,7 @@
             if (!this.dropdown.length) return;
 
             // reset
-            this.dropdown.removeClass('uk-dropdown-top uk-dropdown-bottom uk-dropdown-left uk-dropdown-right uk-dropdown-stack uk-dropdown-autoflip').css({
+            this.dropdown.removeClass('sp-dropdown-top sp-dropdown-bottom sp-dropdown-left sp-dropdown-right sp-dropdown-stack sp-dropdown-autoflip').css({
                 topLeft :'',
                 left :'',
                 marginLeft :'',
@@ -1501,7 +1501,7 @@
 
                         pp  = fdpos.split('-');
                         css = variants[fdpos] ? variants[fdpos] : variants['bottom-left'];
-                        dropdown.addClass('uk-dropdown-autoflip');
+                        dropdown.addClass('sp-dropdown-autoflip');
 
                         // check flipped
                         if (this.checkBoundary(pos.left + css.left, pos.top + css.top, width, height, boundarywidth)) {
@@ -1513,11 +1513,11 @@
             }
 
             if (width > boundarywidth) {
-                dropdown.addClass('uk-dropdown-stack');
+                dropdown.addClass('sp-dropdown-stack');
                 this.trigger('stack.uk.dropdown', [this]);
             }
 
-            dropdown.css(css).css('display', '').addClass('uk-dropdown-'+pp[0]);
+            dropdown.css(css).css('display', '').addClass('sp-dropdown-'+pp[0]);
         },
 
         checkBoundary: function(left, top, width, height, boundarywidth) {
@@ -1550,11 +1550,11 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-dropdown-overlay]', context).each(function() {
+                UI.$('[data-sp-dropdown-overlay]', context).each(function() {
                     var ele = UI.$(this);
 
                     if (!ele.data('dropdownOverlay')) {
-                        UI.dropdownOverlay(ele, UI.Utils.options(ele.attr('data-uk-dropdown-overlay')));
+                        UI.dropdownOverlay(ele, UI.Utils.options(ele.attr('data-sp-dropdown-overlay')));
                     }
                 });
             });
@@ -1565,10 +1565,10 @@
             var $this = this;
 
             this.justified = this.options.justify ? UI.$(this.options.justify) : false;
-            this.overlay   = this.element.find('uk-dropdown-overlay');
+            this.overlay   = this.element.find('sp-dropdown-overlay');
 
             if (!this.overlay.length) {
-                this.overlay = UI.$('<div class="uk-dropdown-overlay"></div>').appendTo(this.element);
+                this.overlay = UI.$('<div class="sp-dropdown-overlay"></div>').appendTo(this.element);
             }
 
             this.overlay.addClass(this.options.cls);
@@ -1587,12 +1587,12 @@
 
                     var h = $this.dropdown.dropdown.outerHeight(true);
 
-                    $this.dropdown.element.removeClass('uk-open');
+                    $this.dropdown.element.removeClass('sp-open');
 
                     $this.overlay.stop().css('display', 'block').animate({height: h}, $this.options.duration, function() {
 
                        $this.dropdown.dropdown.css('visibility', '');
-                       $this.dropdown.element.addClass('uk-open');
+                       $this.dropdown.element.addClass('sp-open');
 
                        UI.Utils.checkDisplay($this.dropdown.dropdown, true);
                     });
@@ -1686,11 +1686,11 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-grid-match]', context).each(function() {
+                UI.$('[data-sp-grid-match]', context).each(function() {
                     var grid = UI.$(this), obj;
 
                     if (!grid.data('gridMatchHeight')) {
-                        obj = UI.gridMatchHeight(grid, UI.Utils.options(grid.attr('data-uk-grid-match')));
+                        obj = UI.gridMatchHeight(grid, UI.Utils.options(grid.attr('data-sp-grid-match')));
                     }
                 });
             });
@@ -1756,8 +1756,8 @@
     UI.component('gridMargin', {
 
         defaults: {
-            cls      : 'uk-grid-margin',
-            rowfirst : 'uk-row-first'
+            cls      : 'sp-grid-margin',
+            rowfirst : 'sp-row-first'
         },
 
         boot: function() {
@@ -1765,11 +1765,11 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-grid-margin]', context).each(function() {
+                UI.$('[data-sp-grid-margin]', context).each(function() {
                     var grid = UI.$(this), obj;
 
                     if (!grid.data('gridMargin')) {
-                        obj = UI.gridMargin(grid, UI.Utils.options(grid.attr('data-uk-grid-margin')));
+                        obj = UI.gridMargin(grid, UI.Utils.options(grid.attr('data-sp-grid-margin')));
                     }
                 });
             });
@@ -1790,7 +1790,7 @@
     var active = false, activeCount = 0, $html = UI.$html, body;
 
     UI.$win.on('resize orientationchange', UI.Utils.debounce(function(){
-        UI.$('.uk-modal.uk-open').each(function(){
+        UI.$('.sp-modal.sp-open').each(function(){
             return UI.$(this).data('modal') && UI.$(this).data('modal').resize();
         });
     }, 150));
@@ -1818,18 +1818,18 @@
             var $this = this;
 
             $this.paddingdir = 'padding-' + (UI.langdirection == 'left' ? 'right':'left');
-            $this.dialog     = $this.find('.uk-modal-dialog');
+            $this.dialog     = $this.find('.sp-modal-dialog');
 
             $this.active     = false;
 
             // Update ARIA
-            $this.element.attr('aria-hidden', $this.element.hasClass('uk-open'));
+            $this.element.attr('aria-hidden', $this.element.hasClass('sp-open'));
 
-            $this.on('click', '.uk-modal-close', function(e) {
+            $this.on('click', '.sp-modal-close', function(e) {
 
                 e.preventDefault();
 
-                var modal = UI.$(e.target).closest('.uk-modal');
+                var modal = UI.$(e.target).closest('.sp-modal');
                 if (modal[0] === $this.element[0]) $this.hide();
 
             }).on('mousedown', function(e) {
@@ -1872,7 +1872,7 @@
                 active.hide(true);
             }
 
-            $this.element.removeClass('uk-open').show();
+            $this.element.removeClass('sp-open').show();
             $this.resize(true);
 
             if ($this.options.modal) {
@@ -1888,13 +1888,13 @@
                 $this.element.one(UI.support.transition.end, function(){
                     $this.hasTransitioned = true;
                     finalize();
-                }).addClass('uk-open');
+                }).addClass('sp-open');
             } else {
-                $this.element.addClass('uk-open');
+                $this.element.addClass('sp-open');
                 finalize();
             }
 
-            $html.addClass('uk-modal-page').height(); // force browser engine redraw
+            $html.addClass('sp-modal-page').height(); // force browser engine redraw
 
             // Update ARIA
             $this.element.attr('aria-hidden', 'false');
@@ -1914,7 +1914,7 @@
 
                 this.one(UI.support.transition.end, function() {
                     $this._hide();
-                }).removeClass('uk-open');
+                }).removeClass('sp-open');
 
             } else {
 
@@ -1952,7 +1952,7 @@
         updateScrollable: function() {
 
             // has scrollable?
-            var scrollable = this.dialog.find('.uk-overflow-container:visible:first');
+            var scrollable = this.dialog.find('.sp-overflow-container:visible:first');
 
             if (scrollable.length) {
 
@@ -1980,14 +1980,14 @@
             if (activeCount > 0) activeCount--;
             else activeCount = 0;
 
-            this.element.hide().removeClass('uk-open');
+            this.element.hide().removeClass('sp-open');
             this.dialog.css('transform', '');
 
             // Update ARIA
             this.element.attr('aria-hidden', 'true');
 
             if (!activeCount) {
-                $html.removeClass('uk-modal-page');
+                $html.removeClass('sp-modal-page');
                 body.css(this.paddingdir, "");
             }
 
@@ -1997,7 +1997,7 @@
         },
 
         isActive: function() {
-            return this.element.hasClass('uk-open');
+            return this.element.hasClass('sp-open');
         }
 
     });
@@ -2007,7 +2007,7 @@
         boot: function() {
 
             // init code
-            UI.$html.on('click.modal.uikit', '[data-uk-modal]', function(e) {
+            UI.$html.on('click.modal.uikit', '[data-sp-modal]', function(e) {
 
                 var ele = UI.$(this);
 
@@ -2016,7 +2016,7 @@
                 }
 
                 if (!ele.data('modalTrigger')) {
-                    var modal = UI.modalTrigger(ele, UI.Utils.options(ele.attr('data-uk-modal')));
+                    var modal = UI.modalTrigger(ele, UI.Utils.options(ele.attr('data-sp-modal')));
                     modal.show();
                 }
 
@@ -2069,15 +2069,15 @@
         return modal;
     };
 
-    UI.modal.dialog.template = '<div class="uk-modal"><div class="uk-modal-dialog" style="min-height:0;"></div></div>';
+    UI.modal.dialog.template = '<div class="sp-modal"><div class="sp-modal-dialog" style="min-height:0;"></div></div>';
 
     UI.modal.alert = function(content, options) {
 
         options = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
 
         var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-button-primary uk-modal-close">'+options.labels.Ok+'</button></div>'
+            '<div class="sp-margin sp-modal-content">'+String(content)+'</div>',
+            '<div class="sp-modal-footer sp-text-right"><button class="sp-button sp-button-primary sp-modal-close">'+options.labels.Ok+'</button></div>'
         ]).join(""), options);
 
         modal.on('show.uk.modal', function(){
@@ -2098,8 +2098,8 @@
         options   = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, UI.$.isFunction(options) ? {}:options);
 
         var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button js-modal-confirm-cancel">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-confirm">'+options.labels.Ok+'</button></div>'
+            '<div class="sp-margin sp-modal-content">'+String(content)+'</div>',
+            '<div class="sp-modal-footer sp-text-right"><button class="sp-button js-modal-confirm-cancel">'+options.labels.Cancel+'</button> <button class="sp-button sp-button-primary js-modal-confirm">'+options.labels.Ok+'</button></div>'
         ]).join(""), options);
 
         modal.element.find(".js-modal-confirm, .js-modal-confirm-cancel").on("click", function(){
@@ -2122,9 +2122,9 @@
         options  = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
 
         var modal = UI.modal.dialog(([
-            text ? '<div class="uk-modal-content uk-form">'+String(text)+'</div>':'',
-            '<div class="uk-margin-small-top uk-modal-content uk-form"><p><input type="text" class="uk-width-1-1"></p></div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-modal-close">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-ok">'+options.labels.Ok+'</button></div>'
+            text ? '<div class="sp-modal-content sp-form">'+String(text)+'</div>':'',
+            '<div class="sp-margin-small-top sp-modal-content sp-form"><p><input type="text" class="sp-width-1-1"></p></div>',
+            '<div class="sp-modal-footer sp-text-right"><button class="sp-button sp-modal-close">'+options.labels.Cancel+'</button> <button class="sp-button sp-button-primary js-modal-ok">'+options.labels.Ok+'</button></div>'
         ]).join(""), options),
 
         input = modal.element.find("input[type='text']").val(value || '').on('keyup', function(e){
@@ -2145,10 +2145,10 @@
     UI.modal.blockUI = function(content, options) {
 
         var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content || '<div class="uk-text-center">...</div>')+'</div>'
+            '<div class="sp-margin sp-modal-content">'+String(content || '<div class="sp-text-center">...</div>')+'</div>'
         ]).join(""), UI.$.extend({bgclose:false, keyboard:false, modal:false}, options));
 
-        modal.content = modal.element.find('.uk-modal-content:first');
+        modal.content = modal.element.find('.sp-modal-content:first');
 
         return modal.show();
     };
@@ -2180,162 +2180,9 @@
                 content = UI.$('<div></div>').html('UIkit2.modal Error: Unsupported data type: ' + typeof content);
         }
 
-        content.appendTo(modal.element.find('.uk-modal-dialog'));
+        content.appendTo(modal.element.find('.sp-modal-dialog'));
 
         return modal;
-    }
-
-})(UIkit2);
-
-(function(UI) {
-
-    "use strict";
-
-    UI.component('nav', {
-
-        defaults: {
-            toggle: '>li.uk-parent > a[href="#"]',
-            lists: '>li.uk-parent > ul',
-            multiple: false
-        },
-
-        boot: function() {
-
-            // init code
-            UI.ready(function(context) {
-
-                UI.$('[data-uk-nav]', context).each(function() {
-                    var nav = UI.$(this);
-
-                    if (!nav.data('nav')) {
-                        var obj = UI.nav(nav, UI.Utils.options(nav.attr('data-uk-nav')));
-                    }
-                });
-            });
-        },
-
-        init: function() {
-
-            var $this = this;
-
-            this.on('click.uk.nav', this.options.toggle, function(e) {
-                e.preventDefault();
-                var ele = UI.$(this);
-                $this.open(ele.parent()[0] == $this.element[0] ? ele : ele.parent("li"));
-            });
-
-            this.update();
-
-            UI.domObserve(this.element, function(e) {
-                if ($this.element.find($this.options.lists).not('[role]').length) {
-                    $this.update();
-                }
-            });
-        },
-
-        update: function() {
-
-            var $this = this;
-
-            this.find(this.options.lists).each(function() {
-
-                var $ele   = UI.$(this).attr('role', 'menu'),
-                    parent = $ele.closest('li'),
-                    active = parent.hasClass("uk-active");
-
-                if (!parent.data('list-container')) {
-                    $ele.wrap('<div style="overflow:hidden;height:0;position:relative;"></div>');
-                    parent.data('list-container', $ele.parent()[active ? 'removeClass':'addClass']('uk-hidden'));
-                }
-
-                // Init ARIA
-                parent.attr('aria-expanded', parent.hasClass("uk-open"));
-
-                if (active) $this.open(parent, true);
-            });
-        },
-
-        open: function(li, noanimation) {
-
-            var $this = this, element = this.element, $li = UI.$(li), $container = $li.data('list-container');
-
-            if (!this.options.multiple) {
-
-                element.children('.uk-open').not(li).each(function() {
-
-                    var ele = UI.$(this);
-
-                    if (ele.data('list-container')) {
-                        ele.data('list-container').stop().animate({height: 0}, function() {
-                            UI.$(this).parent().removeClass('uk-open').end().addClass('uk-hidden');
-                        });
-                    }
-                });
-            }
-
-            $li.toggleClass('uk-open');
-
-            // Update ARIA
-            $li.attr('aria-expanded', $li.hasClass('uk-open'));
-
-            if ($container) {
-
-                if ($li.hasClass('uk-open')) {
-                    $container.removeClass('uk-hidden');
-                }
-
-                if (noanimation) {
-
-                    $container.stop().height($li.hasClass('uk-open') ? 'auto' : 0);
-
-                    if (!$li.hasClass('uk-open')) {
-                        $container.addClass('uk-hidden');
-                    }
-
-                    this.trigger('display.uk.check');
-
-                } else {
-
-                    $container.stop().animate({
-                        height: ($li.hasClass('uk-open') ? getHeight($container.find('ul:first')) : 0)
-                    }, function() {
-
-                        if (!$li.hasClass('uk-open')) {
-                            $container.addClass('uk-hidden');
-                        } else {
-                            $container.css('height', '');
-                        }
-
-                        $this.trigger('display.uk.check');
-                    });
-                }
-            }
-        }
-    });
-
-
-    // helper
-
-    function getHeight(ele) {
-
-        var $ele = UI.$(ele), height = 'auto';
-
-        if ($ele.is(':visible')) {
-            height = $ele.outerHeight();
-        } else {
-
-            var tmp = {
-                position: $ele.css('position'),
-                visibility: $ele.css('visibility'),
-                display: $ele.css('display')
-            };
-
-            height = $ele.css({position: 'absolute', visibility: 'hidden', display: 'block'}).outerHeight();
-
-            $ele.css(tmp); // reset element
-        }
-
-        return height;
     }
 
 })(UIkit2);
@@ -2359,9 +2206,9 @@
             options = UI.$.extend({mode: 'push'}, options);
 
             var $body     = UI.$('body'),
-                bar       = element.find('.uk-offcanvas-bar:first'),
+                bar       = element.find('.sp-offcanvas-bar:first'),
                 rtl       = (UI.langdirection == 'right'),
-                flip      = bar.hasClass('uk-offcanvas-bar-flip') ? -1:1,
+                flip      = bar.hasClass('sp-offcanvas-bar-flip') ? -1:1,
                 dir       = flip * (rtl ? -1 : 1),
 
                 scrollbarwidth =  window.innerWidth - $body.width();
@@ -2369,9 +2216,9 @@
             scrollpos = {x: window.pageXOffset, y: window.pageYOffset};
 
             bar.attr('mode', options.mode);
-            element.addClass('uk-active');
+            element.addClass('sp-active');
 
-            $body.css({width: window.innerWidth - scrollbarwidth, height: window.innerHeight}).addClass('uk-offcanvas-page');
+            $body.css({width: window.innerWidth - scrollbarwidth, height: window.innerHeight}).addClass('sp-offcanvas-page');
 
             if (options.mode == 'push' || options.mode == 'reveal') {
                 $body.css((rtl ? 'margin-right' : 'margin-left'), (rtl ? -1 : 1) * (bar.outerWidth() * dir));
@@ -2384,7 +2231,7 @@
             $html.css('margin-top', scrollpos.y * -1).width(); // .width() - force redraw
 
 
-            bar.addClass('uk-offcanvas-bar-show');
+            bar.addClass('sp-offcanvas-bar-show');
 
             this._initElement(element);
 
@@ -2397,14 +2244,14 @@
         hide: function(force) {
 
             var $body = UI.$('body'),
-                panel = UI.$('.uk-offcanvas.uk-active'),
+                panel = UI.$('.sp-offcanvas.sp-active'),
                 rtl   = (UI.langdirection == 'right'),
-                bar   = panel.find('.uk-offcanvas-bar:first'),
+                bar   = panel.find('.sp-offcanvas-bar:first'),
                 finalize = function() {
-                    $body.removeClass('uk-offcanvas-page').css({width: '', height: '', marginLeft: '', marginRight: ''});
-                    panel.removeClass('uk-active');
+                    $body.removeClass('sp-offcanvas-page').css({width: '', height: '', marginLeft: '', marginRight: ''});
+                    panel.removeClass('sp-active');
 
-                    bar.removeClass('uk-offcanvas-bar-show');
+                    bar.removeClass('sp-offcanvas-bar-show');
                     $html.css('margin-top', '');
                     window.scrollTo(scrollpos.x, scrollpos.y);
                     bar.trigger('hide.uk.offcanvas', [panel, bar]);
@@ -2427,7 +2274,7 @@
                 }
 
                 setTimeout(function(){
-                    bar.removeClass('uk-offcanvas-bar-show');
+                    bar.removeClass('sp-offcanvas-bar-show');
                 }, 0);
 
             } else {
@@ -2444,12 +2291,12 @@
                 var target = UI.$(e.target);
 
                 if (e.type.match(/swipe/)) {
-                    if (target.parents('.uk-offcanvas-bar:first').length) return;
+                    if (target.parents('.sp-offcanvas-bar:first').length) return;
                 } else {
 
-                    if (!target.hasClass('uk-offcanvas-close')) {
-                        if (target.hasClass('uk-offcanvas-bar')) return;
-                        if (target.parents('.uk-offcanvas-bar:first').length) return;
+                    if (!target.hasClass('sp-offcanvas-close')) {
+                        if (target.hasClass('sp-offcanvas-bar')) return;
+                        if (target.parents('.sp-offcanvas-bar:first').length) return;
                     }
                 }
 
@@ -2481,7 +2328,7 @@
                     }
 
                     if (target.length && UI.Utils.scrollToElement) {
-                        UI.Utils.scrollToElement(target, UI.Utils.options(link.attr('data-uk-smooth-scroll') || '{}'));
+                        UI.Utils.scrollToElement(target, UI.Utils.options(link.attr('data-sp-smooth-scroll') || '{}'));
                     } else {
                         window.location.href = href;
                     }
@@ -2499,14 +2346,14 @@
         boot: function() {
 
             // init code
-            $html.on('click.offcanvas.uikit', '[data-uk-offcanvas]', function(e) {
+            $html.on('click.offcanvas.uikit', '[data-sp-offcanvas]', function(e) {
 
                 e.preventDefault();
 
                 var ele = UI.$(this);
 
                 if (!ele.data('offcanvasTrigger')) {
-                    var obj = UI.offcanvasTrigger(ele, UI.Utils.options(ele.attr('data-uk-offcanvas')));
+                    var obj = UI.offcanvasTrigger(ele, UI.Utils.options(ele.attr('data-sp-offcanvas')));
                     ele.trigger("click");
                 }
             });
@@ -2543,277 +2390,6 @@
 
     "use strict";
 
-    var $win           = UI.$win,
-        $doc           = UI.$doc,
-        scrollspies    = [],
-        checkScrollSpy = function() {
-            for(var i=0; i < scrollspies.length; i++) {
-                window.requestAnimationFrame.apply(window, [scrollspies[i].check]);
-            }
-        };
-
-    UI.component('scrollspy', {
-
-        defaults: {
-            target     : false,
-            cls        : 'uk-scrollspy-inview',
-            initcls    : 'uk-scrollspy-init-inview',
-            topoffset  : 0,
-            leftoffset : 0,
-            repeat     : false,
-            delay      : 0
-        },
-
-        boot: function() {
-
-            // listen to scroll and resize
-            $doc.on('scrolling.uk.document', checkScrollSpy);
-            $win.on('load resize orientationchange', UI.Utils.debounce(checkScrollSpy, 50));
-
-            // init code
-            UI.ready(function(context) {
-
-                UI.$('[data-uk-scrollspy]', context).each(function() {
-
-                    var element = UI.$(this);
-
-                    if (!element.data('scrollspy')) {
-                        var obj = UI.scrollspy(element, UI.Utils.options(element.attr('data-uk-scrollspy')));
-                    }
-                });
-            });
-        },
-
-        init: function() {
-
-            var $this = this, inviewstate, initinview, togglecls = this.options.cls.split(/,/), fn = function(){
-
-                var elements     = $this.options.target ? $this.element.find($this.options.target) : $this.element,
-                    delayIdx     = elements.length === 1 ? 1 : 0,
-                    toggleclsIdx = 0;
-
-                elements.each(function(idx){
-
-                    var element     = UI.$(this),
-                        inviewstate = element.data('inviewstate'),
-                        inview      = UI.Utils.isInView(element, $this.options),
-                        toggle      = element.attr('data-uk-scrollspy-cls') || togglecls[toggleclsIdx].trim();
-
-                    if (inview && !inviewstate && !element.data('scrollspy-idle')) {
-
-                        if (!initinview) {
-                            element.addClass($this.options.initcls);
-                            $this.offset = element.offset();
-                            initinview = true;
-
-                            element.trigger('init.uk.scrollspy');
-                        }
-
-                        element.data('scrollspy-idle', setTimeout(function(){
-
-                            element.addClass('uk-scrollspy-inview').toggleClass(toggle).width();
-                            element.trigger('inview.uk.scrollspy');
-
-                            element.data('scrollspy-idle', false);
-                            element.data('inviewstate', true);
-
-                        }, $this.options.delay * delayIdx));
-
-                        delayIdx++;
-                    }
-
-                    if (!inview && inviewstate && $this.options.repeat) {
-
-                        if (element.data('scrollspy-idle')) {
-                            clearTimeout(element.data('scrollspy-idle'));
-                            element.data('scrollspy-idle', false);
-                        }
-
-                        element.removeClass('uk-scrollspy-inview').toggleClass(toggle);
-                        element.data('inviewstate', false);
-
-                        element.trigger('outview.uk.scrollspy');
-                    }
-
-                    toggleclsIdx = togglecls[toggleclsIdx + 1] ? (toggleclsIdx + 1) : 0;
-
-                });
-            };
-
-            fn();
-
-            this.check = fn;
-
-            scrollspies.push(this);
-        }
-    });
-
-
-    var scrollspynavs = [],
-        checkScrollSpyNavs = function() {
-            for(var i=0; i < scrollspynavs.length; i++) {
-                window.requestAnimationFrame.apply(window, [scrollspynavs[i].check]);
-            }
-        };
-
-    UI.component('scrollspynav', {
-
-        defaults: {
-            cls          : 'uk-active',
-            closest      : false,
-            topoffset    : 0,
-            leftoffset   : 0,
-            smoothscroll : false
-        },
-
-        boot: function() {
-
-            // listen to scroll and resize
-            $doc.on('scrolling.uk.document', checkScrollSpyNavs);
-            $win.on('resize orientationchange', UI.Utils.debounce(checkScrollSpyNavs, 50));
-
-            // init code
-            UI.ready(function(context) {
-
-                UI.$('[data-uk-scrollspy-nav]', context).each(function() {
-
-                    var element = UI.$(this);
-
-                    if (!element.data('scrollspynav')) {
-                        var obj = UI.scrollspynav(element, UI.Utils.options(element.attr('data-uk-scrollspy-nav')));
-                    }
-                });
-            });
-        },
-
-        init: function() {
-
-            var ids     = [],
-                links   = this.find("a[href^='#']").each(function(){ if(this.getAttribute('href').trim()!=='#') ids.push(this.getAttribute('href')); }),
-                targets = UI.$(ids.join(",")),
-
-                clsActive  = this.options.cls,
-                clsClosest = this.options.closest || this.options.closest;
-
-            var $this = this, inviews, fn = function(){
-
-                inviews = [];
-
-                for (var i=0 ; i < targets.length ; i++) {
-                    if (UI.Utils.isInView(targets.eq(i), $this.options)) {
-                        inviews.push(targets.eq(i));
-                    }
-                }
-
-                if (inviews.length) {
-
-                    var navitems,
-                        scrollTop = $win.scrollTop(),
-                        target = (function(){
-                            for(var i=0; i< inviews.length;i++){
-                                if (inviews[i].offset().top - $this.options.topoffset >= scrollTop){
-                                    return inviews[i];
-                                }
-                            }
-                        })();
-
-                    if (!target) return;
-
-                    if ($this.options.closest) {
-                        links.blur().closest(clsClosest).removeClass(clsActive);
-                        navitems = links.filter("a[href='#"+target.attr('id')+"']").closest(clsClosest).addClass(clsActive);
-                    } else {
-                        navitems = links.removeClass(clsActive).filter("a[href='#"+target.attr("id")+"']").addClass(clsActive);
-                    }
-
-                    $this.element.trigger('inview.uk.scrollspynav', [target, navitems]);
-                }
-            };
-
-            if (this.options.smoothscroll && UI.smoothScroll) {
-                links.each(function(){
-                    UI.smoothScroll(this, $this.options.smoothscroll);
-                });
-            }
-
-            fn();
-
-            this.element.data('scrollspynav', this);
-
-            this.check = fn;
-            scrollspynavs.push(this);
-
-        }
-    });
-
-})(UIkit2);
-
-(function(UI) {
-
-    "use strict";
-
-    UI.component('smoothScroll', {
-
-        boot: function() {
-
-            // init code
-            UI.$html.on('click.smooth-scroll.uikit', '[data-uk-smooth-scroll]', function(e) {
-                var ele = UI.$(this);
-
-                if (!ele.data('smoothScroll')) {
-                    var obj = UI.smoothScroll(ele, UI.Utils.options(ele.attr('data-uk-smooth-scroll')));
-                    ele.trigger('click');
-                }
-
-                return false;
-            });
-        },
-
-        init: function() {
-
-            var $this = this;
-
-            this.on('click', function(e) {
-                e.preventDefault();
-                scrollToElement(UI.$(this.hash).length ? UI.$(this.hash) : UI.$('body'), $this.options);
-            });
-        }
-    });
-
-    function scrollToElement(ele, options) {
-
-        options = UI.$.extend({
-            duration: 1000,
-            transition: 'easeOutExpo',
-            offset: 0,
-            complete: function(){}
-        }, options);
-
-        // get / set parameters
-        var target    = ele.offset().top - options.offset,
-            docheight = UI.$doc.height(),
-            winheight = window.innerHeight;
-
-        if ((target + winheight) > docheight) {
-            target = docheight - winheight;
-        }
-
-        // animate to target, fire callback when done
-        UI.$('html,body').stop().animate({scrollTop: target}, options.duration, options.transition).promise().done(options.complete);
-    }
-
-    UI.Utils.scrollToElement = scrollToElement;
-
-    if (!UI.$.easing.easeOutExpo) {
-        UI.$.easing.easeOutExpo = function(x, t, b, c, d) { return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b; };
-    }
-
-})(UIkit2);
-
-(function(UI) {
-
-    "use strict";
-
     var Animations;
 
     UI.component('switcher', {
@@ -2834,11 +2410,11 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-switcher]', context).each(function() {
+                UI.$('[data-sp-switcher]', context).each(function() {
                     var switcher = UI.$(this);
 
                     if (!switcher.data('switcher')) {
-                        var obj = UI.switcher(switcher, UI.Utils.options(switcher.attr('data-uk-switcher')));
+                        var obj = UI.switcher(switcher, UI.Utils.options(switcher.attr('data-sp-switcher')));
                     }
                 });
             });
@@ -2863,11 +2439,11 @@
                 return;
             }
 
-            this.connect.on('click.uk.switcher', '[data-uk-switcher-item]', function(e) {
+            this.connect.on('click.uk.switcher', '[data-sp-switcher-item]', function(e) {
 
                 e.preventDefault();
 
-                var item = UI.$(this).attr('data-uk-switcher-item');
+                var item = UI.$(this).attr('data-sp-switcher-item');
 
                 if ($this.index == item) return;
 
@@ -2896,10 +2472,10 @@
 
         update: function() {
 
-            this.connect.children().removeClass('uk-active').attr('aria-hidden', 'true');
+            this.connect.children().removeClass('sp-active').attr('aria-hidden', 'true');
 
             var toggles = this.find(this.options.toggle),
-                active  = toggles.filter('.uk-active');
+                active  = toggles.filter('.sp-active');
 
             if (active.length) {
                 this.show(active, false);
@@ -2955,14 +2531,14 @@
                 animation = Animations.none;
             }
 
-            if (active.hasClass("uk-disabled")) return;
+            if (active.hasClass("sp-disabled")) return;
 
             // Update ARIA for Toggles
             toggles.attr('aria-expanded', 'false');
             active.attr('aria-expanded', 'true');
 
-            toggles.filter(".uk-active").removeClass("uk-active");
-            active.addClass("uk-active");
+            toggles.filter(".sp-active").removeClass("sp-active");
+            active.addClass("sp-active");
 
             if (this.options.connect && this.connect.length) {
 
@@ -2976,15 +2552,15 @@
 
                     var container = UI.$(this),
                         children  = UI.$(container.children()),
-                        current   = UI.$(children.filter('.uk-active')),
+                        current   = UI.$(children.filter('.sp-active')),
                         next      = UI.$(children.eq($this.index));
 
                         $this.animating = true;
 
                         animation.apply($this, [current, next]).then(function(){
 
-                            current.removeClass("uk-active");
-                            next.addClass("uk-active");
+                            current.removeClass("sp-active");
+                            next.addClass("sp-active");
 
                             // Update ARIA for connect
                             current.attr('aria-hidden', 'true');
@@ -3011,20 +2587,20 @@
         },
 
         'fade': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-fade', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-fade', current, next]);
         },
 
         'slide-bottom': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-bottom', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-bottom', current, next]);
         },
 
         'slide-top': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-top', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-top', current, next]);
         },
 
         'slide-vertical': function(current, next, dir) {
 
-            var anim = ['uk-animation-slide-top', 'uk-animation-slide-bottom'];
+            var anim = ['sp-animation-slide-top', 'sp-animation-slide-bottom'];
 
             if (current && current.index() > next.index()) {
                 anim.reverse();
@@ -3034,16 +2610,16 @@
         },
 
         'slide-left': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-left', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-left', current, next]);
         },
 
         'slide-right': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-right', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-right', current, next]);
         },
 
         'slide-horizontal': function(current, next, dir) {
 
-            var anim = ['uk-animation-slide-right', 'uk-animation-slide-left'];
+            var anim = ['sp-animation-slide-right', 'sp-animation-slide-left'];
 
             if (current && current.index() > next.index()) {
                 anim.reverse();
@@ -3053,7 +2629,7 @@
         },
 
         'scale': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-scale-up', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-scale-up', current, next]);
         }
     };
 
@@ -3080,7 +2656,7 @@
 
         release = function() {
 
-            if (current) current.hide().removeClass('uk-active '+clsOut+' uk-animation-reverse');
+            if (current) current.hide().removeClass('sp-active '+clsOut+' sp-animation-reverse');
 
             next.addClass(clsIn).one(UI.support.animation.end, function() {
 
@@ -3103,12 +2679,12 @@
 
             current.css('animation-duration', this.options.duration+'ms');
 
-            current.css('display', 'none').addClass(clsOut+' uk-animation-reverse').one(UI.support.animation.end, function() {
+            current.css('display', 'none').addClass(clsOut+' sp-animation-reverse').one(UI.support.animation.end, function() {
                 release();
             }.bind(this)).css('display', '');
 
         } else {
-            next.addClass('uk-active');
+            next.addClass('sp-active');
             release();
         }
 
@@ -3124,7 +2700,7 @@
     UI.component('tab', {
 
         defaults: {
-            target    : '>li:not(.uk-tab-responsive, .uk-disabled)',
+            target    : '>li:not(.sp-tab-responsive, .sp-disabled)',
             connect   : false,
             active    : 0,
             animation : false,
@@ -3137,12 +2713,12 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-tab]', context).each(function() {
+                UI.$('[data-sp-tab]', context).each(function() {
 
                     var tab = UI.$(this);
 
                     if (!tab.data('tab')) {
-                        var obj = UI.tab(tab, UI.Utils.options(tab.attr('data-uk-tab')));
+                        var obj = UI.tab(tab, UI.Utils.options(tab.attr('data-sp-tab')));
                     }
                 });
             });
@@ -3164,9 +2740,9 @@
 
                 var current = $this.find($this.options.target).not(this);
 
-                current.removeClass('uk-active').blur();
+                current.removeClass('sp-active').blur();
 
-                $this.trigger('change.uk.tab', [UI.$(this).addClass('uk-active'), $this.current]);
+                $this.trigger('change.uk.tab', [UI.$(this).addClass('sp-active'), $this.current]);
 
                 $this.current = UI.$(this);
 
@@ -3182,13 +2758,13 @@
             }
 
             // init responsive tab
-            this.responsivetab = UI.$('<li class="uk-tab-responsive uk-active"><a></a></li>').append('<div class="uk-dropdown uk-dropdown-small"><ul class="uk-nav uk-nav-dropdown"></ul><div>');
+            this.responsivetab = UI.$('<li class="sp-tab-responsive sp-active"><a></a></li>').append('<div class="sp-dropdown sp-dropdown-small"><ul class="sp-nav sp-nav-dropdown"></ul><div>');
 
-            this.responsivetab.dropdown = this.responsivetab.find('.uk-dropdown');
+            this.responsivetab.dropdown = this.responsivetab.find('.sp-dropdown');
             this.responsivetab.lst      = this.responsivetab.dropdown.find('ul');
             this.responsivetab.caption  = this.responsivetab.find('a:first');
 
-            if (this.element.hasClass('uk-tab-bottom')) this.responsivetab.dropdown.addClass('uk-dropdown-up');
+            if (this.element.hasClass('sp-tab-bottom')) this.responsivetab.dropdown.addClass('sp-dropdown-up');
 
             // handle click
             this.responsivetab.lst.on('click.uk.tab', 'a', function(e) {
@@ -3198,7 +2774,7 @@
 
                 var link = UI.$(this);
 
-                $this.element.children('li:not(.uk-tab-responsive)').eq(link.data('index')).trigger('click');
+                $this.element.children('li:not(.sp-tab-responsive)').eq(link.data('index')).trigger('click');
             });
 
             this.on('show.uk.switcher change.uk.tab', function(e, tab) {
@@ -3211,7 +2787,7 @@
             if (this.options.connect) {
 
                 this.switcher = UI.switcher(this.element, {
-                    toggle    : '>li:not(.uk-tab-responsive)',
+                    toggle    : '>li:not(.sp-tab-responsive)',
                     connect   : this.options.connect,
                     active    : this.options.active,
                     animation : this.options.animation,
@@ -3223,7 +2799,7 @@
             UI.dropdown(this.responsivetab, {mode: 'click', preventflip: 'y'});
 
             // init
-            $this.trigger('change.uk.tab', [this.element.find(this.options.target).not('.uk-tab-responsive').filter('.uk-active')]);
+            $this.trigger('change.uk.tab', [this.element.find(this.options.target).not('.sp-tab-responsive').filter('.sp-active')]);
 
             this.check();
 
@@ -3238,10 +2814,10 @@
 
         check: function() {
 
-            var children = this.element.children('li:not(.uk-tab-responsive)').removeClass('uk-hidden');
+            var children = this.element.children('li:not(.sp-tab-responsive)').removeClass('sp-hidden');
 
             if (!children.length) {
-                this.responsivetab.addClass('uk-hidden');
+                this.responsivetab.addClass('sp-hidden');
                 return;
             }
 
@@ -3265,9 +2841,9 @@
                     item  = UI.$(children.eq(i));
                     link  = item.find('a');
 
-                    if (item.css('float') != 'none' && !item.attr('uk-dropdown')) {
+                    if (item.css('float') != 'none' && !item.attr('sp-dropdown')) {
 
-                        if (!item.hasClass('uk-disabled')) {
+                        if (!item.hasClass('sp-disabled')) {
 
                             clone = UI.$(item[0].outerHTML);
                             clone.find('a').data('index', i);
@@ -3275,12 +2851,12 @@
                             this.responsivetab.lst.append(clone);
                         }
 
-                        item.addClass('uk-hidden');
+                        item.addClass('sp-hidden');
                     }
                 }
             }
 
-            this.responsivetab[this.responsivetab.lst.children('li').length ? 'removeClass':'addClass']('uk-hidden');
+            this.responsivetab[this.responsivetab.lst.children('li').length ? 'removeClass':'addClass']('sp-hidden');
         }
     });
 
@@ -3296,7 +2872,7 @@
 
         defaults: {
             target    : false,
-            cls       : 'uk-hidden',
+            cls       : 'sp-hidden',
             animation : false,
             duration  : 200
         },
@@ -3306,11 +2882,11 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-toggle]', context).each(function() {
+                UI.$('[data-sp-toggle]', context).each(function() {
                     var ele = UI.$(this);
 
                     if (!ele.data('toggle')) {
-                        var obj = UI.toggle(ele, UI.Utils.options(ele.attr('data-uk-toggle')));
+                        var obj = UI.toggle(ele, UI.Utils.options(ele.attr('data-sp-toggle')));
                     }
                 });
 
@@ -3328,7 +2904,7 @@
 
             var $this = this;
 
-            this.aria = (this.options.cls.indexOf('uk-hidden') !== -1);
+            this.aria = (this.options.cls.indexOf('sp-hidden') !== -1);
 
             this.on('click', function(e) {
 
@@ -3376,7 +2952,7 @@
 
                     } else {
 
-                        UI.Utils.animate(this, animations[1]+' uk-animation-reverse').then(function(){
+                        UI.Utils.animate(this, animations[1]+' sp-animation-reverse').then(function(){
                             ele.toggleClass($this.options.cls).css('animation-duration', '');
                             UI.Utils.checkDisplay(ele);
                         });
@@ -3402,201 +2978,13 @@
         updateAria: function() {
             if (this.aria && this.totoggle.length) {
                 this.totoggle.not('[aria-hidden]').each(function(){
-                    UI.$(this).attr('aria-hidden', UI.$(this).hasClass('uk-hidden'));
+                    UI.$(this).attr('aria-hidden', UI.$(this).hasClass('sp-hidden'));
                 });
             }
         }
     });
 
 })(UIkit2);
-
-//  Based on Zeptos touch.js
-//  https://raw.github.com/madrobby/zepto/master/src/touch.js
-//  Zepto.js may be freely distributed under the MIT license.
-
-;(function($){
-
-  if ($.fn.swipeLeft) {
-    return;
-  }
-
-
-  var touch = {}, touchTimeout, tapTimeout, swipeTimeout, longTapTimeout, longTapDelay = 750, gesture;
-  var hasTouchEvents = 'ontouchstart' in window,
-      hasPointerEvents = window.PointerEvent,
-      hasTouch = hasTouchEvents
-      || window.DocumentTouch && document instanceof DocumentTouch
-      || navigator.msPointerEnabled && navigator.msMaxTouchPoints > 0 // IE 10
-      || navigator.pointerEnabled && navigator.maxTouchPoints > 0; // IE >=11
-
-  function swipeDirection(x1, x2, y1, y2) {
-    return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down');
-  }
-
-  function longTap() {
-    longTapTimeout = null;
-    if (touch.last) {
-      if ( touch.el !== undefined ) touch.el.trigger('longTap');
-      touch = {};
-    }
-  }
-
-  function cancelLongTap() {
-    if (longTapTimeout) clearTimeout(longTapTimeout);
-    longTapTimeout = null;
-  }
-
-  function cancelAll() {
-    if (touchTimeout)   clearTimeout(touchTimeout);
-    if (tapTimeout)     clearTimeout(tapTimeout);
-    if (swipeTimeout)   clearTimeout(swipeTimeout);
-    if (longTapTimeout) clearTimeout(longTapTimeout);
-    touchTimeout = tapTimeout = swipeTimeout = longTapTimeout = null;
-    touch = {};
-  }
-
-  function isPrimaryTouch(event){
-    return event.pointerType == event.MSPOINTER_TYPE_TOUCH && event.isPrimary;
-  }
-
-  $(function(){
-    var now, delta, deltaX = 0, deltaY = 0, firstTouch;
-
-    if ('MSGesture' in window) {
-      gesture = new MSGesture();
-      gesture.target = document.body;
-    }
-
-    $(document)
-      .on('MSGestureEnd gestureend', function(e){
-
-        var swipeDirectionFromVelocity = e.originalEvent.velocityX > 1 ? 'Right' : e.originalEvent.velocityX < -1 ? 'Left' : e.originalEvent.velocityY > 1 ? 'Down' : e.originalEvent.velocityY < -1 ? 'Up' : null;
-
-        if (swipeDirectionFromVelocity && touch.el !== undefined) {
-          touch.el.trigger('swipe');
-          touch.el.trigger('swipe'+ swipeDirectionFromVelocity);
-        }
-      })
-      // MSPointerDown: for IE10
-      // pointerdown: for IE11
-      .on('touchstart MSPointerDown pointerdown', function(e){
-
-        if(e.type == 'MSPointerDown' && !isPrimaryTouch(e.originalEvent)) return;
-
-        firstTouch = (e.type == 'MSPointerDown' || e.type == 'pointerdown') ? e : e.originalEvent.touches[0];
-
-        now      = Date.now();
-        delta    = now - (touch.last || now);
-        touch.el = $('tagName' in firstTouch.target ? firstTouch.target : firstTouch.target.parentNode);
-
-        if(touchTimeout) clearTimeout(touchTimeout);
-
-        touch.x1 = firstTouch.pageX;
-        touch.y1 = firstTouch.pageY;
-
-        if (delta > 0 && delta <= 250) touch.isDoubleTap = true;
-
-        touch.last = now;
-        longTapTimeout = setTimeout(longTap, longTapDelay);
-
-        // adds the current touch contact for IE gesture recognition
-        if (e.originalEvent && e.originalEvent.pointerId && gesture && ( e.type == 'MSPointerDown' || e.type == 'pointerdown' || e.type == 'touchstart' ) ) {
-          gesture.addPointer(e.originalEvent.pointerId);
-        }
-
-      })
-      // MSPointerMove: for IE10
-      // pointermove: for IE11
-      .on('touchmove MSPointerMove pointermove', function(e){
-
-        if (e.type == 'MSPointerMove' && !isPrimaryTouch(e.originalEvent)) return;
-
-        firstTouch = (e.type == 'MSPointerMove' || e.type == 'pointermove') ? e : e.originalEvent.touches[0];
-
-        cancelLongTap();
-        touch.x2 = firstTouch.pageX;
-        touch.y2 = firstTouch.pageY;
-
-        deltaX += Math.abs(touch.x1 - touch.x2);
-        deltaY += Math.abs(touch.y1 - touch.y2);
-      })
-      // MSPointerUp: for IE10
-      // pointerup: for IE11
-      .on('touchend MSPointerUp pointerup', function(e){
-
-        if (e.type == 'MSPointerUp' && !isPrimaryTouch(e.originalEvent)) return;
-
-        cancelLongTap();
-
-        // swipe
-        if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > 30) || (touch.y2 && Math.abs(touch.y1 - touch.y2) > 30)){
-
-          swipeTimeout = setTimeout(function() {
-            if ( touch.el !== undefined ) {
-              touch.el.trigger('swipe');
-              touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
-            }
-            touch = {};
-          }, 0);
-
-        // normal tap
-        } else if ('last' in touch) {
-
-          // don't fire tap when delta position changed by more than 30 pixels,
-          // for instance when moving to a point and back to origin
-          if (isNaN(deltaX) || (deltaX < 30 && deltaY < 30)) {
-            // delay by one tick so we can cancel the 'tap' event if 'scroll' fires
-            // ('tap' fires before 'scroll')
-            tapTimeout = setTimeout(function() {
-
-              // trigger universal 'tap' with the option to cancelTouch()
-              // (cancelTouch cancels processing of single vs double taps for faster 'tap' response)
-              var event = $.Event('tap');
-              event.cancelTouch = cancelAll;
-              if ( touch.el !== undefined ) touch.el.trigger(event);
-
-              // trigger double tap immediately
-              if (touch.isDoubleTap) {
-                if ( touch.el !== undefined ) touch.el.trigger('doubleTap');
-                touch = {};
-              }
-
-              // trigger single tap after 250ms of inactivity
-              else {
-                touchTimeout = setTimeout(function(){
-                  touchTimeout = null;
-                  if ( touch.el !== undefined ) touch.el.trigger('singleTap');
-                  touch = {};
-                }, 250);
-              }
-            }, 0);
-          } else {
-            touch = {};
-          }
-          deltaX = deltaY = 0;
-        }
-      })
-      // when the browser window loses focus,
-      // for example when a modal dialog is shown,
-      // cancel all ongoing events
-      .on('touchcancel MSPointerCancel pointercancel', function(e){
-
-        // Ignore pointercancel if the event supports touch events, to prevent pointercancel in swipe gesture
-        if ((e.type == 'touchcancel' && hasTouchEvents && hasTouch) || (!hasTouchEvents && e.type == 'pointercancel' && hasPointerEvents)) {
-          cancelAll();
-        }
-
-    });
-
-    // scrolling the window indicates intention of the user
-    // to scroll, not tap or swipe, so cancel all ongoing events
-    $(window).on('scroll', cancelAll);
-  });
-
-  ['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(eventName){
-    $.fn[eventName] = function(callback){ return $(this).on(eventName, callback); };
-  });
-})(jQuery);
 
 (function(UI) {
 
@@ -3607,7 +2995,7 @@
     UI.component('stackMargin', {
 
         defaults: {
-            cls: 'uk-margin-small-top',
+            cls: 'sp-margin-small-top',
             rowfirst: false,
             observe: false
         },
@@ -3617,12 +3005,12 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-margin]', context).each(function() {
+                UI.$('[data-sp-margin]', context).each(function() {
 
                     var ele = UI.$(this);
 
                     if (!ele.data('stackMargin')) {
-                        UI.stackMargin(ele, UI.Utils.options(ele.attr('data-uk-margin')));
+                        UI.stackMargin(ele, UI.Utils.options(ele.attr('data-sp-margin')));
                     }
                 });
             });
@@ -3717,7 +3105,7 @@
                 // init code
                 UI.ready(function(context) {
 
-                    UI.$('iframe.uk-responsive-width, [data-uk-responsive]', context).each(function() {
+                    UI.$('iframe.sp-responsive-width, [data-sp-responsive]', context).each(function() {
 
                         var ele = UI.$(this), obj;
 
@@ -3764,7 +3152,7 @@
     UI.Utils.stackMargin = function(elements, options) {
 
         options = UI.$.extend({
-            cls: 'uk-margin-small-top'
+            cls: 'sp-margin-small-top'
         }, options);
 
         elements = UI.$(elements).removeClass(options.cls);
@@ -3907,7 +3295,7 @@
 
         // init code
         UI.ready(function(context) {
-            UI.Utils.inlineSvg('[data-uk-svg]', context);
+            UI.Utils.inlineSvg('[data-sp-svg]', context);
         });
 
     })({});
@@ -3932,346 +3320,6 @@
     }
 
 })(UIkit2);
-
-(function(addon) {
-
-    var component;
-
-    if (window.UIkit2) {
-        component = addon(UIkit2);
-    }
-
-    if (typeof define == 'function' && define.amd) {
-        define('uikit-autocomplete', ['uikit'], function(){
-            return component || addon(UIkit2);
-        });
-    }
-
-})(function(UI){
-
-    "use strict";
-
-    var active;
-
-    UI.component('autocomplete', {
-
-        defaults: {
-            minLength: 3,
-            param: 'search',
-            method: 'post',
-            delay: 300,
-            loadingClass: 'uk-loading',
-            flipDropdown: false,
-            skipClass: 'uk-skip',
-            hoverClass: 'uk-active',
-            source: null,
-            renderer: null,
-
-            // template
-
-            template: '<ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">{{~items}}<li data-value="{{$item.value}}"><a>{{$item.value}}</a></li>{{/items}}</ul>'
-        },
-
-        visible  : false,
-        value    : null,
-        selected : null,
-
-        boot: function() {
-
-            // init code
-            UI.$html.on('focus.autocomplete.uikit', '[data-uk-autocomplete]', function(e) {
-
-                var ele = UI.$(this);
-
-                if (!ele.data('autocomplete')) {
-                    UI.autocomplete(ele, UI.Utils.options(ele.attr('data-uk-autocomplete')));
-                }
-            });
-
-            // register outer click for autocompletes
-            UI.$html.on('click.autocomplete.uikit', function(e) {
-                if (active && e.target!=active.input[0]) active.hide();
-            });
-        },
-
-        init: function() {
-
-            var $this   = this,
-                select  = false,
-                trigger = UI.Utils.debounce(function(e) {
-
-                    if (select) {
-                        return (select = false);
-                    }
-
-                    $this.handle();
-                }, this.options.delay);
-
-
-            this.dropdown = this.find('.uk-dropdown');
-            this.template = this.find('script[type="text/autocomplete"]').html();
-            this.template = UI.Utils.template(this.template || this.options.template);
-            this.input    = this.find("input:first").attr("autocomplete", "off");
-
-            if (!this.dropdown.length) {
-               this.dropdown = UI.$('<div class="uk-dropdown"></div>').appendTo(this.element);
-            }
-
-            if (this.options.flipDropdown) {
-                this.dropdown.addClass('uk-dropdown-flip');
-            }
-
-            this.dropdown.attr('aria-expanded', 'false');
-
-            this.input.on({
-
-                keydown: function(e) {
-
-                    if (e && e.which && !e.shiftKey && $this.visible) {
-
-                        switch (e.which) {
-                            case 13: // enter
-                                select = true;
-
-                                if ($this.selected) {
-                                    e.preventDefault();
-                                    $this.select();
-                                }
-                                break;
-                            case 38: // up
-                                e.preventDefault();
-                                $this.pick('prev', true);
-                                break;
-                            case 40: // down
-                                e.preventDefault();
-                                $this.pick('next', true);
-                                break;
-                            case 27:
-                            case 9: // esc, tab
-                                $this.hide();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                },
-
-                keyup: trigger
-            });
-
-            this.dropdown.on('click', '.uk-autocomplete-results > *', function(){
-                $this.select();
-            });
-
-            this.dropdown.on('mouseover', '.uk-autocomplete-results > *', function(){
-                $this.pick(UI.$(this));
-            });
-
-            this.triggercomplete = trigger;
-        },
-
-        handle: function() {
-
-            var $this = this, old = this.value;
-
-            this.value = this.input.val();
-
-            if (this.value.length < this.options.minLength) return this.hide();
-
-            if (this.value != old) {
-                $this.request();
-            }
-
-            return this;
-        },
-
-        pick: function(item, scrollinview) {
-
-            var $this    = this,
-                items    = UI.$(this.dropdown.find('.uk-autocomplete-results').children(':not(.'+this.options.skipClass+')')),
-                selected = false;
-
-            if (typeof item !== "string" && !item.hasClass(this.options.skipClass)) {
-                selected = item;
-            } else if (item == 'next' || item == 'prev') {
-
-                if (this.selected) {
-                    var index = items.index(this.selected);
-
-                    if (item == 'next') {
-                        selected = items.eq(index + 1 < items.length ? index + 1 : 0);
-                    } else {
-                        selected = items.eq(index - 1 < 0 ? items.length - 1 : index - 1);
-                    }
-
-                } else {
-                    selected = items[(item == 'next') ? 'first' : 'last']();
-                }
-
-                selected = UI.$(selected);
-            }
-
-            if (selected && selected.length) {
-                this.selected = selected;
-                items.removeClass(this.options.hoverClass);
-                this.selected.addClass(this.options.hoverClass);
-
-                // jump to selected if not in view
-                if (scrollinview) {
-
-                    var top       = selected.position().top,
-                        scrollTop = $this.dropdown.scrollTop(),
-                        dpheight  = $this.dropdown.height();
-
-                    if (top > dpheight ||  top < 0) {
-                        $this.dropdown.scrollTop(scrollTop + top);
-                    }
-                }
-            }
-        },
-
-        select: function() {
-
-            if(!this.selected) return;
-
-            var data = this.selected.data();
-
-            this.trigger('selectitem.uk.autocomplete', [data, this]);
-
-            if (data.value) {
-                this.input.val(data.value).trigger('change');
-            }
-
-            this.hide();
-        },
-
-        show: function() {
-
-            if (this.visible) return;
-
-            this.visible = true;
-            this.element.addClass('uk-open');
-
-            if (active && active!==this) {
-                active.hide();
-            }
-
-            active = this;
-
-            // Update aria
-            this.dropdown.attr('aria-expanded', 'true');
-
-            return this;
-        },
-
-        hide: function() {
-            if (!this.visible) return;
-            this.visible = false;
-            this.element.removeClass('uk-open');
-
-            if (active === this) {
-                active = false;
-            }
-
-            // Update aria
-            this.dropdown.attr('aria-expanded', 'false');
-
-            return this;
-        },
-
-        request: function() {
-
-            var $this   = this,
-                release = function(data) {
-
-                    if(data) {
-                        $this.render(data);
-                    }
-
-                    $this.element.removeClass($this.options.loadingClass);
-                };
-
-            this.element.addClass(this.options.loadingClass);
-
-            if (this.options.source) {
-
-                var source = this.options.source;
-
-                switch(typeof(this.options.source)) {
-                    case 'function':
-
-                        this.options.source.apply(this, [release]);
-
-                        break;
-
-                    case 'object':
-
-                        if(source.length) {
-
-                            var items = [];
-
-                            source.forEach(function(item){
-                                if(item.value && item.value.toLowerCase().indexOf($this.value.toLowerCase())!=-1) {
-                                    items.push(item);
-                                }
-                            });
-
-                            release(items);
-                        }
-
-                        break;
-
-                    case 'string':
-
-                        var params ={};
-
-                        params[this.options.param] = this.value;
-
-                        UI.$.ajax({
-                            url: this.options.source,
-                            data: params,
-                            type: this.options.method,
-                            dataType: 'json'
-                        }).done(function(json) {
-                            release(json || []);
-                        });
-
-                        break;
-
-                    default:
-                        release(null);
-                }
-
-            } else {
-                this.element.removeClass($this.options.loadingClass);
-            }
-        },
-
-        render: function(data) {
-
-            this.dropdown.empty();
-
-            this.selected = false;
-
-            if (this.options.renderer) {
-
-                this.options.renderer.apply(this, [data]);
-
-            } else if(data && data.length) {
-
-                this.dropdown.append(this.template({items:data}));
-                this.show();
-
-                this.trigger('show.uk.autocomplete');
-            }
-
-            return this;
-        }
-    });
-
-    return UI.autocomplete;
-});
 
 (function(addon) {
 
@@ -4324,8 +3372,8 @@
         this.uuid    = UI.Utils.uid('notifymsg');
         this.element = UI.$([
 
-            '<div class="uk-notify-message">',
-                '<a class="uk-close"></a>',
+            '<div class="sp-notify-message">',
+                '<a class="sp-close"></a>',
                 '<div></div>',
             '</div>'
 
@@ -4335,7 +3383,7 @@
 
         // status
         if (this.options.status) {
-            this.element.addClass('uk-notify-message-'+this.options.status);
+            this.element.addClass('sp-notify-message-'+this.options.status);
             this.currentstatus = this.options.status;
         }
 
@@ -4344,7 +3392,7 @@
         messages[this.uuid] = this;
 
         if(!containers[this.options.pos]) {
-            containers[this.options.pos] = UI.$('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo('body').on("click", ".uk-notify-message", function(){
+            containers[this.options.pos] = UI.$('<div class="sp-notify sp-notify-'+this.options.pos+'"></div>').appendTo('body').on("click", ".sp-notify-message", function(){
 
                 var message = UI.$(this).data('notifyMessage');
 
@@ -4438,7 +3486,7 @@
                 return this.currentstatus;
             }
 
-            this.element.removeClass('uk-notify-message-'+this.currentstatus).addClass('uk-notify-message-'+status);
+            this.element.removeClass('sp-notify-message-'+this.currentstatus).addClass('sp-notify-message-'+status);
 
             this.currentstatus = status;
 
@@ -4464,8 +3512,8 @@
 
 window.UI = window.ui = (function (exports, window, UIkit) {
   var
-    ACTIVE_CLASS = 'uk-active',
-    HIDDEN_CLASS = 'uk-hidden',
+    ACTIVE_CLASS = 'sp-active',
+    HIDDEN_CLASS = 'sp-hidden',
     PASSIVE_EVENT = {passive: true};
 
   var
@@ -4573,7 +3621,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function isDefined(obj) {
-    return obj !== undefined;
+    return obj !== undefined && obj !== null;
   }
 
   function isUndefined(obj) {
@@ -4814,9 +3862,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function iconTemplate(config, linkIcon) {
-    var iconSize = config.iconSize ? ' uk-icon-{{iconSize}}' : '';
-    var icon = config.icon ? ' uk-icon-{{icon}}' : '';
-    return '<i class="{{iconClass}}' + icon + iconSize + (linkIcon ? ' uk-link-icon' : '') + '">{{iconContent}}</i>';
+    var iconSize = config.iconSize ? ' sp-icon-{{iconSize}}' : '';
+    var icon = config.icon ? ' sp-icon-{{icon}}' : '';
+    return '<i class="{{iconClass}}' + icon + iconSize + (linkIcon ? ' sp-link-icon' : '') + '">{{iconContent}}</i>';
   }
 
   function elementIconTemplate(templateFn) {
@@ -4831,19 +3879,49 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     };
   }
 
-  function template(templateObject, config, thisArg, parentNode) {
+  function containsInterpolateValues(string) {
+    return /{{[$\w]+}}/.test(string)
+  }
+
+  function containsHTML(string) {
+    return /(<\w+|&\w+;)/.test(string)
+  }
+
+  function template(templateObject, config, thisArg, parentNode, partOfArray) {
     var returnFlag = false;
 
     if (isFunction(templateObject)) {
       templateObject = templateObject.call(thisArg, config);
       returnFlag = true;
     }
-    else if (isNumber(templateObject)) {
-      templateObject = templateObject.toString();
-    }
-
-    if (isString(templateObject)) {
-      parentNode.innerHTML = interpolate(templateObject, config);
+    if (isNumber(templateObject)) {
+      if (partOfArray) {
+        parentNode.appendChild(document.createTextNode(templateObject.toString()))
+      } else {
+        parentNode.textContent = templateObject.toString()
+      }
+    } else if (isString(templateObject)) {
+      if (containsHTML(templateObject)) {
+        var innerHTML = templateObject
+        if (containsInterpolateValues(templateObject)) {
+          innerHTML = interpolate(templateObject, config);
+        }
+        if (partOfArray) {
+          parentNode.insertAdjacentHTML('beforeend', innerHTML)
+        } else {
+          parentNode.innerHTML = innerHTML
+        }
+      } else {
+        var text = templateObject
+        if (containsInterpolateValues(templateObject)) {
+          text = interpolate(templateObject, config);
+        }
+        if (partOfArray) {
+          parentNode.appendChild(document.createTextNode(text))
+        } else {
+          parentNode.textContent = text
+        }
+      }
     }
     else if (isElement(templateObject)) {
       parentNode.appendChild(templateObject);
@@ -4856,10 +3934,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }
     else if (isArray(templateObject)) {
       templateObject.forEach(function (obj) {
-        template(obj, config, thisArg, parentNode);
+        template(obj, config, thisArg, parentNode, true);
       });
     }
-    else {
+    else if (isDefined(templateObject)) {
       fail(returnFlag ?
         'Unrecognized return value from template' :
         'Unrecognized template!', {
@@ -5162,9 +4240,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   exports.classOptions = {
     flex: {
-      true: "uk-flex",
+      true: "sp-flex",
       false: "",
-      inline: "uk-flex-inline"
+      inline: "sp-flex-inline"
     },
     selectable: {
       true: "",
@@ -5175,7 +4253,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       nowrap: "",
       truncate: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     padding: prefixClassOptions({
       "": "",
       none: "remove",
@@ -5189,16 +4267,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "y-lg": "large-y",
       mini: "mini",
       small: "small",
-      medium: "uk-padding",
-      true: "uk-padding",
+      medium: "sp-padding",
+      true: "sp-padding",
       large: "large",
-    }, 'uk-padding-', false, ["true", "medium"]),
+    }, 'sp-padding-', false, ["true", "medium"]),
     flexSize: prefixClassOptions({
       "": "",
       none: "none",
       auto: "auto",
       flex: "1"
-    }, 'uk-flex-item-'),
+    }, 'sp-flex-item-'),
     flexAlign: prefixClassOptions({
       center: "",
       right: "",
@@ -5206,7 +4284,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       middle: "",
       bottom: "",
       "": ""
-    }, 'uk-flex-', true),
+    }, 'sp-flex-', true),
     flexLayout: prefixClassOptions({
       "": "",
       column: "",
@@ -5219,11 +4297,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "column-reverse-small": "",
       "row-reverse-large": "",
       "row-reverse-small": ""
-    }, 'uk-flex-', true),
+    }, 'sp-flex-', true),
     flexSpace: prefixClassOptions({
       between: "",
       around: ""
-    }, 'uk-flex-space-', true),
+    }, 'sp-flex-space-', true),
     flexWrap: prefixClassOptions({
       top: "",
       middle: "",
@@ -5231,10 +4309,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       reverse: "",
       "space-between": "",
       "space-around": "",
-      wrap: "uk-flex-wrap",
-      nowrap: "uk-flex-nowrap",
+      wrap: "sp-flex-wrap",
+      nowrap: "sp-flex-nowrap",
       "": ""
-    }, 'uk-flex-wrap-', true, ["nowrap", "wrap"]),
+    }, 'sp-flex-wrap-', true, ["nowrap", "wrap"]),
     flexOrder: prefixClassOptions({
       first: "",
       last: "",
@@ -5247,49 +4325,39 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "first-xlarge": "",
       "last-xlarge": "",
       "": ""
-    }, 'uk-flex-order-', true),
+    }, 'sp-flex-order-', true),
     card: prefixClassOptions({
-      true: ["uk-card", "uk-card-box"],
-      primary: ["uk-card", "uk-card-box", "uk-card-box-primary"],
-      secondary: ["uk-card", "uk-card-box", "uk-card-box-secondary"],
-      title: "",
-      badge: "",
+      true: "sp-card",
       teaser: "",
       header: "",
       body: "",
-      space: "",
+      shadow: "",
+      "body-blank": "",
       divider: "",
       "": ""
-    }, 'uk-card-', true, ["true", "primary", "secondary"]),
+    }, 'sp-card-', true, ["true"]),
+    cardStyle: prefixClassOptions({
+      primary: "",
+      success: "",
+      danger: "",
+      muted: "",
+      warning: "",
+      "": ""
+    }, 'sp-card-', true),
     badge: prefixClassOptions({
-      true: "badge",
-      notification: "badge-notification",
+      true: "sp-badge",
       success: ["badge", "badge-success"],
       warning: ["badge", "badge-warning"],
       danger: ["badge", "badge-danger"],
       primary: ["badge", "badge-primary"],
       "": ""
-    }, 'uk-', true),
+    }, 'sp-', true, ['true']),
     display: prefixClassOptions({
       block: "",
       inline: "",
       "inline-block": "",
       "": ""
-    }, 'uk-display-', true),
-    halign: prefixClassOptions({
-      center: "",
-      left: "",
-      right: "",
-      "medium-left": "",
-      "medium-right": "",
-      "": ""
-    }, 'uk-align-', true),
-    valign: prefixClassOptions({
-      middle: "align-middle",
-      parent: "align",
-      bottom: "align-bottom",
-      "": ""
-    }, 'uk-vertical-'),
+    }, 'sp-display-', true),
     position: prefixClassOptions({
       "top": "",
       "top-left": "",
@@ -5302,30 +4370,31 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "absolute": "",
       "z-index": "",
       "": ""
-    }, 'uk-position-', true),
+    }, 'sp-position-', true),
     fill: prefixClassOptions({
       height: "height-1-1",
       width: "width-100",
       screen: ["height-1-1", "width-100"],
       "": ""
-    }, 'uk-'),
+    }, 'sp-'),
     float: prefixClassOptions({
       left: "",
       right: "",
-      clearfix: "uk-clearfix",
+      clearfix: "sp-clearfix",
       "": ""
-    }, 'uk-float-', true, ['clearfix']),
+    }, 'sp-float-', true, ['clearfix']),
     scroll: prefixClassOptions({
       xy: "container",
       y: "ycontainer",
       x: "xcontainer",
-      text: "uk-scrollable-text",
+      text: "sp-scrollable-text",
+      hidden: "",
       "": ""
-    }, 'uk-overflow-', false, ['text']),
+    }, 'sp-overflow-', false, ['text']),
     hidden: {
       true: HIDDEN_CLASS,
       false: "",
-      hover: "uk-hidden-hover"
+      hover: "sp-hidden-hover"
     },
     margin: prefixClassOptions({
       "": "",
@@ -5353,7 +4422,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "right-lg": "large-right",
       "right-sm": "small-right",
       "right-mi": "mini-right"
-    }, 'uk-margin-'),
+    }, 'sp-margin-'),
     screen: prefixClassOptions({
       "small": "visible-small",
       "medium": "visible-medium",
@@ -5362,12 +4431,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "except-medium": "hidden-medium",
       "except-large": "hidden-large",
       "": ""
-    }, 'uk-'),
+    }, 'sp-'),
     device: prefixClassOptions({
       touch: "notouch",
       notouch: "touch",
       "": ""
-    }, 'uk-hidden-'),
+    }, 'sp-hidden-'),
     text: prefixClassOptions({
       small: "",
       large: "",
@@ -5376,7 +4445,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       lowercase: "",
       uppercase: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     textColor: prefixClassOptions({
       muted: "",
       primary: "",
@@ -5385,7 +4454,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       danger: "",
       contrast: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     textAlign: prefixClassOptions({
       middle: "",
       top: "",
@@ -5398,7 +4467,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "center-small": "",
       justify: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     animation: prefixClassOptions({
       fade: "",
       "scale-up": "",
@@ -5421,7 +4490,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "bottom-right": "",
       hover: "",
       "": ""
-    }, 'uk-animation-', true)
+    }, 'sp-animation-', true)
   };
 
   function createElement(name, attributes, html) {
@@ -5530,7 +4599,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       dragged.target.dispatch("onItemDragEnd", [dragged.config, dragged.node, e]);
 
-      removeClass(dragged.node, 'uk-active-drag');
+      removeClass(dragged.node, 'sp-active-drag');
 
       nodeStyle.top = dragged.originalPos.top;
       nodeStyle.left = dragged.originalPos.left;
@@ -5545,8 +4614,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     var resizer = exports.$activeResizer;
     if (resizer) {
       if (resizer.dragging) {
-        addClass(resizer.dragHandle, 'uk-hidden');
-        addClass(resizer.dragBackdrop, 'uk-hidden');
+        addClass(resizer.dragHandle, 'sp-hidden');
+        addClass(resizer.dragBackdrop, 'sp-hidden');
         resizer.dragging = false;
         resizer.dispatch("onHandleResized", [resizer.updateDragHandlePosition(e), resizer.el, e]);
       }
@@ -5571,7 +4640,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         // Begin drag event
         exports.$dragged = selectedForDrag;
         exports._selectedForDrag = null;
-        addClass(selectedForDrag.node, 'uk-active-drag');
+        addClass(selectedForDrag.node, 'sp-active-drag');
 
         // Fire drag listener event
         selectedForDrag.target.dispatch("onItemDragStart",
@@ -5605,7 +4674,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   function windowOnLoad() {
     exports.$ready = true;
-    setAttributes(document.body, {"data-uk-observe": ""});
+    setAttributes(document.body, {"data-sp-observe": ""});
   }
 
   function findDroppableParent(node) {
@@ -6046,7 +5115,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         if (value) {
           // Must allow default events to open uploader
           var $this = this;
-          addClass($this.el, "uk-form-file");
+          addClass($this.el, "sp-form-file");
           var uploader = $this._uploader = createElement('INPUT', {type: 'file', multiple: value == 'multiple' ? value : null});
           uploader.onchange = function (e) {
             $this.dispatch('onFileChange', [getConfig($this), this, e])
@@ -6141,13 +5210,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       /**
        * Makes the element invisible, which doesn't affect the layout.
        */
-      addClass(this.el, "uk-invisible");
+      addClass(this.el, "sp-invisible");
     },
     reveal: function () {
       /**
        * Makes the element visible again.
        */
-      removeClass(this.el, "uk-invisible");
+      removeClass(this.el, "sp-invisible");
     },
     isEnabled: function () {
       /**
@@ -6358,13 +5427,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   exports.FormControl = {
     __name__: 'FormControl',
     $defaults: {
-      formDangerClass: "uk-form-danger",
-      formSuccessClass: "uk-form-success",
-      helpDangerClass: "uk-text-danger",
-      helpSuccessClass: "uk-text-success",
+      formDangerClass: "sp-form-danger",
+      formSuccessClass: "sp-form-success",
+      helpDangerClass: "sp-text-danger",
+      helpSuccessClass: "sp-text-success",
       helpTag: "P",
-      helpTagClass: "uk-form-help-block",
-      helpTagClassInline: "uk-form-help-inline"
+      helpTagClass: "sp-form-help-block",
+      helpTagClassInline: "sp-form-help-inline"
     },
     $setters: extend(
       classSetters({
@@ -6372,7 +5441,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           large: "",
           small: "",
           "": ""
-        }, 'uk-form-', true)
+        }, 'sp-form-', true)
       }),
       {
         formClass: function (value) {
@@ -6535,7 +5604,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.modal = def({
     __name__: "modal",
     $defaults: {
-      tagClass: "uk-modal",
+      tagClass: "sp-modal",
       light: false,
       closeButton: true,
       bgClose: true,
@@ -6552,9 +5621,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     __init__: function (config) {
       var self = this;
-      self.header = createElement("DIV", {class: "uk-modal-header"});
-      self.footer = createElement("DIV", {class: "uk-modal-footer"});
-      self.body = createElement("DIV", {class: "uk-modal-dialog"});
+      self.header = createElement("DIV", {class: "sp-modal-header"});
+      self.footer = createElement("DIV", {class: "sp-modal-footer"});
+      self.body = createElement("DIV", {class: "sp-modal-dialog"});
 
       if (config.headerClass) addClass(self.header, config.headerClass);
       if (config.dialogClass) addClass(self.body, config.dialogClass);
@@ -6573,7 +5642,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           scroll: "",
           full: "",
           "": ""
-        }, 'uk-modal-dialog-', true)
+        }, 'sp-modal-dialog-', true)
       }, "body"),
       {
         bodyWidth: function (value) {
@@ -6588,7 +5657,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           if (value) {
             var self = this;
             var close = self.closeButton = createElement("A",
-              {class: "uk-modal-close uk-close"});
+              {class: "sp-modal-close sp-close"});
             var body = self.body;
 
             if (body.firstChild) {
@@ -6623,7 +5692,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         caption: function (value) {
           var self = this;
           if (!self.caption)
-            self.caption = createElement("DIV", {class: "uk-modal-caption"});
+            self.caption = createElement("DIV", {class: "sp-modal-caption"});
           self.caption.innerHTML = value;
           self.body.appendChild(self.caption);
         }
@@ -6690,24 +5759,34 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       buttonStyle: prefixClassOptions({
         link: "button-link",
         button: "button",
+        shadow: "button-shadow",
         "": ""
-      }, 'uk-'),
+      }, 'sp-'),
       color: prefixClassOptions({
         primary: "",
         success: "",
         danger: "",
         muted: "",
         "": ""
-      }, 'uk-button-', true),
+      }, 'sp-button-', true),
       size: prefixClassOptions({
         mini: "",
         small: "",
         large: "",
         "": ""
-      }, 'uk-button-', true)
+      }, 'sp-button-', true)
     }),
     template: elementIconTemplate(function (config) {
-      return config.label ? '<span class="{{labelClass}}">{{label}}</span>' : ''
+      if (config.label) {
+        if (config.labelClass) {
+          return '<span class="{{labelClass}}">{{label}}</span>';
+        } else if (config.icon || config.iconClass) {
+          return '<span>{{label}}</span>';
+        } else {
+          return config.label;
+        }
+      }
+      return ''
     }),
     select: function () {
       /**
@@ -6740,7 +5819,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     setLabel: function (value) {
       /**
        * Sets the label (HTML accepted) of the button component.
-       * @param value
+       * @param value The label value, which can be HTML.
        */
       getConfig(this).label = value;
       this.render();
@@ -6764,14 +5843,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         button: "",
         justify: "",
         "": ""
-      }, 'uk-icon-', true),
+      }, 'sp-icon-', true),
       size: prefixClassOptions({
         small: "",
         medium: "",
         large: "",
         xlarge: "",
         "": ""
-      }, 'uk-icon-', true)
+      }, 'sp-icon-', true)
     }),
     template: function (config) {
       return isFunction(config.iconTemplate) ?
@@ -6789,7 +5868,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     $setters: classSetters({
       labelStyle: {
-        form: "uk-form-label",
+        form: "sp-form-label",
         "": ""
       }
     }),
@@ -6820,13 +5899,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       label: "",
       htmlTag: "A",
       buttonStyle: ""
-    },
-    $setters: classSetters({
-      linkStyle: {
-        '': '',
-        'line': 'uk-active-line'
-      }
-    })
+    }
   }, $definitions.button, exports.MouseEvents);
 
 
@@ -6834,7 +5907,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "progress",
     $defaults: {
       htmlTag: "DIV",
-      tagClass: "uk-progress",
+      tagClass: "sp-progress",
       fill: "width"
     },
     $setters: extend(classSetters({
@@ -6842,7 +5915,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         mini: "",
         small: "",
         "": ""
-      }, 'uk-progress-', true),
+      }, 'sp-progress-', true),
       color: prefixClassOptions({
         danger: "",
         warning: "",
@@ -6850,7 +5923,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         primary: "",
         striped: "",
         "": ""
-      }, 'uk-progress-', true)
+      }, 'sp-progress-', true)
     }), {
       value: function (value) {
         if (isDefined(value))
@@ -6860,7 +5933,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     render: function () {
     },
     __init__: function () {
-      this._bar = createElement("DIV", {class: "uk-progress-bar"});
+      this._bar = createElement("DIV", {class: "sp-progress-bar"});
       this.el.appendChild(this._bar);
     },
     getValue: function () {
@@ -6953,11 +6026,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $setters: extend(
       classSetters({
         color: prefixClassOptions({
-          "success": "",
-          "danger": "",
-          "warning": "",
+          "primary": '',
+          "success": '',
+          "danger": '',
+          "warning": '',
           "": ""
-        }, 'uk-toggle-', true)
+        }, 'sp-toggle-', true)
       }),
       {
         checked: function (value) {
@@ -6967,10 +6041,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     ),
     $defaults: {
       htmlTag: "LABEL",
-      tagClass: "uk-toggle",
+      tagClass: "sp-toggle",
       type: 'checkbox'
     },
-    template: '<input><div class="uk-toggle-slider"></div>',
+    template: '<input><div class="sp-toggle-slider"></div>',
     getFormControl: function () {
       /**
        * Get the HTML input element.
@@ -7002,27 +6076,33 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
 
   $definitions.input = def({
-    __name__: "input",
+    __name__: 'input',
     $defaults: {
-      htmlTag: "INPUT",
-      tagClass: "uk-input",
+      htmlTag: 'INPUT',
+      tagClass: 'sp-input',
+      inputStyle: '',
       width: ""
     },
     $setters: extend(
       classSetters({
+        inputStyle: prefixClassOptions({
+          line: '',
+          round: '',
+          "": ""
+        }, 'sp-input-', true),
         width: prefixClassOptions({
           "": "",
           mini: "",
           small: "",
           medium: "",
           large: "",
-          full: "uk-width-100"
-        }, 'uk-form-width-', true, ['full']),
+          full: "sp-width-100"
+        }, 'sp-form-width-', true, ['full']),
         size: prefixClassOptions({
           "": "",
           small: "",
           large: ""
-        }, 'uk-form-', true)
+        }, 'sp-form-', true)
       }),
     {
       readonly: function (value) {
@@ -7072,70 +6152,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, exports.InputControl, exports.ChangeEvent, exports.FormControl, $definitions.element);
 
 
-  $definitions.autocomplete = def({
-    __name__: "autocomplete",
-    template: '<input class="uk-input" style="width:100%">',
-    $defaults: {
-      htmlTag: "DIV",
-      tagClass: "uk-autocomplete",
-      placeholder: "",
-      type: "text",
-      minLength: 0,
-      caseSensitive: false,
-      sources: [],
-      autocomplete: function (release) {
-        var self = this;
-        var searchValue = self.getValue();
-        var config = self.config;
-        if (!config.caseSensitive) searchValue = searchValue.toLowerCase();
-
-        release(self._getSource().filter(function (item) {
-          var value = config.caseSensitive ? item.value : item.value.toLowerCase();
-          return value.indexOf(searchValue) != -1;
-        }));
-      }
-    },
-    $setters: {
-      sources: function (value) {
-        if (isFunction(value))
-          this._getSource = value;
-        else
-          this._getSource = echo(value);
-      },
-      autocomplete: function (value) {
-        var self = this;
-        var autocomplete = self._autocomplete = UIkit.autocomplete(self.el,
-          {source: bind(value, self), minLength: self.config.minLength});
-        self.el.style.wordBreak = "break-word";
-        autocomplete.dropdown.addClass('uk-dropdown-small');
-        autocomplete.on("selectitem.uk.autocomplete", function (e, obj) {
-          self.dispatch("onChange", [obj.value]);
-          self.dispatch("onAutocomplete", [obj]);
-        });
-      }
-    },
-    getFormControl: function () {
-      /**
-       * Gets the HTML input element.
-       * @returns {Element}
-       */
-      return this.el.firstChild;
-    }
-  }, $definitions.input);
-
-
   $definitions.search = def({
     __name__: "search",
     $defaults: {
-      htmlTag: "DIV",
-      tagClass: "uk-search",
-      placeholder: "Search...",
-      iconClass: "uk-icon-search uk-search-icon",
+      htmlTag: 'DIV',
+      tagClass: 'sp-search',
+      placeholder: 'Search...',
+      iconClass: "sp-icon-search-16 sp-search-icon",
       iconContent: "",
-      icon: "search",
+      icon: 'search',
       iconTemplate: iconTemplate,
-      inputClass: "uk-search-field",
-      type: "search"
+      inputClass: 'sp-input',
+      type: 'search'
     },
     template: elementIconTemplate(function () {
       return '<input class="{{inputClass}}">'
@@ -7153,7 +6181,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.drawer = def({
     __name__: "drawer",
     $defaults: {
-      tagClass: "uk-offcanvas",
+      tagClass: "sp-offcanvas",
       $blockDrawerOpen: false,
       $blockDrawerPan: false,
       $closeInProgress: false,
@@ -7166,12 +6194,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         touchOnly: {
           "": "",
           "false": "",
-          "true": 'uk-offcanvas-touch'
+          "true": 'sp-offcanvas-touch'
         },
         flipped: {
           "": "",
           "false": "",
-          "true": "uk-offcanvas-flip"
+          "true": "sp-offcanvas-flip"
         }
       }),
       {
@@ -7236,7 +6264,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __after__: function () {
       var $this = this;
       var content = $this.el.firstChild;
-      if (content) addClass(content, 'uk-offcanvas-bar');
+      if (content) addClass(content, 'sp-offcanvas-bar');
 
       var flipped = $this.isFlipped();
       var swipeGesture = $this.closeSwipe = new DrawerSwipe($this.element, {
@@ -7252,7 +6280,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.onAnimate = function () {
-        return !$this.openSwipe.closeInProgress;
+        return !$this.openSwipe || !$this.openSwipe.closeInProgress;
       };
 
       swipeGesture.onPan = function () {
@@ -7270,12 +6298,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.applyChanges = function (percent) {
-        $this.openSwipe.percent = $this.closeSwipe.percent = percent;
+        if ($this.openSwipe && $this.closeSwipe) {
+          $this.openSwipe.percent = $this.closeSwipe.percent = percent;
+        }
         var contentElement = $this.element.firstChild;
         if (contentElement) {
           var elementStyle = $this.element.style;
           var contentElementStyle = contentElement.style;
-          var transform = "translateX(" + percent + "%)";
+          var transform = $this.config.flipped ? "translateX(100vw) translateX(-" + (100 - percent) + "%)" : "translateX(" + percent + "%)";
           var transition = "none";
           var bgTransition = "background-color 100ms linear";
           var backface = "hidden";
@@ -7305,9 +6335,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     finalize: function () {
-      $('body').removeClass('uk-offcanvas-page');
-      removeClass(this.element, 'uk-active');
-      this.content().removeClass('uk-offcanvas-bar-show');
+      $('body').removeClass('sp-offcanvas-page');
+      removeClass(this.element, 'sp-active');
+      this.content().removeClass('sp-offcanvas-bar-show');
     },
 
     showDrawer: function() {
@@ -7316,11 +6346,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var body = $("body");
 
         $($this.element)
-          .addClass("uk-active");
+          .addClass("sp-active");
 
-        body.addClass("uk-offcanvas-page");
+        body.addClass("sp-offcanvas-page");
         body.width();  // .width() - force redraw to apply css
-        $this.content().addClass("uk-offcanvas-bar-show");
+        $this.content().addClass("sp-offcanvas-bar-show");
         return true;
       }
       return false;
@@ -7342,7 +6372,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     content: function () {
-      return $(this.el).find(".uk-offcanvas-bar");
+      return $(this.el).find(".sp-offcanvas-bar");
     },
 
     isVisible: function () {
@@ -7350,7 +6380,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     isFlipped: function () {
-      return hasClass(this.el, "uk-offcanvas-flip");
+      return hasClass(this.el, "sp-offcanvas-flip");
     }
   }, $definitions.element);
 
@@ -7359,7 +6389,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "tooltip",
     $defaults: {
       label: "",
-      tagClass: "uk-tooltip",
+      tagClass: "sp-tooltip",
       direction: "top",
       device: "notouch",
       activeClass: ACTIVE_CLASS
@@ -7374,9 +6404,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         "bottom-right": "",
         left: "",
         right: ""
-      }, 'uk-tooltip-', true)
+      }, 'sp-tooltip-', true)
     }),
-    template: '<div class="uk-tooltip-inner">{{label}}</div>',
+    template: '<div class="sp-tooltip-inner">{{label}}</div>',
     isOpened: function () {
       /**
        * Returns if the tooltip is open.
@@ -7425,8 +6455,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       padding: "none",
       justify: false,
       dropdownDelay: 0,
-      dropdownClass: "uk-dropdown-close",
-      dropdownAnimation: "uk-animation-scale-up-y uk-animation-top-center",
+      dropdownClass: "sp-dropdown-close",
+      dropdownAnimation: "sp-animation-scale-up-y sp-animation-top-center",
       dropdownRect: null,
       blank: false
     },
@@ -7442,7 +6472,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self.el.appendChild(dropdownContainer);
         self._inner = exports.new(value, dropdownContainer);
         self.$components.push(self._inner);
-      }
+      },
+      dropdownStyle: prefixClassOptions({
+        small: '',
+        blank: '',
+        scrollable: '',
+        "": ""
+      }, 'sp-dropdown-', true),
     },
     __init__: function (config) {
       var self = this;
@@ -7461,8 +6497,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     getDropdownClass: function () {
       var config = getConfig(this);
       var result = config.dropdownClass;
-      result += config.blank ? " uk-dropdown-blank" : " uk-dropdown";
-      result += config.scrollable ? " uk-dropdown-scrollable" : "";
+      result += config.blank ? " sp-dropdown-blank" : " sp-dropdown";
+      result += config.scrollable ? " sp-dropdown-scrollable" : "";
       result += " " + config.dropdownAnimation;
       return result;
     },
@@ -7478,7 +6514,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * Returns if the dropdown is open.
        * @returns {boolean}
        */
-      return hasClass(this.el, 'uk-open');
+      return hasClass(this.el, 'sp-open');
     },
     open: function (args, cb) {
       /**
@@ -8095,6 +7131,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       htmlTag: "UL",
       itemTag: "LI",
+      itemTagClass: "sp-list-item",
       selectable: false,
       closeButton: false,
       listStyle: "list",
@@ -8110,19 +7147,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           "striped": ["nav", "list", "list-striped"],
           "line": ["list", "list-line"],
           "navbar": "navbar-nav",
-          "subnav": "subnav",
-          "subnav-line": ["subnav", "subnav-line"],
-          "subnav-pill": ["subnav", "subnav-pill"],
+          "nav-side-primary": ["nav", "nav-side", "nav-primary"],
+          "nav-side-success": ["nav", "nav-side", "nav-success"],
+          "danger": "nav-danger",
           "list": "list",
           "tab": "tab",
-          "tab-flip": "tab-flip",
-          "tab-center": "tab-center",
-          "tab-bottom": ["tab", "tab-bottom"],
-          "tab-left": ["tab", "tab-left"],
-          "tab-right": ["tab", "tab-right"],
+          "tab-vertical": ["tab", "flex-column"],
+          "tab-primary": ["tab", "primary"],
+          "tab-success": ["tab", "success"],
+          "tab-muted": ["tab", "muted"],
+          "tab-danger": ["tab", "danger"],
           "breadcrumb": "breadcrumb",
           "": ""
-        }, 'uk-')
+        }, 'sp-')
       }),
       {
         tab: function (value) {
@@ -8167,7 +7204,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self.addListener("onItemSelectionChanged", self._onItemSelectionChanged);
         if (config.tab == 'responsive') {
           self.addListener("onDOMChanged", self._onDOMChanged);
-          self.add({label: "<i class='uk-icon-bars'></i>", $tabMenu: true, batch: "$menu"}, self.headNode);
+          self.add({label: "<i class='sp-icon-bars'></i>", $tabMenu: true, batch: "$menu"}, self.headNode);
           $windowListeners.resize.push(bind(self.updateFit, self));
           self.dispatch("onDOMChanged", [null, "refresh"]);
         }
@@ -8231,7 +7268,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       self.each(function (item) {
         // Show everything for checking y-offset (keep invisible to avoid blink)
-        addClass(this.$elements[item.id], "uk-invisible");
+        addClass(this.$elements[item.id], "sp-invisible");
         // Update batch according to $selected state
         if (!item.$tabMenu) {
           item.batch = item.$selected ? "$selected" : undefined;
@@ -8249,7 +7286,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, self.$elements);
 
       self.each(function (item) {
-        removeClass(this.$elements[item.id], "uk-invisible");
+        removeClass(this.$elements[item.id], "sp-invisible");
       }, self);
 
       if (doResponsive) {
@@ -8347,8 +7384,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     itemClass: function (item) {
       var cls = $definitions.stack.prototype.itemClass.call(this, item);
-      if (item.$header) cls += " uk-nav-header";
-      if (item.$divider) cls += " uk-nav-divider";
+      if (item.$header) cls += " sp-nav-header";
+      if (item.$divider) cls += " sp-nav-divider";
       return cls;
     },
     template: function (item) {
@@ -8386,7 +7423,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       templateArray.forEach(function (itemTemplate) {
         if (isString(itemTemplate)) {
-          el.innerHTML = itemTemplate;
+          if (containsHTML(itemTemplate)) {
+            el.innerHTML = itemTemplate;
+          } else {
+            el.textContent = itemTemplate;
+          }
         }
         else if (isUndefined(itemTemplate) || itemTemplate === null) {
           // Ignore undefined and nulls
@@ -8626,8 +7667,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     template: function (config) {
       return interpolate(
-        '<a><i class="uk-icon-{{icon}}" style="margin-left: {{margin}}px">' +
-        '</i><span class="uk-margin-small-left">{{label}}</span></a>',
+        '<a><i class="sp-icon-{{icon}}" style="margin-left: {{margin}}px">' +
+        '</i><span class="sp-margin-small-left">{{label}}</span></a>',
         {
           icon: getChevron(config),
           label: config.label,
@@ -8636,7 +7677,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       function getChevron (item) {
         if (item.$children && item.$children.length > 0) {
-          return item.$closed ? 'chevron-right' : 'chevron-down';
+          return item.$closed ? 'chevron-right-16' : 'chevron-down-16';
         } else {
           return 'blank';
         }
@@ -8737,7 +7778,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.table = def({
     __name__: "table",
     $defaults: {
-      tagClass: "uk-table",
+      tagClass: "sp-table",
       htmlTag: "TABLE",
       itemTag: "TR",
       flex: false,
@@ -8762,8 +7803,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           hover: "",
           striped: "",
           condensed: "",
+          flat: "",
           "": ""
-        }, 'uk-table-', true)
+        }, 'sp-table-', true)
       }),
       {
         columns: function (value) {
@@ -8838,7 +7880,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.resizer = def({
     __name__: 'resizer',
     $defaults: {
-      tagClass: 'uk-resizer',
+      tagClass: 'sp-resizer',
       direction: 'x',
       minValue: 0,
       maxValue: Number.MAX_VALUE
@@ -8852,8 +7894,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __after__: function (config) {
       var $this = this;
       var el = $this.el
-      var dragHandle = createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
-      var dragBackdrop = createElement('div', {class: 'uk-hidden uk-resizer-drag-backdrop'});
+      var dragHandle = createElement('div', {class: 'sp-hidden sp-resizer-drag-handle'});
+      var dragBackdrop = createElement('div', {class: 'sp-hidden sp-resizer-drag-backdrop'});
       var body = document.body
       $this.dragHandle = dragHandle;
       $this.dragBackdrop = dragBackdrop;
@@ -8881,8 +7923,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           preventEvent(e)  // Stop Chrome changing to globe icon
           exports.$activeResizer = $this;
           updateDragHandlePosition(e);
-          removeClass(dragHandle, 'uk-hidden');
-          removeClass(dragBackdrop, 'uk-hidden');
+          removeClass(dragHandle, 'sp-hidden');
+          removeClass(dragBackdrop, 'sp-hidden');
           var parentRect = $this.el.parentNode.getBoundingClientRect();
           extend(dragBackdrop.style, {
             left: parentRect.left + 'px',
@@ -8949,7 +7991,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.scroller = def({
     __name__: 'scroller',
     $defaults: {
-      tagClass: 'uk-scroller-container',
+      tagClass: 'sp-scroller-container',
       scrollDirection: 'y',
       nativeScroll: false,
       flex: true
@@ -8960,11 +8002,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var scrollDirection = $this.scrollDirection = config.scrollDirection;
 
       $this.wrapper = createElement('DIV');
-      addClass($this.wrapper, 'uk-scroller-wrapper');
+      addClass($this.wrapper, 'sp-scroller-wrapper');
       el.appendChild($this.wrapper);
 
       $this.$content = exports.new({
-        cls: ["uk-scroller-content", scrollDirection],
+        cls: ["sp-scroller-content", scrollDirection],
         cells: config.cells,
         flexLayout: scrollDirection == 'y' ? 'column' : 'row'
       }, $this.wrapper);
@@ -8980,7 +8022,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       if (!config.nativeScroll) {
         $this.bar = createElement('DIV');
-        addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
+        addClass($this.bar, 'sp-scroller-bar ' + scrollDirection);
         el.appendChild($this.bar);
 
         $windowListeners.resize.push($this.moveBar.bind($this));
@@ -9001,7 +8043,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       el.addEventListener('mousedown', function(e) {
         lastPageY = e.pageY;
         lastPageX = e.pageX;
-        addClass(el, 'uk-scroller-grabbed');
+        addClass(el, 'sp-scroller-grabbed');
         document.addEventListener('mousemove', drag);
         document.addEventListener('mouseup', stop);
         return false;
@@ -9023,7 +8065,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
 
       function stop() {
-        removeClass(el, 'uk-scroller-grabbed');
+        removeClass(el, 'sp-scroller-grabbed');
         document.removeEventListener('mousemove', drag);
         document.removeEventListener('mouseup', stop);
       }
@@ -9042,9 +8084,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       raf(function() {
         // Hide scrollbar if no scrolling is possible
         if($this.scrollRatio >= 1) {
-          addClass($this.bar, 'uk-hidden');
+          addClass($this.bar, 'sp-hidden');
         } else {
-          removeClass($this.bar, 'uk-hidden');
+          removeClass($this.bar, 'sp-hidden');
 
           if ($this.scrollDirection == 'y') {
             $this.bar.style.cssText = 'height:' + Math.max($this.scrollRatio * 100, 10) + '%; top:' +
@@ -9071,16 +8113,31 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       htmlTag: "SELECT",
       itemTag: "OPTION",
       groupTag: "OPTGROUP",
-      tagClass: "uk-select",
+      tagClass: "sp-select",
       flex: false,
       flexSize: "",
       listStyle: ""
     },
-    $setters: {
-      multiple: function (value) {
-        setAttributes(this.getFormControl(), value ? {multiple: value} : {});
+    $setters: extend(
+      classSetters({
+        selectStyle: prefixClassOptions({
+          line: '',
+          input: '',
+          "": ""
+        }, 'sp-select-', true),
+        size: prefixClassOptions({
+          mini: "",
+          small: "",
+          large: "",
+          "": ""
+        }, 'sp-select-', true)
+      }),
+      {
+        multiple: function (value) {
+          setAttributes(this.getFormControl(), value ? {multiple: value} : {});
+        }
       }
-    },
+    ),
     __init__: function () {
       this.optgroups = {};
     },
@@ -9136,7 +8193,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "form",
     $defaults: {
       htmlTag: "FORM",
-      tagClass: "uk-form",
+      tagClass: "sp-form",
       formStyle: "stacked",
       fieldset: []
     },
@@ -9150,7 +8207,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           horizontal: "",
           line: "",
           "": ""
-        }, 'uk-form-', true)
+        }, 'sp-form-', true)
       }),
       {
         fieldset: function (value) {
@@ -9234,7 +8291,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       htmlTag: "FIELDSET",
       itemTag: "DIV",
-      itemTagClass: "uk-form-row"
+      itemTagClass: "sp-form-row"
     },
     $setters: classSetters({
       formStyle: prefixClassOptions({
@@ -9242,7 +8299,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         horizontal: "",
         line: "",
         "": ""
-      }, 'uk-form-', true)
+      }, 'sp-form-', true)
     }),
     itemTagString: function (item) {
       return item.$title ? "LEGEND" : getConfig(this).itemTag;
@@ -9254,7 +8311,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       else {
         var component = exports.new(item, function (componentElement) {
           if (!item.$inline) {
-            var controlContainer = createElement("DIV", {class: "uk-form-controls"});
+            var controlContainer = createElement("DIV", {class: "sp-form-controls"});
             controlContainer.appendChild(componentElement);
             el.appendChild(controlContainer);
           }
@@ -9266,11 +8323,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         this.$components.push(component);
 
         if (item.formLabel || item.formLabelAttributes) {
-          var attrs = {class: "uk-form-label", for: item.id}
+          var attrs = {class: "sp-form-label", for: item.id}
           if (item.formLabelAttributes) extend(attrs, item.formLabelAttributes)
           var label = component.label = createElement("LABEL", attrs);
           if (item.formLabel) label.innerHTML = item.formLabel;
-          if (item.$inline) addClass(label, "uk-display-inline");
+          if (item.$inline) addClass(label, "sp-display-inline");
           el.insertBefore(label, el.firstChild);
         }
       }

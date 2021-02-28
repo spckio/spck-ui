@@ -1,7 +1,7 @@
 window.UI = window.ui = (function (exports, window, UIkit) {
   var
-    ACTIVE_CLASS = 'uk-active',
-    HIDDEN_CLASS = 'uk-hidden',
+    ACTIVE_CLASS = 'sp-active',
+    HIDDEN_CLASS = 'sp-hidden',
     PASSIVE_EVENT = {passive: true};
 
   var
@@ -109,7 +109,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function isDefined(obj) {
-    return obj !== undefined;
+    return obj !== undefined && obj !== null;
   }
 
   function isUndefined(obj) {
@@ -350,9 +350,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }
 
   function iconTemplate(config, linkIcon) {
-    var iconSize = config.iconSize ? ' uk-icon-{{iconSize}}' : '';
-    var icon = config.icon ? ' uk-icon-{{icon}}' : '';
-    return '<i class="{{iconClass}}' + icon + iconSize + (linkIcon ? ' uk-link-icon' : '') + '">{{iconContent}}</i>';
+    var iconSize = config.iconSize ? ' sp-icon-{{iconSize}}' : '';
+    var icon = config.icon ? ' sp-icon-{{icon}}' : '';
+    return '<i class="{{iconClass}}' + icon + iconSize + (linkIcon ? ' sp-link-icon' : '') + '">{{iconContent}}</i>';
   }
 
   function elementIconTemplate(templateFn) {
@@ -367,19 +367,49 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     };
   }
 
-  function template(templateObject, config, thisArg, parentNode) {
+  function containsInterpolateValues(string) {
+    return /{{[$\w]+}}/.test(string)
+  }
+
+  function containsHTML(string) {
+    return /(<\w+|&\w+;)/.test(string)
+  }
+
+  function template(templateObject, config, thisArg, parentNode, partOfArray) {
     var returnFlag = false;
 
     if (isFunction(templateObject)) {
       templateObject = templateObject.call(thisArg, config);
       returnFlag = true;
     }
-    else if (isNumber(templateObject)) {
-      templateObject = templateObject.toString();
-    }
-
-    if (isString(templateObject)) {
-      parentNode.innerHTML = interpolate(templateObject, config);
+    if (isNumber(templateObject)) {
+      if (partOfArray) {
+        parentNode.appendChild(document.createTextNode(templateObject.toString()))
+      } else {
+        parentNode.textContent = templateObject.toString()
+      }
+    } else if (isString(templateObject)) {
+      if (containsHTML(templateObject)) {
+        var innerHTML = templateObject
+        if (containsInterpolateValues(templateObject)) {
+          innerHTML = interpolate(templateObject, config);
+        }
+        if (partOfArray) {
+          parentNode.insertAdjacentHTML('beforeend', innerHTML)
+        } else {
+          parentNode.innerHTML = innerHTML
+        }
+      } else {
+        var text = templateObject
+        if (containsInterpolateValues(templateObject)) {
+          text = interpolate(templateObject, config);
+        }
+        if (partOfArray) {
+          parentNode.appendChild(document.createTextNode(text))
+        } else {
+          parentNode.textContent = text
+        }
+      }
     }
     else if (isElement(templateObject)) {
       parentNode.appendChild(templateObject);
@@ -392,10 +422,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     }
     else if (isArray(templateObject)) {
       templateObject.forEach(function (obj) {
-        template(obj, config, thisArg, parentNode);
+        template(obj, config, thisArg, parentNode, true);
       });
     }
-    else {
+    else if (isDefined(templateObject)) {
       fail(returnFlag ?
         'Unrecognized return value from template' :
         'Unrecognized template!', {
@@ -698,9 +728,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   exports.classOptions = {
     flex: {
-      true: "uk-flex",
+      true: "sp-flex",
       false: "",
-      inline: "uk-flex-inline"
+      inline: "sp-flex-inline"
     },
     selectable: {
       true: "",
@@ -711,7 +741,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       nowrap: "",
       truncate: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     padding: prefixClassOptions({
       "": "",
       none: "remove",
@@ -725,16 +755,16 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "y-lg": "large-y",
       mini: "mini",
       small: "small",
-      medium: "uk-padding",
-      true: "uk-padding",
+      medium: "sp-padding",
+      true: "sp-padding",
       large: "large",
-    }, 'uk-padding-', false, ["true", "medium"]),
+    }, 'sp-padding-', false, ["true", "medium"]),
     flexSize: prefixClassOptions({
       "": "",
       none: "none",
       auto: "auto",
       flex: "1"
-    }, 'uk-flex-item-'),
+    }, 'sp-flex-item-'),
     flexAlign: prefixClassOptions({
       center: "",
       right: "",
@@ -742,7 +772,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       middle: "",
       bottom: "",
       "": ""
-    }, 'uk-flex-', true),
+    }, 'sp-flex-', true),
     flexLayout: prefixClassOptions({
       "": "",
       column: "",
@@ -755,11 +785,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "column-reverse-small": "",
       "row-reverse-large": "",
       "row-reverse-small": ""
-    }, 'uk-flex-', true),
+    }, 'sp-flex-', true),
     flexSpace: prefixClassOptions({
       between: "",
       around: ""
-    }, 'uk-flex-space-', true),
+    }, 'sp-flex-space-', true),
     flexWrap: prefixClassOptions({
       top: "",
       middle: "",
@@ -767,10 +797,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       reverse: "",
       "space-between": "",
       "space-around": "",
-      wrap: "uk-flex-wrap",
-      nowrap: "uk-flex-nowrap",
+      wrap: "sp-flex-wrap",
+      nowrap: "sp-flex-nowrap",
       "": ""
-    }, 'uk-flex-wrap-', true, ["nowrap", "wrap"]),
+    }, 'sp-flex-wrap-', true, ["nowrap", "wrap"]),
     flexOrder: prefixClassOptions({
       first: "",
       last: "",
@@ -783,49 +813,39 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "first-xlarge": "",
       "last-xlarge": "",
       "": ""
-    }, 'uk-flex-order-', true),
+    }, 'sp-flex-order-', true),
     card: prefixClassOptions({
-      true: ["uk-card", "uk-card-box"],
-      primary: ["uk-card", "uk-card-box", "uk-card-box-primary"],
-      secondary: ["uk-card", "uk-card-box", "uk-card-box-secondary"],
-      title: "",
-      badge: "",
+      true: "sp-card",
       teaser: "",
       header: "",
       body: "",
-      space: "",
+      shadow: "",
+      "body-blank": "",
       divider: "",
       "": ""
-    }, 'uk-card-', true, ["true", "primary", "secondary"]),
+    }, 'sp-card-', true, ["true"]),
+    cardStyle: prefixClassOptions({
+      primary: "",
+      success: "",
+      danger: "",
+      muted: "",
+      warning: "",
+      "": ""
+    }, 'sp-card-', true),
     badge: prefixClassOptions({
-      true: "badge",
-      notification: "badge-notification",
+      true: "sp-badge",
       success: ["badge", "badge-success"],
       warning: ["badge", "badge-warning"],
       danger: ["badge", "badge-danger"],
       primary: ["badge", "badge-primary"],
       "": ""
-    }, 'uk-', true),
+    }, 'sp-', true, ['true']),
     display: prefixClassOptions({
       block: "",
       inline: "",
       "inline-block": "",
       "": ""
-    }, 'uk-display-', true),
-    halign: prefixClassOptions({
-      center: "",
-      left: "",
-      right: "",
-      "medium-left": "",
-      "medium-right": "",
-      "": ""
-    }, 'uk-align-', true),
-    valign: prefixClassOptions({
-      middle: "align-middle",
-      parent: "align",
-      bottom: "align-bottom",
-      "": ""
-    }, 'uk-vertical-'),
+    }, 'sp-display-', true),
     position: prefixClassOptions({
       "top": "",
       "top-left": "",
@@ -838,30 +858,31 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "absolute": "",
       "z-index": "",
       "": ""
-    }, 'uk-position-', true),
+    }, 'sp-position-', true),
     fill: prefixClassOptions({
       height: "height-1-1",
       width: "width-100",
       screen: ["height-1-1", "width-100"],
       "": ""
-    }, 'uk-'),
+    }, 'sp-'),
     float: prefixClassOptions({
       left: "",
       right: "",
-      clearfix: "uk-clearfix",
+      clearfix: "sp-clearfix",
       "": ""
-    }, 'uk-float-', true, ['clearfix']),
+    }, 'sp-float-', true, ['clearfix']),
     scroll: prefixClassOptions({
       xy: "container",
       y: "ycontainer",
       x: "xcontainer",
-      text: "uk-scrollable-text",
+      text: "sp-scrollable-text",
+      hidden: "",
       "": ""
-    }, 'uk-overflow-', false, ['text']),
+    }, 'sp-overflow-', false, ['text']),
     hidden: {
       true: HIDDEN_CLASS,
       false: "",
-      hover: "uk-hidden-hover"
+      hover: "sp-hidden-hover"
     },
     margin: prefixClassOptions({
       "": "",
@@ -889,7 +910,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "right-lg": "large-right",
       "right-sm": "small-right",
       "right-mi": "mini-right"
-    }, 'uk-margin-'),
+    }, 'sp-margin-'),
     screen: prefixClassOptions({
       "small": "visible-small",
       "medium": "visible-medium",
@@ -898,12 +919,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "except-medium": "hidden-medium",
       "except-large": "hidden-large",
       "": ""
-    }, 'uk-'),
+    }, 'sp-'),
     device: prefixClassOptions({
       touch: "notouch",
       notouch: "touch",
       "": ""
-    }, 'uk-hidden-'),
+    }, 'sp-hidden-'),
     text: prefixClassOptions({
       small: "",
       large: "",
@@ -912,7 +933,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       lowercase: "",
       uppercase: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     textColor: prefixClassOptions({
       muted: "",
       primary: "",
@@ -921,7 +942,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       danger: "",
       contrast: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     textAlign: prefixClassOptions({
       middle: "",
       top: "",
@@ -934,7 +955,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "center-small": "",
       justify: "",
       "": ""
-    }, 'uk-text-', true),
+    }, 'sp-text-', true),
     animation: prefixClassOptions({
       fade: "",
       "scale-up": "",
@@ -957,7 +978,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "bottom-right": "",
       hover: "",
       "": ""
-    }, 'uk-animation-', true)
+    }, 'sp-animation-', true)
   };
 
   function createElement(name, attributes, html) {
@@ -1066,7 +1087,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       dragged.target.dispatch("onItemDragEnd", [dragged.config, dragged.node, e]);
 
-      removeClass(dragged.node, 'uk-active-drag');
+      removeClass(dragged.node, 'sp-active-drag');
 
       nodeStyle.top = dragged.originalPos.top;
       nodeStyle.left = dragged.originalPos.left;
@@ -1081,8 +1102,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     var resizer = exports.$activeResizer;
     if (resizer) {
       if (resizer.dragging) {
-        addClass(resizer.dragHandle, 'uk-hidden');
-        addClass(resizer.dragBackdrop, 'uk-hidden');
+        addClass(resizer.dragHandle, 'sp-hidden');
+        addClass(resizer.dragBackdrop, 'sp-hidden');
         resizer.dragging = false;
         resizer.dispatch("onHandleResized", [resizer.updateDragHandlePosition(e), resizer.el, e]);
       }
@@ -1107,7 +1128,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         // Begin drag event
         exports.$dragged = selectedForDrag;
         exports._selectedForDrag = null;
-        addClass(selectedForDrag.node, 'uk-active-drag');
+        addClass(selectedForDrag.node, 'sp-active-drag');
 
         // Fire drag listener event
         selectedForDrag.target.dispatch("onItemDragStart",
@@ -1141,7 +1162,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
   function windowOnLoad() {
     exports.$ready = true;
-    setAttributes(document.body, {"data-uk-observe": ""});
+    setAttributes(document.body, {"data-sp-observe": ""});
   }
 
   function findDroppableParent(node) {
@@ -1582,7 +1603,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         if (value) {
           // Must allow default events to open uploader
           var $this = this;
-          addClass($this.el, "uk-form-file");
+          addClass($this.el, "sp-form-file");
           var uploader = $this._uploader = createElement('INPUT', {type: 'file', multiple: value == 'multiple' ? value : null});
           uploader.onchange = function (e) {
             $this.dispatch('onFileChange', [getConfig($this), this, e])
@@ -1677,13 +1698,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       /**
        * Makes the element invisible, which doesn't affect the layout.
        */
-      addClass(this.el, "uk-invisible");
+      addClass(this.el, "sp-invisible");
     },
     reveal: function () {
       /**
        * Makes the element visible again.
        */
-      removeClass(this.el, "uk-invisible");
+      removeClass(this.el, "sp-invisible");
     },
     isEnabled: function () {
       /**
@@ -1894,13 +1915,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   exports.FormControl = {
     __name__: 'FormControl',
     $defaults: {
-      formDangerClass: "uk-form-danger",
-      formSuccessClass: "uk-form-success",
-      helpDangerClass: "uk-text-danger",
-      helpSuccessClass: "uk-text-success",
+      formDangerClass: "sp-form-danger",
+      formSuccessClass: "sp-form-success",
+      helpDangerClass: "sp-text-danger",
+      helpSuccessClass: "sp-text-success",
       helpTag: "P",
-      helpTagClass: "uk-form-help-block",
-      helpTagClassInline: "uk-form-help-inline"
+      helpTagClass: "sp-form-help-block",
+      helpTagClassInline: "sp-form-help-inline"
     },
     $setters: extend(
       classSetters({
@@ -1908,7 +1929,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           large: "",
           small: "",
           "": ""
-        }, 'uk-form-', true)
+        }, 'sp-form-', true)
       }),
       {
         formClass: function (value) {
@@ -2071,7 +2092,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.modal = def({
     __name__: "modal",
     $defaults: {
-      tagClass: "uk-modal",
+      tagClass: "sp-modal",
       light: false,
       closeButton: true,
       bgClose: true,
@@ -2088,9 +2109,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     __init__: function (config) {
       var self = this;
-      self.header = createElement("DIV", {class: "uk-modal-header"});
-      self.footer = createElement("DIV", {class: "uk-modal-footer"});
-      self.body = createElement("DIV", {class: "uk-modal-dialog"});
+      self.header = createElement("DIV", {class: "sp-modal-header"});
+      self.footer = createElement("DIV", {class: "sp-modal-footer"});
+      self.body = createElement("DIV", {class: "sp-modal-dialog"});
 
       if (config.headerClass) addClass(self.header, config.headerClass);
       if (config.dialogClass) addClass(self.body, config.dialogClass);
@@ -2109,7 +2130,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           scroll: "",
           full: "",
           "": ""
-        }, 'uk-modal-dialog-', true)
+        }, 'sp-modal-dialog-', true)
       }, "body"),
       {
         bodyWidth: function (value) {
@@ -2124,7 +2145,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           if (value) {
             var self = this;
             var close = self.closeButton = createElement("A",
-              {class: "uk-modal-close uk-close"});
+              {class: "sp-modal-close sp-close"});
             var body = self.body;
 
             if (body.firstChild) {
@@ -2159,7 +2180,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         caption: function (value) {
           var self = this;
           if (!self.caption)
-            self.caption = createElement("DIV", {class: "uk-modal-caption"});
+            self.caption = createElement("DIV", {class: "sp-modal-caption"});
           self.caption.innerHTML = value;
           self.body.appendChild(self.caption);
         }
@@ -2226,24 +2247,34 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       buttonStyle: prefixClassOptions({
         link: "button-link",
         button: "button",
+        shadow: "button-shadow",
         "": ""
-      }, 'uk-'),
+      }, 'sp-'),
       color: prefixClassOptions({
         primary: "",
         success: "",
         danger: "",
         muted: "",
         "": ""
-      }, 'uk-button-', true),
+      }, 'sp-button-', true),
       size: prefixClassOptions({
         mini: "",
         small: "",
         large: "",
         "": ""
-      }, 'uk-button-', true)
+      }, 'sp-button-', true)
     }),
     template: elementIconTemplate(function (config) {
-      return config.label ? '<span class="{{labelClass}}">{{label}}</span>' : ''
+      if (config.label) {
+        if (config.labelClass) {
+          return '<span class="{{labelClass}}">{{label}}</span>';
+        } else if (config.icon || config.iconClass) {
+          return '<span>{{label}}</span>';
+        } else {
+          return config.label;
+        }
+      }
+      return ''
     }),
     select: function () {
       /**
@@ -2276,7 +2307,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     setLabel: function (value) {
       /**
        * Sets the label (HTML accepted) of the button component.
-       * @param value
+       * @param value The label value, which can be HTML.
        */
       getConfig(this).label = value;
       this.render();
@@ -2300,14 +2331,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         button: "",
         justify: "",
         "": ""
-      }, 'uk-icon-', true),
+      }, 'sp-icon-', true),
       size: prefixClassOptions({
         small: "",
         medium: "",
         large: "",
         xlarge: "",
         "": ""
-      }, 'uk-icon-', true)
+      }, 'sp-icon-', true)
     }),
     template: function (config) {
       return isFunction(config.iconTemplate) ?
@@ -2325,7 +2356,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     $setters: classSetters({
       labelStyle: {
-        form: "uk-form-label",
+        form: "sp-form-label",
         "": ""
       }
     }),
@@ -2356,13 +2387,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       label: "",
       htmlTag: "A",
       buttonStyle: ""
-    },
-    $setters: classSetters({
-      linkStyle: {
-        '': '',
-        'line': 'uk-active-line'
-      }
-    })
+    }
   }, $definitions.button, exports.MouseEvents);
 
 
@@ -2370,7 +2395,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "progress",
     $defaults: {
       htmlTag: "DIV",
-      tagClass: "uk-progress",
+      tagClass: "sp-progress",
       fill: "width"
     },
     $setters: extend(classSetters({
@@ -2378,7 +2403,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         mini: "",
         small: "",
         "": ""
-      }, 'uk-progress-', true),
+      }, 'sp-progress-', true),
       color: prefixClassOptions({
         danger: "",
         warning: "",
@@ -2386,7 +2411,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         primary: "",
         striped: "",
         "": ""
-      }, 'uk-progress-', true)
+      }, 'sp-progress-', true)
     }), {
       value: function (value) {
         if (isDefined(value))
@@ -2396,7 +2421,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     render: function () {
     },
     __init__: function () {
-      this._bar = createElement("DIV", {class: "uk-progress-bar"});
+      this._bar = createElement("DIV", {class: "sp-progress-bar"});
       this.el.appendChild(this._bar);
     },
     getValue: function () {
@@ -2489,11 +2514,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $setters: extend(
       classSetters({
         color: prefixClassOptions({
-          "success": "",
-          "danger": "",
-          "warning": "",
+          "primary": '',
+          "success": '',
+          "danger": '',
+          "warning": '',
           "": ""
-        }, 'uk-toggle-', true)
+        }, 'sp-toggle-', true)
       }),
       {
         checked: function (value) {
@@ -2503,10 +2529,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     ),
     $defaults: {
       htmlTag: "LABEL",
-      tagClass: "uk-toggle",
+      tagClass: "sp-toggle",
       type: 'checkbox'
     },
-    template: '<input><div class="uk-toggle-slider"></div>',
+    template: '<input><div class="sp-toggle-slider"></div>',
     getFormControl: function () {
       /**
        * Get the HTML input element.
@@ -2538,27 +2564,33 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
 
   $definitions.input = def({
-    __name__: "input",
+    __name__: 'input',
     $defaults: {
-      htmlTag: "INPUT",
-      tagClass: "uk-input",
+      htmlTag: 'INPUT',
+      tagClass: 'sp-input',
+      inputStyle: '',
       width: ""
     },
     $setters: extend(
       classSetters({
+        inputStyle: prefixClassOptions({
+          line: '',
+          round: '',
+          "": ""
+        }, 'sp-input-', true),
         width: prefixClassOptions({
           "": "",
           mini: "",
           small: "",
           medium: "",
           large: "",
-          full: "uk-width-100"
-        }, 'uk-form-width-', true, ['full']),
+          full: "sp-width-100"
+        }, 'sp-form-width-', true, ['full']),
         size: prefixClassOptions({
           "": "",
           small: "",
           large: ""
-        }, 'uk-form-', true)
+        }, 'sp-form-', true)
       }),
     {
       readonly: function (value) {
@@ -2608,70 +2640,18 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   }, exports.InputControl, exports.ChangeEvent, exports.FormControl, $definitions.element);
 
 
-  $definitions.autocomplete = def({
-    __name__: "autocomplete",
-    template: '<input class="uk-input" style="width:100%">',
-    $defaults: {
-      htmlTag: "DIV",
-      tagClass: "uk-autocomplete",
-      placeholder: "",
-      type: "text",
-      minLength: 0,
-      caseSensitive: false,
-      sources: [],
-      autocomplete: function (release) {
-        var self = this;
-        var searchValue = self.getValue();
-        var config = self.config;
-        if (!config.caseSensitive) searchValue = searchValue.toLowerCase();
-
-        release(self._getSource().filter(function (item) {
-          var value = config.caseSensitive ? item.value : item.value.toLowerCase();
-          return value.indexOf(searchValue) != -1;
-        }));
-      }
-    },
-    $setters: {
-      sources: function (value) {
-        if (isFunction(value))
-          this._getSource = value;
-        else
-          this._getSource = echo(value);
-      },
-      autocomplete: function (value) {
-        var self = this;
-        var autocomplete = self._autocomplete = UIkit.autocomplete(self.el,
-          {source: bind(value, self), minLength: self.config.minLength});
-        self.el.style.wordBreak = "break-word";
-        autocomplete.dropdown.addClass('uk-dropdown-small');
-        autocomplete.on("selectitem.uk.autocomplete", function (e, obj) {
-          self.dispatch("onChange", [obj.value]);
-          self.dispatch("onAutocomplete", [obj]);
-        });
-      }
-    },
-    getFormControl: function () {
-      /**
-       * Gets the HTML input element.
-       * @returns {Element}
-       */
-      return this.el.firstChild;
-    }
-  }, $definitions.input);
-
-
   $definitions.search = def({
     __name__: "search",
     $defaults: {
-      htmlTag: "DIV",
-      tagClass: "uk-search",
-      placeholder: "Search...",
-      iconClass: "uk-icon-search uk-search-icon",
+      htmlTag: 'DIV',
+      tagClass: 'sp-search',
+      placeholder: 'Search...',
+      iconClass: "sp-icon-search-16 sp-search-icon",
       iconContent: "",
-      icon: "search",
+      icon: 'search',
       iconTemplate: iconTemplate,
-      inputClass: "uk-search-field",
-      type: "search"
+      inputClass: 'sp-input',
+      type: 'search'
     },
     template: elementIconTemplate(function () {
       return '<input class="{{inputClass}}">'
@@ -2689,7 +2669,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.drawer = def({
     __name__: "drawer",
     $defaults: {
-      tagClass: "uk-offcanvas",
+      tagClass: "sp-offcanvas",
       $blockDrawerOpen: false,
       $blockDrawerPan: false,
       $closeInProgress: false,
@@ -2702,12 +2682,12 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         touchOnly: {
           "": "",
           "false": "",
-          "true": 'uk-offcanvas-touch'
+          "true": 'sp-offcanvas-touch'
         },
         flipped: {
           "": "",
           "false": "",
-          "true": "uk-offcanvas-flip"
+          "true": "sp-offcanvas-flip"
         }
       }),
       {
@@ -2772,7 +2752,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __after__: function () {
       var $this = this;
       var content = $this.el.firstChild;
-      if (content) addClass(content, 'uk-offcanvas-bar');
+      if (content) addClass(content, 'sp-offcanvas-bar');
 
       var flipped = $this.isFlipped();
       var swipeGesture = $this.closeSwipe = new DrawerSwipe($this.element, {
@@ -2788,7 +2768,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.onAnimate = function () {
-        return !$this.openSwipe.closeInProgress;
+        return !$this.openSwipe || !$this.openSwipe.closeInProgress;
       };
 
       swipeGesture.onPan = function () {
@@ -2806,12 +2786,14 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       };
 
       swipeGesture.applyChanges = function (percent) {
-        $this.openSwipe.percent = $this.closeSwipe.percent = percent;
+        if ($this.openSwipe && $this.closeSwipe) {
+          $this.openSwipe.percent = $this.closeSwipe.percent = percent;
+        }
         var contentElement = $this.element.firstChild;
         if (contentElement) {
           var elementStyle = $this.element.style;
           var contentElementStyle = contentElement.style;
-          var transform = "translateX(" + percent + "%)";
+          var transform = $this.config.flipped ? "translateX(100vw) translateX(-" + (100 - percent) + "%)" : "translateX(" + percent + "%)";
           var transition = "none";
           var bgTransition = "background-color 100ms linear";
           var backface = "hidden";
@@ -2841,9 +2823,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     finalize: function () {
-      $('body').removeClass('uk-offcanvas-page');
-      removeClass(this.element, 'uk-active');
-      this.content().removeClass('uk-offcanvas-bar-show');
+      $('body').removeClass('sp-offcanvas-page');
+      removeClass(this.element, 'sp-active');
+      this.content().removeClass('sp-offcanvas-bar-show');
     },
 
     showDrawer: function() {
@@ -2852,11 +2834,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         var body = $("body");
 
         $($this.element)
-          .addClass("uk-active");
+          .addClass("sp-active");
 
-        body.addClass("uk-offcanvas-page");
+        body.addClass("sp-offcanvas-page");
         body.width();  // .width() - force redraw to apply css
-        $this.content().addClass("uk-offcanvas-bar-show");
+        $this.content().addClass("sp-offcanvas-bar-show");
         return true;
       }
       return false;
@@ -2878,7 +2860,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     content: function () {
-      return $(this.el).find(".uk-offcanvas-bar");
+      return $(this.el).find(".sp-offcanvas-bar");
     },
 
     isVisible: function () {
@@ -2886,7 +2868,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
 
     isFlipped: function () {
-      return hasClass(this.el, "uk-offcanvas-flip");
+      return hasClass(this.el, "sp-offcanvas-flip");
     }
   }, $definitions.element);
 
@@ -2895,7 +2877,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "tooltip",
     $defaults: {
       label: "",
-      tagClass: "uk-tooltip",
+      tagClass: "sp-tooltip",
       direction: "top",
       device: "notouch",
       activeClass: ACTIVE_CLASS
@@ -2910,9 +2892,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         "bottom-right": "",
         left: "",
         right: ""
-      }, 'uk-tooltip-', true)
+      }, 'sp-tooltip-', true)
     }),
-    template: '<div class="uk-tooltip-inner">{{label}}</div>',
+    template: '<div class="sp-tooltip-inner">{{label}}</div>',
     isOpened: function () {
       /**
        * Returns if the tooltip is open.
@@ -2961,8 +2943,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       padding: "none",
       justify: false,
       dropdownDelay: 0,
-      dropdownClass: "uk-dropdown-close",
-      dropdownAnimation: "uk-animation-scale-up-y uk-animation-top-center",
+      dropdownClass: "sp-dropdown-close",
+      dropdownAnimation: "sp-animation-scale-up-y sp-animation-top-center",
       dropdownRect: null,
       blank: false
     },
@@ -2978,7 +2960,13 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self.el.appendChild(dropdownContainer);
         self._inner = exports.new(value, dropdownContainer);
         self.$components.push(self._inner);
-      }
+      },
+      dropdownStyle: prefixClassOptions({
+        small: '',
+        blank: '',
+        scrollable: '',
+        "": ""
+      }, 'sp-dropdown-', true),
     },
     __init__: function (config) {
       var self = this;
@@ -2997,8 +2985,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     getDropdownClass: function () {
       var config = getConfig(this);
       var result = config.dropdownClass;
-      result += config.blank ? " uk-dropdown-blank" : " uk-dropdown";
-      result += config.scrollable ? " uk-dropdown-scrollable" : "";
+      result += config.blank ? " sp-dropdown-blank" : " sp-dropdown";
+      result += config.scrollable ? " sp-dropdown-scrollable" : "";
       result += " " + config.dropdownAnimation;
       return result;
     },
@@ -3014,7 +3002,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * Returns if the dropdown is open.
        * @returns {boolean}
        */
-      return hasClass(this.el, 'uk-open');
+      return hasClass(this.el, 'sp-open');
     },
     open: function (args, cb) {
       /**
@@ -3631,6 +3619,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       htmlTag: "UL",
       itemTag: "LI",
+      itemTagClass: "sp-list-item",
       selectable: false,
       closeButton: false,
       listStyle: "list",
@@ -3646,19 +3635,19 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           "striped": ["nav", "list", "list-striped"],
           "line": ["list", "list-line"],
           "navbar": "navbar-nav",
-          "subnav": "subnav",
-          "subnav-line": ["subnav", "subnav-line"],
-          "subnav-pill": ["subnav", "subnav-pill"],
+          "nav-side-primary": ["nav", "nav-side", "nav-primary"],
+          "nav-side-success": ["nav", "nav-side", "nav-success"],
+          "danger": "nav-danger",
           "list": "list",
           "tab": "tab",
-          "tab-flip": "tab-flip",
-          "tab-center": "tab-center",
-          "tab-bottom": ["tab", "tab-bottom"],
-          "tab-left": ["tab", "tab-left"],
-          "tab-right": ["tab", "tab-right"],
+          "tab-vertical": ["tab", "flex-column"],
+          "tab-primary": ["tab", "primary"],
+          "tab-success": ["tab", "success"],
+          "tab-muted": ["tab", "muted"],
+          "tab-danger": ["tab", "danger"],
           "breadcrumb": "breadcrumb",
           "": ""
-        }, 'uk-')
+        }, 'sp-')
       }),
       {
         tab: function (value) {
@@ -3703,7 +3692,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         self.addListener("onItemSelectionChanged", self._onItemSelectionChanged);
         if (config.tab == 'responsive') {
           self.addListener("onDOMChanged", self._onDOMChanged);
-          self.add({label: "<i class='uk-icon-bars'></i>", $tabMenu: true, batch: "$menu"}, self.headNode);
+          self.add({label: "<i class='sp-icon-bars'></i>", $tabMenu: true, batch: "$menu"}, self.headNode);
           $windowListeners.resize.push(bind(self.updateFit, self));
           self.dispatch("onDOMChanged", [null, "refresh"]);
         }
@@ -3767,7 +3756,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       self.each(function (item) {
         // Show everything for checking y-offset (keep invisible to avoid blink)
-        addClass(this.$elements[item.id], "uk-invisible");
+        addClass(this.$elements[item.id], "sp-invisible");
         // Update batch according to $selected state
         if (!item.$tabMenu) {
           item.batch = item.$selected ? "$selected" : undefined;
@@ -3785,7 +3774,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, self.$elements);
 
       self.each(function (item) {
-        removeClass(this.$elements[item.id], "uk-invisible");
+        removeClass(this.$elements[item.id], "sp-invisible");
       }, self);
 
       if (doResponsive) {
@@ -3883,8 +3872,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     itemClass: function (item) {
       var cls = $definitions.stack.prototype.itemClass.call(this, item);
-      if (item.$header) cls += " uk-nav-header";
-      if (item.$divider) cls += " uk-nav-divider";
+      if (item.$header) cls += " sp-nav-header";
+      if (item.$divider) cls += " sp-nav-divider";
       return cls;
     },
     template: function (item) {
@@ -3922,7 +3911,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       templateArray.forEach(function (itemTemplate) {
         if (isString(itemTemplate)) {
-          el.innerHTML = itemTemplate;
+          if (containsHTML(itemTemplate)) {
+            el.innerHTML = itemTemplate;
+          } else {
+            el.textContent = itemTemplate;
+          }
         }
         else if (isUndefined(itemTemplate) || itemTemplate === null) {
           // Ignore undefined and nulls
@@ -4162,8 +4155,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     },
     template: function (config) {
       return interpolate(
-        '<a><i class="uk-icon-{{icon}}" style="margin-left: {{margin}}px">' +
-        '</i><span class="uk-margin-small-left">{{label}}</span></a>',
+        '<a><i class="sp-icon-{{icon}}" style="margin-left: {{margin}}px">' +
+        '</i><span class="sp-margin-small-left">{{label}}</span></a>',
         {
           icon: getChevron(config),
           label: config.label,
@@ -4172,7 +4165,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       function getChevron (item) {
         if (item.$children && item.$children.length > 0) {
-          return item.$closed ? 'chevron-right' : 'chevron-down';
+          return item.$closed ? 'chevron-right-16' : 'chevron-down-16';
         } else {
           return 'blank';
         }
@@ -4273,7 +4266,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.table = def({
     __name__: "table",
     $defaults: {
-      tagClass: "uk-table",
+      tagClass: "sp-table",
       htmlTag: "TABLE",
       itemTag: "TR",
       flex: false,
@@ -4298,8 +4291,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           hover: "",
           striped: "",
           condensed: "",
+          flat: "",
           "": ""
-        }, 'uk-table-', true)
+        }, 'sp-table-', true)
       }),
       {
         columns: function (value) {
@@ -4374,7 +4368,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.resizer = def({
     __name__: 'resizer',
     $defaults: {
-      tagClass: 'uk-resizer',
+      tagClass: 'sp-resizer',
       direction: 'x',
       minValue: 0,
       maxValue: Number.MAX_VALUE
@@ -4388,8 +4382,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __after__: function (config) {
       var $this = this;
       var el = $this.el
-      var dragHandle = createElement('div', {class: 'uk-hidden uk-resizer-drag-handle'});
-      var dragBackdrop = createElement('div', {class: 'uk-hidden uk-resizer-drag-backdrop'});
+      var dragHandle = createElement('div', {class: 'sp-hidden sp-resizer-drag-handle'});
+      var dragBackdrop = createElement('div', {class: 'sp-hidden sp-resizer-drag-backdrop'});
       var body = document.body
       $this.dragHandle = dragHandle;
       $this.dragBackdrop = dragBackdrop;
@@ -4417,8 +4411,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           preventEvent(e)  // Stop Chrome changing to globe icon
           exports.$activeResizer = $this;
           updateDragHandlePosition(e);
-          removeClass(dragHandle, 'uk-hidden');
-          removeClass(dragBackdrop, 'uk-hidden');
+          removeClass(dragHandle, 'sp-hidden');
+          removeClass(dragBackdrop, 'sp-hidden');
           var parentRect = $this.el.parentNode.getBoundingClientRect();
           extend(dragBackdrop.style, {
             left: parentRect.left + 'px',
@@ -4485,7 +4479,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   $definitions.scroller = def({
     __name__: 'scroller',
     $defaults: {
-      tagClass: 'uk-scroller-container',
+      tagClass: 'sp-scroller-container',
       scrollDirection: 'y',
       nativeScroll: false,
       flex: true
@@ -4496,11 +4490,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var scrollDirection = $this.scrollDirection = config.scrollDirection;
 
       $this.wrapper = createElement('DIV');
-      addClass($this.wrapper, 'uk-scroller-wrapper');
+      addClass($this.wrapper, 'sp-scroller-wrapper');
       el.appendChild($this.wrapper);
 
       $this.$content = exports.new({
-        cls: ["uk-scroller-content", scrollDirection],
+        cls: ["sp-scroller-content", scrollDirection],
         cells: config.cells,
         flexLayout: scrollDirection == 'y' ? 'column' : 'row'
       }, $this.wrapper);
@@ -4516,7 +4510,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
       if (!config.nativeScroll) {
         $this.bar = createElement('DIV');
-        addClass($this.bar, 'uk-scroller-bar ' + scrollDirection);
+        addClass($this.bar, 'sp-scroller-bar ' + scrollDirection);
         el.appendChild($this.bar);
 
         $windowListeners.resize.push($this.moveBar.bind($this));
@@ -4537,7 +4531,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       el.addEventListener('mousedown', function(e) {
         lastPageY = e.pageY;
         lastPageX = e.pageX;
-        addClass(el, 'uk-scroller-grabbed');
+        addClass(el, 'sp-scroller-grabbed');
         document.addEventListener('mousemove', drag);
         document.addEventListener('mouseup', stop);
         return false;
@@ -4559,7 +4553,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
 
       function stop() {
-        removeClass(el, 'uk-scroller-grabbed');
+        removeClass(el, 'sp-scroller-grabbed');
         document.removeEventListener('mousemove', drag);
         document.removeEventListener('mouseup', stop);
       }
@@ -4578,9 +4572,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       raf(function() {
         // Hide scrollbar if no scrolling is possible
         if($this.scrollRatio >= 1) {
-          addClass($this.bar, 'uk-hidden');
+          addClass($this.bar, 'sp-hidden');
         } else {
-          removeClass($this.bar, 'uk-hidden');
+          removeClass($this.bar, 'sp-hidden');
 
           if ($this.scrollDirection == 'y') {
             $this.bar.style.cssText = 'height:' + Math.max($this.scrollRatio * 100, 10) + '%; top:' +
@@ -4607,16 +4601,31 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       htmlTag: "SELECT",
       itemTag: "OPTION",
       groupTag: "OPTGROUP",
-      tagClass: "uk-select",
+      tagClass: "sp-select",
       flex: false,
       flexSize: "",
       listStyle: ""
     },
-    $setters: {
-      multiple: function (value) {
-        setAttributes(this.getFormControl(), value ? {multiple: value} : {});
+    $setters: extend(
+      classSetters({
+        selectStyle: prefixClassOptions({
+          line: '',
+          input: '',
+          "": ""
+        }, 'sp-select-', true),
+        size: prefixClassOptions({
+          mini: "",
+          small: "",
+          large: "",
+          "": ""
+        }, 'sp-select-', true)
+      }),
+      {
+        multiple: function (value) {
+          setAttributes(this.getFormControl(), value ? {multiple: value} : {});
+        }
       }
-    },
+    ),
     __init__: function () {
       this.optgroups = {};
     },
@@ -4672,7 +4681,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     __name__: "form",
     $defaults: {
       htmlTag: "FORM",
-      tagClass: "uk-form",
+      tagClass: "sp-form",
       formStyle: "stacked",
       fieldset: []
     },
@@ -4686,7 +4695,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           horizontal: "",
           line: "",
           "": ""
-        }, 'uk-form-', true)
+        }, 'sp-form-', true)
       }),
       {
         fieldset: function (value) {
@@ -4770,7 +4779,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     $defaults: {
       htmlTag: "FIELDSET",
       itemTag: "DIV",
-      itemTagClass: "uk-form-row"
+      itemTagClass: "sp-form-row"
     },
     $setters: classSetters({
       formStyle: prefixClassOptions({
@@ -4778,7 +4787,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         horizontal: "",
         line: "",
         "": ""
-      }, 'uk-form-', true)
+      }, 'sp-form-', true)
     }),
     itemTagString: function (item) {
       return item.$title ? "LEGEND" : getConfig(this).itemTag;
@@ -4790,7 +4799,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       else {
         var component = exports.new(item, function (componentElement) {
           if (!item.$inline) {
-            var controlContainer = createElement("DIV", {class: "uk-form-controls"});
+            var controlContainer = createElement("DIV", {class: "sp-form-controls"});
             controlContainer.appendChild(componentElement);
             el.appendChild(controlContainer);
           }
@@ -4802,11 +4811,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         this.$components.push(component);
 
         if (item.formLabel || item.formLabelAttributes) {
-          var attrs = {class: "uk-form-label", for: item.id}
+          var attrs = {class: "sp-form-label", for: item.id}
           if (item.formLabelAttributes) extend(attrs, item.formLabelAttributes)
           var label = component.label = createElement("LABEL", attrs);
           if (item.formLabel) label.innerHTML = item.formLabel;
-          if (item.$inline) addClass(label, "uk-display-inline");
+          if (item.$inline) addClass(label, "sp-display-inline");
           el.insertBefore(label, el.firstChild);
         }
       }

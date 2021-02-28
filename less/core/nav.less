@@ -1,288 +1,85 @@
-// Name:            Nav
-// Description:     Defines styles for list navigations
-//
-// Component:       `uk-nav`
-//
-// Sub-objects:     `uk-nav-header`
-//                  `uk-nav-divider`
-//
-// Modifiers:       `uk-nav-parent-icon`
-//                  `uk-nav-side`
-//                  `uk-nav-dropdown`
-//                  `uk-nav-navbar`
-//                  `uk-nav-offcanvas`
-//
-// States:          `uk-active`
-//                  `uk-parent`
-//                  `uk-open`
-//                  `uk-touch`
-//
-// Uses:            Icon: FontAwesome
-//
-// Used by:         Panel
-//                  Dropdown
-//
-// Markup:
-//
-// <!-- uk-nav -->
-// <ul class="uk-nav">
-//     <li class="uk-active"><a href=""></a></li>
-//     <li><a href=""></a></li>
-// </ul>
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@nav-padding-vertical:                          0.25em;
-@nav-padding-horizontal:                        1.5em;
-
-@nav-header-padding-vertical:                   @nav-padding-vertical;
-@nav-header-padding-horizontal:                 @nav-padding-horizontal;
-@nav-header-font-size:                          8pt;
-@nav-header-text-transform:                     uppercase;
-
-@nav-divider-margin-vertical:                   0.5em;
-@nav-divider-margin-horizontal:                 @nav-padding-horizontal;
-
-@nav-side-color:                                #5e6d82;
-@nav-side-dark-color:                           #b9bbc1;
-@nav-side-hover-background:                     transparent;
-@nav-side-hover-color:                          @nav-side-color;
-@nav-side-hover-dark-color:                     @nav-side-dark-color;
-@nav-side-active-color:                         @global-primary-background;
-@nav-side-active-dark-color:                    #fff;
-@nav-side-active-border-color:                  @tab-item-active-color;
-@nav-side-active-dark-border-color:             @tab-item-active-dark-color;
-@nav-side-header-color:                         fade(#8391a5, 80%);
-@nav-side-divider-border:                       @global-border;
-@nav-side-divider-dark-border:                  @global-dark-border;
-@nav-side-divider-border-width:                 1px;
-
-@nav-dropdown-color:                            @global-color;
-@nav-dropdown-hover-background:                 #ecf5ff;
-@nav-dropdown-hover-dark-background:            #1d324c;
-@nav-dropdown-hover-color:                      @nav-side-active-color;
-@nav-dropdown-hover-dark-color:                 @nav-side-active-dark-color;
-@nav-dropdown-header-color:                     @nav-side-header-color;
-@nav-dropdown-divider-border:                   @global-border;
-@nav-dropdown-divider-dark-border:              @global-dark-border;
-@nav-dropdown-divider-border-width:             1px;
-
-
-/* ========================================================================
-   Component: Nav
- ========================================================================== */
-
-.uk-nav,
-.uk-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.sp-nav {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/*
- * Items
- */
-
-.uk-nav > li > a {
-    display: block;
-    text-decoration: none;
-    padding: @nav-padding-vertical @nav-padding-horizontal;
+.sp-nav > .sp-list-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color 0.6s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-
-.uk-nav > li > a[disabled] {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-
-/* Sub-object: `uk-nav-header`
- ========================================================================== */
-
-.uk-nav-header {
-    padding: @nav-header-padding-vertical @nav-header-padding-horizontal;
-    text-transform: @nav-header-text-transform;
-    font-size: @nav-header-font-size;
-    .hook-nav-header;
-}
-
-
-/* Sub-object: `uk-nav-divider`
- ========================================================================== */
-
-.uk-nav-divider {
-    margin: @nav-divider-margin-vertical @nav-divider-margin-horizontal;
-    .hook-nav-divider;
-}
-
-
-/* Modifier `uk-nav-side`
- ========================================================================== */
-
-/*
- * Items
- */
-
-.uk-nav-side > li > a {
-    color: @nav-side-color;
-    .hook-nav-side;
-}
-
-/*
- * Hover
- * 1. Apply hover style also to focus state
- * 2. Remove default focus style
- */
 .uk-notouch {
-  .uk-nav-side > li > a:hover,
-  .uk-nav-side > li > a:focus { // 1
-      background: @nav-side-hover-background;
-      /* 2 */
-      outline: none;
-      .hook-nav-side-hover;
+  .sp-nav > .sp-list-item:hover {
+    background-color: fade(@global-color, 5%);
   }
 }
 
-/* Active */
-.uk-nav-side > li.uk-active > a {
-    & {
-        color: @nav-side-active-color;
-        background: none;
-    }
-
-    &.uk-active-line:before {
-        left: 0;
-    }
-
-    .hook-nav-side-active;
-}
-
-.uk-nav-side > li.uk-active .uk-active-line {
-    position: relative;
-
-    &:before {
-        content: "";
-        position: absolute;
-        top: ~"calc(50% - 1px)";
-        left: -24px;
-        width: 12px;
-        border-top: 2px solid @nav-side-active-border-color;
-
-        .dark & {
-            border-color: @nav-side-active-dark-border-color;
-        }
-    }
-}
-
-/*
- * Sub-object: `uk-nav-header`
- */
-
-.uk-nav-side .uk-nav-header {
-    color: @nav-side-header-color;
-    .hook-nav-side-header;
-}
-
-/*
- * Sub-object: `uk-nav-divider`
- */
-
-.uk-nav-side .uk-nav-divider {
-    border-top: @nav-side-divider-border-width solid @nav-side-divider-border;
-    .hook-nav-side-divider;
-}
-
-
-/* Modifier `uk-nav-dropdown`
+/* Sub-object: `sp-nav-header`
  ========================================================================== */
 
-/*
- * Items
- */
-
-.uk-nav-dropdown > li > a {
-    color: @nav-dropdown-color;
-
-    .hook-nav-dropdown;
+.sp-list-item.sp-nav-header {
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-size: 0.75em;
+  font-weight: 500;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
-/*
- * Hover
- * 1. Apply hover style also to focus state
- * 2. Remove default focus style
- */
-.uk-notouch {
-  .uk-nav-dropdown > li > a:hover,
-  .uk-nav-dropdown > li > a:focus { // 1
-      background: @nav-dropdown-hover-background;
-      color: @nav-dropdown-hover-color;
-      /* 2 */
-      outline: none;
-      .hook-nav-dropdown-hover;
+/* Sub-object: `sp-nav-divider`
+ ========================================================================== */
+
+.sp-nav-divider {
+  margin: 0 1.5em;
+  pointer-events: none;
+}
+
+/* Modifier `sp-nav-side`
+ ========================================================================== */
+
+.sp-nav-side {
+  flex-direction: column;
+}
+
+.sp-nav-side > .sp-list-item:hover {
+  background-color: fade(@global-heading-color, 3%);
+}
+
+&.dark .sp-nav-side > .sp-list-item:hover {
+  background-color: fade(@global-dark-heading-color, 5%);
+}
+
+.sp-nav-side > .sp-list-item.sp-active {
+  color: @global-heading-color;
+  background-color: fade(@global-heading-color, 5%);
+}
+
+.sp-nav-side.sp-nav-primary > .sp-list-item.sp-active {
+  color: @global-primary;
+  background-color: fade(@global-primary, 5%);
+  .dark & {
+    color: @global-dark-primary;
+    background-color: fade(@global-dark-primary, 5%);
   }
 }
 
-/*
- * Sub-object: `uk-nav-header`
- */
-
-.uk-nav-dropdown .uk-nav-header {
-    color: @nav-dropdown-header-color;
-    .hook-nav-dropdown-header;
+.sp-nav-side.sp-nav-success > .sp-list-item.sp-active {
+  color: @global-success;
+  background-color: fade(@global-success, 5%);
 }
 
 /*
- * Sub-object: `uk-nav-divider`
+ * Sub-object: `sp-nav-divider`
  */
 
-.uk-nav-dropdown .uk-nav-divider {
-    border-top: @nav-dropdown-divider-border-width solid @nav-dropdown-divider-border;
-    .hook-nav-dropdown-divider;
-}
-
-
-// Hooks
-// ========================================================================
-
-.hook-nav-header() {}
-.hook-nav-divider() {}
-
-.hook-nav-side() {
-    .dark & {
-        color: @nav-side-dark-color;
-    }
-}
-.hook-nav-side-hover() {
-    .dark & {
-        color: @nav-side-hover-dark-color;
-    }
-}
-.hook-nav-side-active() {
-    .dark & {
-        color: @nav-side-active-dark-color;
-    }
-}
-.hook-nav-side-header() {}
-.hook-nav-side-divider() {
-    .dark & {
-        border-color: @nav-side-divider-dark-border
-    }
-}
-
-.hook-nav-dropdown() {}
-.hook-nav-dropdown-hover() {
-    .dark & {
-        background: @nav-dropdown-hover-dark-background;
-        color: @nav-dropdown-hover-dark-color;
-    }
-}
-.hook-nav-dropdown-header() {}
-.hook-nav-dropdown-divider() {
-    .dark & {
-        border-color: @nav-dropdown-divider-dark-border
-    }
+.sp-nav-side .sp-nav-divider {
+  margin: 0.5em 0;
+  border-top: 1px solid @global-border;
+  .dark & {
+    border-color: @global-dark-border;
+  }
 }

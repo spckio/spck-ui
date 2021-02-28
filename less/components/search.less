@@ -1,241 +1,34 @@
-// Name:            Search
-// Description:     Defines a search component
-//
-// Component:       `uk-search`
-//
-// Sub-objects:     `uk-search-field`
-//
-// Modifier:        (Nav) `uk-nav-search`
-//                  (Dropdown) `uk-dropdown-search`
-//
-// States:          `uk-active`
-//                  `uk-loading`
-//
-// Uses:            Animation
-//                  Navbar: `uk-navbar-flip`
-//
-// Used by:         Off-canvas
-//
-// Markup:
-//
-// <!-- uk-search -->
-// <form class="uk-search" data-uk-search>
-//     <input class="uk-search-field" type="search" placeholder="">
-// </form>
-//
-// ========================================================================
-
-
-// Variables
-// ========================================================================
-
-@search-width:                                  100%;
-@search-height:                                 @global-height;
-@search-background:                             none;
-@search-color:                                  @global-color;
-@search-dark-color:                             @global-dark-color;
-@search-placeholder-color:                      lighten(@global-color, 10%);
-@search-text-indent:                            1.5em;
-@search-border:                                 @global-border;
-@search-dark-border:                            @global-dark-border;
-@search-padding:                                6px 8px;
-
-// Search icon
-@search-icon-top:                               0.05em;
-@search-icon-line-height:                       @global-height;
-
-// Dropdown modifier
-@dropdown-search-width:                         300px;
-@dropdown-search-margin-top:                    0;
-@dropdown-search-background:                    @global-muted-color;
-@dropdown-search-color:                         @global-color;
-@dropdown-search-animation:                     uk-slide-top-fixed;
-@dropdown-search-navbar-margin-top:             @global-margin-small;
-@dropdown-search-navbar-margin-right:           -@global-margin;
-
-// Nav modifier
-@nav-search-color:                              @global-color;
-@nav-search-active-background:                  none;
-@nav-search-active-color:                       @global-primary-background;
-@nav-search-header-color:                       @search-placeholder-color;
-@nav-search-divider-border:                     @global-border;
-@nav-search-divider-border-width:               1px;
-
-
 /* ========================================================================
    Component: Search
  ========================================================================== */
 
-/*
- * 1. Create position context for dropdowns
- * 2. Needed for `form` element
- */
-
-.uk-search {
-    display: inline-block;
-    /* 1 */
-    position: relative;
-    /* 2 */
-    margin: 0;
-    .hook-search;
+.sp-search {
+  display: flex;
+  align-items: center;
+  /* Needed for `form` element */
+  margin: 0;
 }
 
-/* Sub-object `uk-search-field`
+/* Sub-object `sp-search-field`
  ========================================================================== */
-
-/*
- * Removes inner padding and border in Firefox 4+.
- */
-
-.uk-search-field::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-}
 
 /*
  * Remove inner padding and search cancel button in Chrome, Safari and Opera on OS X.
  */
 
-.uk-search-field::-webkit-search-cancel-button,
-.uk-search-field::-webkit-search-decoration { -webkit-appearance: none; }
-
-/*
- * Removes placeholder transparency in Firefox.
- */
-
-.uk-search-field::-moz-placeholder { opacity: 1; }
-
-/*
- * 1. Define consistent box sizing.
- * 2. Address margins set differently in Firefox/IE and Chrome/Safari/Opera.
- * 3. Remove `border-radius` in iOS.
- * 4. Correct `font` properties and `color` not being inherited.
- * 5. Remove default style in iOS.
- * 6. Style
- */
-
-.uk-search-field {
-    /* 1 */
-    box-sizing: border-box;
-    /* 2 */
-    margin: 0;
-    /* 3 */
-    border-radius: 0;
-    /* 4 */
-    font: inherit;
-    color: @search-color;
-    /* 5 */
-    -webkit-appearance: none;
-    /* 6 */
-    width: @search-width;
-    height: @search-height;
-    background: @search-background;
-    -webkit-transition: all linear 0.2s;
-    transition: all linear 0.2s;
-    vertical-align: middle;
-    text-indent: @search-text-indent;
-
-    border: 0;
-    border-bottom: solid 1px @search-border;
-    padding: @search-padding;
-
-    .dark & {
-        color: @search-dark-color;
-        border-color: @search-dark-border;
-    }
+.sp-search > .sp-input::-webkit-search-cancel-button,
+.sp-search > .sp-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-/* Placeholder */
-.uk-search-field:-ms-input-placeholder { color: @search-placeholder-color !important; }
-.uk-search-field::-moz-placeholder { color: @search-placeholder-color; }
-.uk-search-field::-webkit-input-placeholder { color: @search-placeholder-color; }
-.uk-search-field::placeholder { color: @search-placeholder-color; }
-
-/* Focus */
-.uk-search-field:focus {
-    outline: 0;
+.sp-search > .sp-input {
+  padding-left: 38px;
 }
 
-.uk-search-icon {
-    position: absolute;
-    pointer-events: none;
-    top: @search-icon-top;
-    line-height: @search-icon-line-height;
+.sp-search-icon {
+  position: absolute;
+  pointer-events: none;
+  font-size: 18px;
+  margin-left: 12px;
 }
-
-/* Dropdown modifier: `uk-dropdown-search`
- ========================================================================== */
-
-.uk-dropdown-search {
-    width: @dropdown-search-width;
-    margin-top: @dropdown-search-margin-top;
-    background: @dropdown-search-background;
-    color: @dropdown-search-color;
-}
-
-.uk-open > .uk-dropdown-search {
-    -webkit-animation: @dropdown-search-animation 0.2s ease-in-out;
-    animation: @dropdown-search-animation 0.2s ease-in-out;
-}
-
-/*
- * Dependency `uk-navbar-flip`
- */
-
-.uk-navbar-flip .uk-dropdown-search {
-    margin-top: @dropdown-search-navbar-margin-top;
-    margin-right: @dropdown-search-navbar-margin-right;
-}
-
-
-/* Nav modifier `uk-nav-search`
- ========================================================================== */
-
-/*
- * Items
- */
-
-.uk-nav-search > li > a {
-    color: @nav-search-color;
-    .hook-nav-search;
-}
-
-/*
- * Active
- * 1. Remove default focus style
- */
-
-.uk-nav-search > li.uk-active > a {
-    background: @nav-search-active-background;
-    color: @nav-search-active-color;
-    /* 1 */
-    outline: none;
-    .hook-nav-search-active;
-}
-
-/*
- * Sub-object: `uk-nav-header`
- */
-
-.uk-nav-search .uk-nav-header {
-    color: @nav-search-header-color;
-    .hook-nav-search-header;
-}
-
-/*
- * Sub-object: `uk-nav-divider`
- */
-
-.uk-nav-search .uk-nav-divider {
-    border-top: @nav-search-divider-border-width solid @nav-search-divider-border;
-    .hook-nav-search-divider;
-}
-
-// Hooks
-// ========================================================================
-
-.hook-search() {}
-.hook-nav-search() {}
-.hook-nav-search-active() {}
-.hook-nav-search-header() {}
-.hook-nav-search-divider() {}

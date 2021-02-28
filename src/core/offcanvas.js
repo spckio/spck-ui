@@ -17,9 +17,9 @@
             options = UI.$.extend({mode: 'push'}, options);
 
             var $body     = UI.$('body'),
-                bar       = element.find('.uk-offcanvas-bar:first'),
+                bar       = element.find('.sp-offcanvas-bar:first'),
                 rtl       = (UI.langdirection == 'right'),
-                flip      = bar.hasClass('uk-offcanvas-bar-flip') ? -1:1,
+                flip      = bar.hasClass('sp-offcanvas-bar-flip') ? -1:1,
                 dir       = flip * (rtl ? -1 : 1),
 
                 scrollbarwidth =  window.innerWidth - $body.width();
@@ -27,9 +27,9 @@
             scrollpos = {x: window.pageXOffset, y: window.pageYOffset};
 
             bar.attr('mode', options.mode);
-            element.addClass('uk-active');
+            element.addClass('sp-active');
 
-            $body.css({width: window.innerWidth - scrollbarwidth, height: window.innerHeight}).addClass('uk-offcanvas-page');
+            $body.css({width: window.innerWidth - scrollbarwidth, height: window.innerHeight}).addClass('sp-offcanvas-page');
 
             if (options.mode == 'push' || options.mode == 'reveal') {
                 $body.css((rtl ? 'margin-right' : 'margin-left'), (rtl ? -1 : 1) * (bar.outerWidth() * dir));
@@ -42,7 +42,7 @@
             $html.css('margin-top', scrollpos.y * -1).width(); // .width() - force redraw
 
 
-            bar.addClass('uk-offcanvas-bar-show');
+            bar.addClass('sp-offcanvas-bar-show');
 
             this._initElement(element);
 
@@ -55,14 +55,14 @@
         hide: function(force) {
 
             var $body = UI.$('body'),
-                panel = UI.$('.uk-offcanvas.uk-active'),
+                panel = UI.$('.sp-offcanvas.sp-active'),
                 rtl   = (UI.langdirection == 'right'),
-                bar   = panel.find('.uk-offcanvas-bar:first'),
+                bar   = panel.find('.sp-offcanvas-bar:first'),
                 finalize = function() {
-                    $body.removeClass('uk-offcanvas-page').css({width: '', height: '', marginLeft: '', marginRight: ''});
-                    panel.removeClass('uk-active');
+                    $body.removeClass('sp-offcanvas-page').css({width: '', height: '', marginLeft: '', marginRight: ''});
+                    panel.removeClass('sp-active');
 
-                    bar.removeClass('uk-offcanvas-bar-show');
+                    bar.removeClass('sp-offcanvas-bar-show');
                     $html.css('margin-top', '');
                     window.scrollTo(scrollpos.x, scrollpos.y);
                     bar.trigger('hide.uk.offcanvas', [panel, bar]);
@@ -85,7 +85,7 @@
                 }
 
                 setTimeout(function(){
-                    bar.removeClass('uk-offcanvas-bar-show');
+                    bar.removeClass('sp-offcanvas-bar-show');
                 }, 0);
 
             } else {
@@ -102,12 +102,12 @@
                 var target = UI.$(e.target);
 
                 if (e.type.match(/swipe/)) {
-                    if (target.parents('.uk-offcanvas-bar:first').length) return;
+                    if (target.parents('.sp-offcanvas-bar:first').length) return;
                 } else {
 
-                    if (!target.hasClass('uk-offcanvas-close')) {
-                        if (target.hasClass('uk-offcanvas-bar')) return;
-                        if (target.parents('.uk-offcanvas-bar:first').length) return;
+                    if (!target.hasClass('sp-offcanvas-close')) {
+                        if (target.hasClass('sp-offcanvas-bar')) return;
+                        if (target.parents('.sp-offcanvas-bar:first').length) return;
                     }
                 }
 
@@ -139,7 +139,7 @@
                     }
 
                     if (target.length && UI.Utils.scrollToElement) {
-                        UI.Utils.scrollToElement(target, UI.Utils.options(link.attr('data-uk-smooth-scroll') || '{}'));
+                        UI.Utils.scrollToElement(target, UI.Utils.options(link.attr('data-sp-smooth-scroll') || '{}'));
                     } else {
                         window.location.href = href;
                     }
@@ -157,14 +157,14 @@
         boot: function() {
 
             // init code
-            $html.on('click.offcanvas.uikit', '[data-uk-offcanvas]', function(e) {
+            $html.on('click.offcanvas.uikit', '[data-sp-offcanvas]', function(e) {
 
                 e.preventDefault();
 
                 var ele = UI.$(this);
 
                 if (!ele.data('offcanvasTrigger')) {
-                    var obj = UI.offcanvasTrigger(ele, UI.Utils.options(ele.attr('data-uk-offcanvas')));
+                    var obj = UI.offcanvasTrigger(ele, UI.Utils.options(ele.attr('data-sp-offcanvas')));
                     ele.trigger("click");
                 }
             });

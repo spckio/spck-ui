@@ -22,11 +22,11 @@
             // init code
             UI.ready(function(context) {
 
-                UI.$('[data-uk-switcher]', context).each(function() {
+                UI.$('[data-sp-switcher]', context).each(function() {
                     var switcher = UI.$(this);
 
                     if (!switcher.data('switcher')) {
-                        var obj = UI.switcher(switcher, UI.Utils.options(switcher.attr('data-uk-switcher')));
+                        var obj = UI.switcher(switcher, UI.Utils.options(switcher.attr('data-sp-switcher')));
                     }
                 });
             });
@@ -51,11 +51,11 @@
                 return;
             }
 
-            this.connect.on('click.uk.switcher', '[data-uk-switcher-item]', function(e) {
+            this.connect.on('click.uk.switcher', '[data-sp-switcher-item]', function(e) {
 
                 e.preventDefault();
 
-                var item = UI.$(this).attr('data-uk-switcher-item');
+                var item = UI.$(this).attr('data-sp-switcher-item');
 
                 if ($this.index == item) return;
 
@@ -84,10 +84,10 @@
 
         update: function() {
 
-            this.connect.children().removeClass('uk-active').attr('aria-hidden', 'true');
+            this.connect.children().removeClass('sp-active').attr('aria-hidden', 'true');
 
             var toggles = this.find(this.options.toggle),
-                active  = toggles.filter('.uk-active');
+                active  = toggles.filter('.sp-active');
 
             if (active.length) {
                 this.show(active, false);
@@ -143,14 +143,14 @@
                 animation = Animations.none;
             }
 
-            if (active.hasClass("uk-disabled")) return;
+            if (active.hasClass("sp-disabled")) return;
 
             // Update ARIA for Toggles
             toggles.attr('aria-expanded', 'false');
             active.attr('aria-expanded', 'true');
 
-            toggles.filter(".uk-active").removeClass("uk-active");
-            active.addClass("uk-active");
+            toggles.filter(".sp-active").removeClass("sp-active");
+            active.addClass("sp-active");
 
             if (this.options.connect && this.connect.length) {
 
@@ -164,15 +164,15 @@
 
                     var container = UI.$(this),
                         children  = UI.$(container.children()),
-                        current   = UI.$(children.filter('.uk-active')),
+                        current   = UI.$(children.filter('.sp-active')),
                         next      = UI.$(children.eq($this.index));
 
                         $this.animating = true;
 
                         animation.apply($this, [current, next]).then(function(){
 
-                            current.removeClass("uk-active");
-                            next.addClass("uk-active");
+                            current.removeClass("sp-active");
+                            next.addClass("sp-active");
 
                             // Update ARIA for connect
                             current.attr('aria-hidden', 'true');
@@ -199,20 +199,20 @@
         },
 
         'fade': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-fade', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-fade', current, next]);
         },
 
         'slide-bottom': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-bottom', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-bottom', current, next]);
         },
 
         'slide-top': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-top', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-top', current, next]);
         },
 
         'slide-vertical': function(current, next, dir) {
 
-            var anim = ['uk-animation-slide-top', 'uk-animation-slide-bottom'];
+            var anim = ['sp-animation-slide-top', 'sp-animation-slide-bottom'];
 
             if (current && current.index() > next.index()) {
                 anim.reverse();
@@ -222,16 +222,16 @@
         },
 
         'slide-left': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-left', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-left', current, next]);
         },
 
         'slide-right': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-slide-right', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-slide-right', current, next]);
         },
 
         'slide-horizontal': function(current, next, dir) {
 
-            var anim = ['uk-animation-slide-right', 'uk-animation-slide-left'];
+            var anim = ['sp-animation-slide-right', 'sp-animation-slide-left'];
 
             if (current && current.index() > next.index()) {
                 anim.reverse();
@@ -241,7 +241,7 @@
         },
 
         'scale': function(current, next) {
-            return coreAnimation.apply(this, ['uk-animation-scale-up', current, next]);
+            return coreAnimation.apply(this, ['sp-animation-scale-up', current, next]);
         }
     };
 
@@ -268,7 +268,7 @@
 
         release = function() {
 
-            if (current) current.hide().removeClass('uk-active '+clsOut+' uk-animation-reverse');
+            if (current) current.hide().removeClass('sp-active '+clsOut+' sp-animation-reverse');
 
             next.addClass(clsIn).one(UI.support.animation.end, function() {
 
@@ -291,12 +291,12 @@
 
             current.css('animation-duration', this.options.duration+'ms');
 
-            current.css('display', 'none').addClass(clsOut+' uk-animation-reverse').one(UI.support.animation.end, function() {
+            current.css('display', 'none').addClass(clsOut+' sp-animation-reverse').one(UI.support.animation.end, function() {
                 release();
             }.bind(this)).css('display', '');
 
         } else {
-            next.addClass('uk-active');
+            next.addClass('sp-active');
             release();
         }
 
