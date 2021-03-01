@@ -38,6 +38,10 @@
   pointer-events: none;
 }
 
+.sp-list-item.sp-nav-divider {
+  padding: 0;
+}
+
 /* Modifier `sp-nav-side`
  ========================================================================== */
 
@@ -56,6 +60,10 @@
 .sp-nav-side > .sp-list-item.sp-active {
   color: @global-heading-color;
   background-color: fade(@global-heading-color, 5%);
+  .dark & {
+    color: @global-dark-heading-color;
+    background-color: transparent;
+  }
 }
 
 .sp-nav-side.sp-nav-primary > .sp-list-item.sp-active {

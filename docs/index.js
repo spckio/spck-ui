@@ -2230,7 +2230,7 @@ UI.new({
                     return item.options ? {
                       view: 'button',
                       cls: 'sp-text-nowrap',
-                      icon: 'more',
+                      icon: 'kebab-horizontal-16',
                       size: 'small',
                       dropdownOptions: {
                         marginY: Object.keys(item.options).length > 12 ? -300 : 8

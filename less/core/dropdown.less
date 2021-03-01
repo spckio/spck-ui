@@ -5,7 +5,9 @@
   z-index: @global-z-index + 60;
   box-sizing: border-box;
   border-radius: 8px;
-  width: 200px;
+  min-width: 180px;
+  width: auto;
+  white-space: nowrap;
 }
 
 /*
@@ -28,16 +30,6 @@
 .sp-open > .sp-dropdown,
 .sp-open > .sp-dropdown-blank {
   display: block;
-}
-
-/*
-* Set min-width and text expands dropdown if needed
-*/
-
-.sp-dropdown-small {
-  min-width: 150px;
-  width: auto;
-  white-space: nowrap;
 }
 
 /*

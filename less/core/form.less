@@ -210,18 +210,17 @@ select.sp-form-width-mini { width: (@form-mini-width + 25px); }
   align-items: center;
 }
 
+.sp-form-horizontal .sp-form-controls {
+  flex: 1;
+}
+
 .sp-form-horizontal .sp-form-label {
   width: 200px;
 }
 
 @media (max-width: @breakpoint-mini-max) {
-
   .sp-form-horizontal > .sp-form-row {
     flex-direction: column;
-  }
-
-  .sp-form-horizontal .sp-form-controls {
-    flex: 1;
   }
 
   /* Better vertical alignment if controls are checkboxes and radio buttons with text */

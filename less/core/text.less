@@ -20,8 +20,8 @@
 /* Color modifiers
  ========================================================================== */
 
-.sp-text-muted { color: @global-muted-color !important; }
-.dark .sp-text-muted { color: @global-dark-muted-color !important; }
+.sp-text-muted { color: lighten(@global-color, 20%) !important; }
+.dark .sp-text-muted { color: darken(@global-dark-color, 20%) !important; }
 .sp-text-primary { color: @global-primary !important; }
 .dark .sp-text-primary { color: @global-dark-primary !important; }
 .sp-text-success { color: @global-success !important; }

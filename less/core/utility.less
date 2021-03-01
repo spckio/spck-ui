@@ -62,14 +62,19 @@
  * Useful to extend the `html` and `body` element to the full height of the page.
  */
 
-.sp-height-1-1 { height: 100%; }
+.sp-height-100 { height: 100%; }
 
 [class*='sp-width'] {
   box-sizing: border-box;
-  width: 100%;
 }
 
-.sp-width-1-1 { width: 100%; }
+.sp-width-100 { width: 100%; }
+
+.sp-screen-100 {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
 
 /*
  * Useful to create image teasers
@@ -276,6 +281,24 @@
 .sp-padding-large-y {
   padding-top: @global-padding-large;
   padding-bottom: @global-padding-large;
+}
+
+/* Rotate
+ ========================================================================== */
+
+.sp-rotate-90 {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.sp-rotate-180 {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.sp-rotate-270 {
+  -webkit-transform: rotate(270deg);
+  transform: rotate(270deg);
 }
 
 /* Border

@@ -3,11 +3,14 @@
  ========================================================================== */
 
 .sp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sp-list:not(.sp-list-blank) {
   display: flex;
   flex-direction: column;
-  list-style: none;
-  padding: 8px 16px;
-  margin: 0;
 }
 
 /* Modifier: `sp-list-line`

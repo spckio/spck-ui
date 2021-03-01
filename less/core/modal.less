@@ -6,36 +6,32 @@
 
 /*
 * This is the modal overlay and modal dialog container
-* 1. Hide by default
-* 2. Set fixed position
-* 3. Allow scrolling for the modal dialog
-* 4. Mask the background page
-* 5. Fade-in transition
-* 6. Deactivate browser history navigation in IE11
-* 7. force hardware acceleration to prevent browser rendering hiccups
 */
 
 .sp-modal {
-  /* 1 */
+  /* Hide by default */
   display: none;
-  /* 2 */
+  /* Set fixed position */
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: @global-z-index + 1000;
-  /* 3 */
+  /* Allow scrolling for the modal dialog */
   overflow-y: auto;
-  /* 4 */
+  /* Mask the background page */
   background: rgba(0,0,0,.3);
-  /* 5 */
+  .dark & {
+    background: rgba(0,0,0,.5);
+  }
+  /* Fade-in transition */
   opacity: 0;
   -webkit-transition: opacity 0.3s linear;
   transition: opacity 0.3s linear;
-  /* 6 */
+  /* Deactivate browser history navigation in IE11 */
   touch-action: cross-slide-y pinch-zoom double-tap-zoom;
-  /* 7 */
+  /* Force hardware acceleration to prevent browser rendering hiccups */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
@@ -66,6 +62,7 @@
   padding: @modal-margin;
   width: 450px;
   border-radius: 8px;
+  overflow: hidden;
   max-width: ~"calc(100% - 32px)";
   box-shadow: @global-box-shadow;
   background: #fff;
@@ -123,9 +120,9 @@
 
 .sp-modal-dialog > .sp-close:first-child {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  padding: 5px;
+  top: 20px;
+  right: 20px;
+  padding: 4px;
 }
 
 /* Modifier: `sp-modal-dialog-lightbox`
@@ -184,11 +181,6 @@
   margin: 0;
 }
 
-.sp-modal-footer > .sp-modal-header {
-  margin: 0;
-}
-
-
 /* Modifier: `sp-modal-dialog-large`
 ========================================================================== */
 
@@ -208,13 +200,20 @@
 /* Sub-Object: `sp-modal-header` and `sp-modal-footer`
 ========================================================================== */
 
+.sp-modal-dialog-scroll > .sp-scroller-container {
+  margin-left: -@modal-margin;
+  margin-right: -@modal-margin;
+  margin-bottom: -@modal-margin;
+  width: auto;
+}
+
 .sp-modal-header {
-  margin: -@modal-margin -@modal-margin @modal-margin/2;
+  margin: -@modal-margin -@modal-margin 0;
   padding: @modal-margin @modal-margin @modal-margin/2;
 }
 
 .sp-modal-footer {
-  margin: @modal-margin/2 -@modal-margin -@modal-margin;
+  margin: 0 -@modal-margin -@modal-margin;
   padding: @modal-margin/2 @modal-margin;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;

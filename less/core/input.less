@@ -111,12 +111,12 @@
   display: flex;
   box-shadow: @input-box-shadow;
 
-  .sp-button {
-    height: 100%;
+  .dark & {
+    box-shadow: @input-dark-box-shadow;
   }
 
-  .sp-input, .sp-button, .sp-select-input {
-    box-shadow: none;
+  > .sp-input, > .sp-button, > .sp-select-input {
+    box-shadow: none !important;
   }
 }
 

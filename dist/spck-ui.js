@@ -4372,9 +4372,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       "": ""
     }, 'sp-position-', true),
     fill: prefixClassOptions({
-      height: "height-1-1",
+      height: "height-100",
       width: "width-100",
-      screen: ["height-1-1", "width-100"],
+      screen: "screen-100",
       "": ""
     }, 'sp-'),
     float: prefixClassOptions({
@@ -7151,6 +7151,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
           "nav-side-success": ["nav", "nav-side", "nav-success"],
           "danger": "nav-danger",
           "list": "list",
+          "blank": ["list", "list-blank"],
           "tab": "tab",
           "tab-vertical": ["tab", "flex-column"],
           "tab-primary": ["tab", "primary"],
