@@ -46,8 +46,7 @@
     flex-direction: column-reverse;
 }
 
-/* Desktop and bigger */
-@media (min-width: @breakpoint-large) {
+@media (min-width: @breakpoint-large-min) {
 
     .sp-flex-column-large {
         flex-direction: column;
@@ -63,7 +62,22 @@
 
 }
 
-/* Phone landscape and smaller*/
+@media (max-width: @breakpoint-medium-max) {
+
+  .sp-flex-column-medium {
+      flex-direction: column;
+  }
+
+  .sp-flex-column-reverse-medium {
+      flex-direction: column-reverse;
+  }
+
+  .sp-flex-row-reverse-medium {
+      flex-direction: row-reverse;
+  }
+
+}
+
 @media (max-width: @breakpoint-small-max) {
 
     .sp-flex-column-small {
@@ -77,6 +91,22 @@
     .sp-flex-row-reverse-small {
         flex-direction: row-reverse;
     }
+
+}
+
+@media (max-width: @breakpoint-mini-max) {
+
+  .sp-flex-column-mini {
+      flex-direction: column;
+  }
+
+  .sp-flex-column-reverse-mini {
+      flex-direction: column-reverse;
+  }
+
+  .sp-flex-row-reverse-mini {
+      flex-direction: row-reverse;
+  }
 
 }
 
@@ -131,7 +161,7 @@
 
 
 /* Phone landscape and bigger */
-@media (min-width: @breakpoint-small) {
+@media (min-width: @breakpoint-medium-max) {
 
     .sp-flex-order-first-small {
         order: -1;
@@ -144,7 +174,7 @@
 }
 
 /* Tablet and bigger */
-@media (min-width: @breakpoint-medium) {
+@media (min-width: @breakpoint-medium-max) {
 
     .sp-flex-order-first-medium {
         order: -1;
@@ -157,7 +187,7 @@
 }
 
 /* Desktop and bigger */
-@media (min-width: @breakpoint-large) {
+@media (min-width: @breakpoint-large-max) {
 
     .sp-flex-order-first-large {
         order: -1;
@@ -170,7 +200,7 @@
 }
 
 /* Large screen and bigger */
-@media (min-width: @breakpoint-xlarge) {
+@media (min-width: @breakpoint-xlarge-max) {
 
     .sp-flex-order-first-xlarge {
         order: -1;
@@ -212,4 +242,13 @@
 
 .sp-flex-item-1 {
     flex: 1;
+}
+
+/*
+ * Flex Basis 0: Flex: 0 0 0
+ * Space is allocated solely based on flex
+ */
+
+.sp-flex-item-0 {
+  flex: 0;
 }

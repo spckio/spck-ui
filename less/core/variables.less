@@ -1,15 +1,17 @@
 //
 // Breakpoints
 //
-@breakpoint-small:                              480px;
-@breakpoint-medium:                             768px;
-@breakpoint-large:                              960px;
-@breakpoint-xlarge:                             1220px;
+@breakpoint-mini-max:                               320px;
+@breakpoint-small-max:                              480px;
+@breakpoint-medium-max:                             768px;
+@breakpoint-large-max:                              960px;
+@breakpoint-xlarge-max:                             1220px;
 
-@breakpoint-mini-max:                           (@breakpoint-small - 1);
-@breakpoint-small-max:                          (@breakpoint-medium - 1);
-@breakpoint-medium-max:                         (@breakpoint-large - 1);
-@breakpoint-large-max:                          (@breakpoint-xlarge - 1);
+@breakpoint-mini-min:                           (@breakpoint-mini-max + 1);
+@breakpoint-small-min:                          (@breakpoint-small-max + 1);
+@breakpoint-medium-min:                         (@breakpoint-medium-max + 1);
+@breakpoint-large-min:                          (@breakpoint-large-max + 1);
+@breakpoint-xlarge-min:                         (@breakpoint-xlarge-max + 1);
 
 // Global variables
 // ========================================================================

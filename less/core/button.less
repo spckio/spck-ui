@@ -15,8 +15,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font: inherit;
+  line-height: 36px;
   width: 36px;
   height: 36px;
+  background: transparent;
+
+  /* Required for `a` */
+  text-decoration: none;
+  text-align: center;
+
+  outline: none;
 }
 
 .sp-button-circle.sp-primary,
@@ -78,12 +87,12 @@
   color: @global-heading-color;
   border: 1px solid darken(@global-border, 8%);
   padding: 0 20px;
-  line-height: 38px;
+  font: inherit;
+  line-height: 36px;
   height: 38px;
   background: transparent;
   vertical-align: middle;
   white-space: nowrap;
-  font: inherit;
   transition: background-color 0.6s ease;
 
   .dark & {

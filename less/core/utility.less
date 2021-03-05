@@ -14,7 +14,7 @@
   }
 }
 
-@media (min-width: @breakpoint-xlarge) {
+@media (min-width: @breakpoint-xlarge-max) {
   .sp-container {
     max-width: 1200px;
     padding: 0 48px;
@@ -322,21 +322,6 @@
   .sp-link-muted a:hover { color: @global-color; }
 }
 
-/*
- * Reset link style
- */
-
-.sp-link-reset,
-.sp-link-reset a,
-.sp-link-reset:hover,
-.sp-link-reset a:hover,
-.sp-link-reset:focus,
-.sp-link-reset a:focus {
-  color: inherit;
-  text-decoration: none;
-}
-
-
 /* Scrollable
  ========================================================================== */
 
@@ -463,8 +448,9 @@
  */
 
 /* Desktop and bigger */
-@media (min-width: @breakpoint-large) {
+@media (min-width: @breakpoint-large-min) {
 
+  .sp-visible-mini { display: none !important; }
   .sp-visible-small { display: none !important; }
   .sp-visible-medium { display: none !important; }
   .sp-hidden-large { display: none !important; }
@@ -472,20 +458,39 @@
 }
 
 /* Tablets portrait */
-@media (min-width: @breakpoint-medium) and (max-width: @breakpoint-medium-max) {
+@media (min-width: @breakpoint-medium-min) and (max-width: @breakpoint-large-max) {
 
+  .sp-visible-mini { display: none !important; }
   .sp-visible-small { display: none !important; }
   .sp-visible-large { display: none !important ; }
   .sp-hidden-medium { display: none !important; }
 
 }
 
-/* Phone landscape and smaller*/
-@media (max-width: @breakpoint-small-max) {
+/* Phone landscape */
+@media (min-width: @breakpoint-small-min) and (max-width: @breakpoint-medium-max) {
+
+  .sp-visible-mini { display: none !important; }
+  .sp-visible-medium { display: none !important; }
+  .sp-visible-large { display: none !important; }
+  .sp-hidden-medium { display: none !important; }
+
+}
+
+@media (min-width: @breakpoint-mini-min) and (max-width: @breakpoint-small-max) {
 
   .sp-visible-medium { display: none !important; }
   .sp-visible-large { display: none !important; }
   .sp-hidden-small { display: none !important; }
+
+}
+
+@media (max-width: @breakpoint-mini-max) {
+
+  .sp-visible-medium { display: none !important; }
+  .sp-visible-large { display: none !important; }
+  .sp-hidden-small { display: none !important; }
+  .sp-hidden-mini { display: none !important; }
 
 }
 

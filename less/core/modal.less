@@ -81,7 +81,7 @@
   max-height: ~"calc(100vh - 96px)";
 }
 
-@media (min-width: @breakpoint-mini-max) {
+@media (min-width: @breakpoint-medium-min) {
   .sp-modal-dialog-full {
     height: inherit; /* Hack to fix known vh vw issues in Safari */
     max-height: ~"calc(100vh - 96px)";
@@ -89,7 +89,7 @@
 }
 
 /* Phone landscape and smaller */
-@media (max-width: @breakpoint-mini-max) {
+@media (max-width: @breakpoint-medium-max) {
   /*
     * Fit in small screen
     */
@@ -135,28 +135,6 @@
   max-width: ~"calc(100% - 30px)";
 }
 
-/*
-* Close button
-*/
-
-.sp-modal-dialog-lightbox > .sp-close:first-child {
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  margin: 0;
-  float: none;
-}
-
-/* Phone landscape and smaller */
-@media (max-width: @breakpoint-small-max) {
-
-  .sp-modal-dialog-lightbox > .sp-close:first-child {
-    top: -7px;
-    right: -7px;
-  }
-
-}
-
 /* Modifier: `sp-modal-dialog-blank`
 ========================================================================== */
 
@@ -185,13 +163,13 @@
 ========================================================================== */
 
 /* Tablet and bigger */
-@media (min-width: @breakpoint-medium) {
+@media (min-width: @breakpoint-medium-min) and (max-width: @breakpoint-xlarge-max) {
   .sp-modal-dialog-large { width: 600px; }
 
 }
 
 /* Large screen and bigger */
-@media (min-width: @breakpoint-xlarge) {
+@media (min-width: @breakpoint-xlarge-min) {
   .sp-modal-dialog-large { width: 920px; }
 
 }
