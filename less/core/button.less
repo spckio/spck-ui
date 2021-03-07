@@ -12,7 +12,7 @@
   /* Remove borders for `button`. */
   border: none;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   font: inherit;
@@ -113,13 +113,14 @@
 }
 
 .sp-button-link:disabled,
-.sp-button:disabled {
+.sp-button:disabled,
+.sp-button-circle:disabled {
   opacity: 0.5;
   pointer-events: none;
   cursor: not-allowed;
 
   .dark & {
-    opacity: 0.8;
+    opacity: 0.7;
   }
 }
 
@@ -373,7 +374,7 @@
 ========================================================================== */
 
 .sp-button-group {
-  display: flex;
+  display: inline-flex;
 }
 
 /*
