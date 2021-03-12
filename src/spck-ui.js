@@ -2255,6 +2255,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       buttonStyle: prefixClassOptions({
         link: "button-link",
         button: "button",
+        round: 'border-round',
         shadow: "button-shadow",
         "": ""
       }, 'sp-'),
@@ -2583,9 +2584,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       classSetters({
         inputStyle: prefixClassOptions({
           line: '',
-          round: '',
+          round: 'sp-border-round',
           "": ""
-        }, 'sp-input-', true),
+        }, 'sp-input-', true, ['round']),
         width: prefixClassOptions({
           "": "",
           mini: "",

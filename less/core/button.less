@@ -28,18 +28,6 @@
   outline: none;
 }
 
-.sp-button-circle.sp-primary,
-.sp-button-circle.sp-success,
-.sp-button-circle.sp-muted,
-.sp-button-circle.sp-danger {
-  > .sp-list-item {
-    transition: background-color 0.6s ease;
-  }
-  > .sp-list-item:hover {
-    background: fade(@global-heading-color, 8%);
-  }
-}
-
 .sp-button-circle.sp-muted {
   color: @global-muted;
   background: fade(@global-muted, 12%);
@@ -171,16 +159,6 @@
 @button-dark-danger:                 darken(@global-dark-danger, 15%);
 @button-dark-danger-hover:           darken(@global-dark-danger, 12%);
 
-/*
- * Modifier: `sp-button-muted`
- */
-
-.sp-button.sp-button-muted {
-  background-color: @button-muted;
-  color: @global-contrast-color;
-  border-color: transparent;
-}
-
 .sp-notouch {
   /* Hover */
   .sp-button.sp-button-muted:hover {
@@ -206,6 +184,19 @@
   text-shadow: @global-contrast-text-shadow;
   .dark & {
     background-color: @button-dark-primary;
+  }
+}
+
+/*
+ * Modifier: `sp-button-muted`
+ */
+
+.sp-button.sp-button-muted {
+  background-color: @button-muted;
+  color: @global-contrast-color;
+  border-color: transparent;
+  .dark & {
+    background-color: #32323a;
   }
 }
 
