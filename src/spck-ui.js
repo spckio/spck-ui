@@ -1,4 +1,6 @@
 window.UI = window.ui = (function (exports, window, UIkit) {
+  "use strict";
+
   var
     ACTIVE_CLASS = 'sp-active',
     HIDDEN_CLASS = 'sp-hidden',
@@ -3997,26 +3999,26 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         listenerId = addListener(el, "mousedown", onMouseDown, self);
         $listeners.push(listenerId);
         self.$listeners.push(listenerId);
+      }
 
-        function onMouseDown(e) {
-          if (isFunction(this.draggable) && !this.draggable(e)) {
-            return;
-          }
-          var ev = e.touches && e.touches[0] || e;
-          var offset = el.getBoundingClientRect();
-          exports._selectedForDrag = {
-            target: this,
-            config: item,
-            node: el,
-            originalPos: {top: el.style.top, left: el.style.left},
-            pos: {x: ev.clientX, y: ev.clientY},
-            mouseOffset: {
-              left: offset.left - ev.clientX,
-              top: offset.top - ev.clientY
-            },
-            event: e
-          };
+      function onMouseDown(e) {
+        if (isFunction(this.draggable) && !this.draggable(e)) {
+          return;
         }
+        var ev = e.touches && e.touches[0] || e;
+        var offset = el.getBoundingClientRect();
+        exports._selectedForDrag = {
+          target: this,
+          config: item,
+          node: el,
+          originalPos: {top: el.style.top, left: el.style.left},
+          pos: {x: ev.clientX, y: ev.clientY},
+          mouseOffset: {
+            left: offset.left - ev.clientX,
+            top: offset.top - ev.clientY
+          },
+          event: e
+        };
       }
     }
   }, $definitions.stack);
@@ -4192,7 +4194,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var self = this;
       self.dispatch("onOpen", [item.id]);
 
-	    item.$closed = false;
+      item.$closed = false;
 
       var node = self.getItemNode(item.id);
       if (node) node.parentNode.replaceChild(self.createItemElement(item), node);
@@ -4569,7 +4571,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }
     },
 
-    moveBar: function(e) {
+    moveBar: function() {
       var $this = this;
       var totalHeight = $this.content.scrollHeight || 1,
           ownHeight = $this.content.clientHeight || 1,
@@ -5019,7 +5021,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         }
       }
     });
-  };
+  }
 
   DrawerSwipe.prototype = {
     addBuffer: function (x, y) {

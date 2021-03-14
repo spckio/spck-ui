@@ -22,12 +22,16 @@
   },
   "scripts": {
     "test": "karma start karma.conf.js --single-run",
-    "start": "http-server -a localhost -p 4242 -c-1"
+    "start": "http-server -a localhost -p 4242 -c-1",
+    "lint": "eslint  \"src/spck-ui.js\""
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/spckio/spck-ui"
   },
   "author": "Zeb Zhao",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^7.22.0"
+  }
 }
