@@ -1022,13 +1022,10 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   function preventEvent(e) {
     if (e.cancelable) {
       if (e.preventDefault) e.preventDefault();
-      e.defaultPrevented = true;
-      e.cancelBubble = true;
     }
   }
 
   function stopPropagation(e) {
-    e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
   }
 
