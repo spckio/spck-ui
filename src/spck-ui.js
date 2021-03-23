@@ -293,7 +293,9 @@ window.UI = window.ui = (function (exports, window, UIkit) {
     if (isArray(key)) {
       key = key[+keyEvent.shiftKey];
     }
-    keyEvent.key = key;
+    if (!isDefined(keyEvent.key)) {
+      keyEvent.key = key;
+    }
     return keyEvent;
   }
 
@@ -1022,6 +1024,7 @@ window.UI = window.ui = (function (exports, window, UIkit) {
   function preventEvent(e) {
     if (e.cancelable) {
       if (e.preventDefault) e.preventDefault();
+      if (e.stopPropagation) e.stopPropagation();
     }
   }
 
@@ -1295,7 +1298,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
        * @param offset The amount of final offset added to the position depending on which edges are hidden.
        * @example moveWithinBoundary({top: 0, bottom: 500, left: 0, right: 1000}, {top: 100, bottom: 100}, {top: 10, left: 10}, {top: 10, left: 20, right: 30, bottom: 40})
        */
-      var parent = this.el.parentNode ? this.el.parentNode : document.body;
+      var el = this.el
+      var parent = el.parentNode ? el.parentNode : document.body;
       var parentPos = parent.getBoundingClientRect(); // Affected by scrolling
 
       padding = padding || {};
@@ -1319,20 +1323,20 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var pivotBottom = pivot.bottom || boundaryBottom - paddingBottom;
 
       var rect = this.getBoundingClientRect();
-      var htmlStyle = this.el.style;
+      var left = rect.left;
+      var top = rect.top;
 
-      rect.left = htmlStyle.left || rect.left;
-      rect.top = htmlStyle.top || rect.top;
-
-      var hiddenLeft = rect.left < boundaryLeft + paddingLeft;
-      var hiddenRight = rect.left + rect.width > boundaryRight - paddingRight;
-      var hiddenTop = rect.top < boundaryTop + paddingTop;
-      var hiddenBottom = rect.top + rect.height > boundaryBottom - paddingBottom;
+      var hiddenLeft = left < boundaryLeft + paddingLeft;
+      var hiddenRight = left + rect.width > boundaryRight - paddingRight;
+      var hiddenTop = top < boundaryTop + paddingTop;
+      var hiddenBottom = top + rect.height > boundaryBottom - paddingBottom;
 
       var offsetTop = offset.top || 0;
       var offsetBottom = offset.bottom || 0;
       var offsetLeft = offset.left || 0;
       var offsetRight = offset.right || 0;
+
+      var htmlStyle = el.style;
 
       if (hiddenLeft) {
         htmlStyle.left = (pivotLeft + offsetLeft - parentPos.left) + "px";
