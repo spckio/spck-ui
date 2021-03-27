@@ -62,6 +62,14 @@
   border-radius: 8px;
   border: solid 1px darken(@global-border, 5%);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+  &:disabled {
+    background-color: @global-muted-color;
+  }
+
+  .dark &:disabled {
+    background-color: @global-dark-muted-color;
+  }
 }
 
 .sp-select-line {

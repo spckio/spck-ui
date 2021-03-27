@@ -94,6 +94,14 @@
 
   outline: none;
   cursor: pointer;
+
+  &:disabled {
+    background-color: @global-muted-color;
+  }
+
+  .dark &:disabled {
+    background-color: @global-dark-muted-color;
+  }
 }
 
 .sp-button-shadow {
@@ -103,7 +111,7 @@
 .sp-button-link:disabled,
 .sp-button:disabled,
 .sp-button-circle:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   pointer-events: none;
   cursor: not-allowed;
 

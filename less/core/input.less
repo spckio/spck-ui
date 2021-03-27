@@ -30,7 +30,7 @@
 
   // Disabled state
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.75;
     pointer-events: none;
     cursor: not-allowed;;
   }
@@ -45,6 +45,14 @@
     background: @global-dark-muted-color;
     border-color: @global-dark-border;
     box-shadow: @input-dark-box-shadow;
+  }
+
+  &:disabled {
+    background-color: @global-muted-color;
+  }
+
+  .dark &:disabled {
+    background-color: @global-dark-muted-color;
   }
 }
 

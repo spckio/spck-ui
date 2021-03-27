@@ -196,6 +196,35 @@ var Model = {
                 cells: [
                   {
                     view: 'button',
+                    disabled: true,
+                    label: 'Disabled',
+                    buttonStyle: 'button',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    disabled: true,
+                    color: 'muted',
+                    label: 'Muted Disabled',
+                    buttonStyle: 'button',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    disabled: true,
+                    color: 'primary',
+                    label: 'Primary Disabled',
+                    buttonStyle: 'button',
+                    margin: 'x'
+                  }
+                ]
+              },
+              {
+                flexAlign: 'middle',
+                margin: 'y',
+                cells: [
+                  {
+                    view: 'button',
                     size: 'small',
                     label: 'Small Button',
                     buttonStyle: 'button',
@@ -703,6 +732,12 @@ var Model = {
                   readonly: true,
                   placeholder: 'Readonly',
                   margin: 'y'
+                },
+                {
+                  view: 'input',
+                  disabled: true,
+                  placeholder: 'Disabled',
+                  margin: 'y'
                 }
               ]
             },
@@ -715,6 +750,7 @@ var Model = {
                     {
                       view: 'button',
                       buttonStyle: 'button',
+                      disabled: true,
                       label: 'Field'
                     },
                     {
@@ -1049,8 +1085,15 @@ var Model = {
                 },
                 {
                   view: 'select',
-                  selectStyle: 'line',
+                  selectStyle: 'input',
+                  disabled: true,
                   margin: 'y',
+                  data: mapToProperty(phrases1, 'label')
+                },
+                {
+                  view: 'select',
+                  selectStyle: 'line',
+                  margin: 'bottom',
                   data: mapToProperty(phrases1, 'label')
                 },
                 {
