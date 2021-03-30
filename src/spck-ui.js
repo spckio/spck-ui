@@ -2264,9 +2264,11 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       }, 'sp-'),
       color: prefixClassOptions({
         primary: "",
+        "ghost-primary": "",
         success: "",
         danger: "",
         muted: "",
+        "ghost-muted": "",
         "": ""
       }, 'sp-button-', true),
       size: prefixClassOptions({

@@ -238,6 +238,20 @@ var Model = {
                   },
                   {
                     view: 'button',
+                    label: 'Ghost Muted',
+                    color: 'ghost-muted',
+                    buttonStyle: 'button',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
+                    label: 'Ghost Primary',
+                    color: 'ghost-primary',
+                    buttonStyle: 'button',
+                    margin: 'x'
+                  },
+                  {
+                    view: 'button',
                     label: 'Muted Button',
                     buttonStyle: 'button',
                     color: 'muted',

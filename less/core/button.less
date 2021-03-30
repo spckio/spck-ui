@@ -149,13 +149,13 @@
 
 @button-muted:                       @global-muted;
 @button-muted-hover:                 lighten(@global-muted, 15%);
-@button-dark-muted:                  darken(@global-dark-muted, 15%);
-@button-dark-muted-hover:            darken(@global-dark-muted, 12%);
+@button-dark-muted:                  lighten(@global-dark-muted, 6%);
+@button-dark-muted-hover:            lighten(@global-dark-muted, 9%);
 
 @button-primary:                     @global-primary;
 @button-primary-hover:               lighten(@global-primary, 5%);
-@button-dark-primary:                darken(@global-dark-primary, 15%);
-@button-dark-primary-hover:          darken(@global-dark-primary, 12%);
+@button-dark-primary:                @global-dark-primary;
+@button-dark-primary-hover:          lighten(@global-dark-primary, 5%);
 
 @button-success:                     @global-success;
 @button-success-hover:               lighten(@global-success, 5%);
@@ -166,20 +166,6 @@
 @button-danger-hover:                lighten(@global-danger, 8%);
 @button-dark-danger:                 darken(@global-dark-danger, 15%);
 @button-dark-danger-hover:           darken(@global-dark-danger, 12%);
-
-.sp-notouch {
-  /* Hover */
-  .sp-button.sp-button-muted:hover {
-    background-color: @button-muted-hover;
-    color: @global-contrast-color;
-  }
-
-  /* Active */
-  .sp-button.sp-button-muted:active,
-  .sp-button.sp-button-muted.sp-active {
-    color: @global-contrast-color;
-  }
-}
 
 /*
  * Modifier: `sp-button-primary`
@@ -192,19 +178,6 @@
   text-shadow: @global-contrast-text-shadow;
   .dark & {
     background-color: @button-dark-primary;
-  }
-}
-
-/*
- * Modifier: `sp-button-muted`
- */
-
-.sp-button.sp-button-muted {
-  background-color: @button-muted;
-  color: @global-contrast-color;
-  border-color: transparent;
-  .dark & {
-    background-color: #32323a;
   }
 }
 
@@ -223,6 +196,63 @@
   .sp-button.sp-button-primary:active,
   .sp-button.sp-button-primary.sp-active {
     color: @global-contrast-color;
+  }
+}
+
+/*
+ * Modifier: `sp-button-ghost-primary`
+ */
+
+ .sp-button.sp-button-ghost-primary {
+  border-color: @button-primary;
+  color: @button-primary;
+  .dark & {
+    color: @button-dark-primary;
+    border-color: @button-dark-primary;
+  }
+}
+
+/*
+ * Modifier: `sp-button-muted`
+ */
+
+.sp-button.sp-button-muted {
+  background-color: @button-muted;
+  color: @global-contrast-color;
+  border-color: transparent;
+  .dark & {
+    background-color: @button-dark-muted;
+  }
+}
+
+.sp-notouch {
+  /* Hover */
+  .sp-button.sp-button-muted:hover {
+    background-color: @button-muted-hover;
+    color: @global-contrast-color;
+  }
+
+  &.dark .sp-button.sp-button-muted:hover {
+    background-color: @button-dark-muted-hover;
+  }
+
+  /* Active */
+  .sp-button.sp-button-muted:active,
+  .sp-button.sp-button-muted.sp-active {
+    color: @global-contrast-color;
+  }
+}
+
+/*
+ * Modifier: `sp-button-ghost-muted`
+ */
+
+ .sp-button.sp-button-ghost-muted {
+  border-color: @button-muted;
+  color: @button-muted;
+  .dark & {
+    color: lighten(@button-dark-muted, 10%);
+    border-color: lighten(@button-dark-muted, 6%);
   }
 }
 
