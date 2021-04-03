@@ -1,1 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 13C0 6.373 5.373 1 12 1s12 5.373 12 12v8.657a.75.75 0 01-1.5 0V13c0-5.799-4.701-10.5-10.5-10.5S1.5 7.201 1.5 13v8.657a.75.75 0 01-1.5 0V13z"/><path d="M8 19.75a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5a.75.75 0 01-.75-.75z"/><path fill-rule="evenodd" d="M5.25 9.5a1.75 1.75 0 00-1.75 1.75v3.5c0 .966.784 1.75 1.75 1.75h13.5a1.75 1.75 0 001.75-1.75v-3.5a1.75 1.75 0 00-1.75-1.75H5.25zm.22 1.47a.75.75 0 011.06 0L9 13.44l2.47-2.47a.75.75 0 011.06 0L15 13.44l2.47-2.47a.75.75 0 111.06 1.06l-3 3a.75.75 0 01-1.06 0L12 12.56l-2.47 2.47a.75.75 0 01-1.06 0l-3-3a.75.75 0 010-1.06z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg15126"
+   sodipodi:docname="hubot-24.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata15132">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs15130" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="689"
+     inkscape:window-height="480"
+     id="namedview15128"
+     showgrid="false"
+     inkscape:zoom="25.875"
+     inkscape:cx="4.8502415"
+     inkscape:cy="8.9855072"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg15126" />
+  <path
+     d="M0 13C0 6.373 5.373 1 12 1s12 5.373 12 12v8.657a.75.75 0 01-1.5 0V13c0-5.799-4.701-10.5-10.5-10.5S1.5 7.201 1.5 13v8.657a.75.75 0 01-1.5 0V13z"
+     id="path15120" />
+  <path
+     d="M8 19.75a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5a.75.75 0 01-.75-.75z"
+     id="path15122" />
+  <path
+     fill-rule="evenodd"
+     d="m 18.75,9.5 c 0.966498,0 1.75,0.783502 1.75,1.75 v 3.5 c 0,0.966498 -0.783502,1.75 -1.75,1.75 H 5.25 C 4.284,16.5 3.5,15.716 3.5,14.75 v -3.5 C 3.5,10.283502 4.2835017,9.5 5.25,9.5 Z m -13.28,2.53 3,3 c 0.2928175,0.292453 0.7671825,0.292453 1.06,0 l 2.47,-2.47 2.47,2.47 c 0.292818,0.292453 0.767182,0.292453 1.06,0 l 3,-3 c 0.757891,-0.70621 -0.35379,-1.817891 -1.06,-1.06 L 15,13.44 12.53,10.97 c -0.292818,-0.292453 -0.767182,-0.292453 -1.06,0 L 9,13.44 6.53,10.97 c -0.2928175,-0.292453 -0.7671825,-0.292453 -1.06,0 -0.2924534,0.292818 -0.2924534,0.767182 0,1.06 z"
+     id="path15124"
+     sodipodi:nodetypes="sssssssssccccccccccccccc" />
+</svg>

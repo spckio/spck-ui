@@ -1,6 +1,7 @@
 @font-face {
     font-family: "spck-ui-icons";
-    src: url("./spck-ui-icons.ttf?01432acdec8be821e9964adfecf23e97") format("truetype");
+    src: url("./spck-ui-icons.woff?207f27dfbae5d418af50e0f115296e33") format("woff"),
+url("./spck-ui-icons.woff2?207f27dfbae5d418af50e0f115296e33") format("woff2");
 }
 
 i[class^="sp-icon-"]:before, i[class*=" sp-icon-"]:before {

@@ -1,1 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 4v2h-.25A1.75 1.75 0 002 7.75v5.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-5.5A1.75 1.75 0 0012.25 6H12V4a4 4 0 10-8 0zm6.5 2V4a2.5 2.5 0 00-5 0v2h5zM12 7.5h.25a.25.25 0 01.25.25v5.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-5.5a.25.25 0 01.25-.25H12z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg18556"
+   sodipodi:docname="lock-16.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata18562">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18560" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="900"
+     id="namedview18558"
+     showgrid="false"
+     inkscape:zoom="38.8125"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg18556" />
+  <path
+     fill-rule="evenodd"
+     d="M 4,4 V 6 H 3.75 C 2.7835017,6 2,6.7835017 2,7.75 v 5.5 C 2,14.216 2.784,15 3.75,15 h 8.5 C 13.216498,15 14,14.216498 14,13.25 V 7.75 C 14,6.7835017 13.216498,6 12.25,6 H 12 V 4 C 12,-1.333331 4,-1.333331 4,4 Z M 5.5,6 V 4 c 0,-3.33333189 5,-3.33333189 5,0 V 6 Z M 12,7.5 h 0.25 c 0.138071,0 0.25,0.1119288 0.25,0.25 v 5.5 c 0,0.138071 -0.111929,0.25 -0.25,0.25 H 3.75 C 3.6119288,13.5 3.5,13.388071 3.5,13.25 V 7.75 C 3.5,7.6119288 3.6119288,7.5 3.75,7.5 Z"
+     id="path18554"
+     sodipodi:nodetypes="scsssssssscsscsscccssssssssc" />
+</svg>

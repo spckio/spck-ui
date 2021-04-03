@@ -1,1 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 5.782V2.5h-.25a.75.75 0 010-1.5h6.5a.75.75 0 010 1.5H11v3.282l3.666 5.76C15.619 13.04 14.543 15 12.767 15H3.233c-1.776 0-2.852-1.96-1.899-3.458L5 5.782zM9.5 2.5h-3V6a.75.75 0 01-.117.403L4.73 9h6.54L9.617 6.403A.75.75 0 019.5 6V2.5zm-6.9 9.847L3.775 10.5h8.45l1.175 1.847a.75.75 0 01-.633 1.153H3.233a.75.75 0 01-.633-1.153z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg8839"
+   sodipodi:docname="beaker-16.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata8845">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8843" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="900"
+     id="namedview8841"
+     showgrid="false"
+     inkscape:zoom="38.8125"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg8839" />
+  <path
+     fill-rule="evenodd"
+     d="M 5,5.782 V 2.5 H 4.75 C 3.7500004,2.5 3.7500004,1 4.75,1 h 6.5 c 1,0 1,1.5 0,1.5 H 11 v 3.282 l 3.666,5.76 C 15.619,13.04 14.543,15 12.767,15 H 3.233 C 1.457,15 0.381,13.04 1.334,11.542 Z M 9.5,2.5 h -3 V 6 C 6.5001412,6.1427296 6.4595522,6.2825362 6.383,6.403 L 4.73,9 h 6.54 L 9.617,6.403 C 9.5404478,6.2825362 9.4998588,6.1427296 9.5,6 Z m -6.267,11 h 9.534 c 0.592214,3.73e-4 0.951216,-0.653545 0.633,-1.153 L 12.225,10.5 H 3.775 L 2.6,12.347 c -0.3182163,0.499455 0.040786,1.153373 0.633,1.153 z"
+     id="path8837"
+     sodipodi:nodetypes="ccsssscccsscccccccccccccccccc" />
+</svg>

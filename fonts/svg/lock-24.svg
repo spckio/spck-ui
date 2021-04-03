@@ -1,1 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M6 9V7.25C6 3.845 8.503 1 12 1s6 2.845 6 6.25V9h.5a2.5 2.5 0 012.5 2.5v8a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 19.5v-8A2.5 2.5 0 015.5 9H6zm1.5-1.75C7.5 4.58 9.422 2.5 12 2.5c2.578 0 4.5 2.08 4.5 4.75V9h-9V7.25zm-3 4.25a1 1 0 011-1h13a1 1 0 011 1v8a1 1 0 01-1 1h-13a1 1 0 01-1-1v-8z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg17985"
+   sodipodi:docname="lock-24.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata17991">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs17989" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="900"
+     id="namedview17987"
+     showgrid="false"
+     inkscape:zoom="25.875"
+     inkscape:cx="13.545894"
+     inkscape:cy="10.299517"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg17985" />
+  <path
+     fill-rule="evenodd"
+     d="M 5.5,9 C 4.1192881,9 3,10.119288 3,11.5 v 8 C 3,20.880712 4.1192881,22 5.5,22 h 13 c 1.380712,0 2.5,-1.119288 2.5,-2.5 v -8 C 21,10.119288 19.880712,9 18.5,9 H 18 V 7.25 C 18,3.845 15.497,1 12,1 8.503,1 6,3.845 6,7.25 V 9 Z m 2,-1.75 C 7.5,4.58 9.422,2.5 12,2.5 c 2.578,0 4.5,2.08 4.5,4.75 V 9 h -9 z m -3,4.25 c 0,-0.552285 0.4477153,-1 1,-1 h 13 c 0.552285,0 1,0.447715 1,1 v 8 c 0,0.552285 -0.447715,1 -1,1 h -13 c -0.5522847,0 -1,-0.447715 -1,-1 z"
+     id="path17983"
+     sodipodi:nodetypes="sssssssscssscssssccssssssssss" />
+</svg>

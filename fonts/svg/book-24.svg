@@ -1,1 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M0 3.75A.75.75 0 01.75 3h7.497c1.566 0 2.945.8 3.751 2.014A4.496 4.496 0 0115.75 3h7.5a.75.75 0 01.75.75v15.063a.75.75 0 01-.755.75l-7.682-.052a3 3 0 00-2.142.878l-.89.891a.75.75 0 01-1.061 0l-.902-.901a3 3 0 00-2.121-.879H.75a.75.75 0 01-.75-.75v-15zm11.247 3.747a3 3 0 00-3-2.997H1.5V18h6.947a4.5 4.5 0 012.803.98l-.003-11.483zm1.503 11.485V7.5a3 3 0 013-3h6.75v13.558l-6.927-.047a4.5 4.5 0 00-2.823.971z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg845"
+   sodipodi:docname="book-24.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata851">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs849" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="900"
+     id="namedview847"
+     showgrid="false"
+     inkscape:zoom="25.916667"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg845" />
+  <path
+     fill-rule="evenodd"
+     d="M 0,3.75 C 0,3.3357864 0.33578644,3 0.75,3 H 8.247 C 9.813,3 11.192,3.8 11.998,5.014 12.831288,3.7553968 14.240547,2.9989344 15.75,3 h 7.5 C 23.664214,3 24,3.3357864 24,3.75 v 15.063 c 9e-6,0.416174 -0.338835,0.752774 -0.755,0.75 l -7.682,-0.052 c -0.802711,-0.0057 -1.574222,0.310545 -2.142,0.878 l -0.89,0.891 c -0.292932,0.29312 -0.768068,0.29312 -1.061,0 L 10.568,20.379 C 10.005522,19.816352 9.2425844,19.50017 8.447,19.5 H 0.75 C 0.33578644,19.5 0,19.164214 0,18.75 Z M 11.247,7.497 C 11.245344,5.8413174 9.9026834,4.4999992 8.247,4.5 H 1.5 V 18 h 6.947 c 1.0183027,1.13e-4 2.006461,0.345598 2.803,0.98 z m 4.326,10.514 6.927,0.047 V 4.5 h -6.75 c -1.656854,0 -3,1.3431458 -3,3 v 11.482 c 0.803097,-0.635463 1.798925,-0.977988 2.823,-0.971 z"
+     id="path843"
+     sodipodi:nodetypes="sssccssccccccccsssccccccccccsscc" />
+</svg>
