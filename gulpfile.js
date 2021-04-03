@@ -34,7 +34,9 @@ const buildMin = function () {
 const buildDocs = function () {
   return gulp.src([
     './dist/spck-ui.meta.js',
-    './dist/spck-ui-icons.css'
+    './dist/spck-ui-icons.css',
+    './dist/spck-ui-icons.woff2',
+    './dist/spck-ui-icons.woff'
   ], {base: './dist'})
     .pipe(gulp.dest(DOCS));
 };

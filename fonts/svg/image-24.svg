@@ -1,1 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M19.25 4.5H4.75a.25.25 0 00-.25.25v14.5c0 .138.112.25.25.25h.19l9.823-9.823a1.75 1.75 0 012.475 0l2.262 2.262V4.75a.25.25 0 00-.25-.25zm.25 9.56l-3.323-3.323a.25.25 0 00-.354 0L7.061 19.5H19.25a.25.25 0 00.25-.25v-5.19zM4.75 3A1.75 1.75 0 003 4.75v14.5c0 .966.784 1.75 1.75 1.75h14.5A1.75 1.75 0 0021 19.25V4.75A1.75 1.75 0 0019.25 3H4.75zM8.5 9.5a1 1 0 100-2 1 1 0 000 2zm0 1.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg1991"
+   sodipodi:docname="image-24.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata1997">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1995" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="900"
+     id="namedview1993"
+     showgrid="false"
+     inkscape:zoom="25.875"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1991" />
+  <path
+     fill-rule="evenodd"
+     d="m 19.5,4.75 v 7.189 L 17.238,9.677 c -0.683432,-0.6835017 -1.791568,-0.6835017 -2.475,0 L 4.94,19.5 H 4.75 C 4.612,19.5 4.5,19.388 4.5,19.25 V 4.75 C 4.5,4.6119288 4.6119288,4.5 4.75,4.5 h 14.5 c 0.138071,0 0.25,0.1119288 0.25,0.25 z m 0,14.5 c 0,0.138071 -0.111929,0.25 -0.25,0.25 H 7.061 l 8.762,-8.763 c 0.09768,-0.09793 0.256318,-0.09793 0.354,0 L 19.5,14.06 Z M 4.75,3 C 3.7835017,3 3,3.7835017 3,4.75 v 14.5 C 3,20.216 3.784,21 4.75,21 h 14.5 C 20.216498,21 21,20.216498 21,19.25 V 4.75 C 21,3.7835017 20.216498,3 19.25,3 Z M 8.5,7.5 c 1.3333328,0 1.3333328,2 0,2 -1.3333328,0 -1.3333328,-2 0,-2 z m 0,3.5 c 3.333332,0 3.333332,-5 0,-5 -3.3333319,0 -3.3333319,5 0,5 z"
+     id="path1989"
+     sodipodi:nodetypes="sccccssssssssccccssssssssssssssss" />
+</svg>

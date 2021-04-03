@@ -5,15 +5,13 @@
   "main": "./dist/spck-ui.js",
   "private": false,
   "devDependencies": {
-    "grunt": "^1.0.2",
-    "grunt-webfont": "^1.6.0",
+    "eslint": "^7.22.0",
     "gulp": "^4.0.2",
     "gulp-clean": "^0.3.1",
     "gulp-clean-css": "^3.8.0",
     "gulp-concat": "^2.6.0",
     "gulp-less": "^3.0.3",
     "gulp-uglify": "^3.0.1",
-    "gulp-webfont": "0.0.1-3",
     "jasmine-core": "^2.8.0",
     "karma": "^1.7.1",
     "karma-coverage": "^1.1.1",
@@ -31,7 +29,5 @@
   },
   "author": "Zeb Zhao",
   "license": "MIT",
-  "dependencies": {
-    "eslint": "^7.22.0"
-  }
+  "dependencies": {}
 }
