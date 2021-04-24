@@ -7999,7 +7999,8 @@ window.UI = window.ui = (function (exports, window, UIkit) {
       var height = (isNumber(config.height) ? config.height + 'px' : config.height) || 'auto';
       addClass(self.el, config.cls);
       extend(self.el.style, {minWidth: width, minHeight: height});
-    }
+    },
+    dispose: noop
   });
 
 
