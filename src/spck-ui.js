@@ -1571,15 +1571,23 @@ window.UI = window.ui = (function (exports, window, UIkit) {
 
         config.on = config.on || {};
         self.addListener(config.tooltipEvent, function (config, node) {
-          var relativeNode = $$(tooltipOptions.relativeTo);
-          relativeNode = relativeNode ? relativeNode.el : node;
-          var bb = {left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight};
-          ui.open(config, tooltipOptions.closeDelay);
-          ui.positionNextTo(relativeNode, tooltipOptions.pos, tooltipOptions.marginX, tooltipOptions.marginY);
-          ui.moveWithinBoundary(bb);
+        var self = this;
+          self.openTimeout = setTimeout(function () {
+            var relativeNode = $$(tooltipOptions.relativeTo);
+            relativeNode = relativeNode ? relativeNode.el : node;
+            var bb = {left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight};
+            ui.open(config, tooltipOptions.closeDelay);
+            ui.positionNextTo(relativeNode, tooltipOptions.pos, tooltipOptions.marginX, tooltipOptions.marginY);
+            ui.moveWithinBoundary(bb);
+            self.openTimeout = null
+          }, tooltipOptions.openDelay || 0)
         });
 
         self.addListener(config.tooltipDismissEvent, function () {
+          if (self.openTimeout) {
+            clearTimeout(self.openTimeout)
+            self.openTimeout = null
+          }
           ui.close(config);
         });
       },
@@ -1661,8 +1669,22 @@ window.UI = window.ui = (function (exports, window, UIkit) {
         }
       }
     },
+    clearTooltip: function () {
+      var self = this;
+      if (self.tooltipPopup) {
+        if (self.openTimeout) {
+          clearTimeout(self.openTimeout);
+          self.openTimeout = null;
+        }
+        self.tooltipPopup.close(self.config);
+      }
+    },
     dispose: function () {
       var self = this;
+      self.clearTooltip();
+      if (self.tooltipPopup) {
+        self.tooltipPopup.dispose();
+      }
       self.dispatch("onDispose");
       self.$components.forEach(function (component) {
         component.dispose();
