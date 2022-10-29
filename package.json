@@ -13,7 +13,7 @@
     "gulp-less": "^3.0.3",
     "gulp-uglify": "^3.0.1",
     "jasmine-core": "^2.8.0",
-    "karma": "^1.7.1",
+    "karma": "^6.4.1",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.4"
